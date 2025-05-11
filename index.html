@@ -2,28 +2,40 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Mostrar User-Agent</title>
+  <title>Filtrar User-Agent</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+      background-color: #f0f0f0;
       padding: 20px;
     }
-    #userAgent {
-      background-color: #fff;
-      padding: 10px;
+    #filteredInfo {
+      background: white;
       border: 1px solid #ccc;
+      padding: 10px;
       font-family: monospace;
     }
   </style>
 </head>
 <body>
-  <h1>Información del navegador:</h1>
-  <p><strong>User-Agent:</strong></p>
-  <p id="userAgent">Cargando...</p>
+  <h1>Dispositivo detectado:</h1>
+  <p id="filteredInfo">Detectando...</p>
 
   <script>
-    document.getElementById("userAgent").textContent = navigator.userAgent;
+    const ua = navigator.userAgent;
+    let result = "Dispositivo no identificado";
+
+    // Detectar PlayStation 4 y extraer versión
+    const ps4Match = ua.match(/PlayStation 4\/(\d+\.\d+)/);
+    if (ps4Match) {
+      result = "PS4 v" + ps4Match[1];
+    } else if (/Windows/.test(ua) && /Firefox/.test(ua)) {
+      result = "Windows";
+    } else if (/Linux/.test(ua) && /Firefox/.test(ua)) {
+      result = "Linux";
+    }
+
+    document.getElementById("filteredInfo").textContent = result;
   </script>
 </body>
 </html>
