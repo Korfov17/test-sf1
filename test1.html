@@ -2,37 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Selector de Fondo Avanzado</title>
+  <title>Ejemplo de Pestañas</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      transition: background 0.5s;
-      background-size: cover;
-      background-position: center;
-    }
-
-    select, button {
-      font-size: 16px;
-      padding: 8px;
-      margin: 10px;
-      width: 250px;
-    }
-
-    .info {
-      background-color: #f39c12;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 20px;
-      display: none;
-    }
-
     .tabcontent {
       display: none;
     }
-
     .tablinks.active {
       background-color: #ddd;
     }
@@ -40,35 +14,16 @@
 </head>
 <body>
 
-  <h1>🎨 Selector de Fondo</h1>
+  <h1>Bienvenido a la página</h1>
 
-  <select id="colorSelector">
-    <option value="">Selecciona una opción</option>
-    <option value="#3498db">🌊 Azul</option>
-    <option value="#2ecc71">🍃 Verde</option>
-    <option value="#e74c3c">❤️ Rojo</option>
-    <option value="#f1c40f">🌟 Amarillo</option>
-    <option value="#9b59b6">💜 Púrpura</option>
-    <option value="#1abc9c">💎 Turquesa</option>
-    <option value="rainbow">🌈 Arcoíris</option>
-    <option value="customCycle">🔄 Verde-Rosa-Rojo-Azul</option>
-  </select>
-
-  <br>
-  <button id="resetButton">🔄 Restablecer fondo</button>
-  <button id="notifyButton">🔔 Notificación del navegador</button>
-  <button id="playButton">🎶 Reproducir Canción</button>
-  <button id="randomImageButton">🖼️ Fondo aleatorio</button>
-  <button id="whiteBackgroundButton">⬜ Fondo blanco</button>
-
-  <!-- Contenido de las Páginas -->
+  <!-- Navegación de pestañas -->
   <div>
-    <h2>Opciones de Navegación</h2>
     <button class="tablinks" onclick="openTab(event, 'home')">Inicio</button>
     <button class="tablinks" onclick="openTab(event, 'about')">Acerca de</button>
     <button class="tablinks" onclick="openTab(event, 'contact')">Contacto</button>
   </div>
 
+  <!-- Contenido de las pestañas -->
   <div id="home" class="tabcontent">
     <h2>Inicio</h2>
     <p>Este es el contenido de la página de inicio.</p>
@@ -84,118 +39,7 @@
     <p>Este es el contenido de la página de contacto.</p>
   </div>
 
-  <!-- Contenido adicional -->
-  <div id="allset" class="info">¡Notificación del navegador!</div>
-
-  <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-
   <script>
-    const selector = document.getElementById('colorSelector');
-    const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
-    const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"]; // Verde, rosa, rojo, azul
-    let rainbowInterval, customInterval, currentIndex = 0;
-
-    function startRainbow(colorsArray) {
-      stopAllIntervals();
-      currentIndex = 0;
-      rainbowInterval = setInterval(() => {
-        document.body.style.background = colorsArray[currentIndex];
-        currentIndex = (currentIndex + 1) % colorsArray.length;
-      }, 500);
-    }
-
-    function stopAllIntervals() {
-      clearInterval(rainbowInterval);
-      clearInterval(customInterval);
-    }
-
-    selector.addEventListener('change', function () {
-      const value = this.value;
-      localStorage.setItem('selectedBackground', value);
-      stopAllIntervals();
-      document.body.style.backgroundImage = ""; // Quita imagen si hay
-      document.body.style.background = ""; // Quita color
-
-      if (value === "rainbow") {
-        startRainbow(rainbowColors);
-      } else if (value === "customCycle") {
-        startRainbow(customColors);
-      } else if (value) {
-        document.body.style.background = value;
-      }
-    });
-
-    // Restaurar selección al cargar
-    window.addEventListener('load', () => {
-      const savedValue = localStorage.getItem('selectedBackground');
-      if (savedValue) {
-        selector.value = savedValue;
-        if (savedValue === "rainbow") startRainbow(rainbowColors);
-        else if (savedValue === "customCycle") startRainbow(customColors);
-        else document.body.style.background = savedValue;
-      }
-    });
-
-    // Restablecer fondo
-    document.getElementById('resetButton').addEventListener('click', () => {
-      localStorage.removeItem('selectedBackground');
-      selector.value = '';
-      stopAllIntervals();
-      document.body.style.background = '';
-      document.body.style.backgroundImage = '';
-    });
-
-    // Notificación del navegador
-    document.getElementById('notifyButton').addEventListener('click', () => {
-      if (Notification.permission === "granted") {
-        new Notification("El navegador te quiere decir algo", {
-          body: "¡Has activado una notificación!",
-          icon: "https://img.icons8.com/ios/452/bell.png"
-        });
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(permission => {
-          if (permission === "granted") {
-            new Notification("El navegador te quiere decir algo", {
-              body: "¡Has activado una notificación!",
-              icon: "https://img.icons8.com/ios/452/bell.png"
-            });
-          }
-        });
-      }
-    });
-
-    // Reproducir canción
-    const audioPlayer = document.getElementById('audioPlayer');
-    const playButton = document.getElementById('playButton');
-    playButton.addEventListener('click', () => {
-      if (audioPlayer.paused) {
-        audioPlayer.play();
-        playButton.textContent = '⏸️ Pausar Canción';
-      } else {
-        audioPlayer.pause();
-        playButton.textContent = '🎶 Reproducir Canción';
-      }
-    });
-
-    // Fondo aleatorio con imagen
-    document.getElementById('randomImageButton').addEventListener('click', () => {
-      stopAllIntervals();
-      selector.value = '';
-      const randomUrl = `https://source.unsplash.com/random/1600x900?sig=${Math.floor(Math.random() * 1000)}`;
-      document.body.style.backgroundImage = `url(${randomUrl})`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundRepeat = 'no-repeat';
-    });
-
-    // Fondo blanco (original)
-    document.getElementById('whiteBackgroundButton').addEventListener('click', () => {
-      stopAllIntervals();
-      selector.value = '';
-      document.body.style.background = 'white';
-      document.body.style.backgroundImage = '';
-    });
-
-    // Función para las pestañas de navegación
     function openTab(evt, tabName) {
       var i, tabcontent, tablinks;
 
