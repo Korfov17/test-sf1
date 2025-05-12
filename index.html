@@ -2,40 +2,42 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Filtrar User-Agent</title>
+  <title>Selector de Fondo</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      padding: 20px;
+      text-align: center;
+      padding: 50px;
+      transition: background-color 0.5s;
     }
-    #filteredInfo {
-      background: white;
-      border: 1px solid #ccc;
-      padding: 10px;
-      font-family: monospace;
+
+    select {
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <h1>Dispositivo detectado:</h1>
-  <p id="filteredInfo">Detectando...</p>
+
+  <h1>Selecciona un color de fondo</h1>
+
+  <select id="colorSelector">
+    <option value="">Selecciona una opción</option>
+    <option value="#3498db">Azul</option>
+    <option value="#2ecc71">Verde</option>
+  </select>
 
   <script>
-    const ua = navigator.userAgent;
-    let result = "Dispositivo no identificado";
+    const selector = document.getElementById('colorSelector');
 
-    // Detectar PlayStation 4 y extraer versión
-    const ps4Match = ua.match(/PlayStation 4\/(\d+\.\d+)/);
-    if (ps4Match) {
-      result = "PS4 v" + ps4Match[1];
-    } else if (/Windows/.test(ua) && /Firefox/.test(ua)) {
-      result = "Windows";
-    } else if (/Linux/.test(ua) && /Firefox/.test(ua)) {
-      result = "Linux";
-    }
-
-    document.getElementById("filteredInfo").textContent = result;
+    selector.addEventListener('change', function () {
+      const color = this.value;
+      if (color) {
+        document.body.style.backgroundColor = color;
+      }
+    });
   </script>
+
 </body>
 </html>
