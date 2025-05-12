@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Selector de Fondo con Arcoíris</title>
+  <title>Selector de Fondo con Arcoíris y Restablecer</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,11 +11,17 @@
       transition: background-color 0.5s;
     }
 
-    select {
+    select, button {
       font-size: 16px;
       padding: 8px;
       margin-top: 20px;
-      width: 200px;
+      width: 220px;
+    }
+
+    #message {
+      color: green;
+      font-weight: bold;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -25,34 +31,77 @@
 
   <select id="colorSelector">
     <option value="">Selecciona una opción</option>
-    <option value="#3498db">Azul</option>
-    <option value="#2ecc71">Verde</option>
-    <option value="#e74c3c">Rojo</option>
-    <option value="#f1c40f">Amarillo</option>
+    <option value="#3498db">🌊 Azul</option>
+    <option value="#2ecc71">🍃 Verde</option>
+    <option value="#e74c3c">❤️ Rojo</option>
+    <option value="#f1c40f">🌟 Amarillo</option>
+    <option value="#9b59b6">💜 Púrpura</option>
+    <option value="#1abc9c">💎 Turquesa</option>
     <option value="rainbow">🌈 Arcoíris</option>
   </select>
 
+  <br><br>
+  <button id="resetButton">🔄 Restablecer fondo</button>
+  <p id="message"></p>
+
   <script>
     const selector = document.getElementById('colorSelector');
-    let rainbowInterval;
-
     const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
     let currentIndex = 0;
+    let rainbowInterval;
+
+    function startRainbow() {
+      rainbowInterval = setInterval(() => {
+        document.body.style.backgroundColor = rainbowColors[currentIndex];
+        currentIndex = (currentIndex + 1) % rainbowColors.length;
+      }, 500);
+    }
+
+    function stopRainbow() {
+      clearInterval(rainbowInterval);
+    }
 
     selector.addEventListener('change', function () {
-      clearInterval(rainbowInterval); // Detener arcoíris anterior si existe
-
       const value = this.value;
+      localStorage.setItem('selectedBackground', value);
+      stopRainbow();
+
       if (value === "rainbow") {
-        rainbowInterval = setInterval(() => {
-          document.body.style.backgroundColor = rainbowColors[currentIndex];
-          currentIndex = (currentIndex + 1) % rainbowColors.length;
-        }, 500);
+        startRainbow();
       } else if (value) {
         document.body.style.backgroundColor = value;
       } else {
         document.body.style.backgroundColor = "";
       }
+    });
+
+    // Restaurar selección al cargar la página
+    window.addEventListener('load', () => {
+      const savedValue = localStorage.getItem('selectedBackground');
+      if (savedValue) {
+        selector.value = savedValue;
+        if (savedValue === "rainbow") {
+          startRainbow();
+        } else {
+          document.body.style.backgroundColor = savedValue;
+        }
+      }
+    });
+
+    // Botón de restablecer
+    const resetButton = document.getElementById('resetButton');
+    const message = document.getElementById('message');
+
+    resetButton.addEventListener('click', () => {
+      localStorage.removeItem('selectedBackground');
+      document.body.style.backgroundColor = '';
+      selector.value = '';
+      stopRainbow();
+      message.textContent = 'Fondo restablecido y caché limpiada.';
+
+      setTimeout(() => {
+        message.textContent = '';
+      }, 3000);
     });
   </script>
 
