@@ -34,8 +34,9 @@
 
   <h1>🎨 Selector de Fondo</h1>
 
+  <!-- Desplegable de colores -->
   <select id="colorSelector">
-    <option value="">Selecciona una opción</option>
+    <option value="">Selecciona un color o efecto</option>
     <option value="#3498db">🌊 Azul</option>
     <option value="#2ecc71">🍃 Verde</option>
     <option value="#e74c3c">❤️ Rojo</option>
@@ -46,6 +47,15 @@
     <option value="customCycle">🔄 Verde-Rosa-Rojo-Azul</option>
   </select>
 
+  <!-- Desplegable de imágenes de fondo -->
+  <select id="imageSelector">
+    <option value="">Selecciona una imagen de fondo</option>
+    <option value="example.jpg">example.jpg</option>
+    <option value="paisaje.jpg">paisaje.jpg</option>
+    <option value="fondo1.png">fondo1.png</option>
+    <option value="fondo2.webp">fondo2.webp</option>
+  </select>
+
   <br>
   <button id="resetButton">🔄 Restablecer fondo</button>
   <button id="notifyButton">🔔 Notificación del navegador</button>
@@ -53,23 +63,16 @@
   <button id="randomImageButton">🖼️ Fondo aleatorio</button>
   <button id="whiteBackgroundButton">⬜ Fondo blanco</button>
 
-  <!-- NUEVO: Acciones especiales -->
-  <h2 id="mensajeEspecial">🧩 Esperando acción especial...</h2>
-  <select id="accionSelector">
-    <option value="">Selecciona una acción especial</option>
-    <option value="alerta">Mostrar alerta</option>
-    <option value="cambiarTexto">Cambiar mensaje en pantalla</option>
-  </select>
-
   <div id="allset" class="info">¡Notificación del navegador!</div>
 
   <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
   <script>
     const selector = document.getElementById('colorSelector');
+    const imageSelector = document.getElementById('imageSelector');
     const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
     const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"];
-    let rainbowInterval, customInterval, currentIndex = 0;
+    let rainbowInterval, currentIndex = 0;
 
     function startRainbow(colorsArray) {
       stopAllIntervals();
@@ -82,15 +85,14 @@
 
     function stopAllIntervals() {
       clearInterval(rainbowInterval);
-      clearInterval(customInterval);
     }
 
     selector.addEventListener('change', function () {
       const value = this.value;
       localStorage.setItem('selectedBackground', value);
       stopAllIntervals();
-      document.body.style.backgroundImage = "";
-      document.body.style.background = "";
+      document.body.style.backgroundImage = '';
+      document.body.style.background = '';
 
       if (value === "rainbow") {
         startRainbow(rainbowColors);
@@ -98,6 +100,18 @@
         startRainbow(customColors);
       } else if (value) {
         document.body.style.background = value;
+      }
+    });
+
+    imageSelector.addEventListener('change', function () {
+      const fileName = this.value;
+      if (fileName) {
+        stopAllIntervals();
+        selector.value = '';
+        document.body.style.background = '';
+        document.body.style.backgroundImage = `url('img/${fileName}')`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundRepeat = 'no-repeat';
       }
     });
 
@@ -114,6 +128,7 @@
     document.getElementById('resetButton').addEventListener('click', () => {
       localStorage.removeItem('selectedBackground');
       selector.value = '';
+      imageSelector.value = '';
       stopAllIntervals();
       document.body.style.background = '';
       document.body.style.backgroundImage = '';
@@ -152,6 +167,7 @@
     document.getElementById('randomImageButton').addEventListener('click', () => {
       stopAllIntervals();
       selector.value = '';
+      imageSelector.value = '';
       const randomUrl = `https://source.unsplash.com/random/1600x900?sig=${Math.floor(Math.random() * 1000)}`;
       document.body.style.backgroundImage = `url(${randomUrl})`;
       document.body.style.backgroundSize = 'cover';
@@ -161,25 +177,9 @@
     document.getElementById('whiteBackgroundButton').addEventListener('click', () => {
       stopAllIntervals();
       selector.value = '';
+      imageSelector.value = '';
       document.body.style.background = 'white';
       document.body.style.backgroundImage = '';
-    });
-
-    // NUEVO: acciones especiales
-    const accionSelector = document.getElementById('accionSelector');
-    const mensajeEspecial = document.getElementById('mensajeEspecial');
-
-    accionSelector.addEventListener('change', function () {
-      const opcion = this.value;
-
-      if (opcion === "alerta") {
-        alert("🚨 Esta es una alerta especial 🚨");
-        mensajeEspecial.textContent = "🧩 Esperando acción especial...";
-      } else if (opcion === "cambiarTexto") {
-        mensajeEspecial.textContent = "✨ Estás viendo el mensaje especial activado";
-      } else {
-        mensajeEspecial.textContent = "🧩 Esperando acción especial...";
-      }
     });
   </script>
 
