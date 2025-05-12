@@ -2,42 +2,33 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Selector de Fondo</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      transition: background-color 0.5s;
-    }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mensaje con Confirmación</title>
+  <script>
+    // Función que muestra el mensaje de confirmación
+    function mostrarMensaje() {
+      const mensaje = "Este es un mensaje largo que muestra un texto en varias líneas.\n\n" +
+                      "Aquí puedes colocar detalles o una redacción que el usuario debe leer.\n\n" +
+                      "Por ejemplo, puedes decir algo como: '¿Estás seguro de que quieres continuar con esta acción?' y luego confirmar o cancelar.\n\n" +
+                      "Este mensaje también puede incluir advertencias, instrucciones o cualquier otro detalle relevante.\n\n" +
+                      "Si lo deseas, puedes modificar este mensaje según lo necesites.";
 
-    select {
-      font-size: 16px;
-      padding: 8px;
-      margin-top: 20px;
+      // Mostrar el mensaje en el cuadro de confirmación
+      const respuesta = confirm(mensaje);
+
+      // Acción dependiendo de la respuesta del usuario
+      if (respuesta) {
+        alert("Has aceptado continuar.");
+      } else {
+        alert("Has cancelado la acción.");
+      }
     }
-  </style>
+  </script>
 </head>
 <body>
 
-  <h1>Selecciona un color de fondo</h1>
-
-  <select id="colorSelector">
-    <option value="">Selecciona una opción</option>
-    <option value="#3498db">Azul</option>
-    <option value="#2ecc71">Verde</option>
-  </select>
-
-  <script>
-    const selector = document.getElementById('colorSelector');
-
-    selector.addEventListener('change', function () {
-      const color = this.value;
-      if (color) {
-        document.body.style.backgroundColor = color;
-      }
-    });
-  </script>
+  <h1>Prueba de Confirmación con Mensaje Largo</h1>
+  <button onclick="mostrarMensaje()">Mostrar mensaje</button>
 
 </body>
 </html>
