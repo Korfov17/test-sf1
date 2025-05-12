@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Auto Música y Fondos</title>
+  <title>Selector de Fondo Avanzado</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -19,97 +19,163 @@
       margin: 10px;
       width: 250px;
     }
+
+    .info {
+      background-color: #f39c12;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: none;
+    }
   </style>
 </head>
 <body>
 
-  <h1>🎼 Página Musical y Visual</h1>
+  <h1>🎨 Selector de Fondo</h1>
+  <h2 id="saludo">Hola, invitado desconocido</h2>
 
-  <select id="bgSelector">
-    <option value="">🌈 Selecciona un fondo</option>
-    <option value="#ffffff">⬜ Blanco</option>
-    <option value="#2ecc71">🍃 Verde</option>
+  <select id="colorSelector">
+    <option value="">Selecciona una opción</option>
     <option value="#3498db">🌊 Azul</option>
-    <option value="img1">🖼️ Imagen Aleatoria</option>
-    <option value="img2">🌄 Paisaje</option>
+    <option value="#2ecc71">🍃 Verde</option>
+    <option value="#e74c3c">❤️ Rojo</option>
+    <option value="#f1c40f">🌟 Amarillo</option>
+    <option value="#9b59b6">💜 Púrpura</option>
+    <option value="#1abc9c">💎 Turquesa</option>
+    <option value="rainbow">🌈 Arcoíris</option>
+    <option value="customCycle">🔄 Verde-Rosa-Rojo-Azul</option>
   </select>
 
   <br>
+  <button id="resetButton">🔄 Restablecer fondo</button>
+  <button id="notifyButton">🔔 Notificación del navegador</button>
+  <button id="playButton">🎶 Reproducir Canción</button>
+  <button id="randomImageButton">🖼️ Fondo aleatorio</button>
+  <button id="whiteBackgroundButton">⬜ Fondo blanco</button>
+  <br>
+  <button id="cambiarTitulo">📝 Cambiar título de la página</button>
+  <button id="cambiarSaludo">👤 Cambiar nombre de saludo</button>
 
-  <button id="musicToggle">🎶 Cambiar/Quitar Canción</button>
+  <div id="allset" class="info">¡Notificación del navegador!</div>
 
-  <audio id="audioPlayer" autoplay loop></audio>
+  <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
   <script>
-    const audioPlayer = document.getElementById('audioPlayer');
-    const musicToggle = document.getElementById('musicToggle');
-    const songs = [
-      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
-    ];
-    let currentSong = 0;
+    const selector = document.getElementById('colorSelector');
+    const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
+    const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"];
+    let rainbowInterval, customInterval, currentIndex = 0;
 
-    // Función para cargar canción
-    function loadSong(index) {
-      audioPlayer.src = songs[index];
-      audioPlayer.play().catch(() => {
-        console.log("El navegador bloqueó la reproducción automática.");
-      });
-      localStorage.setItem("lastSong", index);
+    function startRainbow(colorsArray) {
+      stopAllIntervals();
+      currentIndex = 0;
+      rainbowInterval = setInterval(() => {
+        document.body.style.background = colorsArray[currentIndex];
+        currentIndex = (currentIndex + 1) % colorsArray.length;
+      }, 500);
     }
 
-    // Cargar última canción usada
-    window.addEventListener('load', () => {
-      const savedSong = localStorage.getItem("lastSong");
-      if (savedSong !== null) {
-        currentSong = parseInt(savedSong);
-      }
-      loadSong(currentSong);
+    function stopAllIntervals() {
+      clearInterval(rainbowInterval);
+      clearInterval(customInterval);
+    }
 
-      const savedBg = localStorage.getItem("bg");
-      if (savedBg) {
-        applyBackground(savedBg);
-        document.getElementById("bgSelector").value = savedBg;
-      }
-    });
+    selector.addEventListener('change', function () {
+      const value = this.value;
+      localStorage.setItem('selectedBackground', value);
+      stopAllIntervals();
+      document.body.style.backgroundImage = "";
+      document.body.style.background = "";
 
-    // Cambiar o pausar canción
-    musicToggle.addEventListener('click', () => {
-      if (!audioPlayer.paused) {
-        audioPlayer.pause();
-        musicToggle.textContent = "▶️ Reanudar Música";
-      } else {
-        currentSong = (currentSong + 1) % songs.length;
-        loadSong(currentSong);
-        musicToggle.textContent = "🎶 Cambiar/Quitar Canción";
-      }
-    });
-
-    // Cambiar fondo
-    const bgSelector = document.getElementById("bgSelector");
-
-    bgSelector.addEventListener("change", () => {
-      const value = bgSelector.value;
-      applyBackground(value);
-      localStorage.setItem("bg", value);
-    });
-
-    function applyBackground(value) {
-      document.body.style.backgroundImage = '';
-      if (value.startsWith("#")) {
+      if (value === "rainbow") {
+        startRainbow(rainbowColors);
+      } else if (value === "customCycle") {
+        startRainbow(customColors);
+      } else if (value) {
         document.body.style.background = value;
-      } else if (value === "img1") {
-        const url = `https://source.unsplash.com/random/1600x900?sig=${Math.floor(Math.random() * 1000)}`;
-        document.body.style.backgroundImage = `url(${url})`;
-        document.body.style.background = "none";
-      } else if (value === "img2") {
-        document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80')";
-        document.body.style.background = "none";
-      } else {
-        document.body.style.background = "#ffffff";
       }
-    }
+    });
+
+    window.addEventListener('load', () => {
+      const savedValue = localStorage.getItem('selectedBackground');
+      if (savedValue) {
+        selector.value = savedValue;
+        if (savedValue === "rainbow") startRainbow(rainbowColors);
+        else if (savedValue === "customCycle") startRainbow(customColors);
+        else document.body.style.background = savedValue;
+      }
+    });
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+      localStorage.removeItem('selectedBackground');
+      selector.value = '';
+      stopAllIntervals();
+      document.body.style.background = '';
+      document.body.style.backgroundImage = '';
+    });
+
+    document.getElementById('notifyButton').addEventListener('click', () => {
+      if (Notification.permission === "granted") {
+        new Notification("El navegador te quiere decir algo", {
+          body: "¡Has activado una notificación!",
+          icon: "https://img.icons8.com/ios/452/bell.png"
+        });
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            new Notification("El navegador te quiere decir algo", {
+              body: "¡Has activado una notificación!",
+              icon: "https://img.icons8.com/ios/452/bell.png"
+            });
+          }
+        });
+      }
+    });
+
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playButton = document.getElementById('playButton');
+    playButton.addEventListener('click', () => {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        playButton.textContent = '⏸️ Pausar Canción';
+      } else {
+        audioPlayer.pause();
+        playButton.textContent = '🎶 Reproducir Canción';
+      }
+    });
+
+    document.getElementById('randomImageButton').addEventListener('click', () => {
+      stopAllIntervals();
+      selector.value = '';
+      const randomUrl = `https://source.unsplash.com/random/1600x900?sig=${Math.floor(Math.random() * 1000)}`;
+      document.body.style.backgroundImage = `url(${randomUrl})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundRepeat = 'no-repeat';
+    });
+
+    document.getElementById('whiteBackgroundButton').addEventListener('click', () => {
+      stopAllIntervals();
+      selector.value = '';
+      document.body.style.background = 'white';
+      document.body.style.backgroundImage = '';
+    });
+
+    // Cambiar título con prompt
+    document.getElementById('cambiarTitulo').addEventListener('click', () => {
+      const nuevoTitulo = prompt("Introduce un nuevo título para la página:");
+      if (nuevoTitulo !== null && nuevoTitulo.trim() !== "") {
+        document.title = nuevoTitulo;
+      }
+    });
+
+    // Cambiar parte del h2 con prompt
+    document.getElementById('cambiarSaludo').addEventListener('click', () => {
+      const nombre = prompt("¿Cuál es tu nombre?");
+      if (nombre !== null && nombre.trim() !== "") {
+        document.getElementById('saludo').textContent = `Hola, ${nombre}`;
+      }
+    });
   </script>
 
 </body>
