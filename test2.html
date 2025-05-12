@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selector de Fondo con Arcoíris, Restablecer y Reproducir Canción</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      transition: background-color 0.5s;
+    }
+
+    select, button {
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 20px;
+      width: 220px;
+    }
+
+    #message {
+      color: green;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .info {
+      background-color: #f39c12;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: none; /* Inicialmente oculto */
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Selecciona un color de fondo</h1>
+
+  <select id="colorSelector">
+    <option value="">Selecciona una opción</option>
+    <option value="#3498db">🌊 Azul</option>
+    <option value="#2ecc71">🍃 Verde</option>
+    <option value="#e74c3c">❤️ Rojo</option>
+    <option value="#f1c40f">🌟 Amarillo</option>
+    <option value="#9b59b6">💜 Púrpura</option>
+    <option value="#1abc9c">💎 Turquesa</option>
+    <option value="rainbow">🌈 Arcoíris</option>
+  </select>
+
+  <br><br>
+  <button id="resetButton">🔄 Restablecer fondo</button>
+  <button id="notifyButton">🔔 Notificación del navegador</button>
+  <button id="playButton">🎶 Reproducir Canción</button>
+
+  <div id="allset" class="info">¡Notificación del navegador!</div> <!-- Mensaje a mostrar -->
+
+  <!-- Etiqueta de audio con una canción desde internet -->
+  <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+
+  <script>
+    const selector = document.getElementById('colorSelector');
+    const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
+    let currentIndex = 0;
+    let rainbowInterval;
+
+    function startRainbow() {
+      rainbowInterval = setInterval(() => {
+        document.body.style.backgroundColor = rainbowColors[currentIndex];
+        currentIndex = (currentIndex + 1) % rainbowColors.length;
+      }, 500);
+    }
+
+    function stopRainbow() {
+      clearInterval(rainbowInterval);
+    }
+
+    selector.addEventListener('change', function () {
+      const value = this.value;
+      localStorage.setItem('selectedBackground', value);
+      stopRainbow();
+
+      if (value === "rainbow") {
+        startRainbow();
+      } else if (value) {
+        document.body.style.backgroundColor = value;
+      } else {
+        document.body.style.backgroundColor = "";
+      }
+    });
+
+    // Restaurar selección al cargar la página
+    window.addEventListener('load', () => {
+      const savedValue = localStorage.getItem('selectedBackground');
+      if (savedValue) {
+        selector.value = savedValue;
+        if (savedValue === "rainbow") {
+          startRainbow();
+        } else {
+          document.body.style.backgroundColor = savedValue;
+        }
+      }
+    });
+
+    // Botón de restablecer
+    const resetButton = document.getElementById('resetButton');
+    const message = document.getElementById('message');
+
+    resetButton.addEventListener('click', () => {
+      localStorage.removeItem('selectedBackground');
+      document.body.style.backgroundColor = '';
+      selector.value = '';
+      stopRainbow();
+      message.textContent = 'Fondo restablecido y caché limpiada.';
+
+      setTimeout(() => {
+        message.textContent = '';
+      }, 3000);
+    });
+
+    // Botón de notificación del navegador
+    const notifyButton = document.getElementById('notifyButton');
+
+    notifyButton.addEventListener('click', () => {
+      // Verificar si las notificaciones están permitidas
+      if (Notification.permission === "granted") {
+        new Notification("El navegador te quiere decir algo", {
+          body: "¡Has activado una notificación!",
+          icon: "https://img.icons8.com/ios/452/bell.png" // Puedes poner un icono
+        });
+      } else if (Notification.permission !== "denied") {
+        // Si no está denegado, pedir permiso para mostrar notificaciones
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            new Notification("El navegador te quiere decir algo", {
+              body: "¡Has activado una notificación!",
+              icon: "https://img.icons8.com/ios/452/bell.png"
+            });
+          }
+        });
+      }
+    });
+
+    // Botón de reproducción de canción
+    const playButton = document.getElementById('playButton');
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    playButton.addEventListener('click', () => {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        playButton.textContent = '⏸️ Pausar Canción'; // Cambiar el texto del botón
+      } else {
+        audioPlayer.pause();
+        playButton.textContent = '🎶 Reproducir Canción'; // Cambiar el texto del botón
+      }
+    });
+  </script>
+
+</body>
+</html>
