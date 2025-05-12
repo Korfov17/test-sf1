@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selector de Fondo con Arcoíris</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      transition: background-color 0.5s;
+    }
+
+    select {
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 20px;
+      width: 200px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Selecciona un color de fondo</h1>
+
+  <select id="colorSelector">
+    <option value="">Selecciona una opción</option>
+    <option value="#3498db">Azul</option>
+    <option value="#2ecc71">Verde</option>
+    <option value="#e74c3c">Rojo</option>
+    <option value="#f1c40f">Amarillo</option>
+    <option value="rainbow">🌈 Arcoíris</option>
+  </select>
+
+  <script>
+    const selector = document.getElementById('colorSelector');
+    let rainbowInterval;
+
+    const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
+    let currentIndex = 0;
+
+    selector.addEventListener('change', function () {
+      clearInterval(rainbowInterval); // Detener arcoíris anterior si existe
+
+      const value = this.value;
+      if (value === "rainbow") {
+        rainbowInterval = setInterval(() => {
+          document.body.style.backgroundColor = rainbowColors[currentIndex];
+          currentIndex = (currentIndex + 1) % rainbowColors.length;
+        }, 500);
+      } else if (value) {
+        document.body.style.backgroundColor = value;
+      } else {
+        document.body.style.backgroundColor = "";
+      }
+    });
+  </script>
+
+</body>
+</html>
