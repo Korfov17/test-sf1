@@ -2,159 +2,114 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Selector de Fondo con Arcoíris, Restablecer y Reproducir Canción</title>
+  <title>Auto Música y Fondos</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 50px;
-      transition: background-color 0.5s;
+      transition: background 0.5s;
+      background-size: cover;
+      background-position: center;
     }
 
     select, button {
       font-size: 16px;
       padding: 8px;
-      margin-top: 20px;
-      width: 220px;
-    }
-
-    #message {
-      color: green;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-
-    .info {
-      background-color: #f39c12;
-      color: white;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 20px;
-      display: none; /* Inicialmente oculto */
+      margin: 10px;
+      width: 250px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Selecciona un color de fondo</h1>
+  <h1>🎼 Página Musical y Visual</h1>
 
-  <select id="colorSelector">
-    <option value="">Selecciona una opción</option>
-    <option value="#3498db">🌊 Azul</option>
+  <select id="bgSelector">
+    <option value="">🌈 Selecciona un fondo</option>
+    <option value="#ffffff">⬜ Blanco</option>
     <option value="#2ecc71">🍃 Verde</option>
-    <option value="#e74c3c">❤️ Rojo</option>
-    <option value="#f1c40f">🌟 Amarillo</option>
-    <option value="#9b59b6">💜 Púrpura</option>
-    <option value="#1abc9c">💎 Turquesa</option>
-    <option value="rainbow">🌈 Arcoíris</option>
+    <option value="#3498db">🌊 Azul</option>
+    <option value="img1">🖼️ Imagen Aleatoria</option>
+    <option value="img2">🌄 Paisaje</option>
   </select>
 
-  <br><br>
-  <button id="resetButton">🔄 Restablecer fondo</button>
-  <button id="notifyButton">🔔 Notificación del navegador</button>
-  <button id="playButton">🎶 Reproducir Canción</button>
+  <br>
 
-  <div id="allset" class="info">¡Notificación del navegador!</div> <!-- Mensaje a mostrar -->
+  <button id="musicToggle">🎶 Cambiar/Quitar Canción</button>
 
-  <!-- Etiqueta de audio con una canción desde internet -->
-  <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  <audio id="audioPlayer" autoplay loop></audio>
 
   <script>
-    const selector = document.getElementById('colorSelector');
-    const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
-    let currentIndex = 0;
-    let rainbowInterval;
-
-    function startRainbow() {
-      rainbowInterval = setInterval(() => {
-        document.body.style.backgroundColor = rainbowColors[currentIndex];
-        currentIndex = (currentIndex + 1) % rainbowColors.length;
-      }, 500);
-    }
-
-    function stopRainbow() {
-      clearInterval(rainbowInterval);
-    }
-
-    selector.addEventListener('change', function () {
-      const value = this.value;
-      localStorage.setItem('selectedBackground', value);
-      stopRainbow();
-
-      if (value === "rainbow") {
-        startRainbow();
-      } else if (value) {
-        document.body.style.backgroundColor = value;
-      } else {
-        document.body.style.backgroundColor = "";
-      }
-    });
-
-    // Restaurar selección al cargar la página
-    window.addEventListener('load', () => {
-      const savedValue = localStorage.getItem('selectedBackground');
-      if (savedValue) {
-        selector.value = savedValue;
-        if (savedValue === "rainbow") {
-          startRainbow();
-        } else {
-          document.body.style.backgroundColor = savedValue;
-        }
-      }
-    });
-
-    // Botón de restablecer
-    const resetButton = document.getElementById('resetButton');
-    const message = document.getElementById('message');
-
-    resetButton.addEventListener('click', () => {
-      localStorage.removeItem('selectedBackground');
-      document.body.style.backgroundColor = '';
-      selector.value = '';
-      stopRainbow();
-      message.textContent = 'Fondo restablecido y caché limpiada.';
-
-      setTimeout(() => {
-        message.textContent = '';
-      }, 3000);
-    });
-
-    // Botón de notificación del navegador
-    const notifyButton = document.getElementById('notifyButton');
-
-    notifyButton.addEventListener('click', () => {
-      // Verificar si las notificaciones están permitidas
-      if (Notification.permission === "granted") {
-        new Notification("El navegador te quiere decir algo", {
-          body: "¡Has activado una notificación!",
-          icon: "https://img.icons8.com/ios/452/bell.png" // Puedes poner un icono
-        });
-      } else if (Notification.permission !== "denied") {
-        // Si no está denegado, pedir permiso para mostrar notificaciones
-        Notification.requestPermission().then(permission => {
-          if (permission === "granted") {
-            new Notification("El navegador te quiere decir algo", {
-              body: "¡Has activado una notificación!",
-              icon: "https://img.icons8.com/ios/452/bell.png"
-            });
-          }
-        });
-      }
-    });
-
-    // Botón de reproducción de canción
-    const playButton = document.getElementById('playButton');
     const audioPlayer = document.getElementById('audioPlayer');
+    const musicToggle = document.getElementById('musicToggle');
+    const songs = [
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+      "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+    ];
+    let currentSong = 0;
 
-    playButton.addEventListener('click', () => {
-      if (audioPlayer.paused) {
-        audioPlayer.play();
-        playButton.textContent = '⏸️ Pausar Canción'; // Cambiar el texto del botón
-      } else {
-        audioPlayer.pause();
-        playButton.textContent = '🎶 Reproducir Canción'; // Cambiar el texto del botón
+    // Función para cargar canción
+    function loadSong(index) {
+      audioPlayer.src = songs[index];
+      audioPlayer.play().catch(() => {
+        console.log("El navegador bloqueó la reproducción automática.");
+      });
+      localStorage.setItem("lastSong", index);
+    }
+
+    // Cargar última canción usada
+    window.addEventListener('load', () => {
+      const savedSong = localStorage.getItem("lastSong");
+      if (savedSong !== null) {
+        currentSong = parseInt(savedSong);
+      }
+      loadSong(currentSong);
+
+      const savedBg = localStorage.getItem("bg");
+      if (savedBg) {
+        applyBackground(savedBg);
+        document.getElementById("bgSelector").value = savedBg;
       }
     });
+
+    // Cambiar o pausar canción
+    musicToggle.addEventListener('click', () => {
+      if (!audioPlayer.paused) {
+        audioPlayer.pause();
+        musicToggle.textContent = "▶️ Reanudar Música";
+      } else {
+        currentSong = (currentSong + 1) % songs.length;
+        loadSong(currentSong);
+        musicToggle.textContent = "🎶 Cambiar/Quitar Canción";
+      }
+    });
+
+    // Cambiar fondo
+    const bgSelector = document.getElementById("bgSelector");
+
+    bgSelector.addEventListener("change", () => {
+      const value = bgSelector.value;
+      applyBackground(value);
+      localStorage.setItem("bg", value);
+    });
+
+    function applyBackground(value) {
+      document.body.style.backgroundImage = '';
+      if (value.startsWith("#")) {
+        document.body.style.background = value;
+      } else if (value === "img1") {
+        const url = `https://source.unsplash.com/random/1600x900?sig=${Math.floor(Math.random() * 1000)}`;
+        document.body.style.backgroundImage = `url(${url})`;
+        document.body.style.background = "none";
+      } else if (value === "img2") {
+        document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80')";
+        document.body.style.background = "none";
+      } else {
+        document.body.style.background = "#ffffff";
+      }
+    }
   </script>
 
 </body>
