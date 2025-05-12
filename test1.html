@@ -52,8 +52,14 @@
   <button id="playButton">🎶 Reproducir Canción</button>
   <button id="randomImageButton">🖼️ Fondo aleatorio</button>
   <button id="whiteBackgroundButton">⬜ Fondo blanco</button>
-  <button id="alertButton">🔔 Mostrar alerta</button>
-  <button id="promptButton">✏️ Mostrar prompt</button>
+
+  <!-- NUEVO: Acciones especiales -->
+  <h2 id="mensajeEspecial">🧩 Esperando acción especial...</h2>
+  <select id="accionSelector">
+    <option value="">Selecciona una acción especial</option>
+    <option value="alerta">Mostrar alerta</option>
+    <option value="cambiarTexto">Cambiar mensaje en pantalla</option>
+  </select>
 
   <div id="allset" class="info">¡Notificación del navegador!</div>
 
@@ -159,16 +165,20 @@
       document.body.style.backgroundImage = '';
     });
 
-    // Botón de alerta
-    document.getElementById('alertButton').addEventListener('click', () => {
-      alert("🚨 Atención:\n\nEste es un mensaje de alerta del navegador.\nEsto es una prueba 😪🤚🫰🥈🎄🎑♣️♦️");
-    });
+    // NUEVO: acciones especiales
+    const accionSelector = document.getElementById('accionSelector');
+    const mensajeEspecial = document.getElementById('mensajeEspecial');
 
-    // Botón de prompt
-    document.getElementById('promptButton').addEventListener('click', () => {
-      const respuesta = prompt("📝 Escribe tu mensaje:");
-      if (respuesta !== null) {
-        alert(`📢 Dijiste: ${respuesta}`);
+    accionSelector.addEventListener('change', function () {
+      const opcion = this.value;
+
+      if (opcion === "alerta") {
+        alert("🚨 Esta es una alerta especial 🚨");
+        mensajeEspecial.textContent = "🧩 Esperando acción especial...";
+      } else if (opcion === "cambiarTexto") {
+        mensajeEspecial.textContent = "✨ Estás viendo el mensaje especial activado";
+      } else {
+        mensajeEspecial.textContent = "🧩 Esperando acción especial...";
       }
     });
   </script>
