@@ -53,8 +53,6 @@
     <!-- Las opciones de imágenes se llenarán mediante JS -->
   </select>
 
-  <input type="text" id="customUrlInput" placeholder="Pega la URL de la imagen" style="display:none; margin-top: 10px; padding: 8px; width: 250px;" />
-
   <br>
   <button id="resetButton">🔄 Restablecer fondo</button>
   <button id="notifyButton">🔔 Notificación del navegador</button>
@@ -69,14 +67,13 @@
   <script>
     const selector = document.getElementById('colorSelector');
     const imageSelector = document.getElementById('imageSelector');
-    const customInput = document.getElementById("customUrlInput");
     
     const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
     const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"]; // Verde, rosa, rojo, azul
     let rainbowInterval, customInterval, currentIndex = 0;
 
     const imageList = [
-      { alias: "🌟 PS4", file: "wallpaperbetter.com_1920x1080.jpg" },
+      { alias: "🌟 PlayStation", file: "wallpaperbetter_1920x1080.jpg" },
       { alias: "🌊 Playa", file: "beach.jpg" },
       { alias: "🌄 Montaña", file: "mountain.jpg" },
       { alias: "🌇 Atardecer", file: "sunset.jpg" }
@@ -116,24 +113,14 @@
       selector.value = '';
 
       if (selectedFile === "__custom__") {
-        // Mostrar input para URL personalizada
-        customInput.style.display = "inline-block";
-        customInput.focus();
-
-        customInput.addEventListener('change', () => {
-          const url = customInput.value.trim();
-          if (url) {
-            document.body.style.backgroundImage = `url(${url})`;
-            document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundRepeat = 'no-repeat';
-          }
-        });
-
+        // Usar prompt para obtener la URL personalizada
+        const customUrl = prompt("Introduce la URL de la imagen:");
+        if (customUrl) {
+          document.body.style.backgroundImage = `url(${customUrl})`;
+          document.body.style.backgroundSize = 'cover';
+          document.body.style.backgroundRepeat = 'no-repeat';
+        }
       } else {
-        // Ocultar input si se elige otra opción
-        customInput.style.display = "none";
-        customInput.value = "";
-
         if (selectedFile) {
           document.body.style.backgroundImage = `url('img/${selectedFile}')`;
           document.body.style.backgroundSize = 'cover';
