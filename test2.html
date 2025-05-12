@@ -8,7 +8,7 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 50px;
-      transition: background 0.5s;
+      transition: background 0.5s, color 0.5s;
       background-size: cover;
       background-position: center;
     }
@@ -33,8 +33,9 @@
 <body>
 
   <h1>🎨 Selector de Fondo</h1>
-  <h2 id="saludo">Hola, invitado desconocido</h2>
+  <h2 id="subTitle">🖍️ Subtítulo editable desde el desplegable</h2>
 
+  <!-- Selector de fondo -->
   <select id="colorSelector">
     <option value="">Selecciona una opción</option>
     <option value="#3498db">🌊 Azul</option>
@@ -47,15 +48,24 @@
     <option value="customCycle">🔄 Verde-Rosa-Rojo-Azul</option>
   </select>
 
+  <!-- Botones -->
   <br>
   <button id="resetButton">🔄 Restablecer fondo</button>
   <button id="notifyButton">🔔 Notificación del navegador</button>
   <button id="playButton">🎶 Reproducir Canción</button>
   <button id="randomImageButton">🖼️ Fondo aleatorio</button>
   <button id="whiteBackgroundButton">⬜ Fondo blanco</button>
-  <br>
-  <button id="cambiarTitulo">📝 Cambiar título de la página</button>
-  <button id="cambiarSaludo">👤 Cambiar nombre de saludo</button>
+
+  <!-- Nuevo desplegable de acciones -->
+  <br><br>
+  <select id="actionSelector">
+    <option value="">🔽 Selecciona una acción</option>
+    <option value="alert">🔈 Mostrar alerta</option>
+    <option value="changeTitle">✏️ Cambiar título</option>
+    <option value="changeSubtitle">📝 Cambiar subtítulo</option>
+    <option value="changeTextColor">🎨 Cambiar color de texto</option>
+    <option value="randomNumber">🎲 Mostrar número aleatorio</option>
+  </select>
 
   <div id="allset" class="info">¡Notificación del navegador!</div>
 
@@ -161,20 +171,32 @@
       document.body.style.backgroundImage = '';
     });
 
-    // Cambiar título con prompt
-    document.getElementById('cambiarTitulo').addEventListener('click', () => {
-      const nuevoTitulo = prompt("Introduce un nuevo título para la página:");
-      if (nuevoTitulo !== null && nuevoTitulo.trim() !== "") {
-        document.title = nuevoTitulo;
+    // Nuevo: desplegable de acciones
+    document.getElementById('actionSelector').addEventListener('change', function () {
+      const action = this.value;
+      switch (action) {
+        case 'alert':
+          alert("¡Hola! Esto es una alerta desde el desplegable.");
+          break;
+        case 'changeTitle':
+          const nuevoTitulo = prompt("Introduce un nuevo título:");
+          if (nuevoTitulo) document.title = nuevoTitulo;
+          break;
+        case 'changeSubtitle':
+          const nuevoSubtitulo = prompt("Nuevo texto del subtítulo:");
+          if (nuevoSubtitulo) document.getElementById('subTitle').textContent = nuevoSubtitulo;
+          break;
+        case 'changeTextColor':
+          const colores = ['#e74c3c', '#2ecc71', '#3498db', '#9b59b6', '#f1c40f', '#1abc9c'];
+          const color = colores[Math.floor(Math.random() * colores.length)];
+          document.body.style.color = color;
+          break;
+        case 'randomNumber':
+          const n = Math.floor(Math.random() * 100) + 1;
+          alert("Tu número aleatorio es: " + n);
+          break;
       }
-    });
-
-    // Cambiar parte del h2 con prompt
-    document.getElementById('cambiarSaludo').addEventListener('click', () => {
-      const nombre = prompt("¿Cuál es tu nombre?");
-      if (nombre !== null && nombre.trim() !== "") {
-        document.getElementById('saludo').textContent = `Hola, ${nombre}`;
-      }
+      this.value = ''; // Reset para que se pueda volver a seleccionar
     });
   </script>
 
