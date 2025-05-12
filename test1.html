@@ -2,26 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Selector de Fondo con Arcoíris y Restablecer</title>
+  <title>Selector de Fondo Avanzado</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 50px;
-      transition: background-color 0.5s;
+      transition: background 0.5s;
+      background-size: cover;
+      background-position: center;
     }
 
     select, button {
       font-size: 16px;
       padding: 8px;
-      margin-top: 20px;
-      width: 220px;
-    }
-
-    #message {
-      color: green;
-      font-weight: bold;
-      margin-top: 20px;
+      margin: 10px;
+      width: 250px;
     }
 
     .info {
@@ -30,13 +26,13 @@
       padding: 10px;
       border-radius: 5px;
       margin-top: 20px;
-      display: none; /* Inicialmente oculto */
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <h1>Selecciona un color de fondo</h1>
+  <h1>🎨 Selector de Fondo</h1>
 
   <select id="colorSelector">
     <option value="">Selecciona una opción</option>
@@ -47,86 +43,124 @@
     <option value="#9b59b6">💜 Púrpura</option>
     <option value="#1abc9c">💎 Turquesa</option>
     <option value="rainbow">🌈 Arcoíris</option>
+    <option value="customCycle">🔄 Verde-Rosa-Rojo-Azul</option>
   </select>
 
-  <br><br>
+  <br>
   <button id="resetButton">🔄 Restablecer fondo</button>
   <button id="notifyButton">🔔 Notificación del navegador</button>
+  <button id="playButton">🎶 Reproducir Canción</button>
+  <button id="randomImageButton">🖼️ Fondo aleatorio</button>
+  <button id="whiteBackgroundButton">⬜ Fondo blanco</button>
 
-  <div id="allset" class="info">¡Notificación del navegador!</div> <!-- Mensaje a mostrar -->
+  <div id="allset" class="info">¡Notificación del navegador!</div>
+
+  <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
   <script>
     const selector = document.getElementById('colorSelector');
     const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
-    let currentIndex = 0;
-    let rainbowInterval;
+    const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"]; // Verde, rosa, rojo, azul
+    let rainbowInterval, customInterval, currentIndex = 0;
 
-    function startRainbow() {
+    function startRainbow(colorsArray) {
+      stopAllIntervals();
+      currentIndex = 0;
       rainbowInterval = setInterval(() => {
-        document.body.style.backgroundColor = rainbowColors[currentIndex];
-        currentIndex = (currentIndex + 1) % rainbowColors.length;
+        document.body.style.background = colorsArray[currentIndex];
+        currentIndex = (currentIndex + 1) % colorsArray.length;
       }, 500);
     }
 
-    function stopRainbow() {
+    function stopAllIntervals() {
       clearInterval(rainbowInterval);
+      clearInterval(customInterval);
     }
 
     selector.addEventListener('change', function () {
       const value = this.value;
       localStorage.setItem('selectedBackground', value);
-      stopRainbow();
+      stopAllIntervals();
+      document.body.style.backgroundImage = ""; // Quita imagen si hay
+      document.body.style.background = ""; // Quita color
 
       if (value === "rainbow") {
-        startRainbow();
+        startRainbow(rainbowColors);
+      } else if (value === "customCycle") {
+        startRainbow(customColors);
       } else if (value) {
-        document.body.style.backgroundColor = value;
-      } else {
-        document.body.style.backgroundColor = "";
+        document.body.style.background = value;
       }
     });
 
-    // Restaurar selección al cargar la página
+    // Restaurar selección al cargar
     window.addEventListener('load', () => {
       const savedValue = localStorage.getItem('selectedBackground');
       if (savedValue) {
         selector.value = savedValue;
-        if (savedValue === "rainbow") {
-          startRainbow();
-        } else {
-          document.body.style.backgroundColor = savedValue;
-        }
+        if (savedValue === "rainbow") startRainbow(rainbowColors);
+        else if (savedValue === "customCycle") startRainbow(customColors);
+        else document.body.style.background = savedValue;
       }
     });
 
-    // Botón de restablecer
-    const resetButton = document.getElementById('resetButton');
-    const message = document.getElementById('message');
-
-    resetButton.addEventListener('click', () => {
+    // Restablecer fondo
+    document.getElementById('resetButton').addEventListener('click', () => {
       localStorage.removeItem('selectedBackground');
-      document.body.style.backgroundColor = '';
       selector.value = '';
-      stopRainbow();
-      message.textContent = 'Fondo restablecido y caché limpiada.';
-
-      setTimeout(() => {
-        message.textContent = '';
-      }, 3000);
+      stopAllIntervals();
+      document.body.style.background = '';
+      document.body.style.backgroundImage = '';
     });
 
-    // Botón de notificación (muestra el mensaje dentro del div)
-    const notifyButton = document.getElementById('notifyButton');
-    const allset = document.getElementById('allset');
+    // Notificación del navegador
+    document.getElementById('notifyButton').addEventListener('click', () => {
+      if (Notification.permission === "granted") {
+        new Notification("El navegador te quiere decir algo", {
+          body: "¡Has activado una notificación!",
+          icon: "https://img.icons8.com/ios/452/bell.png"
+        });
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+          if (permission === "granted") {
+            new Notification("El navegador te quiere decir algo", {
+              body: "¡Has activado una notificación!",
+              icon: "https://img.icons8.com/ios/452/bell.png"
+            });
+          }
+        });
+      }
+    });
 
-    notifyButton.addEventListener('click', () => {
-      // Mostrar el mensaje del div
-      allset.style.display = 'block'; // Cambiar el estilo a display: block
+    // Reproducir canción
+    const audioPlayer = document.getElementById('audioPlayer');
+    const playButton = document.getElementById('playButton');
+    playButton.addEventListener('click', () => {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        playButton.textContent = '⏸️ Pausar Canción';
+      } else {
+        audioPlayer.pause();
+        playButton.textContent = '🎶 Reproducir Canción';
+      }
+    });
 
-      // Ocultar el mensaje después de 3 segundos
-      setTimeout(() => {
-        allset.style.display = 'none';
-      }, 3000); // Ocultar después de 3 segundos
+    // Fondo aleatorio con imagen
+    document.getElementById('randomImageButton').addEventListener('click', () => {
+      stopAllIntervals();
+      selector.value = '';
+      const randomUrl = `https://source.unsplash.com/random/1600x900?sig=${Math.floor(Math.random() * 1000)}`;
+      document.body.style.backgroundImage = `url(${randomUrl})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundRepeat = 'no-repeat';
+    });
+
+    // Fondo blanco (original)
+    document.getElementById('whiteBackgroundButton').addEventListener('click', () => {
+      stopAllIntervals();
+      selector.value = '';
+      document.body.style.background = 'white';
+      document.body.style.backgroundImage = '';
     });
   </script>
 
