@@ -52,6 +52,8 @@
   <button id="playButton">🎶 Reproducir Canción</button>
   <button id="randomImageButton">🖼️ Fondo aleatorio</button>
   <button id="whiteBackgroundButton">⬜ Fondo blanco</button>
+  <button id="alertButton">🔔 Mostrar alerta</button>
+  <button id="promptButton">✏️ Mostrar prompt</button>
 
   <div id="allset" class="info">¡Notificación del navegador!</div>
 
@@ -60,7 +62,7 @@
   <script>
     const selector = document.getElementById('colorSelector');
     const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
-    const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"]; // Verde, rosa, rojo, azul
+    const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"];
     let rainbowInterval, customInterval, currentIndex = 0;
 
     function startRainbow(colorsArray) {
@@ -81,8 +83,8 @@
       const value = this.value;
       localStorage.setItem('selectedBackground', value);
       stopAllIntervals();
-      document.body.style.backgroundImage = ""; // Quita imagen si hay
-      document.body.style.background = ""; // Quita color
+      document.body.style.backgroundImage = "";
+      document.body.style.background = "";
 
       if (value === "rainbow") {
         startRainbow(rainbowColors);
@@ -93,7 +95,6 @@
       }
     });
 
-    // Restaurar selección al cargar
     window.addEventListener('load', () => {
       const savedValue = localStorage.getItem('selectedBackground');
       if (savedValue) {
@@ -104,7 +105,6 @@
       }
     });
 
-    // Restablecer fondo
     document.getElementById('resetButton').addEventListener('click', () => {
       localStorage.removeItem('selectedBackground');
       selector.value = '';
@@ -113,7 +113,6 @@
       document.body.style.backgroundImage = '';
     });
 
-    // Notificación del navegador
     document.getElementById('notifyButton').addEventListener('click', () => {
       if (Notification.permission === "granted") {
         new Notification("El navegador te quiere decir algo", {
@@ -132,7 +131,6 @@
       }
     });
 
-    // Reproducir canción
     const audioPlayer = document.getElementById('audioPlayer');
     const playButton = document.getElementById('playButton');
     playButton.addEventListener('click', () => {
@@ -145,7 +143,6 @@
       }
     });
 
-    // Fondo aleatorio con imagen
     document.getElementById('randomImageButton').addEventListener('click', () => {
       stopAllIntervals();
       selector.value = '';
@@ -155,12 +152,24 @@
       document.body.style.backgroundRepeat = 'no-repeat';
     });
 
-    // Fondo blanco (original)
     document.getElementById('whiteBackgroundButton').addEventListener('click', () => {
       stopAllIntervals();
       selector.value = '';
       document.body.style.background = 'white';
       document.body.style.backgroundImage = '';
+    });
+
+    // Botón de alerta
+    document.getElementById('alertButton').addEventListener('click', () => {
+      alert("🚨 Atención:\n\nEste es un mensaje de alerta del navegador.");
+    });
+
+    // Botón de prompt
+    document.getElementById('promptButton').addEventListener('click', () => {
+      const respuesta = prompt("📝 Escribe tu mensaje:");
+      if (respuesta !== null) {
+        alert(`📢 Dijiste: ${respuesta}`);
+      }
     });
   </script>
 
