@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Aplicar Ajustes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .message {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Página con ajustes aplicados</h1>
+
+  <div class="message">
+    <p>Los ajustes que guardaste se han aplicado a esta página.</p>
+  </div>
+
+  <script>
+    // Recuperar los ajustes del localStorage
+    const backgroundColor = localStorage.getItem('backgroundColor');
+    const fontSize = localStorage.getItem('fontSize');
+
+    // Aplicar los ajustes si existen
+    if (backgroundColor) {
+      document.body.style.backgroundColor = backgroundColor;
+    }
+    if (fontSize) {
+      document.body.style.fontSize = fontSize + 'px';
+    }
+  </script>
+
+</body>
+</html>
