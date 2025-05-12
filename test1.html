@@ -23,6 +23,15 @@
       font-weight: bold;
       margin-top: 20px;
     }
+
+    .info {
+      background-color: #f39c12;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: none; /* Inicialmente oculto */
+    }
   </style>
 </head>
 <body>
@@ -43,7 +52,8 @@
   <br><br>
   <button id="resetButton">🔄 Restablecer fondo</button>
   <button id="notifyButton">🔔 Notificación del navegador</button>
-  <p id="message"></p>
+
+  <div id="allset" class="info">¡Notificación del navegador!</div> <!-- Mensaje a mostrar -->
 
   <script>
     const selector = document.getElementById('colorSelector');
@@ -105,27 +115,18 @@
       }, 3000);
     });
 
-    // Botón de notificación
+    // Botón de notificación (muestra el mensaje dentro del div)
     const notifyButton = document.getElementById('notifyButton');
+    const allset = document.getElementById('allset');
 
     notifyButton.addEventListener('click', () => {
-      // Verificar si las notificaciones están permitidas
-      if (Notification.permission === "granted") {
-        new Notification("El navegador te quiere decir algo", {
-          body: "¡Has activado una notificación!",
-          icon: "https://img.icons8.com/ios/452/bell.png" // Puedes poner un icono
-        });
-      } else if (Notification.permission !== "denied") {
-        // Si no está denegado, pedir permiso para mostrar notificaciones
-        Notification.requestPermission().then(permission => {
-          if (permission === "granted") {
-            new Notification("El navegador te quiere decir algo", {
-              body: "¡Has activado una notificación!",
-              icon: "https://img.icons8.com/ios/452/bell.png"
-            });
-          }
-        });
-      }
+      // Mostrar el mensaje del div
+      allset.style.display = 'block'; // Cambiar el estilo a display: block
+
+      // Ocultar el mensaje después de 3 segundos
+      setTimeout(() => {
+        allset.style.display = 'none';
+      }, 3000); // Ocultar después de 3 segundos
     });
   </script>
 
