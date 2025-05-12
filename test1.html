@@ -34,9 +34,9 @@
 
   <h1>🎨 Selector de Fondo</h1>
 
-  <!-- Select original -->
+  <!-- Selector de color/fondo animado -->
   <select id="colorSelector">
-    <option value="">Selecciona un color</option>
+    <option value="">Selecciona una opción</option>
     <option value="#3498db">🌊 Azul</option>
     <option value="#2ecc71">🍃 Verde</option>
     <option value="#e74c3c">❤️ Rojo</option>
@@ -47,9 +47,9 @@
     <option value="customCycle">🔄 Verde-Rosa-Rojo-Azul</option>
   </select>
 
-  <!-- Nuevo select de imágenes -->
+  <!-- Selector de imágenes con alias -->
   <select id="imageSelector">
-    <option value="">Selecciona una imagen de fondo</option>
+    <option value="">🖼️ Elegir imagen de fondo</option>
   </select>
 
   <br>
@@ -68,10 +68,11 @@
     const imageSelector = document.getElementById('imageSelector');
     const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
     const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"];
-    let rainbowInterval, currentIndex = 0;
+    let rainbowInterval, customInterval, currentIndex = 0;
 
     function stopAllIntervals() {
       clearInterval(rainbowInterval);
+      clearInterval(customInterval);
     }
 
     function startRainbow(colorsArray) {
@@ -83,13 +84,13 @@
       }, 500);
     }
 
-    // Manejo del selector de color
+    // Cambio por color o ciclo
     selector.addEventListener('change', function () {
       const value = this.value;
       localStorage.setItem('selectedBackground', value);
       stopAllIntervals();
-      document.body.style.backgroundImage = "";
-      document.body.style.background = "";
+      document.body.style.backgroundImage = '';
+      document.body.style.background = '';
 
       if (value === "rainbow") {
         startRainbow(rainbowColors);
@@ -100,27 +101,7 @@
       }
     });
 
-    // Manejo del selector de imágenes
-    const imagenesDisponibles = ["test1.jpg", "wallpaperbetter.com_1920x1080.jpg", "fondo1.png", "fondo2.webp"];
-    imagenesDisponibles.forEach(nombre => {
-      const option = document.createElement('option');
-      option.value = nombre;
-      option.textContent = nombre;
-      imageSelector.appendChild(option);
-    });
-
-    imageSelector.addEventListener('change', function () {
-      const fileName = this.value;
-      stopAllIntervals();
-      selector.value = "";
-      if (fileName) {
-        document.body.style.backgroundImage = `url('img/${fileName}')`;
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundRepeat = 'no-repeat';
-      }
-    });
-
-    // Restaurar selección al cargar
+    // Restaurar fondo guardado al cargar
     window.addEventListener('load', () => {
       const savedValue = localStorage.getItem('selectedBackground');
       if (savedValue) {
@@ -131,7 +112,35 @@
       }
     });
 
-    // Botón de reset
+    // Imagenes personalizadas con alias
+    const imageList = [
+      { file: "test1.jpg", alias: "★ Montañas" },
+      { file: "test2.jpg", alias: "🌅 Atardecer" },
+      { file: "test3.jpg", alias: "🌊 Playa" },
+      { file: "test4.jpg", alias: "🌌 Espacio" }
+    ];
+
+    imageList.forEach(img => {
+      const option = document.createElement("option");
+      option.value = img.file;
+      option.textContent = img.alias;
+      imageSelector.appendChild(option);
+    });
+
+    imageSelector.addEventListener('change', () => {
+      const selectedFile = imageSelector.value;
+      stopAllIntervals();
+      selector.value = '';
+      if (selectedFile) {
+        document.body.style.backgroundImage = `url('img/${selectedFile}')`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundRepeat = 'no-repeat';
+      } else {
+        document.body.style.backgroundImage = '';
+      }
+    });
+
+    // Botones
     document.getElementById('resetButton').addEventListener('click', () => {
       localStorage.removeItem('selectedBackground');
       selector.value = '';
@@ -141,7 +150,6 @@
       document.body.style.backgroundImage = '';
     });
 
-    // Notificación
     document.getElementById('notifyButton').addEventListener('click', () => {
       if (Notification.permission === "granted") {
         new Notification("El navegador te quiere decir algo", {
@@ -160,7 +168,6 @@
       }
     });
 
-    // Canción
     const audioPlayer = document.getElementById('audioPlayer');
     const playButton = document.getElementById('playButton');
     playButton.addEventListener('click', () => {
@@ -173,7 +180,6 @@
       }
     });
 
-    // Fondo aleatorio
     document.getElementById('randomImageButton').addEventListener('click', () => {
       stopAllIntervals();
       selector.value = '';
@@ -184,7 +190,6 @@
       document.body.style.backgroundRepeat = 'no-repeat';
     });
 
-    // Fondo blanco
     document.getElementById('whiteBackgroundButton').addEventListener('click', () => {
       stopAllIntervals();
       selector.value = '';
