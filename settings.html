@@ -43,6 +43,7 @@
     <option value="prompt2">📝 Preguntar edad</option>
     <option value="setText2">📄 Cambiar subtítulo</option>
     <option value="alert3">✅ Acción confirmada</option>
+    <option value="changePageTitle">🧾 Cambiar título de la pestaña (HTML)</option>
   </select>
 
   <!-- Desplegable 2 -->
@@ -117,6 +118,13 @@
       prompt2: () => { const edad = prompt("¿Cuántos años tienes?"); alert("Edad registrada: " + edad); },
       setText2: () => { const subtitulo = prompt("Nuevo subtítulo:"); if (subtitulo) storageApply('subText', subtitulo); },
       alert3: () => alert("✅ Acción confirmada correctamente."),
+      changePageTitle: () => {
+        const newTitle = prompt("Título de la pestaña:");
+        if (newTitle?.trim()) {
+          document.title = newTitle.trim();
+          storageApply('pageTitle', newTitle.trim());
+        }
+      },
 
       // Grupo 2
       alertA: () => alert("Bienvenido al panel 2"),
