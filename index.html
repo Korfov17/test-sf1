@@ -2,33 +2,55 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mensaje con Confirmación</title>
-  <script>
-    // Función que muestra el mensaje de confirmación
-    function mostrarMensaje() {
-      const mensaje = "Este es un mensaje largo que muestra un texto en varias líneas.\n\n" +
-                      "Aquí puedes colocar detalles o una redacción que el usuario debe leer.\n\n" +
-                      "Por ejemplo, puedes decir algo como: '¿Estás seguro de que quieres continuar con esta acción?' y luego confirmar o cancelar.\n\n" +
-                      "Este mensaje también puede incluir advertencias, instrucciones o cualquier otro detalle relevante.\n\n" +
-                      "Si lo deseas, puedes modificar este mensaje según lo necesites.";
-
-      // Mostrar el mensaje en el cuadro de confirmación
-      const respuesta = confirm(mensaje);
-
-      // Acción dependiendo de la respuesta del usuario
-      if (respuesta) {
-        alert("Has aceptado continuar.");
-      } else {
-        alert("Este es un mensaje largo que muestra un texto en varias líneas.\n\nAquí puedes colocar detalles o una redacción que el usuario debe leer.\n\nPor ejemplo, puedes decir algo como: '¿Estás seguro de que quieres continuar con esta acción?' y luego confirmar o cancelar.\nste mensaje también puede incluir advertencias, instrucciones o cualquier otro detalle\nSi lo deseas, puedes modificar este mensaje según lo necesites.")
-      }
+  <title>Página principal</title>
+  <style>
+    body {
+      transition: all 0.3s;
     }
-  </script>
+  </style>
 </head>
 <body>
+  <h1 id="titulo">¡Bienvenido!</h1>
+  <p id="parrafo">Este texto puede cambiar con los ajustes.</p>
 
-  <h1>Prueba de Confirmación con Mensaje Largo</h1>
-  <button onclick="mostrarMensaje()">Mostrar mensaje</button>
+  <script>
+    function aplicarAjustes() {
+      const ajustes = JSON.parse(localStorage.getItem('ajustesUsuario') || '{}');
+      const body = document.body;
+      const titulo = document.getElementById('titulo');
+      const parrafo = document.getElementById('parrafo');
 
+      // Ajuste 1
+      switch (ajustes.ajuste1) {
+        case "fondoRojo": body.style.background = "red"; break;
+        case "fondoVerde": body.style.background = "green"; break;
+        case "textoGrande": parrafo.style.fontSize = "24px"; break;
+        case "textoPequeño": parrafo.style.fontSize = "12px"; break;
+      }
+
+      // Ajuste 2
+      switch (ajustes.ajuste2) {
+        case "negrita": parrafo.style.fontWeight = "bold"; break;
+        case "normal": parrafo.style.fontWeight = "normal"; break;
+        case "mayusculas": parrafo.textContent = parrafo.textContent.toUpperCase(); break;
+        case "minusculas": parrafo.textContent = parrafo.textContent.toLowerCase(); break;
+      }
+
+      // Ajuste 3
+      switch (ajustes.ajuste3) {
+        case "fondoImagen": body.style.backgroundImage = "url('img/test1.jpg')"; break;
+        case "fondoBlanco": body.style.background = "#fff"; break;
+      }
+
+      // Ajuste 4
+      switch (ajustes.ajuste4) {
+        case "fuenteArial": body.style.fontFamily = "Arial, sans-serif"; break;
+        case "fuenteComic": body.style.fontFamily = "'Comic Sans MS', cursive"; break;
+        case "fuenteSerif": body.style.fontFamily = "serif"; break;
+      }
+    }
+
+    aplicarAjustes();
+  </script>
 </body>
 </html>
