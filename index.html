@@ -1,16 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Mi Página</title>
+  <title>Página Principal</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 50px;
-      transition: background 0.5s;
-      background-size: cover;
-      background-position: center;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: white;
+      transition: all 0.3s ease;
     }
     h1 {
       color: #333;
@@ -18,25 +17,61 @@
   </style>
 </head>
 <body>
-  <h1 id="mainText">🌟 Bienvenido a la página principal</h1>
+  <h1 id="mainTitle">🌟 Bienvenido a la Página Principal</h1>
 
   <script>
-    window.addEventListener('load', () => {
-      const customTitle = localStorage.getItem('customTitle');
-      const customHeader = localStorage.getItem('customHeader');
-      const backgroundColor = localStorage.getItem('backgroundColor');
-      const backgroundImageUrl = localStorage.getItem('backgroundImageUrl');
+    function aplicarAjustes() {
+      const accion = localStorage.getItem("userAction");
+      if (!accion) return;
 
-      if (customTitle) document.title = customTitle;
-      if (customHeader) document.getElementById('mainText').textContent = customHeader;
-      if (backgroundColor) {
-        document.body.style.background = backgroundColor;
-        document.body.style.backgroundImage = '';
+      switch (accion) {
+        case "setTitle":
+          const nuevoTitulo = prompt("Escribe el nuevo título de la página:");
+          if (nuevoTitulo) {
+            document.title = nuevoTitulo;
+            alert("Título cambiado correctamente.");
+          }
+          break;
+        case "setHeader":
+          const nuevoTexto = prompt("Escribe el nuevo texto del encabezado:");
+          if (nuevoTexto) {
+            document.getElementById("mainTitle").textContent = nuevoTexto;
+            alert("Encabezado cambiado.");
+          }
+          break;
+        case "setBackgroundColor":
+          document.body.style.backgroundColor = "#dff0d8";
+          break;
+        case "setBackgroundImage":
+          const url = prompt("Introduce la URL de la imagen:");
+          if (url) document.body.style.backgroundImage = `url('${url}')`;
+          break;
+        case "reset":
+          document.body.style = "";
+          document.title = "Página Principal";
+          document.getElementById("mainTitle").textContent = "🌟 Bienvenido a la Página Principal";
+          break;
+        case "alertTest":
+          alert("¡Esto es una prueba de alerta!");
+          break;
+        case "changeFont":
+          document.body.style.fontFamily = "'Courier New', monospace";
+          break;
+        case "increaseFontSize":
+          document.body.style.fontSize = "20px";
+          break;
+        case "changeTextColor":
+          document.body.style.color = "#0066cc";
+          break;
+        case "applyGradient":
+          document.body.style.background = "linear-gradient(to right, #ff9966, #66ccff)";
+          break;
       }
-      if (backgroundImageUrl) {
-        document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
-      }
-    });
+
+      localStorage.removeItem("userAction");
+    }
+
+    window.onload = aplicarAjustes;
   </script>
 </body>
 </html>
