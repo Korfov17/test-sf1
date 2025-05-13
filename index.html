@@ -1,56 +1,79 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Página principal</title>
+  <title>Mi Sitio Web</title>
   <style>
     body {
-      transition: all 0.3s;
+      font-family: Arial, sans-serif;
+      padding: 50px;
+      text-align: center;
+      transition: background 0.5s;
+    }
+    #centralText {
+      font-size: 24px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
-  <h1 id="titulo">¡Bienvenido!</h1>
-  <p id="parrafo">Este texto puede cambiar con los ajustes.</p>
+  <h1>Bienvenido a la página principal</h1>
+  <p id="centralText">Este es el texto principal.</p>
 
   <script>
-    function aplicarAjustes() {
-      const ajustes = JSON.parse(localStorage.getItem('ajustesUsuario') || '{}');
-      const body = document.body;
-      const titulo = document.getElementById('titulo');
-      const parrafo = document.getElementById('parrafo');
+    window.onload = function () {
+      const ajustes = JSON.parse(localStorage.getItem('ajustesAplicados')) || {};
+      const texto = document.getElementById('centralText');
 
-      // Ajuste 1
-      switch (ajustes.ajuste1) {
-        case "fondoRojo": body.style.background = "red"; break;
-        case "fondoVerde": body.style.background = "green"; break;
-        case "textoGrande": parrafo.style.fontSize = "24px"; break;
-        case "textoPequeño": parrafo.style.fontSize = "12px"; break;
+      switch (ajustes.dropdown1) {
+        case 'title_cambio':
+          document.title = "Título personalizado 🌟";
+          break;
+        case 'texto_cambio':
+          texto.textContent = "Texto cambiado desde ajustes.";
+          break;
+        case 'fondo_rojo':
+          document.body.style.background = "#e74c3c";
+          break;
+        case 'fondo_azul':
+          document.body.style.background = "#3498db";
+          break;
+        case 'url_personalizada':
+          let url = prompt("Introduce la URL de imagen de fondo:");
+          if (url) {
+            document.body.style.backgroundImage = `url(${url})`;
+            document.body.style.backgroundSize = "cover";
+          }
+          break;
       }
 
-      // Ajuste 2
-      switch (ajustes.ajuste2) {
-        case "negrita": parrafo.style.fontWeight = "bold"; break;
-        case "normal": parrafo.style.fontWeight = "normal"; break;
-        case "mayusculas": parrafo.textContent = parrafo.textContent.toUpperCase(); break;
-        case "minusculas": parrafo.textContent = parrafo.textContent.toLowerCase(); break;
+      switch (ajustes.dropdown2) {
+        case 'quitar_texto':
+          texto.style.display = "none";
+          break;
+        case 'mostrar_texto':
+          texto.style.display = "block";
+          break;
+        case 'fondo_verde':
+          document.body.style.background = "#2ecc71";
+          break;
       }
 
-      // Ajuste 3
-      switch (ajustes.ajuste3) {
-        case "fondoImagen": body.style.backgroundImage = "url('img/test1.jpg')"; break;
-        case "fondoBlanco": body.style.background = "#fff"; break;
+      if (ajustes.dropdown3 === 'imagen_fondo_local') {
+        document.body.style.backgroundImage = "url('img/test1.jpg')";
+        document.body.style.backgroundSize = "cover";
       }
 
-      // Ajuste 4
-      switch (ajustes.ajuste4) {
-        case "fuenteArial": body.style.fontFamily = "Arial, sans-serif"; break;
-        case "fuenteComic": body.style.fontFamily = "'Comic Sans MS', cursive"; break;
-        case "fuenteSerif": body.style.fontFamily = "serif"; break;
+      switch (ajustes.dropdown4) {
+        case 'negrita_texto':
+          texto.style.fontWeight = "bold";
+          break;
+        case 'normal_texto':
+          texto.style.fontWeight = "normal";
+          break;
       }
-    }
-
-    aplicarAjustes();
+    };
   </script>
 </body>
 </html>

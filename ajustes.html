@@ -1,57 +1,92 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Ajustes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1e1e2f;
+      color: white;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .select-block {
+      margin: 20px auto;
+      max-width: 400px;
+      background: #2c2c3e;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px #00000055;
+    }
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      background-color: #444;
+      color: white;
+      border: none;
+    }
+    button {
+      background-color: #00b894;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Configuración</h1>
+  <h1>🎛️ Configuración Avanzada</h1>
+  <div class="select-block">
+    <select id="dropdown1">
+      <option value="">-- Selecciona una acción 1 --</option>
+      <option value="title_cambio">★ Cambiar título</option>
+      <option value="texto_cambio">✏️ Cambiar texto central</option>
+      <option value="fondo_rojo">🔴 Fondo rojo</option>
+      <option value="fondo_azul">🔵 Fondo azul</option>
+      <option value="url_personalizada">🌐 Fondo por URL</option>
+    </select>
 
-  <select id="ajuste1">
-    <option value="">Seleccione una opción</option>
-    <option value="fondoRojo">Fondo rojo</option>
-    <option value="fondoVerde">Fondo verde</option>
-    <option value="textoGrande">Texto grande</option>
-    <option value="textoPequeño">Texto pequeño</option>
-    <!-- Añade hasta 10 -->
-  </select><br>
+    <select id="dropdown2">
+      <option value="">-- Selecciona una acción 2 --</option>
+      <option value="quitar_texto">🚫 Ocultar texto</option>
+      <option value="mostrar_texto">✅ Mostrar texto</option>
+      <option value="fondo_verde">🟢 Fondo verde</option>
+    </select>
 
-  <select id="ajuste2">
-    <option value="">Seleccione una opción</option>
-    <option value="negrita">Texto en negrita</option>
-    <option value="normal">Texto normal</option>
-    <option value="mayusculas">Todo en mayúsculas</option>
-    <option value="minusculas">Todo en minúsculas</option>
-    <!-- Añade hasta 10 -->
-  </select><br>
+    <select id="dropdown3">
+      <option value="">-- Selecciona una acción 3 --</option>
+      <option value="imagen_fondo_local">🖼️ Fondo local: test1.jpg</option>
+    </select>
 
-  <select id="ajuste3">
-    <option value="">Seleccione una opción</option>
-    <option value="fondoImagen">Fondo con imagen</option>
-    <option value="fondoBlanco">Fondo blanco</option>
-    <!-- etc -->
-  </select><br>
+    <select id="dropdown4">
+      <option value="">-- Selecciona una acción 4 --</option>
+      <option value="negrita_texto">📝 Texto en negrita</option>
+      <option value="normal_texto">📝 Texto normal</option>
+    </select>
 
-  <select id="ajuste4">
-    <option value="">Seleccione una opción</option>
-    <option value="fuenteArial">Arial</option>
-    <option value="fuenteComic">Comic Sans</option>
-    <option value="fuenteSerif">Serif</option>
-    <!-- etc -->
-  </select><br>
-
-  <button onclick="guardarAjustes()">Guardar Ajustes</button>
+    <button onclick="guardarAjustes()">Guardar ajustes</button>
+  </div>
 
   <script>
     function guardarAjustes() {
       const ajustes = {
-        ajuste1: document.getElementById('ajuste1').value,
-        ajuste2: document.getElementById('ajuste2').value,
-        ajuste3: document.getElementById('ajuste3').value,
-        ajuste4: document.getElementById('ajuste4').value
+        dropdown1: document.getElementById('dropdown1').value,
+        dropdown2: document.getElementById('dropdown2').value,
+        dropdown3: document.getElementById('dropdown3').value,
+        dropdown4: document.getElementById('dropdown4').value,
       };
-      localStorage.setItem('ajustesUsuario', JSON.stringify(ajustes));
-      alert("¡Ajustes guardados!");
+      localStorage.setItem('ajustesAplicados', JSON.stringify(ajustes));
+      alert('¡Ajustes guardados! Ahora abre index.html');
     }
   </script>
 </body>
