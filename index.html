@@ -1,77 +1,254 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Página Principal</title>
+  <title>Mi Sitio Personalizado</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background-color: white;
-      transition: all 0.3s ease;
+      background-size: cover;
+      background-position: center;
+      transition: all 0.5s;
     }
-    h1 {
-      color: #333;
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    .dropdown-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      border: 2px solid #555;
+      border-radius: 5px;
+      background: linear-gradient(to right, #f1f1f1, #e0e0e0);
+      transition: 0.3s;
+    }
+
+    select:hover {
+      background: linear-gradient(to right, #d1f0ff, #c0e0ff);
+    }
+
+    .note {
+      margin-top: 30px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <h1 id="mainTitle">🌟 Bienvenido a la Página Principal</h1>
+
+  <h1 id="mainTitle">🌟 Bienvenido a Mi Sitio 🌟</h1>
+  <h2 id="subText">Texto Personalizable</h2>
+
+  <div class="dropdown-container">
+    <select id="dropdown1">
+      <option value="">-- Desplegable 1 --</option>
+      <option value="changeTitle">Cambiar título</option>
+      <option value="changeSubText">Cambiar texto secundario</option>
+      <option value="bgImageTest1">Fondo: test1.jpg</option>
+      <option value="alertWelcome">Mostrar alerta de bienvenida</option>
+      <option value="promptColor">Cambiar color de fondo</option>
+      <option value="promptFont">Cambiar fuente</option>
+      <option value="resetBg">Restablecer fondo</option>
+      <option value="rainbowBg">Fondo arcoíris</option>
+      <option value="hideTitle">Ocultar título</option>
+      <option value="showTitle">Mostrar título</option>
+    </select>
+
+    <select id="dropdown2">
+      <option value="">-- Desplegable 2 --</option>
+      <option value="changeFontSize">Cambiar tamaño del texto</option>
+      <option value="addEmoji">Agregar emoji al título</option>
+      <option value="uppercaseTitle">Poner título en mayúsculas</option>
+      <option value="promptEmoji">Prompt para añadir emoji</option>
+      <option value="alertSubtitle">Alerta sobre subtítulo</option>
+      <option value="blurBackground">Fondo difuminado</option>
+      <option value="zoomText">Zoom al texto</option>
+      <option value="resetZoom">Quitar zoom</option>
+      <option value="hideSubtitle">Ocultar subtítulo</option>
+      <option value="showSubtitle">Mostrar subtítulo</option>
+    </select>
+
+    <select id="dropdown3">
+      <option value="">-- Desplegable 3 --</option>
+      <option value="changeToRed">Fondo rojo</option>
+      <option value="changeToBlue">Fondo azul</option>
+      <option value="addBorder">Agregar borde al título</option>
+      <option value="removeBorder">Quitar borde</option>
+      <option value="promptBorderColor">Cambiar color del borde</option>
+      <option value="titleAlert">Mostrar alert con título</option>
+      <option value="hideAll">Ocultar todo</option>
+      <option value="showAll">Mostrar todo</option>
+      <option value="italicSubtitle">Subtítulo en cursiva</option>
+      <option value="boldSubtitle">Subtítulo en negrita</option>
+    </select>
+
+    <select id="dropdown4">
+      <option value="">-- Desplegable 4 --</option>
+      <option value="promptBackgroundUrl">Fondo desde URL</option>
+      <option value="customGradient">Fondo degradado</option>
+      <option value="rotateTitle">Rotar título</option>
+      <option value="unrotateTitle">Quitar rotación</option>
+      <option value="alertFinal">Alerta final</option>
+      <option value="promptCustomText">Cambiar texto personalizado</option>
+      <option value="setBgWhite">Fondo blanco</option>
+      <option value="resetAll">Restablecer todo</option>
+      <option value="invertColors">Invertir colores</option>
+      <option value="normalColors">Colores normales</option>
+    </select>
+  </div>
+
+  <div class="note">🔧 Los ajustes aplicados desde <code>settings.html</code> se cargan automáticamente.</div>
 
   <script>
-    function aplicarAjustes() {
-      const accion = localStorage.getItem("userAction");
-      if (!accion) return;
+    const mainTitle = document.getElementById("mainTitle");
+    const subText = document.getElementById("subText");
+    const body = document.body;
 
-      switch (accion) {
-        case "setTitle":
-          const nuevoTitulo = prompt("Escribe el nuevo título de la página:");
-          if (nuevoTitulo) {
-            document.title = nuevoTitulo;
-            alert("Título cambiado correctamente.");
-          }
-          break;
-        case "setHeader":
-          const nuevoTexto = prompt("Escribe el nuevo texto del encabezado:");
-          if (nuevoTexto) {
-            document.getElementById("mainTitle").textContent = nuevoTexto;
-            alert("Encabezado cambiado.");
-          }
-          break;
-        case "setBackgroundColor":
-          document.body.style.backgroundColor = "#dff0d8";
-          break;
-        case "setBackgroundImage":
-          const url = prompt("Introduce la URL de la imagen:");
-          if (url) document.body.style.backgroundImage = `url('${url}')`;
-          break;
-        case "reset":
-          document.body.style = "";
-          document.title = "Página Principal";
-          document.getElementById("mainTitle").textContent = "🌟 Bienvenido a la Página Principal";
-          break;
-        case "alertTest":
-          alert("¡Esto es una prueba de alerta!");
-          break;
-        case "changeFont":
-          document.body.style.fontFamily = "'Courier New', monospace";
-          break;
-        case "increaseFontSize":
-          document.body.style.fontSize = "20px";
-          break;
-        case "changeTextColor":
-          document.body.style.color = "#0066cc";
-          break;
-        case "applyGradient":
-          document.body.style.background = "linear-gradient(to right, #ff9966, #66ccff)";
-          break;
-      }
-
-      localStorage.removeItem("userAction");
+    function handleDropdown(dropdown, actions) {
+      dropdown.addEventListener("change", function () {
+        const value = this.value;
+        this.value = ""; // Reset selección
+        if (actions[value]) actions[value]();
+      });
     }
 
-    window.onload = aplicarAjustes;
+    // Definir acciones para cada desplegable
+    handleDropdown(document.getElementById("dropdown1"), {
+      changeTitle: () => {
+        const text = prompt("Nuevo título:");
+        if (text) {
+          mainTitle.textContent = text;
+          alert("¡Título cambiado!");
+        }
+      },
+      changeSubText: () => {
+        const text = prompt("Nuevo subtítulo:");
+        if (text) {
+          subText.textContent = text;
+          alert("¡Subtítulo cambiado!");
+        }
+      },
+      bgImageTest1: () => {
+        body.style.backgroundImage = "url('img/test1.jpg')";
+      },
+      alertWelcome: () => alert("¡Bienvenido a esta página!"),
+      promptColor: () => {
+        const color = prompt("Color de fondo (ej: red, #123456):");
+        if (color) body.style.background = color;
+      },
+      promptFont: () => {
+        const font = prompt("Nombre de la fuente (ej: Arial):");
+        if (font) body.style.fontFamily = font;
+      },
+      resetBg: () => {
+        body.style.background = "";
+        body.style.backgroundImage = "";
+      },
+      rainbowBg: () => {
+        const colors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6"];
+        let index = 0;
+        clearInterval(window.rainbowInterval);
+        window.rainbowInterval = setInterval(() => {
+          body.style.background = colors[index % colors.length];
+          index++;
+        }, 500);
+      },
+      hideTitle: () => mainTitle.style.display = "none",
+      showTitle: () => mainTitle.style.display = "block"
+    });
+
+    handleDropdown(document.getElementById("dropdown2"), {
+      changeFontSize: () => {
+        const size = prompt("Tamaño del texto (ej: 20px):");
+        if (size) mainTitle.style.fontSize = size;
+      },
+      addEmoji: () => {
+        mainTitle.textContent += " 😊";
+      },
+      uppercaseTitle: () => mainTitle.textContent = mainTitle.textContent.toUpperCase(),
+      promptEmoji: () => {
+        const emoji = prompt("Ingresa un emoji:");
+        if (emoji) mainTitle.textContent += " " + emoji;
+      },
+      alertSubtitle: () => alert("El subtítulo es: " + subText.textContent),
+      blurBackground: () => body.style.filter = "blur(4px)",
+      zoomText: () => mainTitle.style.transform = "scale(1.5)",
+      resetZoom: () => mainTitle.style.transform = "scale(1)",
+      hideSubtitle: () => subText.style.display = "none",
+      showSubtitle: () => subText.style.display = "block"
+    });
+
+    handleDropdown(document.getElementById("dropdown3"), {
+      changeToRed: () => body.style.background = "red",
+      changeToBlue: () => body.style.background = "blue",
+      addBorder: () => mainTitle.style.border = "2px solid black",
+      removeBorder: () => mainTitle.style.border = "none",
+      promptBorderColor: () => {
+        const borderColor = prompt("Color del borde:");
+        if (borderColor) mainTitle.style.border = `2px solid ${borderColor}`;
+      },
+      titleAlert: () => alert("El título es: " + mainTitle.textContent),
+      hideAll: () => {
+        mainTitle.style.display = "none";
+        subText.style.display = "none";
+      },
+      showAll: () => {
+        mainTitle.style.display = "block";
+        subText.style.display = "block";
+      },
+      italicSubtitle: () => subText.style.fontStyle = "italic",
+      boldSubtitle: () => subText.style.fontWeight = "bold"
+    });
+
+    handleDropdown(document.getElementById("dropdown4"), {
+      promptBackgroundUrl: () => {
+        const url = prompt("Introduce URL de la imagen:");
+        if (url) body.style.backgroundImage = `url(${url})`;
+      },
+      customGradient: () => {
+        body.style.background = "linear-gradient(to right, #6a11cb, #2575fc)";
+      },
+      rotateTitle: () => mainTitle.style.transform = "rotate(5deg)",
+      unrotateTitle: () => mainTitle.style.transform = "rotate(0deg)",
+      alertFinal: () => alert("¡Esta fue la última opción!"),
+      promptCustomText: () => {
+        const txt = prompt("Texto personalizado:");
+        if (txt) {
+          subText.textContent = txt;
+          alert("¡Texto personalizado aplicado!");
+        }
+      },
+      setBgWhite: () => body.style.background = "white",
+      resetAll: () => {
+        body.removeAttribute("style");
+        mainTitle.removeAttribute("style");
+        subText.removeAttribute("style");
+        clearInterval(window.rainbowInterval);
+      },
+      invertColors: () => body.style.filter = "invert(1)",
+      normalColors: () => body.style.filter = "invert(0)"
+    });
+
+    // Aplicar ajustes desde localStorage si existen
+    window.addEventListener("DOMContentLoaded", () => {
+      const bg = localStorage.getItem("bg");
+      const title = localStorage.getItem("title");
+      if (bg) body.style.background = bg;
+      if (title) mainTitle.textContent = title;
+    });
   </script>
+
 </body>
 </html>
