@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ajustes</title>
+</head>
+<body>
+  <h1>Configuración</h1>
+
+  <select id="ajuste1">
+    <option value="">Seleccione una opción</option>
+    <option value="fondoRojo">Fondo rojo</option>
+    <option value="fondoVerde">Fondo verde</option>
+    <option value="textoGrande">Texto grande</option>
+    <option value="textoPequeño">Texto pequeño</option>
+    <!-- Añade hasta 10 -->
+  </select><br>
+
+  <select id="ajuste2">
+    <option value="">Seleccione una opción</option>
+    <option value="negrita">Texto en negrita</option>
+    <option value="normal">Texto normal</option>
+    <option value="mayusculas">Todo en mayúsculas</option>
+    <option value="minusculas">Todo en minúsculas</option>
+    <!-- Añade hasta 10 -->
+  </select><br>
+
+  <select id="ajuste3">
+    <option value="">Seleccione una opción</option>
+    <option value="fondoImagen">Fondo con imagen</option>
+    <option value="fondoBlanco">Fondo blanco</option>
+    <!-- etc -->
+  </select><br>
+
+  <select id="ajuste4">
+    <option value="">Seleccione una opción</option>
+    <option value="fuenteArial">Arial</option>
+    <option value="fuenteComic">Comic Sans</option>
+    <option value="fuenteSerif">Serif</option>
+    <!-- etc -->
+  </select><br>
+
+  <button onclick="guardarAjustes()">Guardar Ajustes</button>
+
+  <script>
+    function guardarAjustes() {
+      const ajustes = {
+        ajuste1: document.getElementById('ajuste1').value,
+        ajuste2: document.getElementById('ajuste2').value,
+        ajuste3: document.getElementById('ajuste3').value,
+        ajuste4: document.getElementById('ajuste4').value
+      };
+      localStorage.setItem('ajustesUsuario', JSON.stringify(ajustes));
+      alert("¡Ajustes guardados!");
+    }
+  </script>
+</body>
+</html>
