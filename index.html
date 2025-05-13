@@ -1,79 +1,42 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Mi Sitio Web</title>
+  <title>Mi Página</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 50px;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
+      padding: 50px;
       transition: background 0.5s;
+      background-size: cover;
+      background-position: center;
     }
-    #centralText {
-      font-size: 24px;
-      margin-top: 40px;
+    h1 {
+      color: #333;
     }
   </style>
 </head>
 <body>
-  <h1>Bienvenido a la página principal</h1>
-  <p id="centralText">Este es el texto principal.</p>
+  <h1 id="mainText">🌟 Bienvenido a la página principal</h1>
 
   <script>
-    window.onload = function () {
-      const ajustes = JSON.parse(localStorage.getItem('ajustesAplicados')) || {};
-      const texto = document.getElementById('centralText');
+    window.addEventListener('load', () => {
+      const customTitle = localStorage.getItem('customTitle');
+      const customHeader = localStorage.getItem('customHeader');
+      const backgroundColor = localStorage.getItem('backgroundColor');
+      const backgroundImageUrl = localStorage.getItem('backgroundImageUrl');
 
-      switch (ajustes.dropdown1) {
-        case 'title_cambio':
-          document.title = "Título personalizado 🌟";
-          break;
-        case 'texto_cambio':
-          texto.textContent = "Texto cambiado desde ajustes.";
-          break;
-        case 'fondo_rojo':
-          document.body.style.background = "#e74c3c";
-          break;
-        case 'fondo_azul':
-          document.body.style.background = "#3498db";
-          break;
-        case 'url_personalizada':
-          let url = prompt("Introduce la URL de imagen de fondo:");
-          if (url) {
-            document.body.style.backgroundImage = `url(${url})`;
-            document.body.style.backgroundSize = "cover";
-          }
-          break;
+      if (customTitle) document.title = customTitle;
+      if (customHeader) document.getElementById('mainText').textContent = customHeader;
+      if (backgroundColor) {
+        document.body.style.background = backgroundColor;
+        document.body.style.backgroundImage = '';
       }
-
-      switch (ajustes.dropdown2) {
-        case 'quitar_texto':
-          texto.style.display = "none";
-          break;
-        case 'mostrar_texto':
-          texto.style.display = "block";
-          break;
-        case 'fondo_verde':
-          document.body.style.background = "#2ecc71";
-          break;
+      if (backgroundImageUrl) {
+        document.body.style.backgroundImage = `url(${backgroundImageUrl})`;
       }
-
-      if (ajustes.dropdown3 === 'imagen_fondo_local') {
-        document.body.style.backgroundImage = "url('img/test1.jpg')";
-        document.body.style.backgroundSize = "cover";
-      }
-
-      switch (ajustes.dropdown4) {
-        case 'negrita_texto':
-          texto.style.fontWeight = "bold";
-          break;
-        case 'normal_texto':
-          texto.style.fontWeight = "normal";
-          break;
-      }
-    };
+    });
   </script>
 </body>
 </html>

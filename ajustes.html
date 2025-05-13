@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,88 +5,94 @@
   <title>Ajustes</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #1e1e2f;
-      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: #f0f0f0;
       padding: 40px;
     }
     h1 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .select-block {
-      margin: 20px auto;
-      max-width: 400px;
-      background: #2c2c3e;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px #00000055;
+      color: #2c3e50;
     }
     select {
-      width: 100%;
+      font-size: 16px;
       padding: 10px;
-      font-size: 16px;
-      margin-bottom: 15px;
-      border-radius: 5px;
-      background-color: #444;
-      color: white;
+      margin: 15px;
+      width: 300px;
       border: none;
-    }
-    button {
-      background-color: #00b894;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
+      border-radius: 8px;
+      background: linear-gradient(to right, #6dd5ed, #2193b0);
       color: white;
-      border-radius: 5px;
-      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <h1>🎛️ Configuración Avanzada</h1>
-  <div class="select-block">
-    <select id="dropdown1">
-      <option value="">-- Selecciona una acción 1 --</option>
-      <option value="title_cambio">★ Cambiar título</option>
-      <option value="texto_cambio">✏️ Cambiar texto central</option>
-      <option value="fondo_rojo">🔴 Fondo rojo</option>
-      <option value="fondo_azul">🔵 Fondo azul</option>
-      <option value="url_personalizada">🌐 Fondo por URL</option>
-    </select>
+  <h1>🎛️ Ajustes Avanzados</h1>
 
-    <select id="dropdown2">
-      <option value="">-- Selecciona una acción 2 --</option>
-      <option value="quitar_texto">🚫 Ocultar texto</option>
-      <option value="mostrar_texto">✅ Mostrar texto</option>
-      <option value="fondo_verde">🟢 Fondo verde</option>
-    </select>
-
-    <select id="dropdown3">
-      <option value="">-- Selecciona una acción 3 --</option>
-      <option value="imagen_fondo_local">🖼️ Fondo local: test1.jpg</option>
-    </select>
-
-    <select id="dropdown4">
-      <option value="">-- Selecciona una acción 4 --</option>
-      <option value="negrita_texto">📝 Texto en negrita</option>
-      <option value="normal_texto">📝 Texto normal</option>
-    </select>
-
-    <button onclick="guardarAjustes()">Guardar ajustes</button>
-  </div>
+  <select id="dropdown1">
+    <option value="">⚙️ Ajuste 1</option>
+    <option value="changeTitle">📝 Cambiar título</option>
+    <option value="changeText">✏️ Cambiar mensaje principal</option>
+  </select>
+  <select id="dropdown2">
+    <option value="">⚙️ Ajuste 2</option>
+    <option value="customImageURL">🌐 Imagen desde URL</option>
+  </select>
+  <select id="dropdown3">
+    <option value="">⚙️ Ajuste 3</option>
+    <option value="changeColorBlue">🔵 Fondo azul</option>
+    <option value="changeColorGreen">🟢 Fondo verde</option>
+  </select>
+  <select id="dropdown4">
+    <option value="">⚙️ Ajuste 4</option>
+    <option value="clearSettings">♻️ Limpiar ajustes</option>
+  </select>
 
   <script>
-    function guardarAjustes() {
-      const ajustes = {
-        dropdown1: document.getElementById('dropdown1').value,
-        dropdown2: document.getElementById('dropdown2').value,
-        dropdown3: document.getElementById('dropdown3').value,
-        dropdown4: document.getElementById('dropdown4').value,
-      };
-      localStorage.setItem('ajustesAplicados', JSON.stringify(ajustes));
-      alert('¡Ajustes guardados! Ahora abre index.html');
+    function handleSelection(value) {
+      switch(value) {
+        case 'changeTitle':
+          let newTitle = prompt("Nuevo título de la página:");
+          if (newTitle) {
+            localStorage.setItem('customTitle', newTitle);
+            alert("✅ Título actualizado.");
+          }
+          break;
+        case 'changeText':
+          let newText = prompt("Nuevo mensaje principal:");
+          if (newText) {
+            localStorage.setItem('customHeader', newText);
+            alert("✅ Mensaje actualizado.");
+          }
+          break;
+        case 'customImageURL':
+          let imageUrl = prompt("Introduce la URL de la imagen:");
+          if (imageUrl) {
+            localStorage.setItem('backgroundImageUrl', imageUrl);
+            alert("✅ Imagen personalizada guardada.");
+          }
+          break;
+        case 'changeColorBlue':
+          localStorage.setItem('backgroundColor', '#3498db');
+          alert("🔵 Color de fondo azul aplicado.");
+          break;
+        case 'changeColorGreen':
+          localStorage.setItem('backgroundColor', '#2ecc71');
+          alert("🟢 Color de fondo verde aplicado.");
+          break;
+        case 'clearSettings':
+          localStorage.clear();
+          alert("🧹 Ajustes limpiados.");
+          break;
+      }
     }
+
+    document.querySelectorAll("select").forEach(drop => {
+      drop.addEventListener("change", function() {
+        handleSelection(this.value);
+        this.value = "";
+      });
+    });
   </script>
 </body>
 </html>
