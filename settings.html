@@ -43,7 +43,6 @@
     <option value="prompt2">📝 Preguntar edad</option>
     <option value="setText2">📄 Cambiar subtítulo</option>
     <option value="alert3">✅ Acción confirmada</option>
-    <option value="changePageTitle">🧾 Cambiar título de la pestaña (HTML)</option>
   </select>
 
   <!-- Desplegable 2 -->
@@ -91,6 +90,21 @@
     <option value="promptH">📌 Nota personal</option>
   </select>
 
+  <!-- Desplegable 5: Cambiar color de fondo -->
+  <select id="selectColor">
+    <option disabled selected>🎨 Elegir color de fondo</option>
+    <option value="#ffffff">⬜ Blanco</option>
+    <option value="#000000">⬛ Negro</option>
+    <option value="#3498db">🔵 Azul</option>
+    <option value="#e74c3c">🔴 Rojo</option>
+    <option value="#2ecc71">🟢 Verde</option>
+    <option value="#f1c40f">🟡 Amarillo</option>
+    <option value="#9b59b6">🟣 Púrpura</option>
+    <option value="#95a5a6">⚪ Gris</option>
+    <option value="#34495e">🟤 Azul oscuro</option>
+    <option value="custom">🎨 Personalizar color</option>
+  </select>
+
   <script>
     const storageApply = (key, value) => {
       localStorage.setItem(key, value);
@@ -118,13 +132,6 @@
       prompt2: () => { const edad = prompt("¿Cuántos años tienes?"); alert("Edad registrada: " + edad); },
       setText2: () => { const subtitulo = prompt("Nuevo subtítulo:"); if (subtitulo) storageApply('subText', subtitulo); },
       alert3: () => alert("✅ Acción confirmada correctamente."),
-      changePageTitle: () => {
-        const newTitle = prompt("Título de la pestaña:");
-        if (newTitle?.trim()) {
-          document.title = newTitle.trim();
-          storageApply('pageTitle', newTitle.trim());
-        }
-      },
 
       // Grupo 2
       alertA: () => alert("Bienvenido al panel 2"),
@@ -169,6 +176,24 @@
         actions[action]?.();
         this.selectedIndex = 0;
       });
+    });
+
+    // Selector de color personalizado
+    document.getElementById('selectColor').addEventListener('change', function () {
+      const value = this.value;
+      if (value === 'custom') {
+        const customColor = prompt("Introduce un código de color hexadecimal (ej: #ff8800):");
+        if (/^#[0-9A-Fa-f]{6}$/.test(customColor)) {
+          localStorage.setItem('bgColor', customColor);
+          alert("✅ Color personalizado guardado y será aplicado en index.html");
+        } else {
+          alert("❌ Código no válido. Usa formato #rrggbb.");
+        }
+      } else {
+        localStorage.setItem('bgColor', value);
+        alert("✅ Color guardado y será aplicado en index.html");
+      }
+      this.selectedIndex = 0;
     });
   </script>
 
