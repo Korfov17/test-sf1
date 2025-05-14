@@ -2,69 +2,96 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Inicio</title>
+  <title>Cargando ajustes...</title>
   <style>
     body {
-      margin: 0;
-      padding: 20px;
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 40px;
       transition: all 0.3s ease;
+      background-color: #ffffff;
     }
     h1, h2 {
       text-align: center;
-      transition: all 0.3s ease;
-    }
-    #content {
-      padding: 20px;
-      border-radius: 10px;
     }
   </style>
 </head>
 <body>
 
-  <h1 id="mainTitle">Título por defecto</h1>
-  <h2 id="subTitle">Subtítulo por defecto</h2>
-  <div id="content">
-    <p>Este es el contenido principal de la página.</p>
-  </div>
+  <h1 id="main-title">Texto por defecto</h1>
+  <h2 id="sub-title">Subtítulo por defecto</h2>
 
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const setStyle = (prop, value, target = document.body.style) => {
-        if (value) target[prop] = value;
-      };
+    const applySetting = (key, callback) => {
+      const value = localStorage.getItem(key);
+      if (value !== null) callback(value);
+    };
 
-      const setText = (id, value) => {
-        if (value) document.getElementById(id).textContent = value;
-      };
+    // Cambiar el título de la pestaña
+    applySetting('title', value => document.title = value);
 
-      const setTransform = (type, value) => {
-        if (value) {
-          document.body.style.transform = type === 'rotate' ? `rotate(${value})` : `scale(${value})`;
-        }
-      };
+    // Cambiar imagen de fondo
+    applySetting('bgImage', value => {
+      document.body.style.backgroundImage = `url(${value})`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    });
 
-      // Aplicar configuraciones guardadas
-      const config = {
-        bgImage: v => document.body.style.backgroundImage = `url('${v}')`,
-        bgColor: v => setStyle('backgroundColor', v),
-        title: v => setText('mainTitle', v),
-        subText: v => setText('subTitle', v),
-        pageTitle: v => document.title = v,
-        fontSize: v => setStyle('fontSize', v),
-        fontColor: v => setStyle('color', v),
-        fontFamily: v => setStyle('fontFamily', v),
-        border: v => document.getElementById('content').style.border = v,
-        opacity: v => setStyle('opacity', v),
-        shadow: v => document.getElementById('content').style.boxShadow = v,
-        rotate: v => setTransform('rotate', v),
-        scale: v => setTransform('scale', v)
-      };
+    // Cambiar color de fondo
+    applySetting('bgColor', value => {
+      document.body.style.backgroundColor = value;
+    });
 
-      Object.keys(config).forEach(key => {
-        const val = localStorage.getItem(key);
-        if (val) config[key](val);
-      });
+    // Cambiar fuente
+    applySetting('fontFamily', value => {
+      document.body.style.fontFamily = value;
+    });
+
+    // Cambiar tamaño de texto
+    applySetting('fontSize', value => {
+      document.body.style.fontSize = value;
+    });
+
+    // Cambiar color del texto
+    applySetting('fontColor', value => {
+      document.body.style.color = value;
+    });
+
+    // Cambiar opacidad
+    applySetting('opacity', value => {
+      document.body.style.opacity = value;
+    });
+
+    // Sombra
+    applySetting('shadow', value => {
+      document.body.style.boxShadow = value;
+    });
+
+    // Borde
+    applySetting('border', value => {
+      document.body.style.border = value;
+    });
+
+    // Rotar
+    applySetting('rotate', value => {
+      document.body.style.transform = `rotate(${value})`;
+    });
+
+    // Escalar
+    applySetting('scale', value => {
+      document.body.style.transform = `scale(${value})`;
+    });
+
+    // Cambiar texto principal
+    applySetting('headerText', value => {
+      const titleEl = document.getElementById('main-title');
+      if (titleEl) titleEl.textContent = value;
+    });
+
+    // Cambiar subtítulo
+    applySetting('subText', value => {
+      const subTitleEl = document.getElementById('sub-title');
+      if (subTitleEl) subTitleEl.textContent = value;
     });
   </script>
 
