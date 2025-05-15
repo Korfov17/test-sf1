@@ -2,67 +2,53 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Ejemplo de Pestañas</title>
+  <title>🎮 Ajustes | Menu 🎮</title>
   <style>
-    .tabcontent {
-      display: none;
+    body {
+      font-family: sans-serif;
+      padding: 20px;
     }
-    .tablinks.active {
-      background-color: #ddd;
+
+    select {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
+  <h1>🎮 Ajustes de fondo</h1>
 
-  <h1>Bienvenido a la página</h1>
+  <select id="opcion2">
+    <option disabled selected>Selecciona una opción</option>
+    <optgroup label="Fondos predefinidos">
+      <option value="img1">Extra 1</option>
+      <option value="img2">Extra 2</option>
+    </optgroup>
+    <optgroup label="Colores sólidos">
+      <option value="solidRed">Rojo</option>
+      <option value="solidBlue">Azul</option>
+      <option value="solidGreen">Verde</option>
+      <option value="solidYellow">Amarillo</option>
+      <option value="solidOrange">Naranja</option>
+      <option value="solidPurple">Púrpura</option>
+      <option value="solidPink">Rosa</option>
+      <option value="solidBrown">Marrón</option>
+      <option value="solidGray">Gris</option>
+      <option value="solidBlack">Negro</option>
+    </optgroup>
+    <optgroup label="Degradados">
+      <option value="gradient1">Azul → Violeta</option>
+      <option value="gradient2">Rojo → Amarillo</option>
+      <option value="gradient3">Verde → Lima</option>
+      <option value="gradient4">Celeste → Blanco</option>
+    </optgroup>
+    <option value="customColor">Color personalizado...</option>
+  </select>
 
-  <!-- Navegación de pestañas -->
-  <div>
-    <button class="tablinks" onclick="openTab(event, 'home')">Inicio</button>
-    <button class="tablinks" onclick="openTab(event, 'about')">Acerca de</button>
-    <button class="tablinks" onclick="openTab(event, 'contact')">Contacto</button>
-  </div>
-
-  <!-- Contenido de las pestañas -->
-  <div id="home" class="tabcontent">
-    <h2>Inicio</h2>
-    <p>Este es el contenido de la página de inicio.</p>
-  </div>
-
-  <div id="about" class="tabcontent">
-    <h2>Acerca de</h2>
-    <p>Este es el contenido de la página acerca de.</p>
-  </div>
-
-  <div id="contact" class="tabcontent">
-    <h2>Contacto</h2>
-    <p>Este es el contenido de la página de contacto.</p>
-  </div>
-
-  <script>
-    function openTab(evt, tabName) {
-      var i, tabcontent, tablinks;
-
-      // Ocultar todas las pestañas
-      tabcontent = document.getElementsByClassName("tabcontent");
-      for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-      }
-
-      // Eliminar clase activa de todas las pestañas
-      tablinks = document.getElementsByClassName("tablinks");
-      for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-      }
-
-      // Mostrar la pestaña seleccionada y añadir clase activa al botón
-      document.getElementById(tabName).style.display = "block";
-      evt.currentTarget.classList.add("active");
-    }
-
-    // Mostrar la pestaña por defecto
-    document.getElementsByClassName("tablinks")[0].click();
-  </script>
-
+  <script src="menu2.js"></script>
 </body>
 </html>
