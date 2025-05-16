@@ -13,13 +13,18 @@
       font-family: Arial, sans-serif;
     }
 
-    body {
-      background: linear-gradient(to bottom, #6ca0ff, #001f5c);
-      display: flex;
+    .screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: none;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      position: relative;
+    }
+
+    .screen.active {
+      display: flex;
     }
 
     .blur-overlay {
@@ -53,6 +58,7 @@
       overflow: hidden;
       border-radius: 0;
       position: relative;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
     }
 
     .progress-bar {
@@ -62,62 +68,95 @@
       transition: width 0.1s linear;
     }
 
-    .final-screen {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      background: black;
-      width: 100%;
-      height: 100%;
+    .screen1 {
+      background: linear-gradient(to bottom, #6ca0ff, #001f5c);
+    }
+
+    .screen2 {
+      background: linear-gradient(to bottom, #3a3a3a, #000000);
+    }
+
+    .final-message {
       color: white;
       font-size: 24px;
-      justify-content: center;
-      align-items: center;
+      display: none;
       text-align: center;
-      flex-direction: column;
-      z-index: 3;
     }
   </style>
 </head>
 <body>
-  <div class="blur-overlay"></div>
 
-  <div class="loader-content">
-    <div class="progress-text" id="progressText">Cargando... 0%</div>
-    <div class="bar-container">
-      <div class="progress-bar" id="progressBar"></div>
+  <!-- Pantalla 1 -->
+  <div class="screen screen1 active" id="screen1">
+    <div class="blur-overlay"></div>
+    <div class="loader-content">
+      <div class="progress-text" id="text1">Cargando... 0%</div>
+      <div class="bar-container">
+        <div class="progress-bar" id="bar1"></div>
+      </div>
     </div>
   </div>
 
-  <div class="final-screen" id="finalScreen">
-    <p>¡Carga completada!<br>Desarrollado por TheZodiacoX</p>
+  <!-- Pantalla 2 -->
+  <div class="screen screen2" id="screen2">
+    <div class="blur-overlay"></div>
+    <div class="loader-content">
+      <div class="progress-text" id="text2">Cargando... 0%</div>
+      <div class="bar-container">
+        <div class="progress-bar" id="bar2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje final -->
+  <div class="final-message" id="finalText">
+    ¡Carga finalizada correctamente!<br>Gracias por esperar 🎮
   </div>
 
   <script>
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
-    const finalScreen = document.getElementById('finalScreen');
-    const loaderContent = document.querySelector('.loader-content');
-    const blurOverlay = document.querySelector('.blur-overlay');
+    function animateProgress(barEl, textEl, callback) {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 1;
+        if (progress > 100) progress = 100;
+        barEl.style.width = progress + '%';
+        textEl.textContent = `Cargando... ${progress}%`;
 
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 1;
-      if (progress > 100) progress = 100;
-      progressBar.style.width = progress + '%';
-      progressText.textContent = `Cargando... ${progress}%`;
+        if (progress >= 100) {
+          clearInterval(interval);
+          callback();
+        }
+      }, 40); // ~4 segundos
+    }
 
-      if (progress >= 100) {
-        clearInterval(interval);
-        blurOverlay.style.display = 'none';
-        progressText.textContent = 'Carga completada';
-        setTimeout(() => {
-          loaderContent.style.display = 'none';
-          finalScreen.style.display = 'flex';
-        }, 3000);
+    const screen1 = document.getElementById('screen1');
+    const screen2 = document.getElementById('screen2');
+    const finalText = document.getElementById('finalText');
+
+    animateProgress(
+      document.getElementById('bar1'),
+      document.getElementById('text1'),
+      () => {
+        screen1.classList.remove('active');
+        screen2.classList.add('active');
+        animateProgress(
+          document.getElementById('bar2'),
+          document.getElementById('text2'),
+          () => {
+            screen2.classList.remove('active');
+            finalText.style.display = 'flex';
+            finalText.style.justifyContent = 'center';
+            finalText.style.alignItems = 'center';
+            finalText.style.position = 'absolute';
+            finalText.style.top = 0;
+            finalText.style.left = 0;
+            finalText.style.width = '100%';
+            finalText.style.height = '100%';
+            finalText.style.background = 'black';
+          }
+        );
       }
-    }, 40); // Tiempo total de carga aprox. 4 segundos
+    );
   </script>
 </body>
 </html>
