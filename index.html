@@ -7,95 +7,74 @@
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #0a2a74;
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #6ca0ff, #001f5c);
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-    }
-
-    .loader-screen {
-      width: 80%;
-      max-width: 900px;
-      text-align: center;
+      font-family: Arial, sans-serif;
       color: white;
-      position: relative;
     }
 
     .progress-text {
-      position: absolute;
-      top: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 28px;
-      font-weight: bold;
-      padding: 10px 40px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 10px;
-      backdrop-filter: blur(5px);
-      user-select: none;
-      pointer-events: none;
+      font-size: 24px;
+      margin-bottom: 20px;
     }
 
     .bar-container {
-      width: 100%;
-      height: 14px;
-      background-color: #0e1f40;
-      border: 1px solid #ffffffaa;
-      filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
-      border-radius: 0;
+      width: 70%;
+      max-width: 800px;
+      height: 10px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid #ffffff;
       overflow: hidden;
-      box-sizing: border-box;
+      filter: drop-shadow(0 0 6px white);
     }
 
     .progress-bar {
       width: 0%;
       height: 100%;
-      background: linear-gradient(to right, white, #ddd, white);
-      filter: blur(1.2px);
-      transition: width 0.3s ease;
-      border-radius: 0;
+      background: linear-gradient(to right, #ffffff, #e0e0e0, #ffffff);
+      animation: loading 4s linear forwards;
+    }
+
+    @keyframes loading {
+      0% { width: 0%; }
+      100% { width: 100%; }
     }
 
     .final-text {
       display: none;
-      font-size: 28px;
+      font-size: 24px;
       margin-top: 40px;
-      text-shadow: 0 0 6px #000;
     }
   </style>
 </head>
 <body>
-  <div class="loader-screen">
-    <div class="progress-text" id="progressText">Cargando... 0%</div>
-    <div class="bar-container">
-      <div class="progress-bar" id="progressBar"></div>
-    </div>
-    <div class="final-text" id="finalText">¡Carga completada con éxito!</div>
+  <div class="progress-text" id="progressText">Cargando... 0%</div>
+  <div class="bar-container">
+    <div class="progress-bar" id="progressBar"></div>
   </div>
+  <div class="final-text" id="finalText">¡Carga completada!</div>
 
   <script>
     const progressBar = document.getElementById('progressBar');
-    const finalText = document.getElementById('finalText');
     const progressText = document.getElementById('progressText');
-    let progress = 0;
+    const finalText = document.getElementById('finalText');
 
+    let progress = 0;
     const interval = setInterval(() => {
       progress += 2;
-      if(progress > 100) progress = 100;
-      progressBar.style.width = progress + "%";
+      if (progress > 100) progress = 100;
       progressText.textContent = `Cargando... ${progress}%`;
-
       if (progress >= 100) {
         clearInterval(interval);
         progressText.style.display = 'none';
         finalText.style.display = 'block';
       }
-    }, 100);
+    }, 80);
   </script>
 </body>
 </html>
