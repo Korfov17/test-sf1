@@ -1,12 +1,9 @@
-
 CACHE MANIFEST
 # Versión 1.0
 
-CACHE:
 index.html
-css/loader.css
-javascript/loader.js
-background/default.jpg
+CACHE:
+https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3
 
 NETWORK:
 *
