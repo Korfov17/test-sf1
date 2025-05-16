@@ -1,99 +1,23 @@
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" manifest="cache.manifest">
 <head>
   <meta charset="UTF-8">
-  <title>Customs...</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 40px;
-      transition: all 0.3s ease;
-      background-color: #ffffff;
-    }
-    h1, h2 {
-      text-align: center;
-    }
-  </style>
+  <title>🎮 TU PS4 HEN | Menu 🎮</title>
+  <link rel="stylesheet" href="css/loader.css">
 </head>
 <body>
+  <div id="loader-wrapper">
+    <div id="loader-text">Cargando, por favor espera...</div>
+    <div class="loader-bar">
+      <div class="loader-bar-fill"></div>
+    </div>
+  </div>
 
-  <h1 id="main-title">Texto por defecto</h1>
-  <h2 id="sub-title">Subtítulo por defecto</h2>
+  <main>
+    <h1 style="color:white; text-align:center;">Contenido de tu menú aquí</h1>
+  </main>
 
-  <script>
-    const applySetting = (key, callback) => {
-      const value = localStorage.getItem(key);
-      if (value !== null) callback(value);
-    };
-
-    // Cambiar el título de la pestaña
-    applySetting('title', value => document.title = value);
-
-    // Cambiar imagen de fondo
-    applySetting('bgImage', value => {
-      document.body.style.backgroundImage = `url(${value})`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundPosition = 'center';
-    });
-
-    // Cambiar color de fondo
-    applySetting('bgColor', value => {
-      document.body.style.backgroundColor = value;
-    });
-
-    // Cambiar fuente
-    applySetting('fontFamily', value => {
-      document.body.style.fontFamily = value;
-    });
-
-    // Cambiar tamaño de texto
-    applySetting('fontSize', value => {
-      document.body.style.fontSize = value;
-    });
-
-    // Cambiar color del texto
-    applySetting('fontColor', value => {
-      document.body.style.color = value;
-    });
-
-    // Cambiar opacidad
-    applySetting('opacity', value => {
-      document.body.style.opacity = value;
-    });
-
-    // Sombra
-    applySetting('shadow', value => {
-      document.body.style.boxShadow = value;
-    });
-
-    // Borde
-    applySetting('border', value => {
-      document.body.style.border = value;
-    });
-
-    // Rotar
-    applySetting('rotate', value => {
-      document.body.style.transform = `rotate(${value})`;
-    });
-
-    // Escalar
-    applySetting('scale', value => {
-      document.body.style.transform = `scale(${value})`;
-    });
-
-    // Cambiar texto principal
-    applySetting('headerText', value => {
-      const titleEl = document.getElementById('main-title');
-      if (titleEl) titleEl.textContent = value;
-    });
-
-    // Cambiar subtítulo
-    applySetting('subText', value => {
-      const subTitleEl = document.getElementById('sub-title');
-      if (subTitleEl) subTitleEl.textContent = value;
-    });
-  </script>
-
+  <script src="javascript/loader.js"></script>
 </body>
 </html>

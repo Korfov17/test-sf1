@@ -1,0 +1,12 @@
+
+CACHE MANIFEST
+# Versión 1.0
+
+CACHE:
+index.html
+css/loader.css
+javascript/loader.js
+background/default.jpg
+
+NETWORK:
+*
