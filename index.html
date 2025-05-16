@@ -1,23 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>PS4 Loading UI</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>🎮 Cargando...</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #0a2a74;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .loader-screen {
+      width: 80%;
+      max-width: 900px;
+      text-align: center;
+      color: white;
+      position: relative;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 28px;
+      font-weight: bold;
+      padding: 10px 40px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .bar-container {
+      width: 100%;
+      height: 14px;
+      background-color: #0e1f40;
+      border: 1px solid #ffffffaa;
+      filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
+      border-radius: 0;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(to right, white, #ddd, white);
+      filter: blur(1.2px);
+      transition: width 0.3s ease;
+      border-radius: 0;
+    }
+
+    .final-text {
+      display: none;
+      font-size: 28px;
+      margin-top: 40px;
+      text-shadow: 0 0 6px #000;
+    }
+  </style>
 </head>
 <body>
-  <div id="loader-screen">
-    <div id="loading-bar">
-      <div id="bar-fill"></div>
+  <div class="loader-screen">
+    <div class="progress-text" id="progressText">Cargando... 0%</div>
+    <div class="bar-container">
+      <div class="progress-bar" id="progressBar"></div>
     </div>
-    <div id="loading-text">Cargando...</div>
+    <div class="final-text" id="finalText">¡Carga completada con éxito!</div>
   </div>
 
-  <div id="main-content" style="display: none;">
-    <h1>Bienvenido a Tu PS4 HEN</h1>
-    <p>La carga se ha completado con éxito.</p>
-  </div>
+  <script>
+    const progressBar = document.getElementById('progressBar');
+    const finalText = document.getElementById('finalText');
+    const progressText = document.getElementById('progressText');
+    let progress = 0;
 
-  <script src="script.js"></script>
+    const interval = setInterval(() => {
+      progress += 2;
+      if(progress > 100) progress = 100;
+      progressBar.style.width = progress + "%";
+      progressText.textContent = `Cargando... ${progress}%`;
+
+      if (progress >= 100) {
+        clearInterval(interval);
+        progressText.style.display = 'none';
+        finalText.style.display = 'block';
+      }
+    }, 100);
+  </script>
 </body>
 </html>
