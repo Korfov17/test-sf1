@@ -35,6 +35,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: 80%;
+      max-width: 1000px;
     }
 
     .progress-text {
@@ -44,21 +46,20 @@
     }
 
     .bar-container {
-      width: 80%;
-      max-width: 1000px;
+      width: 100%;
       height: 10px;
       background-color: rgba(255, 255, 255, 0.2);
       border: 1px solid #ffffff;
       overflow: hidden;
-      filter: drop-shadow(0 0 6px white);
       border-radius: 0;
+      position: relative;
     }
 
     .progress-bar {
-      width: 0%;
       height: 100%;
+      width: 0%;
       background: linear-gradient(to right, #ffffff, #e0e0e0, #ffffff);
-      animation: loading 4s linear forwards;
+      transition: width 0.1s linear;
     }
 
     .final-screen {
@@ -97,22 +98,26 @@
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
     const finalScreen = document.getElementById('finalScreen');
+    const loaderContent = document.querySelector('.loader-content');
+    const blurOverlay = document.querySelector('.blur-overlay');
 
     let progress = 0;
     const interval = setInterval(() => {
-      progress += 2;
+      progress += 1;
       if (progress > 100) progress = 100;
+      progressBar.style.width = progress + '%';
       progressText.textContent = `Cargando... ${progress}%`;
+
       if (progress >= 100) {
         clearInterval(interval);
-        document.querySelector('.blur-overlay').style.display = 'none';
+        blurOverlay.style.display = 'none';
         progressText.textContent = 'Carga completada';
         setTimeout(() => {
-          document.body.querySelector('.loader-content').style.display = 'none';
+          loaderContent.style.display = 'none';
           finalScreen.style.display = 'flex';
         }, 3000);
       }
-    }, 80);
+    }, 40); // Tiempo total de carga aprox. 4 segundos
   </script>
 </body>
 </html>
