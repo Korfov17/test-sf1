@@ -90,7 +90,7 @@
   <div class="screen screen1 active" id="screen1">
     <div class="blur-overlay"></div>
     <div class="loader-content">
-      <div class="progress-text" id="text1">Cargando... 0%</div>
+      <div class="progress-text" id="text1">Cargando...</div>
       <div class="bar-container">
         <div class="progress-bar" id="bar1"></div>
       </div>
@@ -101,7 +101,7 @@
   <div class="screen screen2" id="screen2">
     <div class="blur-overlay"></div>
     <div class="loader-content">
-      <div class="progress-text" id="text2">Cargando... 0%</div>
+      <div class="progress-text" id="text2">Cargando...</div>
       <div class="bar-container">
         <div class="progress-bar" id="bar2"></div>
       </div>
@@ -114,19 +114,17 @@
   </div>
 
   <script>
-    function animateProgress(barEl, textEl, callback) {
+    function animateProgress(barEl, callback) {
       let progress = 0;
       const interval = setInterval(() => {
         progress += 1;
         if (progress > 100) progress = 100;
         barEl.style.width = progress + '%';
-        textEl.textContent = `Cargando... ${progress}%`;
-
         if (progress >= 100) {
           clearInterval(interval);
           callback();
         }
-      }, 40); // ~4 segundos
+      }, 60); // 100 * 60ms = 6000ms = 6s
     }
 
     const screen1 = document.getElementById('screen1');
@@ -135,13 +133,11 @@
 
     animateProgress(
       document.getElementById('bar1'),
-      document.getElementById('text1'),
       () => {
         screen1.classList.remove('active');
         screen2.classList.add('active');
         animateProgress(
           document.getElementById('bar2'),
-          document.getElementById('text2'),
           () => {
             screen2.classList.remove('active');
             finalText.style.display = 'flex';
