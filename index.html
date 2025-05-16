@@ -1,158 +1,103 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" manifest="cache.manifest">
 <head>
-  <meta charset="UTF-8" />
-  <title>🎮 Cargando...</title>
+  <meta charset="UTF-8">
+  <title>Cargando...</title>
   <style>
-    html, body {
+    * {
       margin: 0;
       padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
+      box-sizing: border-box;
     }
 
-    .screen {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: none;
+    body {
+      height: 100vh;
+      background: linear-gradient(to bottom right, #0a0a23, #001f3f);
+      display: flex;
+      align-items: center;
       justify-content: center;
-      align-items: center;
-      flex-direction: column;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
     }
 
-    .screen.active {
-      display: flex;
-    }
-
-    .blur-overlay {
+    #overlay {
       position: absolute;
       width: 100%;
       height: 100%;
-      backdrop-filter: blur(4px);
-      z-index: 1;
-    }
-
-    .loader-content {
-      z-index: 2;
+      backdrop-filter: blur(6px);
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 80%;
-      max-width: 1000px;
+      justify-content: center;
+      z-index: 10;
     }
 
-    .progress-text {
-      font-size: 24px;
-      margin-bottom: 20px;
+    #loadingText {
+      font-size: 2rem;
       color: white;
+      margin-bottom: 40px;
     }
 
     .bar-container {
-      width: 100%;
-      height: 10px;
-      background-color: rgba(255, 255, 255, 0.2);
-      border: 1px solid #ffffff;
-      overflow: hidden;
-      border-radius: 0;
-      position: relative;
-      box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+      width: 70%;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid white;
     }
 
-    .progress-bar {
-      height: 100%;
+    .bar {
       width: 0%;
-      background: linear-gradient(to right, #ffffff, #e0e0e0, #ffffff);
+      height: 100%;
+      background: white;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
       transition: width 0.1s linear;
     }
 
-    .screen1 {
-      background: linear-gradient(to bottom, #6ca0ff, #001f5c);
-    }
-
-    .screen2 {
-      background: linear-gradient(to bottom, #3a3a3a, #000000);
-    }
-
-    .final-message {
-      color: white;
-      font-size: 24px;
+    #finalScreen {
       display: none;
-      text-align: center;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #111, #333);
+      color: white;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   </style>
 </head>
 <body>
-
-  <!-- Pantalla 1 -->
-  <div class="screen screen1 active" id="screen1">
-    <div class="blur-overlay"></div>
-    <div class="loader-content">
-      <div class="progress-text" id="text1">Cargando...</div>
-      <div class="bar-container">
-        <div class="progress-bar" id="bar1"></div>
-      </div>
+  <div id="overlay">
+    <div id="loadingText">Cargando contenido...</div>
+    <div class="bar-container">
+      <div class="bar" id="progressBar"></div>
     </div>
   </div>
 
-  <!-- Pantalla 2 -->
-  <div class="screen screen2" id="screen2">
-    <div class="blur-overlay"></div>
-    <div class="loader-content">
-      <div class="progress-text" id="text2">Cargando...</div>
-      <div class="bar-container">
-        <div class="progress-bar" id="bar2"></div>
-      </div>
-    </div>
-  </div>
+  <div id="finalScreen">Carga completada con éxito ✅</div>
 
-  <!-- Mensaje final -->
-  <div class="final-message" id="finalText">
-    ¡Carga finalizada correctamente!<br>Gracias por esperar 🎮
-  </div>
+  <audio id="sound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto"></audio>
 
   <script>
-    function animateProgress(barEl, callback) {
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 1;
-        if (progress > 100) progress = 100;
-        barEl.style.width = progress + '%';
-        if (progress >= 100) {
-          clearInterval(interval);
-          callback();
-        }
-      }, 60); // 100 * 60ms = 6000ms = 6s
-    }
+    const progressBar = document.getElementById('progressBar');
+    const overlay = document.getElementById('overlay');
+    const finalScreen = document.getElementById('finalScreen');
+    const audio = document.getElementById('sound');
 
-    const screen1 = document.getElementById('screen1');
-    const screen2 = document.getElementById('screen2');
-    const finalText = document.getElementById('finalText');
+    let percent = 0;
 
-    animateProgress(
-      document.getElementById('bar1'),
-      () => {
-        screen1.classList.remove('active');
-        screen2.classList.add('active');
-        animateProgress(
-          document.getElementById('bar2'),
-          () => {
-            screen2.classList.remove('active');
-            finalText.style.display = 'flex';
-            finalText.style.justifyContent = 'center';
-            finalText.style.alignItems = 'center';
-            finalText.style.position = 'absolute';
-            finalText.style.top = 0;
-            finalText.style.left = 0;
-            finalText.style.width = '100%';
-            finalText.style.height = '100%';
-            finalText.style.background = 'black';
-          }
-        );
+    const interval = setInterval(() => {
+      percent += 1;
+      progressBar.style.width = percent + '%';
+
+      if (percent >= 100) {
+        clearInterval(interval);
+        overlay.style.display = 'none';
+        finalScreen.style.display = 'flex';
+        audio.play();
       }
-    );
+    }, 60); // 100 * 60ms = 6000ms = 6s
   </script>
 </body>
 </html>
