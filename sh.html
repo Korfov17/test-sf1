@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Buscador</title>
+  <style>
+    #buscador {
+      display: flex;
+      max-width: 400px;
+      margin: 20px;
+    }
+    input {
+      flex: 1;
+      padding: 8px;
+    }
+    button {
+      padding: 8px 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="buscador">
+  <input type="text" id="entradaURL" placeholder="Introduce una URL o término...">
+  <button onclick="buscar()">Buscar</button>
+</div>
+
+<script>
+  function buscar() {
+    const valor = document.getElementById('entradaURL').value.trim();
+
+    if (valor === '') {
+      alert('Por favor, introduce algo.');
+      return;
+    }
+
+    // Si empieza por http o https, asumimos que es una URL válida
+    if (valor.startsWith('http://') || valor.startsWith('https://')) {
+      window.open(valor, '_blank');
+    } else {
+      // Si no, buscamos en Google
+      const query = encodeURIComponent(valor);
+      window.open(`https://www.google.com/search?q=${query}`, '_blank');
+    }
+  }
+</script>
+
+</body>
+</html>
