@@ -1,0 +1,21 @@
+```cpp
+void image_notify(std::string iconUri, std::string text)
+{
+    if (iconUri.empty())
+        iconUri = "cxml://psnotification/tex_icon_system";
+
+    OrbisNotificationRequest Buffer = {};
+    Buffer.type = NotificationRequest;
+    Buffer.unk3 = 0;
+    Buffer.useIconImageUri = 1;
+    Buffer.targetId = -1;
+
+    strncpy(Buffer.message, text.c_str(), sizeof(Buffer.message) - 1);
+    Buffer.message[sizeof(Buffer.message) - 1] = '\0';
+
+    strncpy(Buffer.iconUri, iconUri.c_str(), sizeof(Buffer.iconUri) - 1);
+    Buffer.iconUri[sizeof(Buffer.iconUri) - 1] = '\0';
+
+    sceKernelSendNotificationRequest(0, &Buffer, sizeof(Buffer), 0);
+}```
+OOSDK version, nothing really diff but yea
