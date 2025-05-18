@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ejemplo de ocultar y mostrar</title>
+    <title>Mostrar/Ocultar con Desplegable</title>
     <style>
         /* Estilos básicos */
         h3 {
@@ -12,25 +12,25 @@
     </style>
 </head>
 <body>
-    <h3>Encabezado 1</h3>
-    <h3>Encabezado 2</h3>
-    <h3 id="h3-ocultar">Encabezado 3</h3> <!-- Este es el que ocultaremos -->
-    <h3>Encabezado 4</h3>
+    <h3 id="h3-ocultar">Encabezado 3</h3> <!-- Este es el que vamos a mostrar/ocultar -->
 
-    <button onclick="ocultarH3()">Ocultar encabezado 3</button>
-    <button onclick="mostrarH3()">Mostrar encabezado 3</button>
+    <label for="mostrar-ocultar">Selecciona una opción: </label>
+    <select id="mostrar-ocultar" onchange="toggleH3()">
+        <option value="mostrar">Mostrar</option>
+        <option value="ocultar">Ocultar</option>
+    </select>
 
     <script>
-        // Función para ocultar el h3 con id 'h3-ocultar'
-        function ocultarH3() {
+        // Función que oculta o muestra el h3 basado en el valor seleccionado
+        function toggleH3() {
             var h3 = document.getElementById('h3-ocultar');
-            h3.style.display = 'none';  // Ocultar el <h3>
-        }
+            var opcion = document.getElementById('mostrar-ocultar').value;
 
-        // Función para mostrar el h3 con id 'h3-ocultar'
-        function mostrarH3() {
-            var h3 = document.getElementById('h3-ocultar');
-            h3.style.display = 'block';  // Mostrar el <h3>
+            if (opcion === 'ocultar') {
+                h3.style.display = 'none';  // Ocultar el <h3>
+            } else {
+                h3.style.display = 'block';  // Mostrar el <h3>
+            }
         }
     </script>
 </body>
