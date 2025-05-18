@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Buscador y Marcadores</title>
+  <meta charset="UTF-8" />
+  <title>Buscador y Marcadores con Carpetas</title>
   <style>
     * {
       box-sizing: border-box;
@@ -19,11 +19,12 @@
       height: 100vh;
     }
 
-    .contenedor {
+    .container {
       display: flex;
       gap: 40px;
       width: 90%;
       max-width: 1100px;
+      height: 90vh;
     }
 
     .panel {
@@ -33,19 +34,19 @@
       gap: 20px;
     }
 
-    .cuadro {
+    .box {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(6px);
       border-radius: 12px;
       padding: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .cuadro input {
+    .box input, .box select {
       padding: 10px;
       font-size: 16px;
       border: none;
@@ -55,7 +56,7 @@
       color: white;
     }
 
-    .cuadro button {
+    .box button {
       background-color: white;
       color: black;
       border: none;
@@ -67,17 +68,28 @@
       transition: background 0.3s;
     }
 
-    .cuadro button:hover {
+    .box button:hover {
       background-color: #cccccc;
     }
 
-    #marcadoresGuardados {
+    #savedBookmarksContainer {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 10px;
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 10px;
     }
 
-    .marcador {
+    #savedBookmarks {
+      overflow-y: auto;
+      flex-grow: 1;
+      margin-top: 10px;
+      padding-right: 5px;
+    }
+
+    .bookmark, .folder {
       background: rgba(255, 255, 255, 0.07);
       border: 1px solid rgba(255, 255, 255, 0.15);
       padding: 10px;
@@ -85,18 +97,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 8px;
     }
 
-    .marcador a {
+    .bookmark a {
       color: #00c3ff;
       text-decoration: none;
+      flex-grow: 1;
+      margin-right: 10px;
+      word-break: break-word;
     }
 
-    .marcador a:hover {
+    .bookmark a:hover {
       text-decoration: underline;
     }
 
-    .marcador button {
+    .bookmark button, .folder button {
       background: white;
       color: black;
       border: none;
@@ -104,88 +120,285 @@
       border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
+      margin-left: 5px;
     }
 
-    .marcador button:hover {
+    .bookmark button:hover, .folder button:hover {
       background: #ccc;
     }
+
+    .folderName {
+      flex-grow: 1;
+      font-weight: bold;
+      color: #87cefa;
+    }
+
+    .folderContents {
+      margin-top: 10px;
+      margin-left: 15px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 10px;
+      user-select: none;
+    }
+
   </style>
 </head>
 <body>
 
-  <div class="contenedor">
+  <div class="container">
 
-    <!-- Panel izquierdo: búsqueda y guardado -->
+    <!-- Left panel: search and save -->
     <div class="panel">
 
-      <!-- Buscador -->
-      <div class="cuadro">
-        <input type="text" id="entradaURL" value="https://" placeholder="Buscar o introducir una URL...">
-        <button onclick="buscar()">Buscar</button>
+      <div class="section-title">Buscar URL</div>
+      <div class="box">
+        <input type="text" id="searchInput" value="https://" placeholder="Buscar o introducir una URL..." />
+        <button onclick="searchURL()">Buscar</button>
       </div>
 
-      <!-- Guardar marcador -->
-      <div class="cuadro">
-        <input type="text" id="nombreMarcador" placeholder="Nombre del marcador">
-        <input type="text" id="urlMarcador" value="https://" placeholder="URL del marcador">
-        <button onclick="guardarMarcador()">Guardar</button>
+      <div class="section-title">Guardar Marcadores</div>
+      <div class="box">
+        <input type="text" id="bookmarkName" placeholder="Nombre del marcador" />
+        <input type="text" id="bookmarkURL" value="https://" placeholder="URL del marcador" />
+        <label for="folderSelect" style="margin-top:10px;">Guardar en carpeta:</label>
+        <select id="folderSelect">
+          <option value="">(Sin carpeta)</option>
+        </select>
+        <button onclick="saveBookmark()">Guardar</button>
+      </div>
+
+      <div class="box" style="margin-top: 20px;">
+        <input type="text" id="newFolderName" placeholder="Nombre nueva carpeta" />
+        <button onclick="createFolder()">Crear Carpeta</button>
       </div>
 
     </div>
 
-    <!-- Panel derecho: marcadores -->
+    <!-- Right panel: bookmarks -->
     <div class="panel">
-      <div class="cuadro" style="height: 100%; overflow-y: auto;">
-        <h3 style="margin: 0;">Marcadores guardados</h3>
-        <div id="marcadoresGuardados"></div>
+      <div id="savedBookmarksContainer">
+        <h3 style="margin: 0; user-select:none;">Marcadores guardados</h3>
+        <div id="savedBookmarks"></div>
       </div>
     </div>
 
   </div>
 
   <script>
-    function buscar() {
-      const valor = document.getElementById('entradaURL').value.trim();
-      if (valor) window.open(valor, '_blank');
+    // Storage key names
+    const STORAGE_KEY_BOOKMARKS = 'bookmarks';
+    const STORAGE_KEY_FOLDERS = 'folders';
+
+    function searchURL() {
+      const url = document.getElementById('searchInput').value.trim();
+      if (url) window.open(url, '_blank');
     }
 
-    function guardarMarcador() {
-      const nombre = document.getElementById('nombreMarcador').value.trim();
-      const url = document.getElementById('urlMarcador').value.trim();
-      if (!nombre || !url) return alert('Introduce nombre y URL');
-
-      const marcador = { nombre, url };
-      let marcadores = JSON.parse(localStorage.getItem('marcadores') || '[]');
-      marcadores.push(marcador);
-      localStorage.setItem('marcadores', JSON.stringify(marcadores));
-      mostrarMarcadores();
+    // Get saved bookmarks and folders from localStorage
+    function getBookmarks() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY_BOOKMARKS) || '[]');
+    }
+    function getFolders() {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY_FOLDERS) || '[]');
     }
 
-    function mostrarMarcadores() {
-      const contenedor = document.getElementById('marcadoresGuardados');
-      contenedor.innerHTML = '';
-      const marcadores = JSON.parse(localStorage.getItem('marcadores') || '[]');
+    // Save updated bookmarks and folders
+    function setBookmarks(bookmarks) {
+      localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify(bookmarks));
+    }
+    function setFolders(folders) {
+      localStorage.setItem(STORAGE_KEY_FOLDERS, JSON.stringify(folders));
+    }
 
-      marcadores.forEach(({ nombre, url }, i) => {
-        const div = document.createElement('div');
-        div.className = 'marcador';
-        div.innerHTML = `
-          <a href="${url}" target="_blank">${nombre}</a>
-          <button onclick="eliminarMarcador(${i})">✕</button>
-        `;
-        contenedor.appendChild(div);
+    function saveBookmark() {
+      const name = document.getElementById('bookmarkName').value.trim();
+      const url = document.getElementById('bookmarkURL').value.trim();
+      const folder = document.getElementById('folderSelect').value;
+      if (!name || !url) {
+        alert('Introduce nombre y URL');
+        return;
+      }
+
+      const bookmarks = getBookmarks();
+      const newBookmark = { name, url };
+
+      if (folder === '') {
+        // Save in root (no folder)
+        bookmarks.push(newBookmark);
+        setBookmarks(bookmarks);
+      } else {
+        // Save inside folder
+        let folders = getFolders();
+        const folderIndex = folders.findIndex(f => f.name === folder);
+        if (folderIndex >= 0) {
+          folders[folderIndex].bookmarks.push(newBookmark);
+          setFolders(folders);
+        } else {
+          alert('Carpeta no encontrada');
+          return;
+        }
+      }
+
+      // Clear inputs
+      document.getElementById('bookmarkName').value = '';
+      document.getElementById('bookmarkURL').value = 'https://';
+      document.getElementById('folderSelect').value = '';
+
+      renderBookmarks();
+      renderFolderSelect();
+    }
+
+    function createFolder() {
+      const folderNameInput = document.getElementById('newFolderName');
+      const folderName = folderNameInput.value.trim();
+      if (!folderName) {
+        alert('Introduce un nombre para la carpeta');
+        return;
+      }
+
+      let folders = getFolders();
+      if (folders.find(f => f.name === folderName)) {
+        alert('La carpeta ya existe');
+        return;
+      }
+
+      folders.push({ name: folderName, bookmarks: [] });
+      setFolders(folders);
+
+      folderNameInput.value = '';
+      renderBookmarks();
+      renderFolderSelect();
+    }
+
+    function renderFolderSelect() {
+      const select = document.getElementById('folderSelect');
+      const folders = getFolders();
+
+      // Clear options except first
+      select.innerHTML = '<option value="">(Sin carpeta)</option>';
+
+      folders.forEach(folder => {
+        const option = document.createElement('option');
+        option.value = folder.name;
+        option.textContent = folder.name;
+        select.appendChild(option);
       });
     }
 
-    function eliminarMarcador(index) {
-      let marcadores = JSON.parse(localStorage.getItem('marcadores') || '[]');
-      marcadores.splice(index, 1);
-      localStorage.setItem('marcadores', JSON.stringify(marcadores));
-      mostrarMarcadores();
+    function renderBookmarks() {
+      const container = document.getElementById('savedBookmarks');
+      container.innerHTML = '';
+
+      const bookmarks = getBookmarks();
+      const folders = getFolders();
+
+      // Render bookmarks without folder
+      bookmarks.forEach(({ name, url }, index) => {
+        const div = createBookmarkElement(name, url, false, null, index);
+        container.appendChild(div);
+      });
+
+      // Render folders with their bookmarks
+      folders.forEach((folder, folderIndex) => {
+        const folderDiv = document.createElement('div');
+        folderDiv.className = 'folder';
+
+        const folderHeader = document.createElement('div');
+        folderHeader.style.display = 'flex';
+        folderHeader.style.alignItems = 'center';
+        folderHeader.style.width = '100%';
+
+        const folderNameSpan = document.createElement('span');
+        folderNameSpan.className = 'folderName';
+        folderNameSpan.textContent = folder.name;
+
+        const deleteFolderBtn = document.createElement('button');
+        deleteFolderBtn.textContent = 'Eliminar Carpeta';
+        deleteFolderBtn.title = 'Eliminar carpeta y todos sus marcadores';
+        deleteFolderBtn.onclick = () => {
+          if (confirm(`Eliminar carpeta "${folder.name}" y todos sus marcadores?`)) {
+            deleteFolder(folderIndex);
+          }
+        };
+
+        folderHeader.appendChild(folderNameSpan);
+        folderHeader.appendChild(deleteFolderBtn);
+        folderDiv.appendChild(folderHeader);
+
+        // Folder contents container
+        const folderContents = document.createElement('div');
+        folderContents.className = 'folderContents';
+
+        folder.bookmarks.forEach(({ name, url }, bmIndex) => {
+          const bmElem = createBookmarkElement(name, url, true, folderIndex, bmIndex);
+          folderContents.appendChild(bmElem);
+        });
+
+        folderDiv.appendChild(folderContents);
+        container.appendChild(folderDiv);
+      });
     }
 
-    // Inicial
-    mostrarMarcadores();
+    function createBookmarkElement(name, url, isInFolder, folderIndex, bookmarkIndex) {
+      const div = document.createElement('div');
+      div.className = 'bookmark';
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.textContent = name;
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '✕';
+      deleteBtn.title = 'Eliminar marcador';
+      deleteBtn.onclick = () => {
+        if (isInFolder) {
+          deleteBookmarkInFolder(folderIndex, bookmarkIndex);
+        } else {
+          deleteBookmark(bookmarkIndex);
+        }
+      };
+
+      div.appendChild(link);
+      div.appendChild(deleteBtn);
+
+      return div;
+    }
+
+    function deleteBookmark(index) {
+      let bookmarks = getBookmarks();
+      bookmarks.splice(index, 1);
+      setBookmarks(bookmarks);
+      renderBookmarks();
+      renderFolderSelect();
+    }
+
+    function deleteBookmarkInFolder(folderIndex, bookmarkIndex) {
+      let folders = getFolders();
+      folders[folderIndex].bookmarks.splice(bookmarkIndex, 1);
+      setFolders(folders);
+      renderBookmarks();
+      renderFolderSelect();
+    }
+
+    function deleteFolder(folderIndex) {
+      let folders = getFolders();
+      folders.splice(folderIndex, 1);
+      setFolders(folders);
+      renderBookmarks();
+      renderFolderSelect();
+    }
+
+    // Inicializar selección y lista al cargar
+    renderFolderSelect();
+    renderBookmarks();
   </script>
 
 </body>
