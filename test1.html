@@ -1,54 +1,112 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>🎮 Ajustes | Menu 🎮</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-    }
+<meta charset="UTF-8" />
+<title>Dropdown con imágenes</title>
+<style>
+  .dropdown {
+    position: relative;
+    width: 250px;
+    user-select: none;
+    font-family: Arial, sans-serif;
+  }
 
-    select {
-      padding: 10px;
-      font-size: 16px;
-    }
+  .dropdown-selected {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-    h1 {
-      margin-bottom: 10px;
-    }
-  </style>
+  .dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
+    background: white;
+    display: none;
+    max-height: 180px;
+    overflow-y: auto;
+    z-index: 10;
+  }
+
+  .dropdown-list.show {
+    display: block;
+  }
+
+  .dropdown-item {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .dropdown-item img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .dropdown-item:hover {
+    background-color: #eee;
+  }
+</style>
 </head>
 <body>
-  <h1>🎮 Ajustes de fondo</h1>
 
-  <select id="opcion2">
-    <option disabled selected>Selecciona una opción</option>
-    <optgroup label="Fondos predefinidos">
-      <option value="img1">Extra 1</option>
-      <option value="img2">Extra 2</option>
-    </optgroup>
-    <optgroup label="Colores sólidos">
-      <option value="solidRed">Rojo</option>
-      <option value="solidBlue">Azul</option>
-      <option value="solidGreen">Verde</option>
-      <option value="solidYellow">Amarillo</option>
-      <option value="solidOrange">Naranja</option>
-      <option value="solidPurple">Púrpura</option>
-      <option value="solidPink">Rosa</option>
-      <option value="solidBrown">Marrón</option>
-      <option value="solidGray">Gris</option>
-      <option value="solidBlack">Negro</option>
-    </optgroup>
-    <optgroup label="Degradados">
-      <option value="gradient1">Azul → Violeta</option>
-      <option value="gradient2">Rojo → Amarillo</option>
-      <option value="gradient3">Verde → Lima</option>
-      <option value="gradient4">Celeste → Blanco</option>
-    </optgroup>
-    <option value="customColor">Color personalizado...</option>
-  </select>
+<h2>Ejemplo: Menú desplegable con imágenes</h2>
 
-  <script src="menu2.js"></script>
+<div class="dropdown" id="dropdown">
+  <div class="dropdown-selected">
+    <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Icono predeterminado" />
+    Selecciona una opción
+  </div>
+  <div class="dropdown-list">
+    <div class="dropdown-item" data-value="1">
+      <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Opción 1" />
+      Opción 1
+    </div>
+    <div class="dropdown-item" data-value="2">
+      <img src="https://cdn-icons-png.flaticon.com/512/616/616490.png" alt="Opción 2" />
+      Opción 2
+    </div>
+    <div class="dropdown-item" data-value="3">
+      <img src="https://cdn-icons-png.flaticon.com/512/616/616494.png" alt="Opción 3" />
+      Opción 3
+    </div>
+  </div>
+</div>
+
+<script>
+  const dropdown = document.getElementById('dropdown');
+  const selected = dropdown.querySelector('.dropdown-selected');
+  const list = dropdown.querySelector('.dropdown-list');
+
+  selected.addEventListener('click', () => {
+    list.classList.toggle('show');
+  });
+
+  list.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      // Copiar imagen y texto al área seleccionada
+      selected.innerHTML = item.innerHTML;
+      list.classList.remove('show');
+
+      // Puedes hacer algo con el valor seleccionado
+      console.log('Seleccionado:', item.dataset.value);
+    });
+  });
+
+  document.addEventListener('click', e => {
+    if (!dropdown.contains(e.target)) {
+      list.classList.remove('show');
+    }
+  });
+</script>
+
 </body>
 </html>
