@@ -4,71 +4,81 @@
   <meta charset="UTF-8">
   <title>Buscador y Marcadores</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #0a0f2c, #1f2e59);
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0d1b2a, #1b263b);
       color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      margin: 0;
     }
 
     .cuadro {
-      display: flex;
-      gap: 10px;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.07); /* semitransparente */
-      border: 1px solid rgba(255, 255, 255, 0.2); /* borde blanco tenue */
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      margin: 10px;
-      backdrop-filter: blur(4px);
-      max-width: 600px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      padding: 20px;
       width: 100%;
+      max-width: 400px;
+      margin: 15px 0;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: aparecer 0.6s ease-out forwards;
     }
 
-    .cuadro input {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
+    .cuadro:nth-child(1) { animation-delay: 0.1s; }
+    .cuadro:nth-child(2) { animation-delay: 0.3s; }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
       border: none;
-      border-radius: 6px;
-      outline: none;
+      border-radius: 8px;
+      font-size: 16px;
     }
 
-    .cuadro button {
-      background-color: #007bff;
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #3498db;
       color: white;
       border: none;
-      padding: 10px 16px;
-      font-size: 16px;
+      border-radius: 8px;
       cursor: pointer;
-      border-radius: 6px;
-      transition: background 0.3s;
+      transition: background 0.3s ease;
     }
 
-    .cuadro button:hover {
-      background-color: #0056b3;
+    button:hover {
+      background-color: #2980b9;
     }
 
     #marcadoresGuardados {
-      margin-top: 20px;
-      max-width: 600px;
-      width: 100%;
+      margin-top: 10px;
+      max-height: 200px;
+      overflow-y: auto;
     }
 
     .marcador {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
       padding: 10px;
       border-radius: 6px;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      transition: all 0.3s ease;
     }
 
     .marcador a {
@@ -79,11 +89,27 @@
     .marcador a:hover {
       text-decoration: underline;
     }
+
+    .marcador button {
+      background: transparent;
+      border: none;
+      color: #ff7675;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    @keyframes aparecer {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Buscador -->
+  <!-- Buscador principal -->
   <div class="cuadro">
     <input type="text" id="entradaURL" value="https://" placeholder="Introduce una URL o término...">
     <button onclick="buscar()">Buscar</button>
@@ -93,11 +119,11 @@
   <div class="cuadro">
     <input type="text" id="nombreMarcador" placeholder="Nombre del marcador">
     <input type="text" id="urlMarcador" value="https://" placeholder="URL del marcador">
-    <button onclick="guardarMarcador()">Guardar</button>
-  </div>
 
-  <!-- Lista de marcadores -->
-  <div id="marcadoresGuardados"></div>
+    <div id="marcadoresGuardados"></div>
+
+    <button onclick="guardarMarcador()">Guardar marcador</button>
+  </div>
 
   <script>
     function buscar() {
@@ -140,7 +166,7 @@
       mostrarMarcadores();
     }
 
-    // Mostrar al cargar
+    // Mostrar marcadores al cargar
     mostrarMarcadores();
   </script>
 
