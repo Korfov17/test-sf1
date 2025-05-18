@@ -10,79 +10,85 @@
 
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0d1b2a, #1b263b);
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom right, #0d0d0d, #2c2c2c);
       color: white;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .contenedor {
+      display: flex;
+      gap: 40px;
+      width: 90%;
+      max-width: 1100px;
+    }
+
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
     .cuadro {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       backdrop-filter: blur(6px);
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+      border-radius: 12px;
       padding: 20px;
-      width: 100%;
-      max-width: 400px;
-      margin: 15px 0;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: aparecer 0.6s ease-out forwards;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .cuadro:nth-child(1) { animation-delay: 0.1s; }
-    .cuadro:nth-child(2) { animation-delay: 0.3s; }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
+    .cuadro input {
+      padding: 10px;
+      font-size: 16px;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      font-size: 16px;
-      background-color: #3498db;
+      border-radius: 6px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.1);
       color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
     }
 
-    button:hover {
-      background-color: #2980b9;
+    .cuadro button {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .cuadro button:hover {
+      background-color: #cccccc;
     }
 
     #marcadoresGuardados {
-      margin-top: 10px;
-      max-height: 200px;
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .marcador {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 8px;
+      border-radius: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.3s ease;
     }
 
     .marcador a {
-      color: #00bfff;
+      color: #00c3ff;
       text-decoration: none;
     }
 
@@ -91,38 +97,50 @@
     }
 
     .marcador button {
-      background: transparent;
+      background: white;
+      color: black;
       border: none;
-      color: #ff7675;
-      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 18px;
+      font-weight: bold;
     }
 
-    @keyframes aparecer {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .marcador button:hover {
+      background: #ccc;
     }
   </style>
 </head>
 <body>
 
-  <!-- Buscador principal -->
-  <div class="cuadro">
-    <input type="text" id="entradaURL" value="https://" placeholder="Introduce una URL o término...">
-    <button onclick="buscar()">Buscar</button>
-  </div>
+  <div class="contenedor">
 
-  <!-- Guardar marcadores -->
-  <div class="cuadro">
-    <input type="text" id="nombreMarcador" placeholder="Nombre del marcador">
-    <input type="text" id="urlMarcador" value="https://" placeholder="URL del marcador">
+    <!-- Panel izquierdo: búsqueda y guardado -->
+    <div class="panel">
 
-    <div id="marcadoresGuardados"></div>
+      <!-- Buscador -->
+      <div class="cuadro">
+        <input type="text" id="entradaURL" value="https://" placeholder="Buscar o introducir una URL...">
+        <button onclick="buscar()">Buscar</button>
+      </div>
 
-    <button onclick="guardarMarcador()">Guardar marcador</button>
+      <!-- Guardar marcador -->
+      <div class="cuadro">
+        <input type="text" id="nombreMarcador" placeholder="Nombre del marcador">
+        <input type="text" id="urlMarcador" value="https://" placeholder="URL del marcador">
+        <button onclick="guardarMarcador()">Guardar</button>
+      </div>
+
+    </div>
+
+    <!-- Panel derecho: marcadores -->
+    <div class="panel">
+      <div class="cuadro" style="height: 100%; overflow-y: auto;">
+        <h3 style="margin: 0;">Marcadores guardados</h3>
+        <div id="marcadoresGuardados"></div>
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -166,7 +184,7 @@
       mostrarMarcadores();
     }
 
-    // Mostrar marcadores al cargar
+    // Inicial
     mostrarMarcadores();
   </script>
 
