@@ -2,45 +2,119 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Buscador</title>
+  <title>Buscador Elegante</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    #buscador {
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      height: 100vh;
       display: flex;
-      max-width: 400px;
-      margin: 20px;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
     }
-    input {
+
+    .buscador-container {
+      background-color: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 30px 40px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 24px;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
       flex: 1;
-      padding: 8px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+      outline: none;
     }
+
     button {
-      padding: 8px 12px;
+      background-color: #ffffff;
+      color: #1e3c72;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #dfe6f3;
+      transform: scale(1.05);
+    }
+
+    .error {
+      margin-top: 10px;
+      color: #ffbaba;
+      font-size: 14px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
-<div id="buscador">
-  <input type="text" id="entradaURL" placeholder="Introduce una URL o término...">
-  <button onclick="buscar()">Buscar</button>
+<div class="buscador-container">
+  <h1>🔍 Buscar o Abrir URL</h1>
+  <div class="input-group">
+    <input type="text" id="entradaURL" placeholder="Introduce una URL o texto de búsqueda...">
+    <button onclick="buscar()">Buscar</button>
+  </div>
+  <div id="errorMensaje" class="error">⚠️ Entrada vacía. Por favor, escribe algo.</div>
 </div>
 
 <script>
-  function buscar() {
-    const valor = document.getElementById('entradaURL').value.trim();
+  function esURLValida(texto) {
+    try {
+      const url = new URL(texto);
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch (_) {
+      return false;
+    }
+  }
 
-    if (valor === '') {
-      alert('Por favor, introduce algo.');
+  function buscar() {
+    const entrada = document.getElementById('entradaURL').value.trim();
+    const error = document.getElementById('errorMensaje');
+
+    if (!entrada) {
+      error.textContent = "⚠️ Entrada vacía. Por favor, escribe algo.";
+      error.style.display = "block";
       return;
     }
 
-    // Si empieza por http o https, asumimos que es una URL válida
-    if (valor.startsWith('http://') || valor.startsWith('https://')) {
-      window.open(valor, '_blank');
+    error.style.display = "none"; // Ocultar mensaje si hay contenido
+
+    if (esURLValida(entrada)) {
+      window.open(entrada, '_blank');
     } else {
-      // Si no, buscamos en Google
-      const query = encodeURIComponent(valor);
-      window.open(`https://www.google.com/search?q=${query}`, '_blank');
+      const query = encodeURIComponent(entrada);
+      window.open(`https://www.startpage.com/do/dsearch?query=${query}`, '_blank');
     }
   }
 </script>
