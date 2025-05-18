@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Buscador Elegante</title>
+  <title>Buscador y Abridor de URL</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -13,79 +13,92 @@
       margin: 0;
       padding: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      height: 100vh;
+      background: linear-gradient(145deg, #2c2c2c, #3f3f3f);
+      color: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #fff;
+      height: 100vh;
     }
 
-    .buscador-container {
+    .contenedor {
       background-color: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
       padding: 30px 40px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       width: 90%;
       max-width: 500px;
-      text-align: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
 
-    h1 {
-      margin-bottom: 20px;
-      font-weight: 600;
-      font-size: 24px;
+    h2 {
+      font-size: 20px;
+      margin-bottom: 10px;
     }
 
-    .input-group {
-      display: flex;
-      gap: 10px;
+    .seccion {
+      margin-bottom: 30px;
     }
 
     input[type="text"] {
-      flex: 1;
+      width: 100%;
       padding: 12px 16px;
       border-radius: 10px;
       border: none;
       font-size: 16px;
+      margin-top: 10px;
+      margin-bottom: 10px;
       outline: none;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    input[type="text"]::placeholder {
+      color: #cccccc;
     }
 
     button {
-      background-color: #ffffff;
-      color: #1e3c72;
-      border: none;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
       border-radius: 10px;
-      padding: 12px 20px;
+      border: none;
+      background-color: #ffffff;
+      color: #2c2c2c;
       font-weight: 600;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
     }
 
     button:hover {
-      background-color: #dfe6f3;
-      transform: scale(1.05);
+      background-color: #dddddd;
+      transform: scale(1.03);
     }
 
     .error {
-      margin-top: 10px;
-      color: #ffbaba;
       font-size: 14px;
+      color: #ffbaba;
+      margin-top: 5px;
       display: none;
     }
   </style>
 </head>
 <body>
 
-<div class="buscador-container">
-  <h1>🔍 Buscar o Abrir URL</h1>
-  <div class="input-group">
-    <input type="text" id="entradaURL" placeholder="Introduce una URL o texto de búsqueda...">
+<div class="contenedor">
+  <div class="seccion">
+    <h2>🔗 Abrir una URL</h2>
+    <input type="text" id="inputUrl" placeholder="https://ejemplo.com">
+    <button onclick="abrirURL()">Abrir URL</button>
+    <div id="errorUrl" class="error">⚠️ La URL no es válida.</div>
+  </div>
+
+  <div class="seccion">
+    <h2>🔍 Buscar en Startpage</h2>
+    <input type="text" id="inputBusqueda" placeholder="Buscar en Startpage...">
     <button onclick="buscar()">Buscar</button>
   </div>
-  <div id="errorMensaje" class="error">⚠️ Entrada vacía. Por favor, escribe algo.</div>
 </div>
 
 <script>
@@ -98,22 +111,22 @@
     }
   }
 
-  function buscar() {
-    const entrada = document.getElementById('entradaURL').value.trim();
-    const error = document.getElementById('errorMensaje');
+  function abrirURL() {
+    const urlInput = document.getElementById('inputUrl').value.trim();
+    const errorDiv = document.getElementById('errorUrl');
 
-    if (!entrada) {
-      error.textContent = "⚠️ Entrada vacía. Por favor, escribe algo.";
-      error.style.display = "block";
-      return;
-    }
-
-    error.style.display = "none"; // Ocultar mensaje si hay contenido
-
-    if (esURLValida(entrada)) {
-      window.open(entrada, '_blank');
+    if (esURLValida(urlInput)) {
+      errorDiv.style.display = "none";
+      window.open(urlInput, '_blank');
     } else {
-      const query = encodeURIComponent(entrada);
+      errorDiv.style.display = "block";
+    }
+  }
+
+  function buscar() {
+    const busqueda = document.getElementById('inputBusqueda').value.trim();
+    if (busqueda) {
+      const query = encodeURIComponent(busqueda);
       window.open(`https://www.startpage.com/do/dsearch?query=${query}`, '_blank');
     }
   }
