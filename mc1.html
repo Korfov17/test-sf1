@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notas Minecraft</title>
+  <style>
+    @font-face {
+      font-family: 'Minecraft';
+      src: url('https://dl.dafont.com/dl/?f=minecraftia') format('truetype');
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Minecraft', monospace;
+      background: url('https://i.imgur.com/DGkTHvs.png') repeat;
+      color: #fff;
+      image-rendering: pixelated;
+    }
+
+    h1 {
+      text-align: center;
+      text-shadow: 2px 2px #000;
+      margin-bottom: 20px;
+    }
+
+    .menu {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      font-family: 'Minecraft', monospace;
+      background-color: #3e7e00;
+      border: 3px solid #000;
+      padding: 10px;
+      color: white;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .explorer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .folder {
+      background-color: rgba(0, 0, 0, 0.7);
+      border: 3px solid #00ff00;
+      padding: 10px;
+    }
+
+    .note {
+      background: rgba(255,255,255,0.9);
+      color: black;
+      padding: 10px;
+      margin-top: 10px;
+      border: 2px dashed black;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      font-family: monospace;
+    }
+
+    .markdown-output {
+      background: #f0f0f0;
+      margin-top: 5px;
+      padding: 5px;
+      border: 1px solid #999;
+    }
+  </style>
+</head>
+<body>
+  <h1>💎📁 Notas Estilo Minecraft</h1>
+  <div class="menu">
+    <button onclick="createFolder()">📂 Crear Carpeta</button>
+    <button onclick="exportNotes()">⬇️ Exportar Notas</button>
+    <input type="file" accept=".md" onchange="importNotes(event)" />
+  </div>
+  <div class="explorer" id="explorer"></div>
+
+  <script>
+    let folderCount = 0;
+
+    function createFolder() {
+      const folderId = "folder_" + folderCount++;
+      const folder = document.createElement("div");
+      folder.className = "folder";
+      folder.innerHTML = `
+        <strong>📁 Carpeta: ${folderId}</strong>
+        <br><button onclick="createNote('${folderId}')">📝 Crear Nota</button>
+        <div class="notes" id="${folderId}"></div>
+      `;
+      document.getElementById("explorer").appendChild(folder);
+    }
+
+    function createNote(folderId) {
+      const noteDiv = document.createElement("div");
+      noteDiv.className = "note";
+      noteDiv.innerHTML = `
+        <textarea placeholder="Escribe Markdown aquí..."></textarea>
+        <br><button onclick="renderMarkdown(this)">✅ Ver Markdown</button>
+        <div class="markdown-output"></div>
+      `;
+      document.getElementById(folderId).appendChild(noteDiv);
+    }
+
+    function renderMarkdown(button) {
+      const note = button.parentElement;
+      const text = note.querySelector("textarea").value;
+      const output = note.querySelector(".markdown-output");
+      output.innerHTML = markdownToHtml(text);
+    }
+
+    function markdownToHtml(md) {
+      return md
+        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+        .replace(/\*\*(.*?)\*\*/gim, '<b>$1</b>')
+        .replace(/\*(.*?)\*/gim, '<i>$1</i>')
+        .replace(/`(.*?)`/gim, '<code>$1</code>')
+        .replace(/\n/gim, '<br>');
+    }
+
+    function exportNotes() {
+      let result = "";
+      document.querySelectorAll('.folder').forEach((folder, i) => {
+        result += `# Carpeta ${i + 1}\n`;
+        folder.querySelectorAll('textarea').forEach((note, j) => {
+          result += `## Nota ${j + 1}\n`;
+          result += note.value + "\n\n";
+        });
+      });
+      const blob = new Blob([result], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "notas_minecraft.md";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importNotes(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const content = e.target.result;
+        parseMarkdown(content);
+      };
+      reader.readAsText(file);
+    }
+
+    function parseMarkdown(content) {
+      document.getElementById("explorer").innerHTML = '';
+      const lines = content.split("\n");
+      let currentFolderId = null;
+
+      lines.forEach(line => {
+        if (line.startsWith("# Carpeta")) {
+          createFolder();
+          currentFolderId = "folder_" + (folderCount - 1);
+        } else if (line.startsWith("## Nota")) {
+          createNote(currentFolderId);
+        } else if (line.trim() !== "" && currentFolderId !== null) {
+          const notes = document.getElementById(currentFolderId).querySelectorAll("textarea");
+          if (notes.length > 0) {
+            const lastTextarea = notes[notes.length - 1];
+            lastTextarea.value += line + "\n";
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
