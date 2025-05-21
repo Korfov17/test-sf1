@@ -2,203 +2,120 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Selector de Fondo Avanzado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Misión Finalizada</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      transition: background 0.5s, color 0.5s;
-      background-size: cover;
-      background-position: center;
-    }
-
-    select, button {
-      font-size: 16px;
-      padding: 8px;
-      margin: 10px;
-      width: 250px;
-    }
-
-    .info {
-      background-color: #f39c12;
+      margin: 0;
+      padding: 0;
+      background: #111;
       color: white;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 20px;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    #startButton {
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #00adee;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #startButton:hover {
+      background-color: #008cbf;
+    }
+
+    #progressBarContainer {
+      width: 60%;
+      height: 6px;
+      background-color: #333;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 30px;
+      box-shadow: 0 0 10px #00f0ff88;
       display: none;
+    }
+
+    #progressBar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, #00f0ff, #008cbf);
+      box-shadow: 0 0 12px #00f0ff;
+      transition: width 0.2s;
+    }
+
+    #missionComplete {
+      display: none;
+      font-size: 64px;
+      font-weight: bold;
+      color: #ffcc00;
+      text-transform: uppercase;
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+
+    #expandBanner {
+      display: none;
+      width: 100%;
+      background-color: rgba(0,0,0,0.9);
+      color: #ffcc00;
+      font-size: 48px;
+      text-align: center;
+      padding: 30px 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      clip-path: inset(0 0 100% 0);
+      animation: expandDown 2s 2s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes expandDown {
+      to { clip-path: inset(0 0 0 0); }
     }
   </style>
 </head>
 <body>
-
-  <h1>🎨 Selector de Fondo</h1>
-  <h2 id="subTitle">🖍️ Subtítulo editable desde el desplegable</h2>
-
-  <!-- Selector de fondo -->
-  <select id="colorSelector">
-    <option value="">Selecciona una opción</option>
-    <option value="#3498db">🌊 Azul</option>
-    <option value="#2ecc71">🍃 Verde</option>
-    <option value="#e74c3c">❤️ Rojo</option>
-    <option value="#f1c40f">🌟 Amarillo</option>
-    <option value="#9b59b6">💜 Púrpura</option>
-    <option value="#1abc9c">💎 Turquesa</option>
-    <option value="rainbow">🌈 Arcoíris</option>
-    <option value="customCycle">🔄 Verde-Rosa-Rojo-Azul</option>
-  </select>
-
-  <!-- Botones -->
-  <br>
-  <button id="resetButton">🔄 Restablecer fondo</button>
-  <button id="notifyButton">🔔 Notificación del navegador</button>
-  <button id="playButton">🎶 Reproducir Canción</button>
-  <button id="randomImageButton">🖼️ Fondo aleatorio</button>
-  <button id="whiteBackgroundButton">⬜ Fondo blanco</button>
-
-  <!-- Nuevo desplegable de acciones -->
-  <br><br>
-  <select id="actionSelector">
-    <option value="">🔽 Selecciona una acción</option>
-    <option value="alert">🔈 Mostrar alerta</option>
-    <option value="changeTitle">✏️ Cambiar título</option>
-    <option value="changeSubtitle">📝 Cambiar subtítulo</option>
-    <option value="changeTextColor">🎨 Cambiar color de texto</option>
-    <option value="randomNumber">🎲 Mostrar número aleatorio</option>
-  </select>
-
-  <div id="allset" class="info">¡Notificación del navegador!</div>
-
-  <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+  <button id="startButton">Iniciar Misión</button>
+  <div id="progressBarContainer">
+    <div id="progressBar"></div>
+  </div>
+  <div id="missionComplete">¡MISIÓN SUPERADA!</div>
+  <div id="expandBanner">Complicaciones</div>
 
   <script>
-    const selector = document.getElementById('colorSelector');
-    const rainbowColors = ["#e74c3c", "#f1c40f", "#2ecc71", "#3498db", "#9b59b6", "#e67e22", "#1abc9c"];
-    const customColors = ["#2ecc71", "#ff69b4", "#e74c3c", "#3498db"];
-    let rainbowInterval, customInterval, currentIndex = 0;
+    const button = document.getElementById("startButton");
+    const barContainer = document.getElementById("progressBarContainer");
+    const bar = document.getElementById("progressBar");
+    const missionText = document.getElementById("missionComplete");
+    const banner = document.getElementById("expandBanner");
 
-    function startRainbow(colorsArray) {
-      stopAllIntervals();
-      currentIndex = 0;
-      rainbowInterval = setInterval(() => {
-        document.body.style.background = colorsArray[currentIndex];
-        currentIndex = (currentIndex + 1) % colorsArray.length;
-      }, 500);
-    }
-
-    function stopAllIntervals() {
-      clearInterval(rainbowInterval);
-      clearInterval(customInterval);
-    }
-
-    selector.addEventListener('change', function () {
-      const value = this.value;
-      localStorage.setItem('selectedBackground', value);
-      stopAllIntervals();
-      document.body.style.backgroundImage = "";
-      document.body.style.background = "";
-
-      if (value === "rainbow") {
-        startRainbow(rainbowColors);
-      } else if (value === "customCycle") {
-        startRainbow(customColors);
-      } else if (value) {
-        document.body.style.background = value;
-      }
-    });
-
-    window.addEventListener('load', () => {
-      const savedValue = localStorage.getItem('selectedBackground');
-      if (savedValue) {
-        selector.value = savedValue;
-        if (savedValue === "rainbow") startRainbow(rainbowColors);
-        else if (savedValue === "customCycle") startRainbow(customColors);
-        else document.body.style.background = savedValue;
-      }
-    });
-
-    document.getElementById('resetButton').addEventListener('click', () => {
-      localStorage.removeItem('selectedBackground');
-      selector.value = '';
-      stopAllIntervals();
-      document.body.style.background = '';
-      document.body.style.backgroundImage = '';
-    });
-
-    document.getElementById('notifyButton').addEventListener('click', () => {
-      if (Notification.permission === "granted") {
-        new Notification("El navegador te quiere decir algo", {
-          body: "¡Has activado una notificación!",
-          icon: "https://img.icons8.com/ios/452/bell.png"
-        });
-      } else if (Notification.permission !== "denied") {
-        Notification.requestPermission().then(permission => {
-          if (permission === "granted") {
-            new Notification("El navegador te quiere decir algo", {
-              body: "¡Has activado una notificación!",
-              icon: "https://img.icons8.com/ios/452/bell.png"
-            });
-          }
-        });
-      }
-    });
-
-    const audioPlayer = document.getElementById('audioPlayer');
-    const playButton = document.getElementById('playButton');
-    playButton.addEventListener('click', () => {
-      if (audioPlayer.paused) {
-        audioPlayer.play();
-        playButton.textContent = '⏸️ Pausar Canción';
-      } else {
-        audioPlayer.pause();
-        playButton.textContent = '🎶 Reproducir Canción';
-      }
-    });
-
-    document.getElementById('randomImageButton').addEventListener('click', () => {
-      stopAllIntervals();
-      selector.value = '';
-      const randomUrl = `https://source.unsplash.com/random/1600x900?sig=${Math.floor(Math.random() * 1000)}`;
-      document.body.style.backgroundImage = `url(${randomUrl})`;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundRepeat = 'no-repeat';
-    });
-
-    document.getElementById('whiteBackgroundButton').addEventListener('click', () => {
-      stopAllIntervals();
-      selector.value = '';
-      document.body.style.background = 'white';
-      document.body.style.backgroundImage = '';
-    });
-
-    // Nuevo: desplegable de acciones
-    document.getElementById('actionSelector').addEventListener('change', function () {
-      const action = this.value;
-      switch (action) {
-        case 'alert':
-          alert("¡Hola! Esto es una alerta desde el desplegable.");
-          break;
-        case 'changeTitle':
-          const nuevoTitulo = prompt("Introduce un nuevo título:");
-          if (nuevoTitulo) document.title = nuevoTitulo;
-          break;
-        case 'changeSubtitle':
-          const nuevoSubtitulo = prompt("Nuevo texto del subtítulo:");
-          if (nuevoSubtitulo) document.getElementById('subTitle').textContent = nuevoSubtitulo;
-          break;
-        case 'changeTextColor':
-          const colores = ['#e74c3c', '#2ecc71', '#3498db', '#9b59b6', '#f1c40f', '#1abc9c'];
-          const color = colores[Math.floor(Math.random() * colores.length)];
-          document.body.style.color = color;
-          break;
-        case 'randomNumber':
-          const n = Math.floor(Math.random() * 100) + 1;
-          alert("Tu número aleatorio es: " + n);
-          break;
-      }
-      this.value = ''; // Reset para que se pueda volver a seleccionar
-    });
+    button.onclick = () => {
+      button.style.display = "none";
+      barContainer.style.display = "block";
+      let width = 0;
+      const interval = setInterval(() => {
+        width += 1;
+        bar.style.width = width + "%";
+        if (width >= 100) {
+          clearInterval(interval);
+          barContainer.style.display = "none";
+          missionText.style.display = "block";
+          banner.style.display = "block";
+        }
+      }, 40); // 4s approx
+    };
   </script>
-
 </body>
 </html>
