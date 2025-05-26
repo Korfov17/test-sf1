@@ -2,125 +2,201 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Ajustes estilo PS4</title>
+  <title>PS4 Settings</title>
   <style>
-    body {
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #003087, #0062cc);
+      background: linear-gradient(to bottom right, #003087, #0050c8);
       color: white;
-      height: 100vh;
       overflow: hidden;
     }
 
-    .settings-container {
-      width: 800px;
-      margin: 50px auto;
-      padding: 30px;
+    .screen {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 60px 120px;
+      transition: transform 0.5s ease, opacity 0.5s ease;
     }
 
     h1 {
-      font-size: 24px;
-      margin-bottom: 30px;
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      padding-bottom: 10px;
+      font-size: 32px;
+      margin-bottom: 40px;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .menu-item {
       display: flex;
       align-items: center;
-      gap: 15px;
-      padding: 12px 20px;
-      font-size: 18px;
-      transition: background 0.3s ease;
-      border-left: 4px solid transparent;
-      margin-bottom: 5px;
-      position: relative;
+      padding: 14px 24px;
+      font-size: 20px;
+      border-left: 6px solid transparent;
+      background-color: rgba(255,255,255,0.05);
+      transition: background 0.3s, border-left 0.3s;
+      cursor: pointer;
     }
 
     .menu-item:hover,
     .menu-item.selected {
-      background-color: rgba(255,255,255,0.1);
-      border-left: 4px solid #00ff90;
+      background-color: rgba(255,255,255,0.15);
+      border-left: 6px solid #32ff8c;
     }
 
-    .menu-icon {
-      width: 24px;
-      height: 24px;
+    .icon {
+      width: 32px;
+      height: 32px;
       background-color: white;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
       color: #003087;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 8px;
+      margin-right: 20px;
+      font-size: 18px;
     }
 
     .footer {
       position: absolute;
-      bottom: 20px;
-      right: 40px;
-      font-size: 14px;
+      bottom: 30px;
+      right: 60px;
+      font-size: 16px;
       color: rgba(255,255,255,0.6);
     }
 
     .enter-back {
       position: absolute;
-      bottom: 20px;
-      left: 40px;
-      font-size: 14px;
+      bottom: 30px;
+      left: 60px;
+      font-size: 16px;
       color: rgba(255,255,255,0.7);
+    }
+
+    /* Zoom animation for submenu */
+    .zoom-out {
+      transform: scale(0.9);
+      opacity: 0;
+    }
+
+    .submenu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom right, #002060, #0040a0);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 32px;
+      z-index: 2;
+    }
+
+    .submenu.active {
+      display: flex;
+      animation: zoomIn 0.5s forwards;
+    }
+
+    @keyframes zoomIn {
+      0% {
+        transform: scale(1.1);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
   </style>
 </head>
 <body>
 
-<div class="settings-container">
+<div class="screen" id="mainScreen">
   <h1>Settings</h1>
-
-  <div class="menu-item selected">
-    <div class="menu-icon">U</div>
-    User's Guide/Helpful Info
+  <div class="menu">
+    <div class="menu-item selected" onclick="openSubmenu('User\'s Guide')">
+      <div class="icon">U</div>
+      User's Guide/Helpful Info
+    </div>
+    <div class="menu-item" onclick="openSubmenu('Data Handling')">
+      <div class="icon">H</div>
+      Data Handling/Health & Safety
+    </div>
+    <div class="menu-item" onclick="openSubmenu('Accessibility')">
+      <div class="icon">A</div>
+      Accessibility
+    </div>
+    <div class="menu-item" onclick="openSubmenu('Account')">
+      <div class="icon">@</div>
+      Account Management
+    </div>
+    <div class="menu-item" onclick="openSubmenu('Parental Control')">
+      <div class="icon">P</div>
+      Parental Controls/Family Management
+    </div>
+    <div class="menu-item" onclick="openSubmenu('Login')">
+      <div class="icon">L</div>
+      Login Settings
+    </div>
+    <div class="menu-item" onclick="openSubmenu('Network')">
+      <div class="icon">N</div>
+      Network
+    </div>
+    <div class="menu-item" onclick="openSubmenu('Notifications')">
+      <div class="icon">!</div>
+      Notifications
+    </div>
   </div>
+</div>
 
-  <div class="menu-item">
-    <div class="menu-icon">H</div>
-    Data Handling/Health & Safety
-  </div>
-
-  <div class="menu-item">
-    <div class="menu-icon">A</div>
-    Accessibility
-  </div>
-
-  <div class="menu-item">
-    <div class="menu-icon">@</div>
-    Account Management
-  </div>
-
-  <div class="menu-item">
-    <div class="menu-icon">P</div>
-    Parental Controls/Family Management
-  </div>
-
-  <div class="menu-item">
-    <div class="menu-icon">L</div>
-    Login Settings
-  </div>
-
-  <div class="menu-item">
-    <div class="menu-icon">N</div>
-    Network
-  </div>
-
-  <div class="menu-item">
-    <div class="menu-icon">!</div>
-    Notifications
-  </div>
+<div class="submenu" id="submenuScreen">
+  <div id="submenuTitle">Loading...</div>
+  <div style="margin-top: 30px; font-size: 20px; opacity: 0.7;">Pulsa [Backspace] para volver</div>
 </div>
 
 <div class="footer">Mom</div>
 <div class="enter-back">Enter &nbsp;&nbsp;&nbsp;&nbsp; Back</div>
+
+<script>
+  function openSubmenu(title) {
+    const main = document.getElementById("mainScreen");
+    const sub = document.getElementById("submenuScreen");
+    const titleEl = document.getElementById("submenuTitle");
+
+    main.classList.add("zoom-out");
+    setTimeout(() => {
+      main.style.display = "none";
+      sub.classList.add("active");
+      titleEl.textContent = title;
+    }, 500);
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Backspace") {
+      const main = document.getElementById("mainScreen");
+      const sub = document.getElementById("submenuScreen");
+
+      sub.classList.remove("active");
+      main.style.display = "flex";
+      main.classList.remove("zoom-out");
+    }
+  });
+</script>
 
 </body>
 </html>
