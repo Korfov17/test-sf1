@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Docs</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f3f4;
+    }
+
+    .toolbar {
+      background: #ffffff;
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .toolbar select,
+    .toolbar button,
+    .toolbar input[type="color"] {
+      padding: 5px;
+    }
+
+    #editor {
+      margin: 20px auto;
+      padding: 40px;
+      background: white;
+      width: 80%;
+      min-height: 600px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      outline: none;
+    }
+
+    .actions {
+      text-align: center;
+      margin: 20px;
+    }
+
+    .actions button {
+      margin: 0 10px;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <button onclick="execCmd('bold')"><b>B</b></button>
+    <button onclick="execCmd('italic')"><i>I</i></button>
+    <button onclick="execCmd('underline')"><u>U</u></button>
+    <button onclick="execCmd('strikeThrough')"><s>S</s></button>
+
+    <select onchange="execCmdArg('formatBlock', this.value)">
+      <option value="">Encabezado</option>
+      <option value="h1">H1</option>
+      <option value="h2">H2</option>
+      <option value="h3">H3</option>
+      <option value="p">Párrafo</option>
+    </select>
+
+    <select onchange="execCmdArg('fontName', this.value)">
+      <option value="">Fuente</option>
+      <option value="Arial">Arial</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Courier New">Courier</option>
+      <option value="Verdana">Verdana</option>
+    </select>
+
+    <select onchange="execCmdArg('fontSize', this.value)">
+      <option value="">Tamaño</option>
+      <option value="1">Muy pequeño</option>
+      <option value="2">Pequeño</option>
+      <option value="3">Normal</option>
+      <option value="4">Grande</option>
+      <option value="5">Muy grande</option>
+    </select>
+
+    <input type="color" onchange="execCmdArg('foreColor', this.value)" title="Color de texto" />
+    <input type="color" onchange="execCmdArg('hiliteColor', this.value)" title="Color de fondo" />
+
+    <button onclick="execCmd('justifyLeft')">Izq</button>
+    <button onclick="execCmd('justifyCenter')">Centro</button>
+    <button onclick="execCmd('justifyRight')">Der</button>
+    <button onclick="execCmd('insertUnorderedList')">• Lista</button>
+    <button onclick="execCmd('insertOrderedList')">1. Lista</button>
+  </div>
+
+  <div id="editor" contenteditable="true"></div>
+
+  <div class="actions">
+    <button onclick="saveDoc()">Guardar</button>
+    <button onclick="loadDoc()">Cargar</button>
+    <button onclick="downloadTxt()">Exportar .txt</button>
+    <button onclick="downloadHtml()">Exportar .html</button>
+  </div>
+
+  <script>
+    function execCmd(cmd) {
+      document.execCommand(cmd, false, null);
+    }
+
+    function execCmdArg(cmd, arg) {
+      document.execCommand(cmd, false, arg);
+    }
+
+    function saveDoc() {
+      localStorage.setItem("minidoc", document.getElementById("editor").innerHTML);
+      alert("Documento guardado localmente.");
+    }
+
+    function loadDoc() {
+      const saved = localStorage.getItem("minidoc");
+      if (saved) {
+        document.getElementById("editor").innerHTML = saved;
+      } else {
+        alert("No hay documento guardado.");
+      }
+    }
+
+    function downloadTxt() {
+      const text = document.getElementById("editor").innerText;
+      const blob = new Blob([text], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "documento.txt";
+      a.click();
+    }
+
+    function downloadHtml() {
+      const html = document.getElementById("editor").innerHTML;
+      const blob = new Blob([html], { type: "text/html" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "documento.html";
+      a.click();
+    }
+  </script>
+</body>
+</html>
