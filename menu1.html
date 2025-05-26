@@ -2,117 +2,125 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Menú de Ajustes estilo PS4</title>
+  <title>Ajustes estilo PS4</title>
   <style>
     body {
       margin: 0;
-      background: linear-gradient(to bottom right, #0a2a61, #1c4c96);
-      font-family: "Segoe UI", sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #003087, #0062cc);
       color: white;
+      height: 100vh;
       overflow: hidden;
     }
 
-    .menu-container {
-      display: flex;
-      flex-direction: column;
-      width: 400px;
+    .settings-container {
+      width: 800px;
       margin: 50px auto;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 15px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
-      overflow: hidden;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 10px;
     }
 
     .menu-item {
-      padding: 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
       gap: 15px;
-      cursor: pointer;
+      padding: 12px 20px;
+      font-size: 18px;
       transition: background 0.3s ease;
+      border-left: 4px solid transparent;
+      margin-bottom: 5px;
+      position: relative;
     }
 
-    .menu-item:hover {
-      background: rgba(255, 255, 255, 0.1);
+    .menu-item:hover,
+    .menu-item.selected {
+      background-color: rgba(255,255,255,0.1);
+      border-left: 4px solid #00ff90;
     }
 
-    .icon {
-      width: 32px;
-      height: 32px;
-      background: white;
+    .menu-icon {
+      width: 24px;
+      height: 24px;
+      background-color: white;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #1c4c96;
-      font-weight: bold;
+      font-size: 14px;
+      color: #003087;
     }
 
-    .submenu {
-      background: rgba(255, 255, 255, 0.1);
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease;
-      padding-left: 60px;
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      right: 40px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
     }
 
-    .submenu.active {
-      max-height: 300px;
-    }
-
-    .submenu-item {
-      padding: 15px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+    .enter-back {
+      position: absolute;
+      bottom: 20px;
+      left: 40px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
     }
   </style>
 </head>
 <body>
 
-<div class="menu-container">
-  <div class="menu-item" onclick="toggleSubmenu(0)">
-    <div class="icon">A</div>
-    Configuración de red
-  </div>
-  <div class="submenu">
-    <div class="submenu-item">Estado de conexión</div>
-    <div class="submenu-item">Configurar conexión a Internet</div>
-    <div class="submenu-item">Probar conexión</div>
+<div class="settings-container">
+  <h1>Settings</h1>
+
+  <div class="menu-item selected">
+    <div class="menu-icon">U</div>
+    User's Guide/Helpful Info
   </div>
 
-  <div class="menu-item" onclick="toggleSubmenu(1)">
-    <div class="icon">S</div>
-    Sonido y pantalla
-  </div>
-  <div class="submenu">
-    <div class="submenu-item">Ajustes de volumen</div>
-    <div class="submenu-item">Resolución de vídeo</div>
-    <div class="submenu-item">Salida de audio</div>
+  <div class="menu-item">
+    <div class="menu-icon">H</div>
+    Data Handling/Health & Safety
   </div>
 
-  <div class="menu-item" onclick="toggleSubmenu(2)">
-    <div class="icon">U</div>
-    Usuarios
+  <div class="menu-item">
+    <div class="menu-icon">A</div>
+    Accessibility
   </div>
-  <div class="submenu">
-    <div class="submenu-item">Crear usuario</div>
-    <div class="submenu-item">Cambiar avatar</div>
-    <div class="submenu-item">Control parental</div>
+
+  <div class="menu-item">
+    <div class="menu-icon">@</div>
+    Account Management
+  </div>
+
+  <div class="menu-item">
+    <div class="menu-icon">P</div>
+    Parental Controls/Family Management
+  </div>
+
+  <div class="menu-item">
+    <div class="menu-icon">L</div>
+    Login Settings
+  </div>
+
+  <div class="menu-item">
+    <div class="menu-icon">N</div>
+    Network
+  </div>
+
+  <div class="menu-item">
+    <div class="menu-icon">!</div>
+    Notifications
   </div>
 </div>
 
-<script>
-  function toggleSubmenu(index) {
-    const all = document.querySelectorAll('.submenu');
-    all.forEach((el, i) => {
-      if (i === index) {
-        el.classList.toggle('active');
-      } else {
-        el.classList.remove('active');
-      }
-    });
-  }
-</script>
+<div class="footer">Mom</div>
+<div class="enter-back">Enter &nbsp;&nbsp;&nbsp;&nbsp; Back</div>
 
 </body>
 </html>
