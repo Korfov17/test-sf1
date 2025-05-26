@@ -40,15 +40,11 @@
       margin-bottom: 30px;
     }
 
-    .profile-button {
-      position: absolute;
-      top: 20px;
-      right: 40px;
-      background: rgba(255, 255, 255, 0.2);
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 16px;
-      color: white;
+    .top-line {
+      width: 100%;
+      height: 2px;
+      background-color: white;
+      margin-bottom: 10px;
     }
 
     .menu {
@@ -89,7 +85,7 @@
       bottom: -4px;
       border: 2px solid white;
       pointer-events: none;
-      animation: blink 1s infinite;
+      animation: blink 2s infinite;
     }
 
     .no-blink {
@@ -152,11 +148,10 @@
 </head>
 <body>
 
-<div class="profile-button">Perfil</div>
-
 <div class="screen" id="mainScreen">
   <h1>Settings</h1>
   <div class="title-bar"></div>
+  <div class="top-line"></div>
   <div class="menu" id="menu">
     <div class="menu-item"><div class="icon">U</div>User's Guide/Helpful Info</div>
     <div class="menu-item"><div class="icon">H</div>Data Handling/Health & Safety</div>
@@ -189,7 +184,7 @@
     clearTimeout(blinkTimeout);
     blinkTimeout = setTimeout(() => {
       selector.classList.remove("no-blink");
-    }, 1000);
+    }, 2000); // Parpadea si no hay movimiento por 2s
   }
 
   function updateSelection() {
