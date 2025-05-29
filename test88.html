@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Elegante con Acciones Interactivas</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cae;
+            --accent-color: #ff7e5f;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .accordion-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .accordion {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .accordion:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .accordion-header {
+            padding: 1.2rem 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .accordion-header:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .accordion-header h3 {
+            font-weight: 400;
+            font-size: 1.2rem;
+        }
+
+        .accordion-header .icon {
+            transition: var(--transition);
+        }
+
+        .accordion.active .accordion-header .icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .accordion.active .accordion-content {
+            max-height: 500px;
+        }
+
+        .action-list {
+            list-style: none;
+        }
+
+        .action-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        .action-item:last-child {
+            border-bottom: none;
+        }
+
+        .action-item:hover {
+            background-color: #f8f9fa;
+            padding-left: 1.8rem;
+        }
+
+        .action-item i {
+            margin-right: 0.8rem;
+            color: var(--accent-color);
+            width: 20px;
+            text-align: center;
+        }
+
+        .action-item span {
+            flex: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Efectos especiales */
+        .highlight {
+            animation: highlight 1.5s ease;
+        }
+
+        @keyframes highlight {
+            0% { background-color: rgba(255, 126, 95, 0.3); }
+            100% { background-color: transparent; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .accordion-container {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Web Interactiva Elegante</h1>
+            <p class="subtitle">Explora las diferentes acciones en cada desplegable</p>
+        </header>
+
+        <div class="accordion-container">
+            <!-- Desplegable 1 -->
+            <div class="accordion">
+                <div class="accordion-header">
+                    <h3>Acciones de Información</h3>
+                    <i class="fas fa-chevron-down icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="action-list">
+                        <li class="action-item" onclick="showUserAgent()">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Mostrar User Agent</span>
+                        </li>
+                        <li class="action-item" onclick="showScreenResolution()">
+                            <i class="fas fa-desktop"></i>
+                            <span>Mostrar Resolución de Pantalla</span>
+                        </li>
+                        <li class="action-item" onclick="showBrowserInfo()">
+                            <i class="fas fa-window-maximize"></i>
+                            <span>Información del Navegador</span>
+                        </li>
+                        <li class="action-item" onclick="showPageInfo()">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Información de la Página</span>
+                        </li>
+                        <li class="action-item" onclick="showDateTime()">
+                            <i class="fas fa-clock"></i>
+                            <span>Mostrar Fecha y Hora</span>
+                        </li>
+                        <li class="action-item" onclick="showLocation()">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Mostrar Ubicación</span>
+                        </li>
+                        <li class="action-item" onclick="showBatteryStatus()">
+                            <i class="fas fa-battery-three-quarters"></i>
+                            <span>Estado de la Batería</span>
+                        </li>
+                        <li class="action-item" onclick="showConnectionInfo()">
+                            <i class="fas fa-wifi"></i>
+                            <span>Información de Conexión</span>
+                        </li>
+                        <li class="action-item" onclick="showMemoryStatus()">
+                            <i class="fas fa-memory"></i>
+                            <span>Estado de Memoria</span>
+                        </li>
+                        <li class="action-item" onclick="showDeviceInfo()">
+                            <i class="fas fa-mobile-alt"></i>
+                            <span>Información del Dispositivo</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Desplegable 2 -->
+            <div class="accordion">
+                <div class="accordion-header">
+                    <h3>Acciones de Estilo</h3>
+                    <i class="fas fa-chevron-down icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="action-list">
+                        <li class="action-item" onclick="changeTheme('light')">
+                            <i class="fas fa-sun"></i>
+                            <span>Cambiar a Tema Claro</span>
+                        </li>
+                        <li class="action-item" onclick="changeTheme('dark')">
+                            <i class="fas fa-moon"></i>
+                            <span>Cambiar a Tema Oscuro</span>
+                        </li>
+                        <li class="action-item" onclick="changeTheme('blue')">
+                            <i class="fas fa-palette"></i>
+                            <span>Cambiar a Tema Azul</span>
+                        </li>
+                        <li class="action-item" onclick="changeFontSize('increase')">
+                            <i class="fas fa-text-height"></i>
+                            <span>Aumentar Tamaño de Fuente</span>
+                        </li>
+                        <li class="action-item" onclick="changeFontSize('decrease')">
+                            <i class="fas fa-text-width"></i>
+                            <span>Disminuir Tamaño de Fuente</span>
+                        </li>
+                        <li class="action-item" onclick="toggleHighContrast()">
+                            <i class="fas fa-adjust"></i>
+                            <span>Alternar Alto Contraste</span>
+                        </li>
+                        <li class="action-item" onclick="randomizeColors()">
+                            <i class="fas fa-random"></i>
+                            <span>Colores Aleatorios</span>
+                        </li>
+                        <li class="action-item" onclick="toggleGradientBackground()">
+                            <i class="fas fa-fill-drip"></i>
+                            <span>Fondo Degradado</span>
+                        </li>
+                        <li class="action-item" onclick="animateElements()">
+                            <i class="fas fa-film"></i>
+                            <span>Animar Elementos</span>
+                        </li>
+                        <li class="action-item" onclick="resetStyles()">
+                            <i class="fas fa-undo"></i>
+                            <span>Restablecer Estilos</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Desplegable 3 -->
+            <div class="accordion">
+                <div class="accordion-header">
+                    <h3>Acciones de Contenido</h3>
+                    <i class="fas fa-chevron-down icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="action-list">
+                        <li class="action-item" onclick="addRandomQuote()">
+                            <i class="fas fa-quote-right"></i>
+                            <span>Añadir Cita Aleatoria</span>
+                        </li>
+                        <li class="action-item" onclick="showHiddenMessage()">
+                            <i class="fas fa-eye"></i>
+                            <span>Mostrar Mensaje Oculto</span>
+                        </li>
+                        <li class="action-item" onclick="toggleLoremIpsum()">
+                            <i class="fas fa-paragraph"></i>
+                            <span>Alternar Texto Lorem Ipsum</span>
+                        </li>
+                        <li class="action-item" onclick="createRandomList()">
+                            <i class="fas fa-list-ol"></i>
+                            <span>Generar Lista Aleatoria</span>
+                        </li>
+                        <li class="action-item" onclick="showRandomImage()">
+                            <i class="fas fa-image"></i>
+                            <span>Mostrar Imagen Aleatoria</span>
+                        </li>
+                        <li class="action-item" onclick="toggleSecretSection()">
+                            <i class="fas fa-user-secret"></i>
+                            <span>Sección Secreta</span>
+                        </li>
+                        <li class="action-item" onclick="displayMathFact()">
+                            <i class="fas fa-square-root-alt"></i>
+                            <span>Mostrar Dato Matemático</span>
+                        </li>
+                        <li class="action-item" onclick="showJoke()">
+                            <i class="fas fa-laugh-squint"></i>
+                            <span>Contar un Chiste</span>
+                        </li>
+                        <li class="action-item" onclick="displayFact()">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Mostrar Dato Curioso</span>
+                        </li>
+                        <li class="action-item" onclick="toggleBinaryMode()">
+                            <i class="fas fa-code"></i>
+                            <span>Modo Binario</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Desplegable 4 -->
+            <div class="accordion">
+                <div class="accordion-header">
+                    <h3>Acciones de Interacción</h3>
+                    <i class="fas fa-chevron-down icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="action-list">
+                        <li class="action-item" onclick="startConfetti()">
+                            <i class="fas fa-birthday-cake"></i>
+                            <span>Lanzar Confeti</span>
+                        </li>
+                        <li class="action-item" onclick="playSound('notification')">
+                            <i class="fas fa-bell"></i>
+                            <span>Reproducir Sonido</span>
+                        </li>
+                        <li class="action-item" onclick="shakeElement(this)">
+                            <i class="fas fa-hand-paper"></i>
+                            <span>Agitar Elemento</span>
+                        </li>
+                        <li class="action-item" onclick="createRippleEffect(this)">
+                            <i class="fas fa-water"></i>
+                            <span>Efecto de Ondas</span>
+                        </li>
+                        <li class="action-item" onclick="toggleCursorEffect()">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <span>Efecto de Cursor</span>
+                        </li>
+                        <li class="action-item" onclick="startParticles()">
+                            <i class="fas fa-atom"></i>
+                            <span>Partículas Flotantes</span>
+                        </li>
+                        <li class="action-item" onclick="showModal()">
+                            <i class="fas fa-window-restore"></i>
+                            <span>Mostrar Ventana Modal</span>
+                        </li>
+                        <li class="action-item" onclick="showNotification()">
+                            <i class="fas fa-comment-alt"></i>
+                            <span>Mostrar Notificación</span>
+                        </li>
+                        <li class="action-item" onclick="simulateTyping()">
+                            <i class="fas fa-keyboard"></i>
+                            <span>Efecto de Escritura</span>
+                        </li>
+                        <li class="action-item" onclick="toggleSnowfall()">
+                            <i class="fas fa-snowflake"></i>
+                            <span>Nevada</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Desplegable 5 -->
+            <div class="accordion">
+                <div class="accordion-header">
+                    <h3>Acciones Avanzadas</h3>
+                    <i class="fas fa-chevron-down icon"></i>
+                </div>
+                <div class="accordion-content">
+                    <ul class="action-list">
+                        <li class="action-item" onclick="calculatePi()">
+                            <i class="fas fa-calculator"></i>
+                            <span>Calcular Pi</span>
+                        </li>
+                        <li class="action-item" onclick="startClock()">
+                            <i class="fas fa-stopwatch"></i>
+                            <span>Reloj en Tiempo Real</span>
+                        </li>
+                        <li class="action-item" onclick="fetchRandomUser()">
+                            <i class="fas fa-users"></i>
+                            <span>Obtener Usuario Aleatorio</span>
+                        </li>
+                        <li class="action-item" onclick="detectMotion()">
+                            <i class="fas fa-running"></i>
+                            <span>Detectar Movimiento</span>
+                        </li>
+                        <li class="action-item" onclick="startVoiceRecognition()">
+                            <i class="fas fa-microphone"></i>
+                            <span>Reconocimiento de Voz</span>
+                        </li>
+                        <li class="action-item" onclick="takeScreenshot()">
+                            <i class="fas fa-camera"></i>
+                            <span>Capturar Pantalla</span>
+                        </li>
+                        <li class="action-item" onclick="measurePerformance()">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Medir Rendimiento</span>
+                        </li>
+                        <li class="action-item" onclick="startCountdown()">
+                            <i class="fas fa-hourglass-start"></i>
+                            <span>Cuenta Regresiva</span>
+                        </li>
+                        <li class="action-item" onclick="simulateLoad()">
+                            <i class="fas fa-spinner"></i>
+                            <span>Simular Carga</span>
+                        </li>
+                        <li class="action-item" onclick="showSecretCode()">
+                            <i class="fas fa-lock"></i>
+                            <span>Código Secreto</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área de contenido dinámico -->
+        <div id="dynamic-content" style="margin-top: 2rem; min-height: 200px; background-color: white; padding: 2rem; border-radius: 8px; box-shadow: var(--shadow);"></div>
+
+        <footer>
+            <p>© 2023 Web Interactiva Elegante. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;">
+        <div style="background-color: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 90%; position: relative;">
+            <button onclick="closeModal()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            <h2 id="modal-title" style="margin-bottom: 1rem;">Título del Modal</h2>
+            <p id="modal-content">Contenido del modal aquí...</p>
+        </div>
+    </div>
+
+    <script>
+        // Funciones para los acordeones
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const accordion = header.parentElement;
+                accordion.classList.toggle('active');
+            });
+        });
+
+        // Funciones para las acciones del desplegable 1 (Información)
+        function showUserAgent() {
+            alert(`Tu User Agent es:\n${navigator.userAgent}`);
+        }
+
+        function showScreenResolution() {
+            alert(`Resolución de pantalla:\nAncho: ${screen.width}px\nAlto: ${screen.height}px`);
+        }
+
+        function showBrowserInfo() {
+            const info = `
+                Navegador: ${navigator.appName}
+                Versión: ${navigator.appVersion}
+                Plataforma: ${navigator.platform}
+                Idiomas: ${navigator.languages ? navigator.languages.join(', ') : navigator.language}
+                Cookies habilitadas: ${navigator.cookieEnabled ? 'Sí' : 'No'}
+                JavaScript habilitado: Sí
+            `;
+            alert(`Información del navegador:\n${info}`);
+        }
+
+        function showPageInfo() {
+            const info = `
+                URL: ${window.location.href}
+                Protocolo: ${window.location.protocol}
+                Host: ${window.location.host}
+                Path: ${window.location.pathname}
+                Título: ${document.title}
+                Última modificación: ${document.lastModified}
+            `;
+            alert(`Información de la página:\n${info}`);
+        }
+
+        function showDateTime() {
+            const now = new Date();
+            alert(`Fecha y hora actual:\n${now.toLocaleString()}`);
+        }
+
+        function showLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        alert(`Tu ubicación aproximada:\nLatitud: ${position.coords.latitude}\nLongitud: ${position.coords.longitude}`);
+                    },
+                    error => {
+                        alert(`Error al obtener la ubicación: ${error.message}`);
+                    }
+                );
+            } else {
+                alert("Geolocalización no es soportada por este navegador.");
+            }
+        }
+
+        async function showBatteryStatus() {
+            if ('getBattery' in navigator) {
+                try {
+                    const battery = await navigator.getBattery();
+                    const status = `
+                        Nivel de batería: ${Math.floor(battery.level * 100)}%
+                        Cargando: ${battery.charging ? 'Sí' : 'No'}
+                        Tiempo de carga/descarga: ${battery.charging ? 
+                            (battery.chargingTime === Infinity ? 'Desconocido' : `${battery.chargingTime} segundos`) : 
+                            (battery.dischargingTime === Infinity ? 'Desconocido' : `${battery.dischargingTime} segundos`)}
+                    `;
+                    alert(`Estado de la batería:\n${status}`);
+                } catch (error) {
+                    alert("No se pudo obtener información de la batería.");
+                }
+            } else {
+                alert("API de Batería no es soportada por este navegador.");
+            }
+        }
+
+        function showConnectionInfo() {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                const info = `
+                    Tipo de conexión: ${connection.effectiveType}
+                    Ancho de banda estimado: ${connection.downlink} Mbps
+                    Ahorro de datos: ${connection.saveData ? 'Activado' : 'Desactivado'}
+                    RTT: ${connection.rtt} ms
+                `;
+                alert(`Información de conexión:\n${info}`);
+            } else {
+                alert("API de Network Information no es soportada por este navegador.");
+            }
+        }
+
+        function showMemoryStatus() {
+            if ('deviceMemory' in navigator) {
+                alert(`Memoria del dispositivo: ${navigator.deviceMemory} GB`);
+            } else {
+                alert("API de Device Memory no es soportada por este navegador.");
+            }
+        }
+
+        function showDeviceInfo() {
+            const info = `
+                User Agent: ${navigator.userAgent}
+                Sistema operativo: ${navigator.platform}
+                Núcleos de CPU: ${navigator.hardwareConcurrency || 'Desconocido'}
+                Memoria: ${navigator.deviceMemory || 'Desconocido'} GB
+                Touch: ${'maxTouchPoints' in navigator ? navigator.maxTouchPoints > 0 ? 'Sí' : 'No' : 'Desconocido'}
+            `;
+            alert(`Información del dispositivo:\n${info}`);
+        }
+
+        // Funciones para las acciones del desplegable 2 (Estilo)
+        function changeTheme(theme) {
+            document.documentElement.style.setProperty('--primary-color', 
+                theme === 'dark' ? '#2c3e50' : 
+                theme === 'blue' ? '#4a6fa5' : '#6b8cae');
+            
+            document.documentElement.style.setProperty('--secondary-color', 
+                theme === 'dark' ? '#34495e' : 
+                theme === 'blue' ? '#6b8cae' : '#4a6fa5');
+            
+            document.documentElement.style.setProperty('--light-color', 
+                theme === 'dark' ? '#ecf0f1' : '#f8f9fa');
+            
+            document.documentElement.style.setProperty('--dark-color', 
+                theme === 'dark' ? '#f8f9fa' : '#343a40');
+            
+            document.body.style.backgroundColor = 
+                theme === 'dark' ? '#2c3e50' : '#f5f7fa';
+            
+            highlightAction();
+        }
+
+        function changeFontSize(type) {
+            const html = document.documentElement;
+            const currentSize = parseFloat(window.getComputedStyle(html).fontSize);
+            
+            if (type === 'increase' && currentSize < 24) {
+                html.style.fontSize = (currentSize + 1) + 'px';
+            } else if (type === 'decrease' && currentSize > 12) {
+                html.style.fontSize = (currentSize - 1) + 'px';
+            }
+            
+            highlightAction();
+        }
+
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+            if (document.body.classList.contains('high-contrast')) {
+                document.body.style.backgroundColor = '#000';
+                document.body.style.color = '#fff';
+                document.documentElement.style.setProperty('--primary-color', '#fff');
+                document.documentElement.style.setProperty('--secondary-color', '#ccc');
+                document.documentElement.style.setProperty('--light-color', '#333');
+                document.documentElement.style.setProperty('--dark-color', '#fff');
+            } else {
+                document.body.style.backgroundColor = '';
+                document.body.style.color = '';
+                document.documentElement.style.setProperty('--primary-color', '#4a6fa5');
+                document.documentElement.style.setProperty('--secondary-color', '#6b8cae');
+                document.documentElement.style.setProperty('--light-color', '#f8f9fa');
+                document.documentElement.style.setProperty('--dark-color', '#343a40');
+            }
+            
+            highlightAction();
+        }
+
+        function randomizeColors() {
+            const randomColor = () => Math.floor(Math.random() * 256);
+            const primary = `rgb(${randomColor()}, ${randomColor()}, ${randomColor()})`;
+            const secondary = `rgb(${randomColor()}, ${randomColor()}, ${randomColor()})`;
+            
+            document.documentElement.style.setProperty('--primary-color', primary);
+            document.documentElement.style.setProperty('--secondary-color', secondary);
+            
+            highlightAction();
+        }
+
+        function toggleGradientBackground() {
+            const body = document.body;
+            if (body.style.backgroundImage.includes('gradient')) {
+                body.style.backgroundImage = '';
+            } else {
+                const angle = Math.floor(Math.random() * 360);
+                const color1 = `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`;
+                const color2 = `hsl(${Math.floor(Math.random() * 360)}, 70%, 80%)`;
+                body.style.backgroundImage = `linear-gradient(${angle}deg, ${color1}, ${color2})`;
+            }
+            
+            highlightAction();
+        }
+
+        function animateElements() {
+            const elements = document.querySelectorAll('.accordion, header, footer');
+            elements.forEach(el => {
+                el.style.animation = 'none';
+                setTimeout(() => {
+                    el.style.animation = 'highlight 1.5s ease';
+                }, 10);
+            });
+            
+            highlightAction();
+        }
+
+        function resetStyles() {
+            document.body.className = '';
+            document.body.style = '';
+            document.documentElement.style = '';
+            
+            // Restaurar valores por defecto
+            document.documentElement.style.setProperty('--primary-color', '#4a6fa5');
+            document.documentElement.style.setProperty('--secondary-color', '#6b8cae');
+            document.documentElement.style.setProperty('--light-color', '#f8f9fa');
+            document.documentElement.style.setProperty('--dark-color', '#343a40');
+            
+            highlightAction();
+        }
+
+        // Funciones para las acciones del desplegable 3 (Contenido)
+        const quotes = [
+            "La vida es lo que pasa mientras estás ocupado haciendo otros planes. - John Lennon",
+            "La única manera de hacer un gran trabajo es amar lo que haces. - Steve Jobs",
+            "No cuentes los días, haz que los días cuenten. - Muhammad Ali",
+            "El éxito es la suma de pequeños esfuerzos repetidos día tras día. - Robert Collier",
+            "La mejor venganza es un éxito masivo. - Frank Sinatra",
+            "La vida es 10% lo que me ocurre y 90% cómo reacciono a ello. - Charles Swindoll",
+            "Sé el cambio que deseas ver en el mundo. - Mahatma Gandhi",
+            "La única limitación es la que pones en tu mente. - Desconocido",
+            "Si puedes soñarlo, puedes hacerlo. - Walt Disney",
+            "El conocimiento es poder. - Francis Bacon"
+        ];
+
+        function addRandomQuote() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            
+            const quoteElement = document.createElement('blockquote');
+            quoteElement.style.borderLeft = '4px solid var(--accent-color)';
+            quoteElement.style.padding = '1rem';
+            quoteElement.style.margin = '1rem 0';
+            quoteElement.style.fontStyle = 'italic';
+            quoteElement.textContent = randomQuote;
+            
+            dynamicContent.appendChild(quoteElement);
+            highlightAction();
+        }
+
+        function showHiddenMessage() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="color: var(--accent-color); margin-bottom: 1rem;">Mensaje Secreto</h3>
+                <p>¡Felicidades! Has descubierto el mensaje oculto. 🎉</p>
+                <p style="margin-top: 1rem;">Este es un mensaje especial solo para aquellos curiosos que exploran todas las opciones.</p>
+            `;
+            highlightAction();
+        }
+
+        function toggleLoremIpsum() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            if (dynamicContent.innerHTML.includes('Lorem ipsum')) {
+                dynamicContent.innerHTML = '';
+            } else {
+                dynamicContent.innerHTML = `
+                    <h3 style="margin-bottom: 1rem;">Texto de Ejemplo</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                    <p>Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <p>Nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt.</p>
+                `;
+            }
+            highlightAction();
+        }
+
+        function createRandomList() {
+            const items = [
+                "Manzana", "Banana", "Naranja", "Pera", "Uva", 
+                "Kiwi", "Mango", "Piña", "Sandía", "Melón",
+                "Fresa", "Arándano", "Frambuesa", "Cereza", "Ciruela"
+            ];
+            
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = '<h3 style="margin-bottom: 1rem;">Lista Aleatoria</h3><ul style="list-style-type: disc; padding-left: 2rem;"></ul>';
+            const ul = dynamicContent.querySelector('ul');
+            
+            // Mezclar y seleccionar 5-10 elementos
+            const shuffled = items.sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, Math.floor(Math.random() * 6) + 5);
+            
+            selected.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
+            });
+            
+            highlightAction();
+        }
+
+        function showRandomImage() {
+            const images = [
+                "https://source.unsplash.com/random/600x400/?nature",
+                "https://source.unsplash.com/random/600x400/?city",
+                "https://source.unsplash.com/random/600x400/?technology",
+                "https://source.unsplash.com/random/600x400/?animal",
+                "https://source.unsplash.com/random/600x400/?food"
+            ];
+            
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Imagen Aleatoria</h3>
+                <img src="${images[Math.floor(Math.random() * images.length)]}" alt="Imagen aleatoria" style="max-width: 100%; height: auto; border-radius: 8px;">
+            `;
+            highlightAction();
+        }
+
+        function toggleSecretSection() {
+            const secretSection = document.getElementById('secret-section');
+            if (secretSection) {
+                secretSection.remove();
+            } else {
+                const section = document.createElement('div');
+                section.id = 'secret-section';
+                section.style.marginTop = '2rem';
+                section.style.padding = '2rem';
+                section.style.backgroundColor = '#ffefef';
+                section.style.borderRadius = '8px';
+                section.style.border = '1px dashed var(--accent-color)';
+                section.innerHTML = `
+                    <h3 style="color: var(--accent-color); margin-bottom: 1rem;">¡Sección Secreta!</h3>
+                    <p>Has descubierto una sección secreta. Aquí tienes un dato curioso:</p>
+                    <p>Los pulpos tienen tres corazones, nueve cerebros y sangre azul.</p>
+                `;
+                document.querySelector('.container').insertBefore(section, document.querySelector('footer'));
+            }
+            highlightAction();
+        }
+
+        function displayMathFact() {
+            const facts = [
+                "El número Pi (π) es irracional, lo que significa que no puede expresarse como una fracción exacta.",
+                "Un círculo tiene 360 grados porque los antiguos babilonios usaban un sistema numérico de base 60.",
+                "El cero es el único número que no puede representarse en números romanos.",
+                "Hay exactamente 10! (3,628,800) formas de organizar las cartas en una baraja estándar de 52 cartas.",
+                "El número más grande que puede escribirse con tres dígitos es 9^9^9, que tiene 369,693,100 dígitos."
+            ];
+            
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Dato Matemático</h3>
+                <p>${facts[Math.floor(Math.random() * facts.length)]}</p>
+            `;
+            highlightAction();
+        }
+
+        function showJoke() {
+            const jokes = [
+                "¿Qué le dice un semáforo a otro? No me mires que me estoy cambiando.",
+                "¿Cómo se dice pañuelo en japonés? Saka-moko.",
+                "¿Qué le dice una iguana a su hermana gemela? Somos iguanitas.",
+                "¿Por qué los pájaros no usan Facebook? Porque ya tienen Twitter.",
+                "¿Qué hace una abeja en el gimnasio? Zum-ba."
+            ];
+            
+            alert(jokes[Math.floor(Math.random() * jokes.length)]);
+            highlightAction();
+        }
+
+        function displayFact() {
+            const facts = [
+                "Los humanos son los únicos animales que pueden dibujar líneas rectas.",
+                "El corazón de un camarón está en su cabeza.",
+                "El sonido que hace el pato no hace eco y nadie sabe por qué.",
+                "El nombre completo de Barbie es Barbara Millicent Roberts.",
+                "El 10% de los huesos de un gato están en su cola."
+            ];
+            
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Dato Curioso</h3>
+                <p>${facts[Math.floor(Math.random() * facts.length)]}</p>
+            `;
+            highlightAction();
+        }
+
+        function toggleBinaryMode() {
+            document.body.classList.toggle('binary-mode');
+            if (document.body.classList.contains('binary-mode')) {
+                // Convertir texto a "binario" (solo un efecto visual)
+                const elements = document.querySelectorAll('h1, h2, h3, p, span, li:not(.action-item)');
+                elements.forEach(el => {
+                    const originalText = el.textContent;
+                    el.setAttribute('data-original-text', originalText);
+                    el.textContent = originalText.split('').map(char => {
+                        return Math.random() > 0.5 ? '0' : '1';
+                    }).join('');
+                });
+            } else {
+                // Restaurar texto original
+                const elements = document.querySelectorAll('[data-original-text]');
+                elements.forEach(el => {
+                    el.textContent = el.getAttribute('data-original-text');
+                    el.removeAttribute('data-original-text');
+                });
+            }
+            highlightAction();
+        }
+
+        // Funciones para las acciones del desplegable 4 (Interacción)
+        function startConfetti() {
+            // Crear confeti simple
+            const colors = ['#ff7e5f', '#4a6fa5', '#6b8cae', '#f8f9fa', '#343a40'];
+            const container = document.querySelector('.container');
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = '50%';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.zIndex = '1000';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                container.appendChild(confetti);
+                
+                // Animación
+                const animation = confetti.animate([
+                    { top: '-10px', opacity: 1 },
+                    { top: '100%', opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+            
+            highlightAction();
+        }
+
+        function playSound(type) {
+            // Usar el Web Audio API para generar sonidos simples
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                if (type === 'notification') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(880, audioCtx.currentTime);
+                    oscillator.frequency.setValueAtTime(440, audioCtx.currentTime + 0.1);
+                    oscillator.frequency.setValueAtTime(880, audioCtx.currentTime + 0.2);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                }
+                
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+                
+            } catch (e) {
+                alert("No se pudo reproducir el sonido. Asegúrate de que el navegador soporte Web Audio API.");
+            }
+            
+            highlightAction();
+        }
+
+        function shakeElement(element) {
+            element.style.animation = 'none';
+            setTimeout(() => {
+                element.style.animation = 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both';
+            }, 10);
+            
+            // Definir la animación shake si no existe
+            if (!document.getElementById('shake-animation')) {
+                const style = document.createElement('style');
+                style.id = 'shake-animation';
+                style.textContent = `
+                    @keyframes shake {
+                        10%, 90% { transform: translateX(-1px); }
+                        20%, 80% { transform: translateX(2px); }
+                        30%, 50%, 70% { transform: translateX(-4px); }
+                        40%, 60% { transform: translateX(4px); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            highlightAction();
+        }
+
+        function createRippleEffect(element) {
+            const ripple = document.createElement('span');
+            const rect = element.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = event.clientX - rect.left - size / 2;
+            const y = event.clientY - rect.top - size / 2;
+            
+            ripple.style.position = 'absolute';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.style.backgroundColor = 'rgba(255, 255, 255, 0.4)';
+            ripple.style.borderRadius = '50%';
+            ripple.style.transform = 'scale(0)';
+            ripple.style.transition = 'transform 0.6s ease-out, opacity 0.6s ease-out';
+            
+            element.style.position = 'relative';
+            element.style.overflow = 'hidden';
+            element.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.style.transform = 'scale(4)';
+                ripple.style.opacity = '0';
+            }, 10);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 700);
+            
+            highlightAction();
+        }
+
+        function toggleCursorEffect() {
+            document.body.classList.toggle('custom-cursor');
+            
+            if (document.body.classList.contains('custom-cursor')) {
+                // Crear un estilo para el cursor personalizado
+                const style = document.createElement('style');
+                style.id = 'cursor-style';
+                style.textContent = `
+                    body.custom-cursor {
+                        cursor: none;
+                    }
+                    .cursor-dot {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 10px;
+                        height: 10px;
+                        background-color: var(--accent-color);
+                        border-radius: 50%;
+                        pointer-events: none;
+                        z-index: 9999;
+                        transform: translate(-50%, -50%);
+                    }
+                    .cursor-ring {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 30px;
+                        height: 30px;
+                        border: 2px solid var(--primary-color);
+                        border-radius: 50%;
+                        pointer-events: none;
+                        z-index: 9998;
+                        transform: translate(-50%, -50%);
+                        transition: all 0.1s ease-out;
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // Crear elementos del cursor
+                const dot = document.createElement('div');
+                dot.className = 'cursor-dot';
+                document.body.appendChild(dot);
+                
+                const ring = document.createElement('div');
+                ring.className = 'cursor-ring';
+                document.body.appendChild(ring);
+                
+                // Mover el cursor
+                document.addEventListener('mousemove', function(e) {
+                    dot.style.left = e.clientX + 'px';
+                    dot.style.top = e.clientY + 'px';
+                    ring.style.left = e.clientX + 'px';
+                    ring.style.top = e.clientY + 'px';
+                });
+                
+                // Efecto al hacer clic
+                document.addEventListener('mousedown', function() {
+                    dot.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    ring.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                });
+                
+                document.addEventListener('mouseup', function() {
+                    dot.style.transform = 'translate(-50%, -50%) scale(1)';
+                    ring.style.transform = 'translate(-50%, -50%) scale(1)';
+                });
+            } else {
+                // Eliminar el cursor personalizado
+                const style = document.getElementById('cursor-style');
+                if (style) style.remove();
+                
+                const dot = document.querySelector('.cursor-dot');
+                if (dot) dot.remove();
+                
+                const ring = document.querySelector('.cursor-ring');
+                if (ring) ring.remove();
+            }
+            
+            highlightAction();
+        }
+
+        function startParticles() {
+            const container = document.querySelector('.container');
+            const colors = ['#ff7e5f', '#4a6fa5', '#6b8cae', '#f8f9fa', '#343a40'];
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.borderRadius = '50%';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.opacity = '0.6';
+                particle.style.zIndex = '999';
+                particle.style.pointerEvents = 'none';
+                
+                container.appendChild(particle);
+                
+                // Animación aleatoria
+                const duration = Math.random() * 10000 + 5000;
+                const xMovement = (Math.random() - 0.5) * 200;
+                const yMovement = (Math.random() - 0.5) * 200;
+                
+                particle.animate([
+                    { transform: 'translate(0, 0)' },
+                    { transform: `translate(${xMovement}px, ${yMovement}px)` }
+                ], {
+                    duration: duration,
+                    iterations: Infinity,
+                    direction: 'alternate',
+                    easing: 'ease-in-out'
+                });
+            }
+            
+            highlightAction();
+        }
+
+        function showModal() {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            
+            modalTitle.textContent = 'Ventana Modal';
+            modalContent.textContent = 'Esta es una ventana modal de ejemplo. Puedes cerrarla haciendo clic en la X o fuera del área del modal.';
+            
+            modal.style.display = 'flex';
+            highlightAction();
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        function showNotification() {
+            if (!("Notification" in window)) {
+                alert("Este navegador no soporta notificaciones del sistema");
+                return;
+            }
+            
+            if (Notification.permission === "granted") {
+                createNotification();
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        createNotification();
+                    }
+                });
+            }
+            
+            function createNotification() {
+                const options = {
+                    body: "Esta es una notificación de ejemplo de la web interactiva.",
+                    icon: "https://via.placeholder.com/128/4a6fa5/ffffff?text=WEB"
+                };
+                
+                new Notification("Notificación", options);
+            }
+            
+            highlightAction();
+        }
+
+        function simulateTyping() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            const text = "Este texto está siendo escrito automáticamente, letra por letra, simulando que alguien lo está tecleando en tiempo real. ¡Es un efecto interesante!";
+            
+            dynamicContent.innerHTML = '<div id="typing-effect" style="font-family: monospace; white-space: pre-wrap; min-height: 100px;"></div>';
+            const typingElement = document.getElementById('typing-effect');
+            
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    typingElement.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 50);
+            
+            highlightAction();
+        }
+
+        function toggleSnowfall() {
+            document.body.classList.toggle('snowfall');
+            
+            if (document.body.classList.contains('snowfall')) {
+                // Crear estilo para la nevada
+                const style = document.createElement('style');
+                style.id = 'snowfall-style';
+                style.textContent = `
+                    .snowflake {
+                        position: fixed;
+                        top: -10px;
+                        color: white;
+                        user-select: none;
+                        pointer-events: none;
+                        z-index: 1000;
+                        animation: snowfall linear infinite;
+                    }
+                    
+                    @keyframes snowfall {
+                        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                        100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                // Crear copos de nieve
+                const snowflakes = ['❄', '❅', '❆', '*', '·'];
+                const createSnowflake = () => {
+                    const snowflake = document.createElement('div');
+                    snowflake.className = 'snowflake';
+                    snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                    snowflake.style.left = Math.random() * 100 + 'vw';
+                    snowflake.style.fontSize = Math.random() * 20 + 10 + 'px';
+                    snowflake.style.animationDuration = Math.random() * 5 + 5 + 's';
+                    document.body.appendChild(snowflake);
+                    
+                    // Eliminar después de la animación
+                    setTimeout(() => {
+                        snowflake.remove();
+                    }, parseFloat(snowflake.style.animationDuration) * 1000);
+                };
+                
+                // Crear copos continuamente
+                const interval = setInterval(createSnowflake, 300);
+                
+                // Guardar el intervalo para poder limpiarlo después
+                document.body.setAttribute('data-snow-interval', interval);
+            } else {
+                // Detener la nevada
+                const style = document.getElementById('snowfall-style');
+                if (style) style.remove();
+                
+                const interval = document.body.getAttribute('data-snow-interval');
+                if (interval) clearInterval(parseInt(interval));
+                
+                const snowflakes = document.querySelectorAll('.snowflake');
+                snowflakes.forEach(snowflake => snowflake.remove());
+            }
+            
+            highlightAction();
+        }
+
+        // Funciones para las acciones del desplegable 5 (Avanzadas)
+        function calculatePi() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = '<h3 style="margin-bottom: 1rem;">Calculando π (Pi)</h3><div id="pi-calculation" style="font-family: monospace;"></div>';
+            
+            const piElement = document.getElementById('pi-calculation');
+            let pi = 0;
+            let n = 1;
+            
+            // Usar la serie de Leibniz para calcular π
+            const interval = setInterval(() => {
+                const term = 4 / (2 * n - 1);
+                pi += n % 2 === 1 ? term : -term;
+                piElement.textContent = `π ≈ ${pi.toFixed(10)} (iteración ${n})`;
+                n++;
+                
+                if (n > 1000000) {
+                    clearInterval(interval);
+                    piElement.innerHTML += `<p style="margin-top: 1rem;">Valor real de π: ${Math.PI.toFixed(10)}</p>`;
+                }
+            }, 10);
+            
+            highlightAction();
+        }
+
+        function startClock() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Reloj en Tiempo Real</h3>
+                <div id="clock" style="font-size: 2rem; font-weight: bold; text-align: center;"></div>
+                <div id="date" style="text-align: center; margin-top: 0.5rem;"></div>
+            `;
+            
+            const updateClock = () => {
+                const now = new Date();
+                document.getElementById('clock').textContent = now.toLocaleTimeString();
+                document.getElementById('date').textContent = now.toLocaleDateString();
+            };
+            
+            updateClock();
+            setInterval(updateClock, 1000);
+            
+            highlightAction();
+        }
+
+        async function fetchRandomUser() {
+            try {
+                const response = await fetch('https://randomuser.me/api/');
+                const data = await response.json();
+                const user = data.results[0];
+                
+                const dynamicContent = document.getElementById('dynamic-content');
+                dynamicContent.innerHTML = `
+                    <h3 style="margin-bottom: 1rem;">Usuario Aleatorio</h3>
+                    <div style="display: flex; align-items: center; gap: 2rem;">
+                        <img src="${user.picture.large}" alt="Foto de ${user.name.first}" style="border-radius: 50%; width: 100px; height: 100px;">
+                        <div>
+                            <p><strong>Nombre:</strong> ${user.name.title} ${user.name.first} ${user.name.last}</p>
+                            <p><strong>Género:</strong> ${user.gender}</p>
+                            <p><strong>Email:</strong> ${user.email}</p>
+                            <p><strong>País:</strong> ${user.location.country}</p>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                alert("Error al obtener usuario aleatorio: " + error.message);
+            }
+            
+            highlightAction();
+        }
+
+        function detectMotion() {
+            if (window.DeviceMotionEvent) {
+                const dynamicContent = document.getElementById('dynamic-content');
+                dynamicContent.innerHTML = `
+                    <h3 style="margin-bottom: 1rem;">Detector de Movimiento</h3>
+                    <div id="motion-data" style="font-family: monospace; white-space: pre;"></div>
+                    <p style="margin-top: 1rem;">Mueve tu dispositivo para ver los datos de aceleración.</p>
+                `;
+                
+                const motionData = document.getElementById('motion-data');
+                
+                window.addEventListener('devicemotion', (event) => {
+                    const acceleration = event.accelerationIncludingGravity;
+                    motionData.textContent = `
+                        Eje X: ${acceleration.x?.toFixed(2) || 'N/A'}
+                        Eje Y: ${acceleration.y?.toFixed(2) || 'N/A'}
+                        Eje Z: ${acceleration.z?.toFixed(2) || 'N/A'}
+                    `;
+                });
+            } else {
+                alert("Este dispositivo no soporta la detección de movimiento.");
+            }
+            
+            highlightAction();
+        }
+
+        function startVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                const dynamicContent = document.getElementById('dynamic-content');
+                dynamicContent.innerHTML = `
+                    <h3 style="margin-bottom: 1rem;">Reconocimiento de Voz</h3>
+                    <button id="start-recognition" style="padding: 0.5rem 1rem; background-color: var(--accent-color); color: white; border: none; border-radius: 4px; cursor: pointer;">Iniciar Reconocimiento</button>
+                    <div id="recognition-result" style="margin-top: 1rem; padding: 1rem; background-color: #f0f0f0; border-radius: 4px;"></div>
+                `;
+                
+                const recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'es-ES';
+                
+                document.getElementById('start-recognition').addEventListener('click', () => {
+                    recognition.start();
+                    document.getElementById('recognition-result').textContent = "Escuchando...";
+                });
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.getElementById('recognition-result').textContent = `Dijiste: "${transcript}"`;
+                };
+                
+                recognition.onerror = (event) => {
+                    document.getElementById('recognition-result').textContent = `Error: ${event.error}`;
+                };
+            } else {
+                alert("Reconocimiento de voz no soportado en este navegador.");
+            }
+            
+            highlightAction();
+        }
+
+        function takeScreenshot() {
+            alert("Esta función normalmente capturaría una imagen de la página. En un entorno real, podrías usar librerías como html2canvas.");
+            highlightAction();
+        }
+
+        function measurePerformance() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Medición de Rendimiento</h3>
+                <div id="performance-data" style="font-family: monospace; white-space: pre;"></div>
+            `;
+            
+            const performanceData = document.getElementById('performance-data');
+            
+            // Medir tiempo de carga
+            const loadTime = window.performance.timing.domContentLoadedEventEnd - window.performance.timing.navigationStart;
+            
+            // Memoria usada (solo en algunos navegadores)
+            const memory = performance.memory ? 
+                `Memoria usada: ${(performance.memory.usedJSHeapSize / 1048576).toFixed(2)} MB / ${(performance.memory.totalJSHeapSize / 1048576).toFixed(2)} MB` : 
+                "Información de memoria no disponible";
+            
+            performanceData.textContent = `
+                Tiempo de carga: ${loadTime} ms
+                ${memory}
+                Núcleos de CPU: ${navigator.hardwareConcurrency || 'Desconocido'}
+                Conexión efectiva: ${navigator.connection?.effectiveType || 'Desconocida'}
+            `;
+            
+            highlightAction();
+        }
+
+        function startCountdown() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Cuenta Regresiva</h3>
+                <div id="countdown" style="font-size: 2rem; text-align: center; font-weight: bold;">10</div>
+                <button id="reset-countdown" style="display: block; margin: 1rem auto; padding: 0.5rem 1rem; background-color: var(--accent-color); color: white; border: none; border-radius: 4px; cursor: pointer;">Reiniciar</button>
+            `;
+            
+            let seconds = 10;
+            const countdownElement = document.getElementById('countdown');
+            
+            const countdown = setInterval(() => {
+                seconds--;
+                countdownElement.textContent = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdown);
+                    countdownElement.textContent = "¡Tiempo terminado!";
+                    playSound('notification');
+                }
+            }, 1000);
+            
+            document.getElementById('reset-countdown').addEventListener('click', () => {
+                clearInterval(countdown);
+                seconds = 10;
+                countdownElement.textContent = seconds;
+                startCountdown();
+            });
+            
+            highlightAction();
+        }
+
+        function simulateLoad() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Simulando Carga</h3>
+                <div id="progress-bar-container" style="height: 20px; background-color: #f0f0f0; border-radius: 10px; overflow: hidden;">
+                    <div id="progress-bar" style="height: 100%; width: 0%; background-color: var(--accent-color); transition: width 0.1s linear;"></div>
+                </div>
+                <div id="progress-text" style="text-align: center; margin-top: 0.5rem;">0%</div>
+            `;
+            
+            let progress = 0;
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            const interval = setInterval(() => {
+                progress += Math.random() * 5;
+                if (progress > 100) progress = 100;
+                
+                progressBar.style.width = progress + '%';
+                progressText.textContent = Math.floor(progress) + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    progressText.textContent = "¡Carga completada!";
+                }
+            }, 100);
+            
+            highlightAction();
+        }
+
+        function showSecretCode() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.innerHTML = `
+                <h3 style="margin-bottom: 1rem;">Código Secreto</h3>
+                <div style="background-color: #333; color: #0f0; padding: 1rem; border-radius: 4px; font-family: monospace; overflow-x: auto;">
+                    <pre>${generateMatrixCode()}</pre>
+                </div>
+                <p style="margin-top: 1rem;">Este código parece importante... ¿qué hará?</p>
+            `;
+            
+            highlightAction();
+        }
+
+        function generateMatrixCode() {
+            const lines = [];
+            const chars = "01";
+            
+            for (let i = 0; i < 10; i++) {
+                let line = "";
+                for (let j = 0; j < 40; j++) {
+                    line += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                lines.push(line);
+            }
+            
+            return lines.join('\n');
+        }
+
+        // Función auxiliar para resaltar la acción seleccionada
+        function highlightAction() {
+            const dynamicContent = document.getElementById('dynamic-content');
+            dynamicContent.classList.add('highlight');
+            setTimeout(() => {
+                dynamicContent.classList.remove('highlight');
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
