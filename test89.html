@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel de Configuración</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    select {
+      width: 300px;
+      padding: 10px;
+      margin: 15px 0;
+      font-size: 1em;
+      background: #1f1f1f;
+      color: white;
+      border: 2px solid #4fc3f7;
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.3s;
+    }
+
+    select:hover {
+      border-color: #81d4fa;
+      background: #2a2a2a;
+    }
+
+    #noteArea {
+      margin-top: 20px;
+      width: 80%;
+      max-width: 600px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #ffffff10;
+      backdrop-filter: blur(3px);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Panel de Ajustes Avanzados</h1>
+
+  <select onchange="handleSelect(this, 1)">
+    <option selected disabled>Menú 1: Estilos</option>
+    <option value="changeBg">Cambiar fondo aleatorio</option>
+    <option value="changeTextColor">Cambiar color de texto</option>
+    <option value="changeFont">Cambiar fuente</option>
+    <option value="addShadow">Añadir sombra al texto</option>
+    <option value="increaseSize">Aumentar tamaño de texto</option>
+    <option value="resetStyle">Restablecer estilos</option>
+    <option value="toggleDark">Modo oscuro/claro</option>
+    <option value="invertColors">Invertir colores</option>
+    <option value="borderEffect">Borde animado</option>
+    <option value="blurBg">Fondo difuminado</option>
+  </select>
+
+  <select onchange="handleSelect(this, 2)">
+    <option selected disabled>Menú 2: Utilidades</option>
+    <option value="showTime">Mostrar hora actual</option>
+    <option value="showDate">Mostrar fecha actual</option>
+    <option value="showAgent">Mostrar User-Agent</option>
+    <option value="reloadPage">Recargar página</option>
+    <option value="copyTitle">Copiar título al portapapeles</option>
+    <option value="showTitle">Mostrar título en alerta</option>
+    <option value="consoleHello">Escribir en consola</option>
+    <option value="logScreenSize">Tamaño de pantalla</option>
+    <option value="detectLang">Detectar idioma del navegador</option>
+    <option value="confirmExit">Mostrar confirmación de salida</option>
+  </select>
+
+  <select onchange="handleSelect(this, 3)">
+    <option selected disabled>Menú 3: Personalización</option>
+    <option value="changeTitle">Cambiar título</option>
+    <option value="changeH1">Cambiar texto principal</option>
+    <option value="toggleNote">Mostrar zona de notas</option>
+    <option value="createBox">Crear nuevo recuadro</option>
+    <option value="setRandomColor">Color aleatorio al título</option>
+    <option value="centerText">Centrar texto</option>
+    <option value="makeItalic">Texto en cursiva</option>
+    <option value="applyGradient">Gradiente al texto</option>
+    <option value="underlineText">Subrayar texto</option>
+    <option value="shakeTitle">Temblor en el título</option>
+  </select>
+
+  <select onchange="handleSelect(this, 4)">
+    <option selected disabled>Menú 4: Información</option>
+    <option value="showHostname">Mostrar nombre del host</option>
+    <option value="showLocation">Mostrar URL actual</option>
+    <option value="showProtocol">Mostrar protocolo usado</option>
+    <option value="detectOnline">¿Estás conectado?</option>
+    <option value="checkCookies">¿Cookies habilitadas?</option>
+    <option value="checkJavaScript">¿JS activo?</option>
+    <option value="memoryInfo">Simular uso de memoria</option>
+    <option value="pixelRatio">Ratio de píxeles</option>
+    <option value="languageCode">Código de idioma</option>
+    <option value="showAllInfo">Mostrar todo lo anterior</option>
+  </select>
+
+  <select onchange="handleSelect(this, 5)">
+    <option selected disabled>Menú 5: Diversión / Otros</option>
+    <option value="alertJoke">Contar chiste</option>
+    <option value="animateBg">Animar fondo</option>
+    <option value="surprise">Sorpresa</option>
+    <option value="toggleVisibility">Ocultar título</option>
+    <option value="alertMotivation">Frase motivadora</option>
+    <option value="setEmojiTitle">Agregar emojis al título</option>
+    <option value="flipText">Invertir texto</option>
+    <option value="textToUpper">Texto en mayúsculas</option>
+    <option value="crazyMode">Modo loco</option>
+    <option value="beep">Beep del sistema</option>
+  </select>
+
+  <div id="noteArea" contenteditable="true" placeholder="Escribe aquí tus notas...">
+    ✍ Escribe aquí tus notas personalizadas...
+  </div>
+
+  <script>
+    function handleSelect(select, menuNumber) {
+      const action = select.value;
+      select.selectedIndex = 0; // reset selection
+
+      const h1 = document.querySelector("h1");
+      const body = document.body;
+      const noteArea = document.getElementById("noteArea");
+
+      const actions = {
+        // Menú 1
+        changeBg: () => body.style.background = `linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16)}, #000)`,
+        changeTextColor: () => body.style.color = prompt("Color (en inglés o hex):", "cyan"),
+        changeFont: () => body.style.fontFamily = prompt("Fuente CSS:", "Courier New"),
+        addShadow: () => body.style.textShadow = "2px 2px 5px black",
+        increaseSize: () => body.style.fontSize = "1.2em",
+        resetStyle: () => location.reload(),
+        toggleDark: () => body.classList.toggle("dark"),
+        invertColors: () => body.style.filter = "invert(1)",
+        borderEffect: () => body.style.border = "10px double #4fc3f7",
+        blurBg: () => body.style.backdropFilter = "blur(4px)",
+
+        // Menú 2
+        showTime: () => alert("Hora: " + new Date().toLocaleTimeString()),
+        showDate: () => alert("Fecha: " + new Date().toLocaleDateString()),
+        showAgent: () => alert(navigator.userAgent),
+        reloadPage: () => location.reload(),
+        copyTitle: () => navigator.clipboard.writeText(document.title),
+        showTitle: () => alert(document.title),
+        consoleHello: () => console.log("¡Hola desde el menú 2!"),
+        logScreenSize: () => console.log(`Tamaño: ${window.innerWidth}x${window.innerHeight}`),
+        detectLang: () => alert("Idioma: " + navigator.language),
+        confirmExit: () => confirm("¿Seguro que quieres salir?") && window.close(),
+
+        // Menú 3
+        changeTitle: () => document.title = prompt("Nuevo título:", "Mi Sitio Elegante"),
+        changeH1: () => h1.innerText = prompt("Nuevo encabezado:", "Mi sitio personalizado"),
+        toggleNote: () => noteArea.style.display = noteArea.style.display === "none" ? "block" : "none",
+        createBox: () => {
+          const box = document.createElement("div");
+          box.textContent = "🧊 Nuevo recuadro";
+          box.style = "margin:10px;padding:10px;border:2px solid white;border-radius:8px;";
+          body.appendChild(box);
+        },
+        setRandomColor: () => h1.style.color = `#${Math.floor(Math.random()*16777215).toString(16)}`,
+        centerText: () => h1.style.textAlign = "center",
+        makeItalic: () => h1.style.fontStyle = "italic",
+        applyGradient: () => h1.style.background = "linear-gradient(to right, #30cfd0, #330867);-webkit-background-clip: text;color: transparent;",
+        underlineText: () => h1.style.textDecoration = "underline",
+        shakeTitle: () => {
+          h1.style.animation = "shake 0.5s"; setTimeout(() => h1.style.animation = "", 500);
+        },
+
+        // Menú 4
+        showHostname: () => alert("Host: " + location.hostname),
+        showLocation: () => alert("URL: " + location.href),
+        showProtocol: () => alert("Protocolo: " + location.protocol),
+        detectOnline: () => alert(navigator.onLine ? "Estás en línea" : "Estás desconectado"),
+        checkCookies: () => alert(navigator.cookieEnabled ? "Cookies activadas" : "Cookies desactivadas"),
+        checkJavaScript: () => alert("JavaScript está activo"),
+        memoryInfo: () => alert("Simulado: Memoria usada 40%"),
+        pixelRatio: () => alert("Pixel Ratio: " + window.devicePixelRatio),
+        languageCode: () => alert("Lang code: " + navigator.language),
+        showAllInfo: () => alert(`${location.href}\n${navigator.userAgent}\n${navigator.language}`),
+
+        // Menú 5
+        alertJoke: () => alert("¿Por qué el programa se deprimió?\nPorque tenía demasiados bugs 🐛"),
+        animateBg: () => body.style.animation = "bgmove 2s infinite alternate",
+        surprise: () => alert("🎉 ¡Sorpresa! 🎉"),
+        toggleVisibility: () => h1.style.display = h1.style.display === "none" ? "block" : "none",
+        alertMotivation: () => alert("¡Tú puedes con todo! 💪"),
+        setEmojiTitle: () => document.title += " 😎🔥",
+        flipText: () => h1.innerText = h1.innerText.split('').reverse().join(''),
+        textToUpper: () => h1.innerText = h1.innerText.toUpperCase(),
+        crazyMode: () => { body.style.transform = "rotate(2deg)"; body.style.transition = "all 0.1s"; },
+        beep: () => new AudioContext().createOscillator().start()
+      };
+
+      if (actions[action]) actions[action]();
+    }
+  </script>
+
+  <style>
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      25% { transform: translate(-1px, -2px) rotate(-1deg); }
+      50% { transform: translate(-3px, 0px) rotate(1deg); }
+      75% { transform: translate(3px, 2px) rotate(0deg); }
+      100% { transform: translate(1px, -1px) rotate(1deg); }
+    }
+
+    @keyframes bgmove {
+      0% { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+      100% { background: linear-gradient(135deg, #2c5364, #0f2027); }
+    }
+  </style>
+</body>
+</html>
