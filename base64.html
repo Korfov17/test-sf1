@@ -2,8 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Codificador/Decodificador Base64</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base64 Tool</title>
   <style>
+    * { box-sizing: border-box; }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       background: linear-gradient(to right, #1e3c72, #2a5298);
@@ -13,62 +16,107 @@
     }
 
     .container {
-      max-width: 700px;
-      margin: 50px auto;
-      background-color: rgba(0, 0, 0, 0.4);
+      max-width: 900px;
+      margin: 40px auto;
+      background: rgba(0, 0, 0, 0.4);
       border-radius: 15px;
-      padding: 30px;
+      padding: 25px;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      width: 90%;
     }
 
-    h1 {
+    h1, h2, h3 {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 28px;
+      margin-bottom: 20px;
     }
 
     textarea {
       width: 100%;
       height: 120px;
-      padding: 15px;
+      padding: 12px;
       font-size: 16px;
       border: none;
       border-radius: 10px;
       resize: vertical;
       margin-bottom: 20px;
-      background-color: #f0f0f0;
+      background: #f9f9f9;
       color: #333;
     }
 
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
     button {
-      background-color: #00bcd4;
+      background: #00bcd4;
       color: white;
       border: none;
-      padding: 12px 20px;
-      margin: 5px;
+      padding: 12px 18px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
       transition: background-color 0.3s ease;
+      min-width: 140px;
     }
 
-    button:hover {
-      background-color: #008fa1;
-    }
+    button:hover { background-color: #008fa1; }
 
-    .output {
-      background-color: #222;
-      color: #0f0;
+    .output, .history, .favorites {
+      background: #222;
       padding: 15px;
       border-radius: 10px;
-      min-height: 60px;
+      margin-top: 15px;
       font-family: monospace;
+      color: #0f0;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    .buttons {
-      text-align: center;
+    .sub-section {
+      margin-top: 30px;
+    }
+
+    .history-box {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .history-title {
+      font-weight: bold;
+      margin-top: 10px;
+      color: #6dd5fa;
+    }
+
+    .fav-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .fav-list li {
+      margin: 8px 0;
+      color: #fff;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+      button { font-size: 14px; padding: 10px 14px; }
+      textarea { height: 100px; font-size: 15px; }
     }
   </style>
 </head>
@@ -79,23 +127,50 @@
     <textarea id="inputText" placeholder="Introduce el texto aquí..."></textarea>
 
     <div class="buttons">
-      <button onclick="encodeBase64()">Codificar a Base64</button>
-      <button onclick="decodeBase64()">Decodificar Base64</button>
+      <button onclick="encodeBase64()">Codificar</button>
+      <button onclick="decodeBase64()">Decodificar</button>
       <button onclick="clearAll()">Limpiar</button>
     </div>
 
     <h3>Resultado:</h3>
     <div id="output" class="output"></div>
+
+    <div class="sub-section">
+      <h2>Historial reciente</h2>
+      <div class="history">
+        <div class="history-title">Codificados:</div>
+        <div id="encodedHistory" class="history-box"></div>
+
+        <div class="history-title">Decodificados:</div>
+        <div id="decodedHistory" class="history-box"></div>
+      </div>
+    </div>
+
+    <div class="sub-section">
+      <h2>Guardar en Favoritos</h2>
+      <input type="text" id="linkName" placeholder="Nombre para el enlace (ej: Google)">
+      <button onclick="saveFavorite()">Guardar enlace decodificado</button>
+
+      <div class="favorites">
+        <h3>Favoritos:</h3>
+        <ul id="favList" class="fav-list"></ul>
+      </div>
+    </div>
   </div>
 
   <script>
+    const maxHistory = 5;
+    let encodedList = [];
+    let decodedList = [];
+
     function encodeBase64() {
       const input = document.getElementById("inputText").value;
       try {
         const encoded = btoa(unescape(encodeURIComponent(input)));
         document.getElementById("output").textContent = encoded;
+        updateHistory(encodedList, encoded, 'encodedHistory');
       } catch (e) {
-        document.getElementById("output").textContent = "⚠️ Error al codificar. Verifica el texto.";
+        document.getElementById("output").textContent = "⚠️ Error al codificar.";
       }
     }
 
@@ -104,15 +179,64 @@
       try {
         const decoded = decodeURIComponent(escape(atob(input)));
         document.getElementById("output").textContent = decoded;
+        updateHistory(decodedList, decoded, 'decodedHistory');
       } catch (e) {
-        document.getElementById("output").textContent = "⚠️ Error al decodificar. Asegúrate de que es Base64 válido.";
+        document.getElementById("output").textContent = "⚠️ Error al decodificar.";
       }
+    }
+
+    function updateHistory(list, value, elementId) {
+      if (value.trim() === "") return;
+      list.unshift(value);
+      if (list.length > maxHistory) list.pop();
+      renderHistory(list, elementId);
+    }
+
+    function renderHistory(list, elementId) {
+      const container = document.getElementById(elementId);
+      container.innerHTML = '';
+      list.forEach(item => {
+        const div = document.createElement('div');
+        div.textContent = item;
+        container.appendChild(div);
+      });
     }
 
     function clearAll() {
       document.getElementById("inputText").value = "";
       document.getElementById("output").textContent = "";
     }
+
+    function saveFavorite() {
+      const name = document.getElementById("linkName").value.trim();
+      const value = document.getElementById("output").textContent.trim();
+      if (!name || !value.startsWith("http")) {
+        alert("Introduce un nombre válido y asegúrate de que el valor decodificado es un enlace.");
+        return;
+      }
+
+      const existing = JSON.parse(localStorage.getItem("base64Favorites") || "[]");
+      existing.push({ name, url: value });
+      localStorage.setItem("base64Favorites", JSON.stringify(existing));
+      renderFavorites();
+      document.getElementById("linkName").value = "";
+    }
+
+    function renderFavorites() {
+      const list = JSON.parse(localStorage.getItem("base64Favorites") || "[]");
+      const container = document.getElementById("favList");
+      container.innerHTML = '';
+      list.forEach(fav => {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${fav.name}</strong>: <a href="${fav.url}" target="_blank" style="color:#6dd5fa">${fav.url}</a>`;
+        container.appendChild(li);
+      });
+    }
+
+    // Cargar favoritos al iniciar
+    window.onload = () => {
+      renderFavorites();
+    };
   </script>
 </body>
 </html>
