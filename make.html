@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Botones y Desplegables Dinámicos</title>
+<title>Desplegables Dinámicos con Select y Alert</title>
 <style>
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -64,50 +64,36 @@
     background: #6b46c1;
   }
 
-  /* Desplegable estilo */
-  details {
+  /* Estilo para selects */
+  .dropdown-wrapper {
+    margin-bottom: 30px;
     background: rgba(255 255 255 / 0.15);
-    border-radius: 8px;
-    padding: 12px 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 3px 7px rgba(0,0,0,0.2);
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
-  details summary {
+  .dropdown-wrapper label {
+    display: block;
     font-weight: 700;
+    margin-bottom: 10px;
     font-size: 18px;
+    color: #ddd;
+  }
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #764ba2;
+    background: #f7f3ff;
     cursor: pointer;
-    outline: none;
-    user-select: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
   }
-  details summary::-webkit-details-marker {
-    display: none;
-  }
-  details[open] summary::after {
-    content: "▲";
-    float: right;
-    font-size: 14px;
-  }
-  details summary::after {
-    content: "▼";
-    float: right;
-    font-size: 14px;
-  }
-
-  .dropdown-option {
-    margin-top: 10px;
-  }
-  .dropdown-option a {
-    display: inline-block;
-    color: #dcdcdc;
-    text-decoration: underline;
-  }
-  .info-text {
-    background: rgba(255 255 255 / 0.25);
-    border-radius: 5px;
-    padding: 8px 12px;
-    margin-top: 8px;
-    font-style: italic;
-    color: #eee;
+  select:hover {
+    background: #e5dbff;
   }
 </style>
 </head>
@@ -125,6 +111,7 @@
   const buttonsArea = document.getElementById('buttonsArea');
   const dropdownsArea = document.getElementById('dropdownsArea');
 
+  // Crear botón normal
   document.getElementById('btnCreateButton').addEventListener('click', () => {
     const name = prompt("¿Cuál es el nombre del botón?");
     if (!name) return alert("Nombre inválido.");
@@ -139,30 +126,38 @@
     buttonsArea.appendChild(btn);
   });
 
+  // Crear desplegable
   document.getElementById('btnCreateDropdown').addEventListener('click', () => {
-    let dropdownName = prompt("Nombre del desplegable:");
+    const dropdownName = prompt("Nombre del desplegable:");
     if (!dropdownName) return alert("Nombre inválido.");
 
-    // Crear detalles y summary
-    const details = document.createElement('details');
-    const summary = document.createElement('summary');
-    summary.textContent = dropdownName;
-    details.appendChild(summary);
+    const wrapper = document.createElement('div');
+    wrapper.className = 'dropdown-wrapper';
 
-    // Función para agregar opciones
+    const label = document.createElement('label');
+    label.textContent = dropdownName;
+    wrapper.appendChild(label);
+
+    const select = document.createElement('select');
+    wrapper.appendChild(select);
+
+    // Array para opciones
+    const optionsData = [];
+
     function addDropdownOption() {
-      const type = prompt("¿Quieres crear una opción con URL o información extra? (url/info)").toLowerCase();
-      if (type !== 'url' && type !== 'info') {
-        alert("Solo 'url' o 'info'.");
+      let optionType = prompt("¿Quieres crear una opción con URL o información extra? (url/info)").toLowerCase();
+      if (optionType !== 'url' && optionType !== 'info') {
+        alert("Solo 'url' o 'info' son válidos.");
         return false;
       }
 
-      if (type === 'url') {
-        let optionName = prompt("Nombre de la opción (se añadirá ✖️ al inicio):");
-        if (!optionName) {
-          alert("Nombre inválido.");
-          return false;
-        }
+      let optionName = prompt("Nombre de la opción:");
+      if (!optionName) {
+        alert("Nombre inválido.");
+        return false;
+      }
+
+      if (optionType === 'url') {
         optionName = "✖️ " + optionName.trim();
 
         let optionUrl = prompt("URL de la opción:");
@@ -171,44 +166,66 @@
           return false;
         }
 
-        // Crear opción con enlace
-        const divOpt = document.createElement('div');
-        divOpt.className = 'dropdown-option';
+        optionsData.push({type:'url', name: optionName, url: optionUrl});
+      } else {
+        optionName = "📜 " + optionName.trim();
 
-        const a = document.createElement('a');
-        a.href = optionUrl;
-        a.target = "_blank";
-        a.textContent = optionName;
-
-        divOpt.appendChild(a);
-        details.appendChild(divOpt);
-      } else if (type === 'info') {
-        let infoText = prompt("📜 Informacion extra:");
+        let infoText = prompt("Texto de información extra para esta opción:");
         if (!infoText) {
           alert("Información inválida.");
           return false;
         }
-        const divInfo = document.createElement('div');
-        divInfo.className = 'info-text';
-        divInfo.textContent = "📜 Informacion extra: " + infoText;
-        details.appendChild(divInfo);
+
+        optionsData.push({type:'info', name: optionName, info: infoText});
       }
       return true;
     }
 
-    // Preguntar si crear opción, repetir hasta que diga no
     while(true) {
       let createMore = prompt("¿Quieres crear una opción de desplegable más? (si/no)").toLowerCase();
       if (createMore !== 'si' && createMore !== 's') break;
 
       if (!addDropdownOption()) {
-        // Si hay error al agregar, pregunta si quiere intentar otra vez
-        const retry = prompt("Error al crear la opción. ¿Quieres intentar de nuevo? (si/no)").toLowerCase();
+        let retry = prompt("Error al crear la opción. ¿Quieres intentar de nuevo? (si/no)").toLowerCase();
         if (retry !== 'si' && retry !== 's') break;
       }
     }
 
-    dropdownsArea.appendChild(details);
+    if (optionsData.length === 0) {
+      alert("No creaste ninguna opción, no se creará el desplegable.");
+      return;
+    }
+
+    optionsData.forEach((opt, i) => {
+      const optionElem = document.createElement('option');
+      optionElem.value = i;
+      optionElem.textContent = opt.name;
+      select.appendChild(optionElem);
+    });
+
+    select.addEventListener('change', () => {
+      const selected = optionsData[select.value];
+      switch(selected.type) {
+        case 'url':
+          if (selected.url) {
+            window.open(selected.url, '_blank');
+          }
+          break;
+        case 'info':
+          alert("📜 Información extra: " + selected.info);
+          break;
+        default:
+          break;
+      }
+      // Para que no se quede seleccionada la opción info (opcional)
+      // select.selectedIndex = 0; // si quieres resetear a primera opción tras alert
+    });
+
+    dropdownsArea.appendChild(wrapper);
+
+    // Activar la opción inicial para evitar que no pase nada al cargar
+    select.selectedIndex = 0;
+    select.dispatchEvent(new Event('change'));
   });
 </script>
 </body>
