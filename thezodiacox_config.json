@@ -1,9 +1,0 @@
-{
-  "TU PS4 HEN CONFIG JSON": {
-    "version_json": "v1.0.0",
-    "tph_customBackground": "tph_gradient:linear-gradient(120deg, #7f00ff 0%, #3f51b5 60%, #ffffff 100%)",
-    "tph_settingsBackground": "tph_gradient:linear-gradient(120deg, #7f00ff 0%, #3f51b5 60%, #ffffff 100%)",
-    "tph_customTitle": "Calla voludo",
-    "tph_customTitleHTML": "putero nato"
-  }
-}
