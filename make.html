@@ -72,13 +72,6 @@
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   }
-  .dropdown-wrapper label {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #ddd;
-  }
   select {
     width: 100%;
     padding: 10px 12px;
@@ -134,12 +127,15 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'dropdown-wrapper';
 
-    const label = document.createElement('label');
-    label.textContent = dropdownName;
-    wrapper.appendChild(label);
-
     const select = document.createElement('select');
     wrapper.appendChild(select);
+
+    // Añadir la primera opción bloqueada con el nombre del desplegable
+    const firstOption = document.createElement('option');
+    firstOption.textContent = dropdownName;
+    firstOption.disabled = true;
+    firstOption.selected = true;
+    select.appendChild(firstOption);
 
     // Array para opciones
     const optionsData = [];
@@ -196,36 +192,43 @@
       return;
     }
 
+    // Añadir opciones al select, empezando en índice 1 porque la 0 es el título
     optionsData.forEach((opt, i) => {
       const optionElem = document.createElement('option');
-      optionElem.value = i;
+      optionElem.value = i+1; // +1 porque 0 es opción fija
       optionElem.textContent = opt.name;
       select.appendChild(optionElem);
     });
 
     select.addEventListener('change', () => {
-      const selected = optionsData[select.value];
-      switch(selected.type) {
-        case 'url':
-          if (selected.url) {
-            window.open(selected.url, '_blank');
-          }
-          break;
-        case 'info':
-          alert("📜 Información extra: " + selected.info);
+      const selectedIndex = select.selectedIndex;
+
+      switch(selectedIndex) {
+        case 0:
+          // La opción fija, no hacer nada
           break;
         default:
+          const selected = optionsData[selectedIndex-1];
+          switch(selected.type) {
+            case 'url':
+              if (selected.url) {
+                window.open(selected.url, '_blank');
+              }
+              break;
+            case 'info':
+              alert("📜 Información extra: " + selected.info);
+              break;
+          }
+          // Opcional: resetear al título para que no quede seleccionada opción url/info
+          select.selectedIndex = 0;
           break;
       }
-      // Para que no se quede seleccionada la opción info (opcional)
-      // select.selectedIndex = 0; // si quieres resetear a primera opción tras alert
     });
 
     dropdownsArea.appendChild(wrapper);
 
-    // Activar la opción inicial para evitar que no pase nada al cargar
+    // Dejar seleccionada la opción fija al crear
     select.selectedIndex = 0;
-    select.dispatchEvent(new Event('change'));
   });
 </script>
 </body>
