@@ -1,5 +1,9 @@
 {
   "TU PS4 HEN CONFIG JSON": {
-    "version_json": "v1.0.0"
+    "version_json": "v1.0.0",
+    "tph_customBackground": "background/extra5.jpg",
+    "tph_settingsBackground": "background/extra13.jpg",
+    "tph_customTitle": "putero",
+    "tph_customTitleHTML": "putero2"
   }
 }
