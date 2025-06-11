@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astro Clone</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0d10;
+      color: white;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    header {
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      background: rgba(11, 13, 16, 0.85);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    nav {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+    .nav-links a {
+      font-weight: 500;
+      color: #ccc;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: white;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: radial-gradient(ellipse at center, #1b1d23 0%, #0b0d10 100%);
+      text-align: center;
+      padding: 0 1.5rem;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      max-width: 800px;
+    }
+    .hero p {
+      color: #aaa;
+      margin-top: 1rem;
+      max-width: 600px;
+      font-size: 1.25rem;
+    }
+    .cta {
+      margin-top: 2rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn.primary {
+      background: white;
+      color: black;
+    }
+    .btn.primary:hover {
+      background: #e2e2e2;
+    }
+    .btn.secondary {
+      border: 1px solid #444;
+      background: transparent;
+      color: white;
+    }
+    .btn.secondary:hover {
+      background: #222;
+    }
+    .copy-box {
+      background: #1a1c20;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 600px;
+    }
+    .copy-box code {
+      font-family: monospace;
+      font-size: 0.95rem;
+      color: #8fbcff;
+    }
+    .copy-box button {
+      background: #2d8cff;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    section.features {
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .features h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 3rem;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .feature {
+      background: #1a1c20;
+      padding: 2rem;
+      border-radius: 1rem;
+      transition: transform 0.3s ease;
+    }
+    .feature:hover {
+      transform: translateY(-5px);
+    }
+    .feature h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+    .feature p {
+      color: #bbb;
+      font-size: 0.95rem;
+    }
+    footer {
+      background: #0e1014;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #666;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.25rem; }
+      .hero p { font-size: 1rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Astro</div>
+      <div class="nav-links">
+        <a href="#">Docs</a>
+        <a href="#">Blog</a>
+        <a href="#">Showcase</a>
+        <a href="#">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Build fast websites with Astro</h1>
+    <p>Astro is the all-in-one web framework designed for speed. Pull content from anywhere, deploy everywhere.</p>
+    <div class="cta">
+      <button class="btn primary">Get Started</button>
+      <button class="btn secondary">View Docs</button>
+    </div>
+    <div class="copy-box">
+      <code>npm create astro@latest</code>
+      <button onclick="navigator.clipboard.writeText('npm create astro@latest')">Copy</button>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>Why Choose Astro?</h2>
+    <div class="feature-grid">
+      <div class="feature">
+        <h3>Minimal JavaScript</h3>
+        <p>Astro sends zero JS by default, giving you fast performance out of the box.</p>
+      </div>
+      <div class="feature">
+        <h3>Component Islands</h3>
+        <p>Use your favorite frameworks like React, Vue, or Svelte where needed.</p>
+      </div>
+      <div class="feature">
+        <h3>Built for Speed</h3>
+        <p>Static-first architecture with instant page loads and optimized rendering.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Astro. All rights reserved. Built with ❤️</p>
+  </footer>
+
+</body>
+</html>
