@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Botón Dinámico Sin Rotación</title>
+  <title>Botón Animado + Blur</title>
   <style>
     body {
       background-color: #0d1117;
@@ -16,6 +16,7 @@
       gap: 30px;
     }
 
+    /* Botón base dinámico */
     .boton-dinamico {
       position: relative;
       display: inline-block;
@@ -61,34 +62,59 @@
     }
 
     @keyframes gradientGlow {
-      0% {
-        background-position: 0% 50%;
-      }
-      100% {
-        background-position: 100% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
 
-    /* Variantes */
-    .azul::before {
-      background: linear-gradient(90deg, #00bfff, #33ddff, #00bfff);
+    /* NUEVO BOTÓN: estilo glassmorphism + animación color fluido */
+    .boton-blur {
+      position: relative;
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      text-decoration: none;
+      z-index: 1;
+      overflow: hidden;
+      background: rgba(13, 17, 23, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 255, 160, 0.15);
     }
 
-    .rosa::before {
-      background: linear-gradient(90deg, #ff5ec2, #ff85d6, #ff5ec2);
+    .boton-blur::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(130deg, #00ffa0, #00fff0, #00ffa0);
+      background-size: 200% 200%;
+      animation: anim-bg 5s ease-in-out infinite;
+      z-index: -1;
+      filter: blur(30px);
     }
 
-    .rojo::before {
-      background: linear-gradient(90deg, #ff3b3b, #ff6666, #ff3b3b);
+    .boton-blur:hover {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 6px 25px rgba(0, 255, 160, 0.25);
     }
+
+    @keyframes anim-bg {
+      0% { transform: translate(0%, 0%); }
+      50% { transform: translate(25%, 25%); }
+      100% { transform: translate(0%, 0%); }
+    }
+
   </style>
 </head>
 <body>
 
   <a href="https://www.startpage.com" class="boton-dinamico">Disponible para trabajar</a>
-  <a href="https://www.startpage.com" class="boton-dinamico azul">Buscar con Startpage</a>
-  <a href="https://www.startpage.com" class="boton-dinamico rosa">Explorar más</a>
-  <a href="https://www.startpage.com" class="boton-dinamico rojo">Contáctame</a>
+  <a href="https://www.startpage.com" class="boton-blur">Nuevo botón estilo glass</a>
 
 </body>
 </html>
