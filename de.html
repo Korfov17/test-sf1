@@ -1,89 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Botones Dinámicos</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Botones con Borde Circular Animado</title>
   <style>
     body {
       background-color: #0d1117;
-      font-family: Arial, sans-serif;
+      font-family: sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      gap: 30px;
+      gap: 20px;
     }
 
-    /* BOTÓN ANIMADO TIPO PORTFOLIO.DEV */
-    .boton-dinamico {
+    /* BOTÓN BASE ANIMADO */
+    .boton-circular {
       position: relative;
       display: inline-block;
       padding: 12px 24px;
       border-radius: 9999px;
       font-size: 16px;
       font-weight: bold;
-      color: #ffffff;
+      color: white;
       background-color: #0d1117;
       text-decoration: none;
       z-index: 1;
       overflow: hidden;
     }
 
-    .boton-dinamico::before {
+    .boton-circular::before {
       content: '';
       position: absolute;
       inset: 0;
       border-radius: 9999px;
       padding: 2px;
-      background: linear-gradient(
-        120deg,
-        transparent,
-        #00ffc3,
-        #00fff0,
-        #00ffc3,
-        transparent
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        var(--color) 60deg,
+        transparent 180deg,
+        transparent 360deg
       );
-      background-size: 300% 300%;
-      animation: moverLuz 3s linear infinite;
-      -webkit-mask:
-        linear-gradient(#000 0 0) content-box,
+      background-size: 100% 100%;
+      animation: girarLuz 3s linear infinite;
+      -webkit-mask: 
+        linear-gradient(#000 0 0) content-box, 
         linear-gradient(#000 0 0);
       -webkit-mask-composite: destination-out;
       mask-composite: exclude;
       z-index: -1;
     }
 
-    @keyframes moverLuz {
-      0% {
-        background-position: -150% 0%;
+    @keyframes girarLuz {
+      from {
+        transform: rotate(0deg);
       }
-      100% {
-        background-position: 150% 0%;
+      to {
+        transform: rotate(360deg);
       }
     }
 
-    .boton-dinamico:active {
-      backdrop-filter: blur(6px);
-      background-color: rgba(0, 255, 160, 0.1);
-      color: #00ffa0;
+    .boton-circular:active {
+      backdrop-filter: blur(5px);
     }
 
-    /* VARIANTES DE COLORES */
-    .azul::before {
-      background: linear-gradient(120deg, transparent, #00bfff, #33ddff, #00bfff, transparent);
-    }
+    /* COLORES PERSONALIZADOS */
+    .verde   { --color: #00ffc3; }
+    .rojo    { --color: #ff4d4d; }
+    .azul    { --color: #00bfff; }
+    .rosa    { --color: #ff85d6; }
 
-    .rosa::before {
-      background: linear-gradient(120deg, transparent, #ff5ec2, #ff85d6, #ff5ec2, transparent);
-    }
-
-    .rojo::before {
-      background: linear-gradient(120deg, transparent, #ff3b3b, #ff6666, #ff3b3b, transparent);
-    }
-
-    /* NUEVO BOTÓN: BLANCO + BLUR + ILUMINACIÓN SUAVE */
+    /* BOTÓN BLANCO CON BORDE Y BLUR */
     .boton-blanco {
       position: relative;
       display: inline-block;
@@ -91,10 +81,10 @@
       border-radius: 9999px;
       font-size: 16px;
       font-weight: bold;
-      color: #ffffff;
+      color: white;
       background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       z-index: 1;
       overflow: hidden;
     }
@@ -104,40 +94,31 @@
       position: absolute;
       inset: 0;
       border-radius: 9999px;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.15),
-        rgba(255, 255, 255, 0.4),
-        rgba(255, 255, 255, 0.1)
+      padding: 2px;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(255,255,255,0.6) 60deg,
+        transparent 180deg,
+        transparent 360deg
       );
-      background-size: 300% 300%;
-      animation: brilloBorde 4s ease-in-out infinite;
+      animation: girarLuz 4s linear infinite;
+      -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
       z-index: -1;
     }
-
-    @keyframes brilloBorde {
-      0% {
-        background-position: top left;
-      }
-      50% {
-        background-position: bottom right;
-      }
-      100% {
-        background-position: top left;
-      }
-    }
-
   </style>
 </head>
 <body>
 
-  <!-- Botones con colores dinámicos -->
-  <a href="https://www.startpage.com" class="boton-dinamico">Disponible para trabajar</a>
-  <a href="https://www.startpage.com" class="boton-dinamico azul">Buscar con Startpage</a>
-  <a href="https://www.startpage.com" class="boton-dinamico rosa">Explorar más</a>
-  <a href="https://www.startpage.com" class="boton-dinamico rojo">Contáctame</a>
+  <a href="https://www.startpage.com" class="boton-circular verde">Disponible para trabajar</a>
+  <a href="https://www.startpage.com" class="boton-circular azul">Buscar con Startpage</a>
+  <a href="https://www.startpage.com" class="boton-circular rosa">Explorar más</a>
+  <a href="https://www.startpage.com" class="boton-circular rojo">Contáctame</a>
 
-  <!-- Nuevo botón blanco con blur e iluminación en borde superior e izquierdo -->
   <a href="https://www.startpage.com" class="boton-blanco">Modo cristal blanco</a>
 
 </body>
