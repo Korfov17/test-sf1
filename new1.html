@@ -2,20 +2,18 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>🔥 Interfaz Totalmente Interactiva ⚡</title>
+  <title>🔥 Web Interactiva</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #111;
-      color: #fff;
+      background: #0e0e0e;
+      color: #f0f0f0;
+      font-family: Arial, sans-serif;
       padding: 2rem;
-      transition: all 0.5s;
     }
 
-    h1, h2 {
+    h1 {
       text-align: center;
-      color: #00d9ff;
+      color: #00e0ff;
     }
 
     .selectors, .custom-section {
@@ -23,254 +21,186 @@
       gap: 1rem;
       margin: 2rem auto;
       max-width: 1200px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     }
 
-    .selectors {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    select, input, button {
-      padding: 0.6rem;
+    select, button {
+      padding: 0.8rem;
       font-size: 1rem;
       border-radius: 8px;
-      border: 1px solid #00d9ff;
-      background: #222;
-      color: #00d9ff;
+      border: 1px solid #00e0ff;
+      background: #1c1c1c;
+      color: #00e0ff;
       width: 100%;
     }
 
     button {
-      cursor: pointer;
-      background: #00d9ff;
+      background-color: #00e0ff;
       color: #000;
       font-weight: bold;
       transition: background 0.3s;
     }
 
     button:hover {
-      background: #00aacc;
+      background-color: #00b8cc;
     }
 
     .output {
+      margin-top: 2rem;
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       justify-content: center;
     }
 
-    .card {
-      background: #222;
-      border-radius: 10px;
+    .box {
       padding: 1rem;
-      box-shadow: 0 0 10px rgba(0, 217, 255, 0.2);
-      width: 220px;
-      transition: 0.3s;
-    }
-
-    .card:hover {
-      transform: scale(1.05);
-      background: #333;
-    }
-
-    .rainbow {
-      animation: rainbow 5s infinite;
-    }
-
-    @keyframes rainbow {
-      0% { color: red; }
-      25% { color: yellow; }
-      50% { color: lime; }
-      75% { color: blue; }
-      100% { color: magenta; }
+      background: #1c1c1c;
+      border-left: 5px solid #00e0ff;
+      border-radius: 10px;
+      max-width: 300px;
     }
 
     .rotating {
-      animation: rotate 3s linear infinite;
+      font-size: 2rem;
+      animation: spin 2s linear infinite;
     }
 
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .info-box {
-      background: #333;
-      border-left: 4px solid #00d9ff;
-      padding: 1rem;
-      border-radius: 8px;
-    }
-
-    .custom-form {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <h1>🔥 Interfaz Totalmente Interactiva ⚡</h1>
+  <h1>🔥 Web Interactiva con Desplegables</h1>
 
   <div class="selectors" id="selectors"></div>
-  <div class="output" id="output"></div>
 
-  <h2>🎛️ Crear Desplegables Personalizados</h2>
-  <div class="custom-section">
-    <div class="custom-form">
-      <select id="customType">
-        <option value="info">⚡ Información</option>
-        <option value="link">🔗 Redirección</option>
-      </select>
-      <input type="text" id="customLabel" placeholder="Nombre del botón">
-      <input type="text" id="customValue" placeholder="Texto o URL">
-      <button onclick="addCustomDropdown()">Agregar</button>
-    </div>
-    <div id="customDropdowns" class="selectors"></div>
+  <div style="text-align: center; margin: 2rem;">
+    <button onclick="crearDesplegablePersonalizado()">Crear Desplegable Personalizado 🏝</button>
   </div>
 
+  <div class="selectors" id="customDropdownContainer"></div>
+
+  <div class="output" id="output"></div>
+
   <script>
-    const output = document.getElementById('output');
-    const selectorsContainer = document.getElementById('selectors');
-    const customDropdowns = document.getElementById('customDropdowns');
+    const output = document.getElementById("output");
+    const selectors = document.getElementById("selectors");
+    const customDropdownContainer = document.getElementById("customDropdownContainer");
 
-    const functionDescriptions = [
-      "🎨 Cambiar fondo",
-      "🖍️ Cambiar color de texto",
-      "📢 Mostrar mensaje ⚡",
-      "🧹 Limpiar pantalla",
-      "🧊 Agregar tarjeta",
-      "🌀 Emoji giratorio",
-      "🌓 Invertir colores temporalmente",
-      "🔍 Zoom aleatorio",
-      "🔔 Mostrar alerta",
-      "📜 Scroll automático",
-      "✨ Agregar emojis",
-      "✍️ Cambiar fuente",
-      "📦 Caja informativa ⚡",
-      "🖼️ Borde animado",
-      "📝 Cambiar título",
-      "🔊 Sonido",
-      "📳 Vibración",
-      "🌈 Fondo degradado",
-      "🧷 Cambiar diseño",
-      "💡 Texto con sombra"
-    ];
-
-    function createFunction(index) {
-      return function () {
-        const t = index % functionDescriptions.length;
-        switch (t) {
-          case 0:
-            document.body.style.background = `hsl(${Math.random() * 360}, 30%, 10%)`; break;
-          case 1:
-            document.body.style.color = `hsl(${Math.random() * 360}, 100%, 80%)`; break;
-          case 2:
-            const p = document.createElement("p");
-            p.textContent = `⚡ Mensaje especial ejecutado`;
-            p.className = "rainbow";
-            output.appendChild(p); break;
-          case 3:
-            output.innerHTML = ""; break;
-          case 4:
-            const card = document.createElement("div");
-            card.className = "card";
-            card.innerHTML = `🧊 Tarjeta visual`;
-            output.appendChild(card); break;
-          case 5:
-            const spin = document.createElement("div");
-            spin.textContent = "🌈";
-            spin.className = "rotating";
-            spin.style.fontSize = "3rem";
-            output.appendChild(spin); break;
-          case 6:
-            document.body.style.filter = "invert(1)";
-            setTimeout(() => document.body.style.filter = "none", 1500); break;
-          case 7:
-            document.body.style.zoom = Math.random() * 2 + 0.5;
-            setTimeout(() => document.body.style.zoom = 1, 2000); break;
-          case 8:
-            alert("🔔 ¡Has activado una función!"); break;
-          case 9:
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); break;
-          case 10:
-            const emoji = document.createElement("div");
-            emoji.textContent = "💥💫🌟";
-            emoji.style.fontSize = "2rem";
-            output.appendChild(emoji); break;
-          case 11:
-            const randFont = ['cursive', 'monospace', 'serif', 'fantasy'][Math.floor(Math.random() * 4)];
-            document.body.style.fontFamily = randFont; break;
-          case 12:
-            const box = document.createElement("div");
-            box.className = "info-box";
-            box.innerHTML = `<h3>🔥 Caja</h3><p>⚡ Información generada</p>`;
-            output.appendChild(box); break;
-          case 13:
-            document.body.style.border = "10px solid #00d9ff";
-            setTimeout(() => document.body.style.border = "none", 2000); break;
-          case 14:
-            document.title = `🔥 Título dinámico ${Date.now()}`; break;
-          case 15:
-            const beep = new Audio("https://www.soundjay.com/button/sounds/button-16.mp3");
-            beep.play(); break;
-          case 16:
-            navigator.vibrate && navigator.vibrate(200); break;
-          case 17:
-            document.body.style.backgroundImage = `radial-gradient(circle at center, #${Math.floor(Math.random()*0xFFFFFF).toString(16)}, black)`; break;
-          case 18:
-            output.style.flexWrap = output.style.flexWrap === 'wrap' ? 'nowrap' : 'wrap'; break;
-          case 19:
-            document.body.style.textShadow = "0 0 5px #0ff"; break;
-        }
-      }
-    }
-
-    // Crear los 10 desplegables con funciones descriptivas
-    for (let i = 0; i < 10; i++) {
-      const select = document.createElement("select");
-      for (let j = 0; j < 20; j++) {
-        const idx = i * 20 + j;
-        const option = document.createElement("option");
-        option.value = idx;
-        option.textContent = `🔥 ${functionDescriptions[j % functionDescriptions.length]}`;
-        select.appendChild(option);
-      }
-      select.addEventListener("change", e => {
-        const idx = e.target.value;
-        createFunction(idx)();
-      });
-      selectorsContainer.appendChild(select);
-    }
-
-    // Crear desplegable personalizado
-    function addCustomDropdown() {
-      const type = document.getElementById("customType").value;
-      const labelRaw = document.getElementById("customLabel").value.trim();
-      const value = document.getElementById("customValue").value.trim();
-
-      if (!labelRaw || !value) {
-        alert("⚠️ Ingresa nombre y contenido.");
-        return;
-      }
-
-      const label = `🔥 ${labelRaw}`;
-      const select = document.createElement("select");
-      const option = document.createElement("option");
-      option.textContent = label;
-      option.selected = true;
-      select.appendChild(option);
-
-      select.addEventListener("change", () => {
-        if (type === "info") {
+    // Generar 500 acciones únicas y variadas
+    const acciones = Array.from({ length: 500 }, (_, i) => () => {
+      const num = i + 1;
+      switch (num % 10) {
+        case 0: alert(`🔔 Alerta número ${num}`); break;
+        case 1: document.body.style.backgroundColor = `hsl(${Math.random() * 360}, 30%, 10%)`; break;
+        case 2: document.body.style.color = `hsl(${Math.random() * 360}, 80%, 85%)`; break;
+        case 3:
           const box = document.createElement("div");
-          box.className = "info-box";
-          box.innerHTML = `<h3>${label}</h3><p>⚡ ${value}</p>`;
+          box.className = "box";
+          box.innerText = `📦 Caja dinámica #${num}`;
           output.appendChild(box);
-        } else if (type === "link") {
-          window.open(value, "_blank");
-        }
+          break;
+        case 4:
+          const spin = document.createElement("div");
+          spin.className = "rotating";
+          spin.textContent = `🌪️${num}`;
+          output.appendChild(spin);
+          break;
+        case 5: window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); break;
+        case 6: document.title = `🔥 Acción #${num}`; break;
+        case 7: if (navigator.vibrate) navigator.vibrate(100 + (num % 300)); break;
+        case 8: output.innerHTML = ""; break;
+        case 9: confirm(`❓ ¿Te gusta la acción #${num}?`); break;
+      }
+    });
+
+    // Crear 10 desplegables, cada uno con 50 opciones únicas (sin repetir acciones)
+    for (let d = 0; d < 10; d++) {
+      const select = document.createElement("select");
+      const placeholder = document.createElement("option");
+      placeholder.textContent = `Desplegable ${d + 1}`;
+      placeholder.disabled = true;
+      placeholder.selected = true;
+      select.appendChild(placeholder);
+
+      for (let i = 0; i < 50; i++) {
+        const index = d * 50 + i;
+        const opt = document.createElement("option");
+        opt.textContent = `🔥 Acción ${index + 1}`;
+        opt.value = index;
+        select.appendChild(opt);
+      }
+
+      select.addEventListener("change", (e) => {
+        const idx = parseInt(e.target.value);
+        if (!isNaN(idx)) acciones[idx]();
+        e.target.selectedIndex = 0;
       });
 
-      customDropdowns.appendChild(select);
+      selectors.appendChild(select);
+    }
+
+    // Crear desplegable personalizado con múltiples botones
+    function crearDesplegablePersonalizado() {
+      const nombre = prompt("¿Qué nombre tendrá el desplegable?");
+      if (!nombre) return;
+
+      const select = document.createElement("select");
+      const placeholder = document.createElement("option");
+      placeholder.textContent = nombre;
+      placeholder.disabled = true;
+      placeholder.selected = true;
+      select.appendChild(placeholder);
+
+      let seguir = true;
+
+      while (seguir) {
+        const tipo = prompt("¿Qué tipo de botón deseas agregar? (info o url)");
+        if (!tipo || (tipo !== "info" && tipo !== "url")) {
+          alert("❌ Tipo inválido. Usa 'info' o 'url'.");
+          continue;
+        }
+
+        let contenido = prompt(`Introduce el contenido del botón (${tipo}):`);
+        if (!contenido) continue;
+
+        if (tipo === "info") contenido = `💈 ${contenido}`;
+
+        const nombreBoton = prompt("¿Qué nombre tendrá este botón?");
+        if (!nombreBoton) continue;
+
+        const opt = document.createElement("option");
+        opt.textContent = `🏝 ${nombreBoton}`;
+        opt.dataset.tipo = tipo;
+        opt.dataset.contenido = contenido;
+        select.appendChild(opt);
+
+        seguir = confirm("¿Quieres agregar otro botón?");
+      }
+
+      select.addEventListener("change", (e) => {
+        const opt = e.target.selectedOptions[0];
+        if (!opt || opt.disabled) return;
+        const tipo = opt.dataset.tipo;
+        const contenido = opt.dataset.contenido;
+
+        if (tipo === "info") {
+          const box = document.createElement("div");
+          box.className = "box";
+          box.innerHTML = `<strong>${opt.textContent}</strong><p>${contenido}</p>`;
+          output.appendChild(box);
+        } else if (tipo === "url") {
+          window.open(contenido, "_blank");
+        }
+
+        e.target.selectedIndex = 0;
+      });
+
+      customDropdownContainer.appendChild(select);
+      alert("✅ Todo terminado!");
     }
   </script>
 </body>
