@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>🔥 Web Interactiva</title>
+  <meta charset="UTF-8" />
+  <title>🔥 Web Interactiva Mejorada</title>
   <style>
     body {
-      background: #0e0e0e;
+      background: #121212;
       color: #f0f0f0;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       padding: 2rem;
     }
 
     h1 {
       text-align: center;
-      color: #00e0ff;
+      color: #00f0ff;
     }
 
     .selectors, .custom-section {
@@ -28,52 +28,27 @@
       padding: 0.8rem;
       font-size: 1rem;
       border-radius: 8px;
-      border: 1px solid #00e0ff;
-      background: #1c1c1c;
-      color: #00e0ff;
+      border: 1px solid #00f0ff;
+      background: #1e1e1e;
+      color: #00f0ff;
       width: 100%;
     }
 
     button {
-      background-color: #00e0ff;
+      background-color: #00f0ff;
       color: #000;
       font-weight: bold;
+      cursor: pointer;
       transition: background 0.3s;
     }
 
     button:hover {
-      background-color: #00b8cc;
-    }
-
-    .output {
-      margin-top: 2rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-    }
-
-    .box {
-      padding: 1rem;
-      background: #1c1c1c;
-      border-left: 5px solid #00e0ff;
-      border-radius: 10px;
-      max-width: 300px;
-    }
-
-    .rotating {
-      font-size: 2rem;
-      animation: spin 2s linear infinite;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      background-color: #00d2e0;
     }
   </style>
 </head>
 <body>
-  <h1>🔥 Web Interactiva con Desplegables</h1>
+  <h1>🔥 Web Interactiva Avanzada</h1>
 
   <div class="selectors" id="selectors"></div>
 
@@ -83,41 +58,58 @@
 
   <div class="selectors" id="customDropdownContainer"></div>
 
-  <div class="output" id="output"></div>
-
   <script>
-    const output = document.getElementById("output");
     const selectors = document.getElementById("selectors");
     const customDropdownContainer = document.getElementById("customDropdownContainer");
 
-    // Generar 500 acciones únicas y variadas
-    const acciones = Array.from({ length: 500 }, (_, i) => () => {
-      const num = i + 1;
-      switch (num % 10) {
-        case 0: alert(`🔔 Alerta número ${num}`); break;
-        case 1: document.body.style.backgroundColor = `hsl(${Math.random() * 360}, 30%, 10%)`; break;
-        case 2: document.body.style.color = `hsl(${Math.random() * 360}, 80%, 85%)`; break;
-        case 3:
-          const box = document.createElement("div");
-          box.className = "box";
-          box.innerText = `📦 Caja dinámica #${num}`;
-          output.appendChild(box);
-          break;
-        case 4:
-          const spin = document.createElement("div");
-          spin.className = "rotating";
-          spin.textContent = `🌪️${num}`;
-          output.appendChild(spin);
-          break;
-        case 5: window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); break;
-        case 6: document.title = `🔥 Acción #${num}`; break;
-        case 7: if (navigator.vibrate) navigator.vibrate(100 + (num % 300)); break;
-        case 8: output.innerHTML = ""; break;
-        case 9: confirm(`❓ ¿Te gusta la acción #${num}?`); break;
-      }
+    // Lista de funciones con descripciones
+    const acciones = Array.from({ length: 500 }, (_, i) => {
+      return () => {
+        const tipo = i % 10;
+        let mensaje = "";
+
+        switch (tipo) {
+          case 0:
+            mensaje = `🔔 Alerta #${i + 1}`;
+            alert(mensaje);
+            break;
+          case 1:
+            document.body.style.backgroundColor = `hsl(${Math.random() * 360}, 20%, 10%)`;
+            alert(`🎨 Fondo cambiado (acción #${i + 1})`);
+            break;
+          case 2:
+            document.body.style.color = `hsl(${Math.random() * 360}, 100%, 85%)`;
+            alert(`🎨 Color de texto cambiado (acción #${i + 1})`);
+            break;
+          case 3:
+            alert(`📦 Acción dinámica #${i + 1}`);
+            break;
+          case 4:
+            alert(`🌪️ Acción giratoria #${i + 1}`);
+            break;
+          case 5:
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            alert(`🎯 Scroll hacia abajo (acción #${i + 1})`);
+            break;
+          case 6:
+            document.title = `🔥 Acción #${i + 1}`;
+            alert(`📛 Título de la pestaña cambiado`);
+            break;
+          case 7:
+            if (navigator.vibrate) navigator.vibrate(200);
+            alert(`⚡ Vibración activada (acción #${i + 1})`);
+            break;
+          case 8:
+            alert(`🧹 Acción #${i + 1}: limpieza visual simulada`);
+            break;
+          case 9:
+            confirm(`❓ ¿Te gustó la acción #${i + 1}?`);
+            break;
+        }
+      };
     });
 
-    // Crear 10 desplegables, cada uno con 50 opciones únicas (sin repetir acciones)
+    // Crear los 10 desplegables
     for (let d = 0; d < 10; d++) {
       const select = document.createElement("select");
       const placeholder = document.createElement("option");
@@ -129,7 +121,23 @@
       for (let i = 0; i < 50; i++) {
         const index = d * 50 + i;
         const opt = document.createElement("option");
-        opt.textContent = `🔥 Acción ${index + 1}`;
+        const tipo = index % 10;
+        let emoji = "";
+
+        switch (tipo) {
+          case 0: emoji = "🔔"; break;
+          case 1: emoji = "🎨"; break;
+          case 2: emoji = "🎨"; break;
+          case 3: emoji = "📦"; break;
+          case 4: emoji = "🌪️"; break;
+          case 5: emoji = "🎯"; break;
+          case 6: emoji = "📛"; break;
+          case 7: emoji = "⚡"; break;
+          case 8: emoji = "🧹"; break;
+          case 9: emoji = "❓"; break;
+        }
+
+        opt.textContent = `${emoji} Acción ${index + 1}`;
         opt.value = index;
         select.appendChild(opt);
       }
@@ -143,7 +151,7 @@
       selectors.appendChild(select);
     }
 
-    // Crear desplegable personalizado con múltiples botones
+    // Crear un desplegable personalizado con opciones
     function crearDesplegablePersonalizado() {
       const nombre = prompt("¿Qué nombre tendrá el desplegable?");
       if (!nombre) return;
@@ -155,16 +163,16 @@
       placeholder.selected = true;
       select.appendChild(placeholder);
 
-      let seguir = true;
+      let continuar = true;
 
-      while (seguir) {
-        const tipo = prompt("¿Qué tipo de botón deseas agregar? (info o url)");
-        if (!tipo || (tipo !== "info" && tipo !== "url")) {
+      while (continuar) {
+        const tipo = prompt("¿Qué tipo de botón deseas agregar? (info o url)").toLowerCase();
+        if (!["info", "url"].includes(tipo)) {
           alert("❌ Tipo inválido. Usa 'info' o 'url'.");
           continue;
         }
 
-        let contenido = prompt(`Introduce el contenido del botón (${tipo}):`);
+        let contenido = prompt(`Introduce el contenido (${tipo}):`);
         if (!contenido) continue;
 
         if (tipo === "info") contenido = `💈 ${contenido}`;
@@ -173,12 +181,13 @@
         if (!nombreBoton) continue;
 
         const opt = document.createElement("option");
-        opt.textContent = `🏝 ${nombreBoton}`;
+        const emojiTipo = tipo === "info" ? "♨️" : "🧊";
+        opt.textContent = `🏝 ${emojiTipo} ${nombreBoton}`;
         opt.dataset.tipo = tipo;
         opt.dataset.contenido = contenido;
         select.appendChild(opt);
 
-        seguir = confirm("¿Quieres agregar otro botón?");
+        continuar = confirm("¿Deseas agregar otro botón?");
       }
 
       select.addEventListener("change", (e) => {
@@ -187,14 +196,8 @@
         const tipo = opt.dataset.tipo;
         const contenido = opt.dataset.contenido;
 
-        if (tipo === "info") {
-          const box = document.createElement("div");
-          box.className = "box";
-          box.innerHTML = `<strong>${opt.textContent}</strong><p>${contenido}</p>`;
-          output.appendChild(box);
-        } else if (tipo === "url") {
-          window.open(contenido, "_blank");
-        }
+        alert(`🏝 ${tipo === "info" ? "INFO" : "URL"}:\n\n${contenido}`);
+        if (tipo === "url") window.open(contenido.replace("💈", ""), "_blank");
 
         e.target.selectedIndex = 0;
       });
