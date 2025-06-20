@@ -1,50 +1,213 @@
-function updateGamepadStatus() {
-  const gamepads = navigator.getGamepads();
-  const gp = gamepads[gamepadIndex];
-  if (!gp) {
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detección de Mando PS4</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&family=Press+Start+2P&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: none;
+      font-size: 1.5rem;
+    }
+
+    .blue {
+      background: #007bff;
+      color: white;
+    }
+
+    .connected {
+      color: #00ffcc;
+    }
+
+    .big-box {
+      display: none;
+      margin-top: 30px;
+      padding: 30px;
+      background: #222;
+      border: 3px solid #007bff;
+      border-radius: 20px;
+      width: 80%;
+      max-width: 800px;
+    }
+
+    .text-mixed {
+      font-size: 1.2rem;
+    }
+
+    .text-mixed span.roboto {
+      font-family: 'Roboto', sans-serif;
+      color: #ffffff;
+    }
+
+    .text-mixed span.pixel {
+      font-family: 'Press Start 2P', monospace;
+      color: #00ffcc;
+    }
+
+    .text-mixed span.script {
+      font-family: 'Pacifico', cursive;
+      color: #ff69b4;
+    }
+
+    #extraMessage {
+      display: none;
+      margin-top: 30px;
+      font-size: 2rem;
+      color: #007bff;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background: #555;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Conecta y prueba tu mando</h1>
+  <p id="status">Buscando mando...</p>
+
+  <div class="message blue" id="comboMessage">¡L1 + R1 mantenidos 5 segundos!</div>
+
+  <div class="big-box" id="bigBox">
+    <div class="text-mixed">
+      <span class="roboto">Este es un mensaje </span>
+      <span class="pixel">con varias fuentes</span>
+      <span class="script"> muy estilizado ♥</span>
+    </div>
+  </div>
+
+  <div id="extraMessage">
+    ¡R1 + Flecha Izquierda mantenidos 5 segundos!
+  </div>
+
+  <button onclick="forceCheckGamepad()">Probar mando manualmente</button>
+
+  <script>
+    let comboStartTime = null;
+    let comboShown = false;
+    let gamepadIndex = null;
+
+    function checkGamepads() {
+      const gamepads = navigator.getGamepads();
+      for (let i = 0; i < gamepads.length; i++) {
+        if (gamepads[i]) {
+          gamepadIndex = i;
+          document.getElementById("status").textContent = "Mando detectado";
+          document.getElementById("status").classList.add("connected");
+          return;
+        }
+      }
+    }
+
+    function updateGamepadStatus() {
+      const gamepads = navigator.getGamepads();
+      const gp = gamepads[gamepadIndex];
+      if (!gp) {
+        requestAnimationFrame(updateGamepadStatus);
+        return;
+      }
+
+      gp.buttons.forEach((btn, index) => {
+        if (btn.pressed) {
+          console.log("Botón presionado: " + index);
+        }
+      });
+
+      const L1 = gp.buttons[4];
+      const R1 = gp.buttons[5];
+      const LEFT = gp.buttons[14];
+
+      // Combo 1: L1 + R1
+      if (L1?.pressed && R1?.pressed) {
+        if (comboStartTime === null) {
+          comboStartTime = performance.now();
+        } else if (performance.now() - comboStartTime >= 5000 && !comboShown) {
+          document.getElementById("comboMessage").style.display = "block";
+          document.getElementById("bigBox").style.display = "block";
+          comboShown = true;
+        }
+      } else {
+        comboStartTime = null;
+        comboShown = false;
+        document.getElementById("comboMessage").style.display = "none";
+        document.getElementById("bigBox").style.display = "none";
+      }
+
+      // Combo 2: R1 + Flecha Izquierda
+      if (R1?.pressed && LEFT?.pressed) {
+        if (!window.leftComboStartTime) {
+          window.leftComboStartTime = performance.now();
+        } else if (performance.now() - window.leftComboStartTime >= 5000 && !window.leftComboShown) {
+          document.getElementById("extraMessage").style.display = "block";
+          window.leftComboShown = true;
+        }
+      } else {
+        window.leftComboStartTime = null;
+        window.leftComboShown = false;
+        document.getElementById("extraMessage").style.display = "none";
+      }
+
+      requestAnimationFrame(updateGamepadStatus);
+    }
+
+    function forceCheckGamepad() {
+      checkGamepads();
+      if (gamepadIndex !== null) {
+        updateGamepadStatus();
+      } else {
+        alert("No se detectó ningún mando. Asegúrate de presionar un botón en el mando.");
+      }
+    }
+
+    // Revisión periódica
+    setInterval(() => {
+      if (gamepadIndex === null) {
+        checkGamepads();
+      }
+    }, 1000);
+
+    // Eventos conexión/desconexión
+    window.addEventListener("gamepadconnected", (e) => {
+      gamepadIndex = e.gamepad.index;
+      document.getElementById("status").textContent = "Mando conectado";
+      document.getElementById("status").classList.add("connected");
+    });
+
+    window.addEventListener("gamepaddisconnected", () => {
+      document.getElementById("status").textContent = "Mando desconectado";
+      document.getElementById("status").classList.remove("connected");
+      document.getElementById("comboMessage").style.display = "none";
+      document.getElementById("bigBox").style.display = "none";
+      document.getElementById("extraMessage").style.display = "none";
+      comboStartTime = null;
+      comboShown = false;
+      gamepadIndex = null;
+    });
+
     requestAnimationFrame(updateGamepadStatus);
-    return;
-  }
-
-  gp.buttons.forEach((btn, index) => {
-    if (btn.pressed) {
-      console.log("Botón presionado: " + index);
-    }
-  });
-
-  const L1 = gp.buttons[4];
-  const R1 = gp.buttons[5];
-  const LEFT = gp.buttons[14];
-
-  // -------- Primer combo: L1 + R1 --------
-  if (L1?.pressed && R1?.pressed) {
-    if (comboStartTime === null) {
-      comboStartTime = performance.now();
-    } else if (performance.now() - comboStartTime >= 5000 && !comboShown) {
-      document.getElementById("comboMessage").style.display = "block";
-      document.getElementById("bigBox").style.display = "block";
-      comboShown = true;
-    }
-  } else {
-    comboStartTime = null;
-    comboShown = false;
-    document.getElementById("comboMessage").style.display = "none";
-    document.getElementById("bigBox").style.display = "none";
-  }
-
-  // -------- Nuevo combo: R1 + Flecha Izquierda --------
-  if (R1?.pressed && LEFT?.pressed) {
-    if (!window.leftComboStartTime) {
-      window.leftComboStartTime = performance.now();
-    } else if (performance.now() - window.leftComboStartTime >= 5000 && !window.leftComboShown) {
-      document.getElementById("extraMessage").style.display = "block";
-      window.leftComboShown = true;
-    }
-  } else {
-    window.leftComboStartTime = null;
-    window.leftComboShown = false;
-    document.getElementById("extraMessage").style.display = "none";
-  }
-
-  requestAnimationFrame(updateGamepadStatus);
-}
+  </script>
+</body>
+</html>
