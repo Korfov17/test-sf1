@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detección de Mando PS4</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #28a745;
+      border-radius: 10px;
+      display: none;
+      font-size: 1.5rem;
+    }
+
+    .connected {
+      color: #00ffcc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Conecta tu mando de PS4</h1>
+  <p id="status">Esperando mando...</p>
+  <div class="message" id="r1Message">¡R1 mantenido por 5 segundos!</div>
+
+  <script>
+    let r1PressedTime = null;
+    let r1MessageShown = false;
+    let gamepadIndex = null;
+
+    window.addEventListener("gamepadconnected", (event) => {
+      gamepadIndex = event.gamepad.index;
+      document.getElementById("status").textContent = "Mando conectado";
+      document.getElementById("status").classList.add("connected");
+      requestAnimationFrame(updateGamepadStatus);
+    });
+
+    function updateGamepadStatus() {
+      const gamepads = navigator.getGamepads();
+      const gp = gamepads[gamepadIndex];
+      if (!gp) {
+        requestAnimationFrame(updateGamepadStatus);
+        return;
+      }
+
+      const R1 = gp.buttons[5]; // R1 is button index 5
+
+      if (R1.pressed) {
+        if (r1PressedTime === null) {
+          r1PressedTime = performance.now();
+        } else if (performance.now() - r1PressedTime >= 5000 && !r1MessageShown) {
+          document.getElementById("r1Message").style.display = "block";
+          r1MessageShown = true;
+        }
+      } else {
+        r1PressedTime = null;
+        r1MessageShown = false;
+        document.getElementById("r1Message").style.display = "none";
+      }
+
+      requestAnimationFrame(updateGamepadStatus);
+    }
+
+    window.addEventListener("gamepaddisconnected", () => {
+      document.getElementById("status").textContent = "Mando desconectado";
+      document.getElementById("status").classList.remove("connected");
+      document.getElementById("r1Message").style.display = "none";
+      r1PressedTime = null;
+      r1MessageShown = false;
+    });
+  </script>
+</body>
+</html>
