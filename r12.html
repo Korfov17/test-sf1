@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Contador con mensaje centrado</title>
+  <title>Contador que cambia pantalla</title>
   <style>
     body {
       background-color: #1a1a1a;
@@ -33,75 +33,52 @@
       100% { filter: hue-rotate(360deg); }
     }
 
-    /* Cuadro centrado fijo */
-    #mensaje {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #222;
-      color: white;
-      border: 4px solid white;
-      box-shadow: 0 0 30px white;
-      padding: 40px 50px;
-      max-width: 700px;
-      width: 80%;
-      font-size: 18px;
+    #main-text {
       text-align: center;
-      line-height: 1.7;
-      z-index: 9999;
-      border-radius: 10px;
-    }
-
-    #mensaje h2 {
-      margin-bottom: 20px;
-      font-size: 26px;
-      color: #00ffcc;
-    }
-
-    h1, p {
-      color: white;
-      text-align: center;
-      margin: 0 0 20px 0;
       user-select: none;
+      margin-bottom: 20px;
+    }
+
+    #final-message {
+      display: none;
+      font-size: 64px;
+      font-weight: bold;
+      text-align: center;
+      color: white;
     }
   </style>
 </head>
 <body>
-  <h1>Presiona F6 + Flecha Izquierda</h1>
-  <p>Mantén ambas teclas presionadas durante 5 segundos para revelar el mensaje oculto.</p>
-  <div id="contador"></div>
-  <div id="mensaje"></div>
+  <div id="contenido-principal">
+    <h1 id="main-text">Presiona F6 + Flecha Izquierda</h1>
+    <p id="main-text">Mantén ambas teclas presionadas durante 5 segundos para revelar el mensaje oculto.</p>
+    <div id="contador"></div>
+  </div>
+
+  <div id="final-message">Has descubierto esto</div>
 
   <script>
     let keysPressed = {};
     let intervalId = null;
     let count = 0;
 
-    const parrafos = [
-      "En un rincón del mundo digital, los bytes bailan sin cesar. Cada instrucción es una nota, cada ciclo una melodía. El código no duerme, solo espera ser entendido. Y cuando lo es, crea magia donde antes hubo silencio.",
-      "El viento soplaba fuerte aquella noche, mientras los árboles contaban secretos al cielo. Nadie escuchaba, salvo el viejo cuervo en la rama más alta. Él sabía que al amanecer, todo cambiaría para siempre.",
-      "Entre montañas olvidadas, un viajero solitario escribió su historia con cada paso. No buscaba un destino, sino preguntas sin respuesta. Su mapa era el cielo, y su brújula, la intuición. A veces, perderse era la única forma de encontrarse.",
-      "En el corazón de una biblioteca eterna, los libros hablaban entre ellos en susurros de papel. Algunos recordaban guerras, otros sueños. Todos, sin excepción, anhelaban ser abiertos una vez más."
-    ];
-
     function iniciarContador() {
       const contadorEl = document.getElementById('contador');
-      const mensajeEl = document.getElementById('mensaje');
+      const contenidoPrincipal = document.getElementById('contenido-principal');
+      const finalMessage = document.getElementById('final-message');
+
       count = 0;
       contadorEl.textContent = '0';
       contadorEl.style.display = 'block';
-      mensajeEl.style.display = 'none';
-      mensajeEl.innerHTML = '';
+      finalMessage.style.display = 'none';
 
       intervalId = setInterval(() => {
         count++;
         contadorEl.textContent = count;
 
+        // Ajustar brillo y tamaño para animación
         const brillo = 2.5 - (count * 0.3);
         const escala = 1.2 - (count * 0.04);
-
         contadorEl.style.filter = `brightness(${brillo})`;
         contadorEl.style.transform = `scale(${escala})`;
 
@@ -111,11 +88,16 @@
 
           alert('¡Has mantenido F6 + Flecha Izquierda durante 5 segundos!');
 
-          const textoAleatorio = parrafos[Math.floor(Math.random() * parrafos.length)];
-          mensajeEl.innerHTML = `<h2>Mensaje desbloqueado</h2><div>${textoAleatorio}</div>`;
-          mensajeEl.style.display = 'block';
+          // Eliminar todo el contenido visible
+          contenidoPrincipal.innerHTML = '';
 
-          // El contador queda oculto
+          // Cambiar el fondo a azul
+          document.body.style.backgroundColor = 'blue';
+
+          // Mostrar mensaje grande
+          finalMessage.style.display = 'block';
+
+          // Ocultar contador
           contadorEl.style.display = 'none';
         }
       }, 1000);
@@ -123,7 +105,8 @@
 
     function cancelarContador() {
       const contadorEl = document.getElementById('contador');
-      const mensajeEl = document.getElementById('mensaje');
+      const contenidoPrincipal = document.getElementById('contenido-principal');
+      const finalMessage = document.getElementById('final-message');
 
       if (intervalId) {
         clearInterval(intervalId);
@@ -132,8 +115,17 @@
 
       contadorEl.style.display = 'none';
       contadorEl.textContent = '';
-      mensajeEl.style.display = 'none';
-      mensajeEl.innerHTML = '';
+      finalMessage.style.display = 'none';
+      // Restaurar fondo original por si se cancela
+      document.body.style.backgroundColor = '#1a1a1a';
+
+      // Restaurar el contenido principal si vacío
+      if (contenidoPrincipal.innerHTML.trim() === '') {
+        contenidoPrincipal.innerHTML = `
+          <h1 id="main-text">Presiona F6 + Flecha Izquierda</h1>
+          <p id="main-text">Mantén ambas teclas presionadas durante 5 segundos para revelar el mensaje oculto.</p>
+        `;
+      }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
