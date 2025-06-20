@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Contador con mensaje animado</title>
+  <meta charset="UTF-8" />
+  <title>Contador con mensaje centrado</title>
   <style>
     body {
       background-color: #1a1a1a;
       color: white;
       font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      margin: 0;
-      padding-top: 60px;
+      justify-content: center;
     }
 
     #contador {
@@ -33,42 +33,38 @@
       100% { filter: hue-rotate(360deg); }
     }
 
+    /* Cuadro centrado fijo */
     #mensaje {
       display: none;
-      background-color: #1a1a1a;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #222;
       color: white;
       border: 4px solid white;
-      box-shadow: 0 0 25px white;
-      padding: 30px;
+      box-shadow: 0 0 30px white;
+      padding: 40px 50px;
       max-width: 700px;
       width: 80%;
       font-size: 18px;
       text-align: center;
       line-height: 1.7;
-      margin-top: 30px;
-      animation: aparecer 0.6s ease-in-out;
+      z-index: 9999;
+      border-radius: 10px;
     }
 
     #mensaje h2 {
-      margin-bottom: 15px;
-      font-size: 24px;
+      margin-bottom: 20px;
+      font-size: 26px;
       color: #00ffcc;
-    }
-
-    @keyframes aparecer {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
     }
 
     h1, p {
       color: white;
       text-align: center;
+      margin: 0 0 20px 0;
+      user-select: none;
     }
   </style>
 </head>
@@ -103,9 +99,8 @@
         count++;
         contadorEl.textContent = count;
 
-        // Efecto visual: más brillante al principio, menos después
-        const brillo = 2.5 - (count * 0.3); // brillo decae con el tiempo
-        const escala = 1.2 - (count * 0.04); // más grande al principio
+        const brillo = 2.5 - (count * 0.3);
+        const escala = 1.2 - (count * 0.04);
 
         contadorEl.style.filter = `brightness(${brillo})`;
         contadorEl.style.transform = `scale(${escala})`;
@@ -120,6 +115,7 @@
           mensajeEl.innerHTML = `<h2>Mensaje desbloqueado</h2><div>${textoAleatorio}</div>`;
           mensajeEl.style.display = 'block';
 
+          // El contador queda oculto
           contadorEl.style.display = 'none';
         }
       }, 1000);
