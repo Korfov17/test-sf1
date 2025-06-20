@@ -42,6 +42,7 @@
       border-radius: 20px;
       width: 90%;
       max-width: 800px;
+      position: relative;
     }
 
     .text-mixed {
@@ -76,6 +77,13 @@
       color: white;
       cursor: pointer;
     }
+
+    #countdown {
+      margin-top: 15px;
+      font-size: 2rem;
+      color: #007bff;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -91,6 +99,7 @@
       <span class="pixel">con varias fuentes</span>
       <span class="script"> muy estilizado ♥</span>
     </div>
+    <div id="countdown"></div>
   </div>
 
   <button onclick="forceCheckGamepad()">Probar detección manual</button>
@@ -99,10 +108,13 @@
 
   <script>
     let gamepadIndex = null;
-    let comboStartTime = null;
-    let comboShown = false;
+    let r1StartTime = null;
+    let r1AlertShown = false;
 
     const logBox = document.getElementById("log");
+    const countdownEl = document.getElementById("countdown");
+    const bigBox = document.getElementById("bigBox");
+
     function log(msg) {
       logBox.textContent += msg + "\n";
       logBox.scrollTop = logBox.scrollHeight;
@@ -129,38 +141,36 @@
         return;
       }
 
-      const L1 = gp.buttons[4];
       const R1 = gp.buttons[5];
 
       gp.buttons.forEach((b, i) => {
         if (b.pressed) log("Botón presionado: " + i);
       });
 
-      if (L1?.pressed && R1?.pressed) {
-        if (!comboStartTime) {
-          comboStartTime = performance.now();
-        } else if (performance.now() - comboStartTime >= 5000 && !comboShown) {
-          showCombo();
+      if (R1?.pressed) {
+        if (!r1StartTime) {
+          r1StartTime = performance.now();
+          bigBox.style.display = 'block';
+        }
+        const elapsed = (performance.now() - r1StartTime) / 1000; // segundos
+        const secondsLeft = Math.max(0, 5 - elapsed);
+        countdownEl.textContent = secondsLeft.toFixed(1) + " s";
+
+        if (elapsed >= 5 && !r1AlertShown) {
+          r1AlertShown = true;
+          alert("¡R1 mantenido durante 5 segundos!");
+          countdownEl.textContent = "";
+          bigBox.style.display = 'none';
+          r1StartTime = null;  // Reinicia para que pueda volver a funcionar si vuelve a pulsar
         }
       } else {
-        comboStartTime = null;
-        if (comboShown) hideCombo();
+        r1StartTime = null;
+        r1AlertShown = false;
+        countdownEl.textContent = "";
+        bigBox.style.display = 'none';
       }
 
       requestAnimationFrame(updateGamepadStatus);
-    }
-
-    function showCombo() {
-      comboShown = true;
-      document.getElementById("comboMessage").style.display = "block";
-      document.getElementById("bigBox").style.display = "block";
-      log("¡Combo L1 + R1 detectado durante 5 segundos!");
-    }
-
-    function hideCombo() {
-      comboShown = false;
-      document.getElementById("comboMessage").style.display = "none";
-      document.getElementById("bigBox").style.display = "none";
     }
 
     function forceCheckGamepad() {
@@ -183,8 +193,10 @@
     window.addEventListener("gamepaddisconnected", () => {
       document.getElementById("status").textContent = "Mando desconectado";
       document.getElementById("status").classList.remove("connected");
-      hideCombo();
-      comboStartTime = null;
+      countdownEl.textContent = "";
+      bigBox.style.display = 'none';
+      r1StartTime = null;
+      r1AlertShown = false;
       gamepadIndex = null;
       log("Gamepad desconectado.");
     });
