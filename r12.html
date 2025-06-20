@@ -2,19 +2,33 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Detector de F6</title>
+  <title>Detectar F6 mantenido</title>
   <script>
+    let f6Timer = null;
+
     document.addEventListener('DOMContentLoaded', () => {
       document.addEventListener('keydown', (event) => {
-        if (event.keyCode === 117) { // F6
-          alert('¡Has presionado F6!');
+        if (event.keyCode === 117 && !f6Timer) {
+          // Iniciar temporizador solo si no está corriendo
+          f6Timer = setTimeout(() => {
+            alert('¡Has mantenido F6 durante 5 segundos!');
+            f6Timer = null; // Reset para permitir una nueva detección
+          }, 5000);
+        }
+      });
+
+      document.addEventListener('keyup', (event) => {
+        if (event.keyCode === 117 && f6Timer) {
+          // Cancelar si se suelta antes de los 5 segundos
+          clearTimeout(f6Timer);
+          f6Timer = null;
         }
       });
     });
   </script>
 </head>
 <body>
-  <h1>Presiona F6</h1>
-  <p>Presiona la tecla F6 para ver una alerta.</p>
+  <h1>Mantén presionada la tecla F6</h1>
+  <p>Debes mantener F6 durante 5 segundos seguidos para ver una alerta.</p>
 </body>
 </html>
