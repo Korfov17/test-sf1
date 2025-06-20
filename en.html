@@ -1,22 +1,85 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Página de Prueba Multilenguaje</title>
+
+  <!-- Font Awesome CDN -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-/+sYEM3Ir+ISBPwTIvnfcb6YKbY+FZkA8xJ+iDJdJzIpwJOW3lXSkKNUJkByewYcq7pThTCU4MPPlVmOtNSuFQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #f0f4f8, #d9e2ec);
       color: #333;
-      max-width: 900px;
-      margin: auto;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #2f80ed;
+      color: white;
       padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    h1, h2, h3 {
+      color: #2c3e50;
     }
 
     select, button {
-      padding: 8px;
-      margin: 10px 0;
-      border-radius: 4px;
+      padding: 10px 15px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    select {
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #2f80ed;
+      color: white;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button:hover {
+      background-color: #1c60c5;
+    }
+
+    .section {
+      margin-bottom: 40px;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    ul {
+      padding-left: 20px;
     }
 
     .lang {
@@ -27,76 +90,148 @@
       display: block;
     }
 
-    #infoResult {
-      margin-top: 15px;
-      padding: 10px;
-      background-color: #e1f5fe;
-      border-left: 4px solid #0288d1;
+    #infoResult, #infoResult-en {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #e3f2fd;
+      border-left: 5px solid #2196f3;
+      border-radius: 4px;
+    }
+
+    .icon-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: bold;
+    }
+
+    footer {
+      background-color: #2f80ed;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 60px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Idioma principal -->
-  <label for="idioma"><strong>Idioma:</strong></label>
-  <select id="idioma" onchange="cambiarIdioma(this.value)">
-    <option value="" disabled selected>Selección de idioma</option>
-    <option value="es">Español</option>
-    <option value="en">English</option>
-  </select>
+  <header>
+    <h1 class="lang lang-es visible"><i class="fas fa-globe"></i> Mi Sitio Multilenguaje</h1>
+    <h1 class="lang lang-en"><i class="fas fa-globe"></i> My Multilanguage Website</h1>
+  </header>
 
-  <!-- Select secundario: temas -->
-  <div id="selectorSecundario" class="lang lang-es visible">
-    <label for="tema">Selecciona un tema:</label>
-    <select id="tema">
-      <option value="" disabled selected>Elige una opción</option>
-      <option value="html">¿Qué es HTML?</option>
-      <option value="css">¿Qué es CSS?</option>
-      <option value="js">¿Qué es JavaScript?</option>
+  <div class="container">
+
+    <!-- Selector de idioma -->
+    <label for="idioma" class="icon-label"><i class="fas fa-language"></i> Idioma / Language:</label>
+    <select id="idioma" onchange="cambiarIdioma(this.value)">
+      <option value="" disabled selected>🌐 Selección de idioma / Select language</option>
+      <option value="es">Español</option>
+      <option value="en">English</option>
     </select>
-    <button onclick="mostrarInfo()">Mostrar información</button>
+
+    <!-- Contenido en Español -->
+    <div class="lang lang-es visible">
+      <div class="section">
+        <h2><i class="fas fa-user-astronaut"></i> Sobre mí</h2>
+        <p>Soy un desarrollador web apasionado por el diseño limpio, accesible y funcional. Me especializo en crear experiencias digitales centradas en el usuario.</p>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-briefcase"></i> Servicios</h2>
+        <ul>
+          <li>Diseño de sitios web responsivos</li>
+          <li>Desarrollo de aplicaciones web</li>
+          <li>Optimización para buscadores (SEO)</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-laptop-code"></i> Tecnologías</h2>
+        <p>Trabajo con HTML5, CSS3, JavaScript, Git, y frameworks como React.</p>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-gamepad"></i> Aprende sobre tecnología</h2>
+        <label for="tema" class="icon-label"><i class="fas fa-lightbulb"></i> Tema:</label>
+        <select id="tema">
+          <option value="" disabled selected>Elige una opción</option>
+          <option value="html">¿Qué es HTML?</option>
+          <option value="css">¿Qué es CSS?</option>
+          <option value="js">¿Qué es JavaScript?</option>
+        </select>
+        <button onclick="mostrarInfo()"><i class="fas fa-book-open"></i> Mostrar información</button>
+        <div id="infoResult"></div>
+      </div>
+    </div>
+
+    <!-- Contenido en Inglés -->
+    <div class="lang lang-en">
+      <div class="section">
+        <h2><i class="fas fa-user-astronaut"></i> About Me</h2>
+        <p>I'm a web developer passionate about clean, accessible, and functional design. I specialize in building user-centered digital experiences.</p>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-briefcase"></i> Services</h2>
+        <ul>
+          <li>Responsive website design</li>
+          <li>Web application development</li>
+          <li>Search engine optimization (SEO)</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-laptop-code"></i> Technologies</h2>
+        <p>I work with HTML5, CSS3, JavaScript, Git, and frameworks like React.</p>
+      </div>
+
+      <div class="section">
+        <h2><i class="fas fa-gamepad"></i> Learn About Technology</h2>
+        <label for="tema-en" class="icon-label"><i class="fas fa-lightbulb"></i> Topic:</label>
+        <select id="tema-en">
+          <option value="" disabled selected>Choose an option</option>
+          <option value="html">What is HTML?</option>
+          <option value="css">What is CSS?</option>
+          <option value="js">What is JavaScript?</option>
+        </select>
+        <button onclick="mostrarInfo()"><i class="fas fa-book-open"></i> Show information</button>
+        <div id="infoResult-en"></div>
+      </div>
+    </div>
   </div>
 
-  <div id="selectorSecundario-en" class="lang lang-en">
-    <label for="tema-en">Select a topic:</label>
-    <select id="tema-en">
-      <option value="" disabled selected>Choose an option</option>
-      <option value="html">What is HTML?</option>
-      <option value="css">What is CSS?</option>
-      <option value="js">What is JavaScript?</option>
-    </select>
-    <button onclick="mostrarInfo()">Show information</button>
-  </div>
+  <footer class="lang lang-es visible">
+    <p>© 2025 Carlos Web. Todos los derechos reservados.</p>
+  </footer>
 
-  <!-- Resultado de información -->
-  <div id="infoResult" class="lang lang-es visible"></div>
-  <div id="infoResult-en" class="lang lang-en"></div>
+  <footer class="lang lang-en">
+    <p>© 2025 Carlos Web. All rights reserved.</p>
+  </footer>
 
   <script>
     const contenidos = {
       es: {
-        html: "HTML es el lenguaje de marcado que estructura el contenido en la web.",
-        css: "CSS es el lenguaje que da estilo y diseño a las páginas web.",
-        js: "JavaScript permite agregar interactividad y lógica a los sitios web.",
+        html: "HTML es el lenguaje que estructura el contenido de una página web mediante etiquetas.",
+        css: "CSS es el lenguaje que define la presentación visual de una página web.",
+        js: "JavaScript es un lenguaje de programación que permite interactividad en los sitios web.",
         titulo: "Página de Prueba Multilenguaje"
       },
       en: {
-        html: "HTML is the markup language that structures web content.",
-        css: "CSS is the language that styles and designs web pages.",
-        js: "JavaScript adds interactivity and logic to websites.",
+        html: "HTML is the language that structures the content of a web page using tags.",
+        css: "CSS is the language that defines the visual presentation of a web page.",
+        js: "JavaScript is a programming language that enables interactivity on websites.",
         titulo: "Multilanguage Test Page"
       }
     };
 
     function cambiarIdioma(idioma) {
-      // Mostrar/ocultar contenido según idioma
       document.querySelectorAll('.lang').forEach(el => el.classList.remove('visible'));
       document.querySelectorAll('.lang-' + idioma).forEach(el => el.classList.add('visible'));
-
-      // Cambiar el título del documento
       document.title = contenidos[idioma].titulo;
 
-      // Limpiar info previa
+      // Limpiar resultados previos
       document.getElementById('infoResult').innerText = "";
       document.getElementById('infoResult-en').innerText = "";
     }
@@ -104,14 +239,13 @@
     function mostrarInfo() {
       const idioma = document.querySelector('.lang-es.visible') ? 'es' : 'en';
       const selectId = idioma === 'es' ? 'tema' : 'tema-en';
-      const value = document.getElementById(selectId).value;
-
-      if (!value) return;
-
       const resultadoId = idioma === 'es' ? 'infoResult' : 'infoResult-en';
-      document.getElementById(resultadoId).innerText = contenidos[idioma][value];
+      const valor = document.getElementById(selectId).value;
+
+      if (!valor) return;
+
+      document.getElementById(resultadoId).innerText = contenidos[idioma][valor];
     }
   </script>
-
 </body>
 </html>
