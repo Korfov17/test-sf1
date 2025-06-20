@@ -2,46 +2,35 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Contador con mensaje</title>
+  <title>Contador con mensaje animado</title>
   <style>
     body {
-      background-color: #1a1a1a; /* negro grisáceo */
+      background-color: #1a1a1a;
       color: white;
       font-family: Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
+      justify-content: flex-start;
+      min-height: 100vh;
       margin: 0;
+      padding-top: 60px;
     }
 
     #contador {
       font-size: 80px;
-      color: #00ffcc;
       margin-bottom: 40px;
       display: none;
+      animation: brilloColor 0.4s linear infinite;
+      transition: filter 0.5s ease, transform 0.5s ease;
     }
 
-    .contador-animado {
-      animation: flipZoom 0.6s ease-in-out;
-    }
-
-    @keyframes flipZoom {
-      0% {
-        transform: rotateX(0deg) scale(1);
-        opacity: 0.7;
-        filter: brightness(1);
-      }
-      50% {
-        transform: rotateX(180deg) scale(1.4);
-        opacity: 1;
-        filter: brightness(1.8);
-      }
-      100% {
-        transform: rotateX(360deg) scale(1);
-        filter: brightness(1);
-      }
+    @keyframes brilloColor {
+      0%   { filter: hue-rotate(0deg); }
+      25%  { filter: hue-rotate(90deg); }
+      50%  { filter: hue-rotate(180deg); }
+      75%  { filter: hue-rotate(270deg); }
+      100% { filter: hue-rotate(360deg); }
     }
 
     #mensaje {
@@ -53,13 +42,20 @@
       padding: 30px;
       max-width: 700px;
       width: 80%;
-      font-size: 20px;
+      font-size: 18px;
       text-align: center;
       line-height: 1.7;
-      animation: fadeIn 0.6s ease-in-out;
+      margin-top: 30px;
+      animation: aparecer 0.6s ease-in-out;
     }
 
-    @keyframes fadeIn {
+    #mensaje h2 {
+      margin-bottom: 15px;
+      font-size: 24px;
+      color: #00ffcc;
+    }
+
+    @keyframes aparecer {
       from {
         opacity: 0;
         transform: scale(0.9);
@@ -101,14 +97,18 @@
       contadorEl.textContent = '0';
       contadorEl.style.display = 'block';
       mensajeEl.style.display = 'none';
-      mensajeEl.textContent = '';
+      mensajeEl.innerHTML = '';
 
       intervalId = setInterval(() => {
         count++;
         contadorEl.textContent = count;
-        contadorEl.classList.remove('contador-animado');
-        void contadorEl.offsetWidth; // forzar reflow para reiniciar animación
-        contadorEl.classList.add('contador-animado');
+
+        // Efecto visual: más brillante al principio, menos después
+        const brillo = 2.5 - (count * 0.3); // brillo decae con el tiempo
+        const escala = 1.2 - (count * 0.04); // más grande al principio
+
+        contadorEl.style.filter = `brightness(${brillo})`;
+        contadorEl.style.transform = `scale(${escala})`;
 
         if (count >= 5) {
           clearInterval(intervalId);
@@ -117,8 +117,9 @@
           alert('¡Has mantenido F6 + Flecha Izquierda durante 5 segundos!');
 
           const textoAleatorio = parrafos[Math.floor(Math.random() * parrafos.length)];
-          mensajeEl.textContent = textoAleatorio;
+          mensajeEl.innerHTML = `<h2>Mensaje desbloqueado</h2><div>${textoAleatorio}</div>`;
           mensajeEl.style.display = 'block';
+
           contadorEl.style.display = 'none';
         }
       }, 1000);
@@ -136,7 +137,7 @@
       contadorEl.style.display = 'none';
       contadorEl.textContent = '';
       mensajeEl.style.display = 'none';
-      mensajeEl.textContent = '';
+      mensajeEl.innerHTML = '';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
