@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Progreso con barra</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(to bottom right, #0a0a23, #001f3f);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #progress-text {
+      font-size: 24px;
+      color: white;
+      text-shadow: 2px 2px 4px black;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .bar-container {
+      width: 70%;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid white;
+    }
+
+    .bar {
+      width: 0%;
+      height: 100%;
+      background: white;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+      transition: width 0.1s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-text">Esperando caché...</div>
+
+  <div class="bar-container">
+    <div class="bar" id="progressBar"></div>
+  </div>
+
+  <script>
+    const progressText = document.getElementById("progress-text");
+    const progressBar = document.getElementById("progressBar");
+
+    window.applicationCache.ondownloading = function () {
+      progressText.textContent = "Iniciando proceso de caché...";
+    };
+
+    window.applicationCache.onprogress = function (e) {
+      const percent = Math.round(100 * (e.loaded / e.total));
+      progressBar.style.width = percent + '%';
+    };
+
+    window.applicationCache.oncached = function () {
+      progressText.textContent = "Se ha almacenado la caché exitosamente!!";
+      setTimeout(function () {
+        progressText.textContent = "Abre de nuevo el navegador!!";
+      }, 1500);
+    };
+  </script>
+
+</body>
+</html>
