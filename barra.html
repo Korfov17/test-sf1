@@ -2,46 +2,49 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Barra de Carga Fina</title>
+  <title>Cargando...</title>
   <style>
-    body {
+    * {
       margin: 0;
-      background-color: #1a1a1a; /* negro grisáceo */
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       height: 100vh;
-    }
-
-    .barra-contenedor {
-      width: 60%;
-      height: 10px; /* barra fina */
-      border: 2px solid white;
-      border-radius: 8px;
-      box-shadow: 0 0 12px 2px white;
+      background: linear-gradient(to bottom right, #0a0a23, #001f3f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       overflow: hidden;
-      background-color: #1a1a1a;
     }
 
-    .barra-carga {
-      height: 100%;
+    .bar-container {
+      width: 70%;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid white;
+      box-shadow: 0 0 12px 2px white;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .bar {
       width: 0%;
-      background-color: white;
-      animation: cargar 10s linear forwards;
+      height: 100%;
+      background: white;
+      animation: fillBar 10s linear forwards;
     }
 
-    @keyframes cargar {
+    @keyframes fillBar {
       from { width: 0%; }
       to { width: 100%; }
     }
   </style>
 </head>
 <body>
-
-  <div class="barra-contenedor">
-    <div class="barra-carga"></div>
+  <div class="bar-container">
+    <div class="bar"></div>
   </div>
-
 </body>
 </html>
