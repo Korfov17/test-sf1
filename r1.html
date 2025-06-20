@@ -99,10 +99,6 @@
     let comboShown = false;
     let gamepadIndex = null;
 
-    // Variables para detectar R1 mantenido 5 segundos
-    let r1StartTime = null;
-    let r1Triggered = false;
-
     function checkGamepads() {
       const gamepads = navigator.getGamepads();
       for (let i = 0; i < gamepads.length; i++) {
@@ -123,6 +119,7 @@
         return;
       }
 
+      // Mostrar en consola qué botones están presionados
       gp.buttons.forEach((btn, index) => {
         if (btn.pressed) {
           console.log("Botón presionado: " + index);
@@ -131,19 +128,6 @@
 
       const L1 = gp.buttons[4];
       const R1 = gp.buttons[5];
-
-      // Detectar R1 mantenido 5 segundos
-      if (R1?.pressed) {
-        if (!r1StartTime) {
-          r1StartTime = performance.now();
-        } else if (performance.now() - r1StartTime >= 5000 && !r1Triggered) {
-          alert("¡R1 mantenido durante 5 segundos!");
-          r1Triggered = true;
-        }
-      } else {
-        r1StartTime = null;
-        r1Triggered = false;
-      }
 
       if (L1?.pressed && R1?.pressed) {
         if (comboStartTime === null) {
@@ -172,12 +156,14 @@
       }
     }
 
+    // Bucle continuo para encontrar mandos incluso si no hay eventos
     setInterval(() => {
       if (gamepadIndex === null) {
         checkGamepads();
       }
     }, 1000);
 
+    // También enciende el bucle cuando se detecta conexión
     window.addEventListener("gamepadconnected", (e) => {
       gamepadIndex = e.gamepad.index;
       document.getElementById("status").textContent = "Mando conectado";
