@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Página de Prueba Multilenguaje</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    select {
+      padding: 5px;
+      margin-bottom: 20px;
+    }
+
+    .lang {
+      display: none;
+    }
+
+    .visible {
+      display: block;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    hr {
+      margin: 30px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Selector de idioma -->
+  <label for="idioma"><strong>Idioma:</strong></label>
+  <select id="idioma" onchange="cambiarIdioma(this.value)">
+    <option value="" disabled selected>Selección de idioma</option>
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+
+  <!-- Contenido en Español -->
+  <div class="lang lang-es visible">
+    <h1>Bienvenido a mi sitio web</h1>
+    <h2>Sobre mí</h2>
+    <p>Me llamo Carlos y soy desarrollador web. Me encanta crear sitios simples pero funcionales.</p>
+    <h3>Proyectos</h3>
+    <ul>
+      <li>Portafolio personal</li>
+      <li>Blog de programación</li>
+      <li>Calculadora básica</li>
+    </ul>
+    <button>Contáctame</button>
+  </div>
+
+  <!-- Contenido en Inglés -->
+  <div class="lang lang-en">
+    <h1>Welcome to my website</h1>
+    <h2>About Me</h2>
+    <p>My name is Carlos and I'm a web developer. I love building simple yet useful sites.</p>
+    <h3>Projects</h3>
+    <ul>
+      <li>Personal portfolio</li>
+      <li>Programming blog</li>
+      <li>Basic calculator</li>
+    </ul>
+    <button>Contact me</button>
+  </div>
+
+  <hr>
+
+  <footer class="lang lang-es visible">
+    <p>Gracias por visitar. ¡Hasta pronto!</p>
+  </footer>
+
+  <footer class="lang lang-en">
+    <p>Thanks for visiting. See you soon!</p>
+  </footer>
+
+  <script>
+    function cambiarIdioma(idioma) {
+      const elementos = document.querySelectorAll('.lang');
+      elementos.forEach(el => {
+        el.classList.remove('visible');
+        if (el.classList.contains('lang-' + idioma)) {
+          el.classList.add('visible');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
