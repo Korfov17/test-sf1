@@ -2,235 +2,71 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Detección de Mando Tesy</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&family=Press+Start+2P&family=Pacifico&display=swap" rel="stylesheet">
+  <title>Alerta con F6 + Flecha Izquierda</title>
   <style>
     body {
-      font-family: 'Roboto', sans-serif;
-      background: #111;
-      color: #fff;
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      flex-direction: column;
+      background-color: #222;
+      color: white;
+      margin: 0;
       text-align: center;
+      padding: 20px;
     }
-
-    .message {
-      margin-top: 20px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      display: none;
-      font-size: 1.5rem;
-    }
-
-    .blue {
-      background: #007bff;
-      color: white;
-    }
-
-    .connected {
-      color: #00ffcc;
-    }
-
-    .big-box {
-      display: none;
-      margin-top: 30px;
-      padding: 30px;
-      background: #222;
-      border: 3px solid #007bff;
-      border-radius: 20px;
-      width: 80%;
-      max-width: 800px;
-    }
-
-    .text-mixed {
-      font-size: 1.2rem;
-    }
-
-    .text-mixed span.roboto {
-      font-family: 'Roboto', sans-serif;
-      color: #ffffff;
-    }
-
-    .text-mixed span.pixel {
-      font-family: 'Press Start 2P', monospace;
-      color: #00ffcc;
-    }
-
-    .text-mixed span.script {
-      font-family: 'Pacifico', cursive;
-      color: #ff69b4;
-    }
-
-    #counter {
-      font-size: 2rem;
-      color: #00ffcc;
-      margin-top: 20px;
-      display: none;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      background: #555;
-      color: white;
+    h1 {
+      max-width: 400px;
     }
   </style>
 </head>
 <body>
-
-  <h1>Conecta y prueba tu mando</h1>
-  <p id="status">Buscando mando...</p>
-
-  <div class="message blue" id="comboMessage">¡L1 + R1 mantenidos por 5 segundos!</div>
-
-  <div id="counter"></div>
-
-  <div class="big-box" id="bigBox">
-    <div class="text-mixed">
-      <span class="roboto">Este es un mensaje </span>
-      <span class="pixel">con varias fuentes</span>
-      <span class="script"> muy estilizado ♥</span>
-    </div>
-  </div>
-
-  <button onclick="forceCheckGamepad()">Probar mando manualmente</button>
+  <h1>Mantén pulsadas las teclas <b>F6</b> + <b>Flecha Izquierda</b> durante 5 segundos para activar la alerta.</h1>
 
   <script>
-    let comboStartTime = null;
-    let comboShown = false;
-    let gamepadIndex = null;
+    let keysPressed = {};
+    let intervalId = null;
+    let counter = 0;
 
-    let r1Interval = null;
-    let r1Count = 0;
-    let r1Active = false;
-
-    function checkGamepads() {
-      const gamepads = navigator.getGamepads();
-      for (let i = 0; i < gamepads.length; i++) {
-        if (gamepads[i]) {
-          gamepadIndex = i;
-          document.getElementById("status").textContent = "Mando detectado";
-          document.getElementById("status").classList.add("connected");
-          return;
-        }
-      }
+    function mostrarAlerta() {
+      alert('¡Has mantenido F6 + Flecha Izquierda durante 5 segundos!');
     }
 
-    function startR1Counter() {
-      const counter = document.getElementById("counter");
-      counter.style.display = "block";
-      r1Count = 0;
-      counter.textContent = "Contador: 0";
-
-      r1Interval = setInterval(() => {
-        r1Count++;
-        counter.textContent = `Contador: ${r1Count}`;
-        if (r1Count >= 5) {
-          clearInterval(r1Interval);
-          r1Interval = null;
-          counter.style.display = "none";
-          alert("¡R1 mantenido durante 5 segundos!");
+    function iniciarContador() {
+      counter = 0;
+      intervalId = setInterval(() => {
+        counter++;
+        if (counter >= 5) {
+          clearInterval(intervalId);
+          intervalId = null;
+          mostrarAlerta();
         }
       }, 1000);
     }
 
-    function stopR1Counter() {
-      if (r1Interval) {
-        clearInterval(r1Interval);
-        r1Interval = null;
+    function cancelarContador() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
       }
-      document.getElementById("counter").style.display = "none";
-      r1Count = 0;
+      counter = 0;
     }
 
-    function updateGamepadStatus() {
-      const gamepads = navigator.getGamepads();
-      const gp = gamepads[gamepadIndex];
-      if (!gp) {
-        requestAnimationFrame(updateGamepadStatus);
-        return;
+    document.addEventListener('keydown', (e) => {
+      keysPressed[e.keyCode] = true;
+
+      if (keysPressed[117] && keysPressed[37] && !intervalId) {
+        iniciarContador();
       }
-
-      gp.buttons.forEach((btn, index) => {
-        if (btn.pressed) {
-          console.log("Botón presionado: " + index);
-        }
-      });
-
-      const L1 = gp.buttons[4];
-      const R1 = gp.buttons[5];
-
-      if (R1?.pressed) {
-        if (!r1Active) {
-          r1Active = true;
-          startR1Counter();
-        }
-      } else {
-        if (r1Active) {
-          r1Active = false;
-          stopR1Counter();
-        }
-      }
-
-      if (L1?.pressed && R1?.pressed) {
-        if (comboStartTime === null) {
-          comboStartTime = performance.now();
-        } else if (performance.now() - comboStartTime >= 5000 && !comboShown) {
-          document.getElementById("comboMessage").style.display = "block";
-          document.getElementById("bigBox").style.display = "block";
-          comboShown = true;
-        }
-      } else {
-        comboStartTime = null;
-        comboShown = false;
-        document.getElementById("comboMessage").style.display = "none";
-        document.getElementById("bigBox").style.display = "none";
-      }
-
-      requestAnimationFrame(updateGamepadStatus);
-    }
-
-    function forceCheckGamepad() {
-      checkGamepads();
-      if (gamepadIndex !== null) {
-        updateGamepadStatus();
-      } else {
-        alert("No se detectó ningún mando. Asegúrate de presionar un botón en el mando.");
-      }
-    }
-
-    setInterval(() => {
-      if (gamepadIndex === null) {
-        checkGamepads();
-      }
-    }, 1000);
-
-    window.addEventListener("gamepadconnected", (e) => {
-      gamepadIndex = e.gamepad.index;
-      document.getElementById("status").textContent = "Mando conectado";
-      document.getElementById("status").classList.add("connected");
     });
 
-    window.addEventListener("gamepaddisconnected", () => {
-      document.getElementById("status").textContent = "Mando desconectado";
-      document.getElementById("status").classList.remove("connected");
-      document.getElementById("comboMessage").style.display = "none";
-      document.getElementById("bigBox").style.display = "none";
-      stopR1Counter();
-      comboStartTime = null;
-      comboShown = false;
-      gamepadIndex = null;
+    document.addEventListener('keyup', (e) => {
+      delete keysPressed[e.keyCode];
+      if (!keysPressed[117] || !keysPressed[37]) {
+        cancelarContador();
+      }
     });
-
-    requestAnimationFrame(updateGamepadStatus);
   </script>
 </body>
 </html>
