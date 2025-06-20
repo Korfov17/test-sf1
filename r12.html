@@ -2,33 +2,38 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Detectar F6 mantenido</title>
+  <title>Detectar F6 (R1) + Flecha Arriba (< ps4)</title>
   <script>
-    let f6Timer = null;
+    let comboTimer = null;
+    const keysPressed = {};
 
     document.addEventListener('DOMContentLoaded', () => {
       document.addEventListener('keydown', (event) => {
-        if (event.keyCode === 117 && !f6Timer) {
-          // Iniciar temporizador solo si no está corriendo
-          f6Timer = setTimeout(() => {
-            alert('¡Has mantenido F6 durante 5 segundos!');
-            f6Timer = null; // Reset para permitir una nueva detección
+        keysPressed[event.keyCode] = true;
+
+        // Verificar si ambas teclas están presionadas
+        if (keysPressed[117] && keysPressed[38] && !comboTimer) {
+          comboTimer = setTimeout(() => {
+            alert('¡Has mantenido F6 + Flecha Arriba durante 5 segundos!');
+            comboTimer = null;
           }, 5000);
         }
       });
 
       document.addEventListener('keyup', (event) => {
-        if (event.keyCode === 117 && f6Timer) {
-          // Cancelar si se suelta antes de los 5 segundos
-          clearTimeout(f6Timer);
-          f6Timer = null;
+        delete keysPressed[event.keyCode];
+
+        // Cancelar si se suelta cualquiera de las dos teclas
+        if (comboTimer) {
+          clearTimeout(comboTimer);
+          comboTimer = null;
         }
       });
     });
   </script>
 </head>
 <body>
-  <h1>Mantén presionada la tecla F6</h1>
-  <p>Debes mantener F6 durante 5 segundos seguidos para ver una alerta.</p>
+  <h1>Combinación: F6 + Flecha Arriba</h1>
+  <p>Mantén presionadas las teclas F6 y Flecha Arriba durante 5 segundos para ver una alerta.</p>
 </body>
 </html>
