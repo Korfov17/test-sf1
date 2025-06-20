@@ -170,6 +170,19 @@
         document.getElementById("extraMessage").style.display = "none";
       }
 
+      // Combo 3: Solo R1 mantenido
+      if (R1?.pressed && !L1?.pressed && !LEFT?.pressed) {
+        if (!window.r1StartTime) {
+          window.r1StartTime = performance.now();
+        } else if (performance.now() - window.r1StartTime >= 5000 && !window.r1Shown) {
+          alert("¡Mantuvistes R1 durante 5 segundos!");
+          window.r1Shown = true;
+        }
+      } else {
+        window.r1StartTime = null;
+        window.r1Shown = false;
+      }
+
       requestAnimationFrame(updateGamepadStatus);
     }
 
