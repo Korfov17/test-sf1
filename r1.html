@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Detección de Mando PS4</title>
+  <title>Detección de Mando</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&family=Press+Start+2P&family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
@@ -64,12 +64,23 @@
       font-family: 'Pacifico', cursive;
       color: #ff69b4;
     }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      background: #555;
+      color: white;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Conecta tu mando de PS4</h1>
-  <p id="status">Esperando mando...</p>
+  <h1>Conecta y prueba tu mando</h1>
+  <p id="status">Buscando mando...</p>
 
   <div class="message blue" id="comboMessage">¡L1 + R1 mantenidos por 5 segundos!</div>
 
@@ -81,17 +92,24 @@
     </div>
   </div>
 
+  <button onclick="forceCheckGamepad()">Probar mando manualmente</button>
+
   <script>
     let comboStartTime = null;
     let comboShown = false;
     let gamepadIndex = null;
 
-    window.addEventListener("gamepadconnected", (event) => {
-      gamepadIndex = event.gamepad.index;
-      document.getElementById("status").textContent = "Mando conectado";
-      document.getElementById("status").classList.add("connected");
-      requestAnimationFrame(updateGamepadStatus);
-    });
+    function checkGamepads() {
+      const gamepads = navigator.getGamepads();
+      for (let i = 0; i < gamepads.length; i++) {
+        if (gamepads[i]) {
+          gamepadIndex = i;
+          document.getElementById("status").textContent = "Mando detectado";
+          document.getElementById("status").classList.add("connected");
+          return;
+        }
+      }
+    }
 
     function updateGamepadStatus() {
       const gamepads = navigator.getGamepads();
@@ -101,10 +119,17 @@
         return;
       }
 
+      // Mostrar en consola qué botones están presionados
+      gp.buttons.forEach((btn, index) => {
+        if (btn.pressed) {
+          console.log("Botón presionado: " + index);
+        }
+      });
+
       const L1 = gp.buttons[4];
       const R1 = gp.buttons[5];
 
-      if (L1.pressed && R1.pressed) {
+      if (L1?.pressed && R1?.pressed) {
         if (comboStartTime === null) {
           comboStartTime = performance.now();
         } else if (performance.now() - comboStartTime >= 5000 && !comboShown) {
@@ -122,6 +147,29 @@
       requestAnimationFrame(updateGamepadStatus);
     }
 
+    function forceCheckGamepad() {
+      checkGamepads();
+      if (gamepadIndex !== null) {
+        updateGamepadStatus();
+      } else {
+        alert("No se detectó ningún mando. Asegúrate de presionar un botón en el mando.");
+      }
+    }
+
+    // Bucle continuo para encontrar mandos incluso si no hay eventos
+    setInterval(() => {
+      if (gamepadIndex === null) {
+        checkGamepads();
+      }
+    }, 1000);
+
+    // También enciende el bucle cuando se detecta conexión
+    window.addEventListener("gamepadconnected", (e) => {
+      gamepadIndex = e.gamepad.index;
+      document.getElementById("status").textContent = "Mando conectado";
+      document.getElementById("status").classList.add("connected");
+    });
+
     window.addEventListener("gamepaddisconnected", () => {
       document.getElementById("status").textContent = "Mando desconectado";
       document.getElementById("status").classList.remove("connected");
@@ -129,7 +177,10 @@
       document.getElementById("bigBox").style.display = "none";
       comboStartTime = null;
       comboShown = false;
+      gamepadIndex = null;
     });
+
+    requestAnimationFrame(updateGamepadStatus);
   </script>
 </body>
 </html>
