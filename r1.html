@@ -1,204 +1,50 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Detección de Mando y Teclado</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Press+Start+2P&family=Pacifico&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: #111;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      min-height: 100vh;
-      padding: 20px;
-      text-align: center;
+function updateGamepadStatus() {
+  const gamepads = navigator.getGamepads();
+  const gp = gamepads[gamepadIndex];
+  if (!gp) {
+    requestAnimationFrame(updateGamepadStatus);
+    return;
+  }
+
+  gp.buttons.forEach((btn, index) => {
+    if (btn.pressed) {
+      console.log("Botón presionado: " + index);
     }
+  });
 
-    h1 { margin-bottom: 10px; }
+  const L1 = gp.buttons[4];
+  const R1 = gp.buttons[5];
+  const LEFT = gp.buttons[14];
 
-    .message {
-      margin-top: 20px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      display: none;
-      font-size: 1.5rem;
-    }
-
-    .blue { background: #007bff; color: white; }
-
-    .connected { color: #00ffcc; }
-
-    .big-box {
-      display: none;
-      margin-top: 30px;
-      padding: 30px;
-      background: #222;
-      border: 3px solid #007bff;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 800px;
-    }
-
-    .text-mixed {
-      font-size: 1.2rem;
-    }
-
-    .text-mixed span.roboto { font-family: 'Roboto', sans-serif; color: #ffffff; }
-    .text-mixed span.pixel { font-family: 'Press Start 2P', monospace; color: #00ffcc; }
-    .text-mixed span.script { font-family: 'Pacifico', cursive; color: #ff69b4; }
-
-    #log {
-      margin-top: 20px;
-      background: #222;
-      padding: 10px;
-      width: 90%;
-      max-width: 800px;
-      border-radius: 10px;
-      font-size: 14px;
-      height: 100px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-      text-align: left;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      background: #555;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>Conecta tu mando o usa el teclado</h1>
-  <p id="status">Esperando mando o teclado...</p>
-
-  <div class="message blue" id="comboMessage">¡L1 + R1 mantenidos por 5 segundos!</div>
-
-  <div class="big-box" id="bigBox">
-    <div class="text-mixed">
-      <span class="roboto">Este es un mensaje </span>
-      <span class="pixel">con varias fuentes</span>
-      <span class="script"> muy estilizado ♥</span>
-    </div>
-  </div>
-
-  <button onclick="forceCheckGamepad()">Probar detección manual</button>
-
-  <div id="log">Consola:</div>
-
-  <script>
-    let gamepadIndex = null;
-    let comboStartTime = null;
-    let comboShown = false;
-
-    const logBox = document.getElementById("log");
-    function log(msg) {
-      logBox.textContent += msg + "\n";
-      logBox.scrollTop = logBox.scrollHeight;
-    }
-
-    function checkGamepads() {
-      const gamepads = navigator.getGamepads();
-      for (let i = 0; i < gamepads.length; i++) {
-        if (gamepads[i]) {
-          gamepadIndex = i;
-          document.getElementById("status").textContent = "Mando detectado: " + gamepads[i].id;
-          document.getElementById("status").classList.add("connected");
-          log("Gamepad conectado: " + gamepads[i].id);
-          return;
-        }
-      }
-    }
-
-    function updateGamepadStatus() {
-      const gamepads = navigator.getGamepads();
-      const gp = gamepads[gamepadIndex];
-      if (!gp) {
-        requestAnimationFrame(updateGamepadStatus);
-        return;
-      }
-
-      const L1 = gp.buttons[4];
-      const R1 = gp.buttons[5];
-
-      gp.buttons.forEach((b, i) => {
-        if (b.pressed) log("Botón presionado: " + i);
-      });
-
-      if (L1?.pressed && R1?.pressed) {
-        if (!comboStartTime) {
-          comboStartTime = performance.now();
-        } else if (performance.now() - comboStartTime >= 5000 && !comboShown) {
-          showCombo();
-        }
-      } else {
-        comboStartTime = null;
-        if (comboShown) hideCombo();
-      }
-
-      requestAnimationFrame(updateGamepadStatus);
-    }
-
-    function showCombo() {
-      comboShown = true;
+  // -------- Primer combo: L1 + R1 --------
+  if (L1?.pressed && R1?.pressed) {
+    if (comboStartTime === null) {
+      comboStartTime = performance.now();
+    } else if (performance.now() - comboStartTime >= 5000 && !comboShown) {
       document.getElementById("comboMessage").style.display = "block";
       document.getElementById("bigBox").style.display = "block";
-      log("¡Combo L1 + R1 detectado durante 5 segundos!");
+      comboShown = true;
     }
+  } else {
+    comboStartTime = null;
+    comboShown = false;
+    document.getElementById("comboMessage").style.display = "none";
+    document.getElementById("bigBox").style.display = "none";
+  }
 
-    function hideCombo() {
-      comboShown = false;
-      document.getElementById("comboMessage").style.display = "none";
-      document.getElementById("bigBox").style.display = "none";
+  // -------- Nuevo combo: R1 + Flecha Izquierda --------
+  if (R1?.pressed && LEFT?.pressed) {
+    if (!window.leftComboStartTime) {
+      window.leftComboStartTime = performance.now();
+    } else if (performance.now() - window.leftComboStartTime >= 5000 && !window.leftComboShown) {
+      document.getElementById("extraMessage").style.display = "block";
+      window.leftComboShown = true;
     }
+  } else {
+    window.leftComboStartTime = null;
+    window.leftComboShown = false;
+    document.getElementById("extraMessage").style.display = "none";
+  }
 
-    function forceCheckGamepad() {
-      checkGamepads();
-      if (gamepadIndex !== null) updateGamepadStatus();
-      else alert("Mando no detectado. Asegúrate de presionar un botón.");
-    }
-
-    setInterval(() => {
-      if (gamepadIndex === null) checkGamepads();
-    }, 1000);
-
-    window.addEventListener("gamepadconnected", (e) => {
-      gamepadIndex = e.gamepad.index;
-      document.getElementById("status").textContent = "Mando conectado";
-      document.getElementById("status").classList.add("connected");
-      log("Gamepad conectado por evento.");
-    });
-
-    window.addEventListener("gamepaddisconnected", () => {
-      document.getElementById("status").textContent = "Mando desconectado";
-      document.getElementById("status").classList.remove("connected");
-      hideCombo();
-      comboStartTime = null;
-      gamepadIndex = null;
-      log("Gamepad desconectado.");
-    });
-
-    // ⌨️ Detección por teclado
-    window.onkeydown = function (e) {
-      log("Tecla presionada: " + e.keyCode);
-      if (e.keyCode === 117) {
-        log("R1 detectado por teclado (F6)");
-        alert("¡R1 presionado (F6) vía teclado!");
-      }
-    };
-
-    requestAnimationFrame(updateGamepadStatus);
-  </script>
-</body>
-</html>
+  requestAnimationFrame(updateGamepadStatus);
+}
