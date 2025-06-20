@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Barra de Carga Fina</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #1a1a1a; /* negro grisáceo */
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .barra-contenedor {
+      width: 60%;
+      height: 10px; /* barra fina */
+      border: 2px solid white;
+      border-radius: 8px;
+      box-shadow: 0 0 12px 2px white;
+      overflow: hidden;
+      background-color: #1a1a1a;
+    }
+
+    .barra-carga {
+      height: 100%;
+      width: 0%;
+      background-color: white;
+      animation: cargar 10s linear forwards;
+    }
+
+    @keyframes cargar {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="barra-contenedor">
+    <div class="barra-carga"></div>
+  </div>
+
+</body>
+</html>
