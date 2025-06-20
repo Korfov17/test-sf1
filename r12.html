@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Contador de combinación</title>
+  <title>Contador y mensaje aleatorio</title>
   <style>
     #contador {
       font-size: 24px;
@@ -10,17 +10,39 @@
       display: none;
       margin-top: 20px;
     }
+
+    #mensaje {
+      display: none;
+      margin-top: 30px;
+      padding: 20px;
+      border: 3px solid #333;
+      background-color: #f0f0f0;
+      font-size: 18px;
+      width: 80%;
+      max-width: 700px;
+      line-height: 1.6;
+    }
   </style>
   <script>
     let keysPressed = {};
     let intervalId = null;
     let count = 0;
 
+    const parrafos = [
+      "En un rincón del mundo digital, los bytes bailan sin cesar. Cada instrucción es una nota, cada ciclo una melodía. El código no duerme, solo espera ser entendido. Y cuando lo es, crea magia donde antes hubo silencio.",
+      "El viento soplaba fuerte aquella noche, mientras los árboles contaban secretos al cielo. Nadie escuchaba, salvo el viejo cuervo en la rama más alta. Él sabía que al amanecer, todo cambiaría para siempre.",
+      "Entre montañas olvidadas, un viajero solitario escribió su historia con cada paso. No buscaba un destino, sino preguntas sin respuesta. Su mapa era el cielo, y su brújula, la intuición. A veces, perderse era la única forma de encontrarse.",
+      "En el corazón de una biblioteca eterna, los libros hablaban entre ellos en susurros de papel. Algunos recordaban guerras, otros sueños. Todos, sin excepción, anhelaban ser abiertos una vez más."
+    ];
+
     function iniciarContador() {
       const contadorEl = document.getElementById('contador');
+      const mensajeEl = document.getElementById('mensaje');
       count = 0;
       contadorEl.style.display = 'block';
       contadorEl.textContent = 'Contando: 0';
+      mensajeEl.style.display = 'none';
+      mensajeEl.textContent = '';
 
       intervalId = setInterval(() => {
         count++;
@@ -30,6 +52,12 @@
           clearInterval(intervalId);
           intervalId = null;
           alert('¡Has mantenido F6 + Flecha Izquierda durante 5 segundos!');
+
+          // Mostrar mensaje aleatorio
+          const textoAleatorio = parrafos[Math.floor(Math.random() * parrafos.length)];
+          mensajeEl.textContent = textoAleatorio;
+          mensajeEl.style.display = 'block';
+
           contadorEl.style.display = 'none';
         }
       }, 1000);
@@ -37,12 +65,15 @@
 
     function cancelarContador() {
       const contadorEl = document.getElementById('contador');
+      const mensajeEl = document.getElementById('mensaje');
       if (intervalId) {
         clearInterval(intervalId);
         intervalId = null;
       }
       contadorEl.style.display = 'none';
       contadorEl.textContent = '';
+      mensajeEl.style.display = 'none';
+      mensajeEl.textContent = '';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -57,7 +88,6 @@
       document.addEventListener('keyup', (event) => {
         delete keysPressed[event.keyCode];
 
-        // Cancelar si se suelta cualquiera de las teclas necesarias
         if (!keysPressed[117] || !keysPressed[37]) {
           cancelarContador();
         }
@@ -66,8 +96,9 @@
   </script>
 </head>
 <body>
-  <h1>Presiona F6 + Flecha Izquierda</h1>
-  <p>Mantén ambas teclas presionadas durante 5 segundos para activar la alerta.</p>
+  <h1>Presiona F6 (R1 en PS4) + Flecha Izquierda</h1>
+  <p>Mantén ambas teclas presionadas durante 5 segundos para activar el mensaje oculto.</p>
   <div id="contador"></div>
+  <div id="mensaje"></div>
 </body>
 </html>
