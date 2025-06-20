@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Deteccfkdkdkdión de Mando PS4</title>
+  <title>Detección de Mando</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400&family=Press+Start+2P&family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
@@ -65,13 +65,6 @@
       color: #ff69b4;
     }
 
-    #extraMessage {
-      display: none;
-      margin-top: 30px;
-      font-size: 2rem;
-      color: #007bff;
-    }
-
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -89,7 +82,7 @@
   <h1>Conecta y prueba tu mando</h1>
   <p id="status">Buscando mando...</p>
 
-  <div class="message blue" id="comboMessage">¡L1 + R1 mantenidos 5 segundos!</div>
+  <div class="message blue" id="comboMessage">¡L1 + R1 mantenidos por 5 segundos!</div>
 
   <div class="big-box" id="bigBox">
     <div class="text-mixed">
@@ -99,16 +92,16 @@
     </div>
   </div>
 
-  <div id="extraMessage">
-    ¡R1 + Flecha Izquierda mantenidos 5 segundos!
-  </div>
-
   <button onclick="forceCheckGamepad()">Probar mando manualmente</button>
 
   <script>
     let comboStartTime = null;
     let comboShown = false;
     let gamepadIndex = null;
+
+    // Variables para detectar R1 mantenido 5 segundos
+    let r1StartTime = null;
+    let r1Triggered = false;
 
     function checkGamepads() {
       const gamepads = navigator.getGamepads();
@@ -138,9 +131,20 @@
 
       const L1 = gp.buttons[4];
       const R1 = gp.buttons[5];
-      const LEFT = gp.buttons[14];
 
-      // Combo 1: L1 + R1
+      // Detectar R1 mantenido 5 segundos
+      if (R1?.pressed) {
+        if (!r1StartTime) {
+          r1StartTime = performance.now();
+        } else if (performance.now() - r1StartTime >= 5000 && !r1Triggered) {
+          alert("¡R1 mantenido durante 5 segundos!");
+          r1Triggered = true;
+        }
+      } else {
+        r1StartTime = null;
+        r1Triggered = false;
+      }
+
       if (L1?.pressed && R1?.pressed) {
         if (comboStartTime === null) {
           comboStartTime = performance.now();
@@ -156,33 +160,6 @@
         document.getElementById("bigBox").style.display = "none";
       }
 
-      // Combo 2: R1 + Flecha Izquierda
-      if (R1?.pressed && LEFT?.pressed) {
-        if (!window.leftComboStartTime) {
-          window.leftComboStartTime = performance.now();
-        } else if (performance.now() - window.leftComboStartTime >= 5000 && !window.leftComboShown) {
-          document.getElementById("extraMessage").style.display = "block";
-          window.leftComboShown = true;
-        }
-      } else {
-        window.leftComboStartTime = null;
-        window.leftComboShown = false;
-        document.getElementById("extraMessage").style.display = "none";
-      }
-
-      // Combo 3: Solo R1 mantenido
-      if (R1?.pressed && !L1?.pressed && !LEFT?.pressed) {
-        if (!window.r1StartTime) {
-          window.r1StartTime = performance.now();
-        } else if (performance.now() - window.r1StartTime >= 5000 && !window.r1Shown) {
-          alert("¡Mantuvistes R1 durante 5 segundos!");
-          window.r1Shown = true;
-        }
-      } else {
-        window.r1StartTime = null;
-        window.r1Shown = false;
-      }
-
       requestAnimationFrame(updateGamepadStatus);
     }
 
@@ -195,14 +172,12 @@
       }
     }
 
-    // Revisión periódica
     setInterval(() => {
       if (gamepadIndex === null) {
         checkGamepads();
       }
     }, 1000);
 
-    // Eventos conexión/desconexión
     window.addEventListener("gamepadconnected", (e) => {
       gamepadIndex = e.gamepad.index;
       document.getElementById("status").textContent = "Mando conectado";
@@ -214,7 +189,6 @@
       document.getElementById("status").classList.remove("connected");
       document.getElementById("comboMessage").style.display = "none";
       document.getElementById("bigBox").style.display = "none";
-      document.getElementById("extraMessage").style.display = "none";
       comboStartTime = null;
       comboShown = false;
       gamepadIndex = null;
