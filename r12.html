@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Contador que cambia pantalla</title>
+  <title>Contador y pantalla alternativa</title>
   <style>
     body {
       background-color: #1a1a1a;
@@ -12,17 +12,16 @@
       height: 100vh;
       overflow: hidden;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
     }
 
     #contador {
-      font-size: 80px;
-      margin-bottom: 40px;
-      display: none;
+      font-size: 120px;
       animation: brilloColor 0.4s linear infinite;
       transition: filter 0.5s ease, transform 0.5s ease;
+      user-select: none;
     }
 
     @keyframes brilloColor {
@@ -33,50 +32,126 @@
       100% { filter: hue-rotate(360deg); }
     }
 
-    #main-text {
+    #pantalla-inicial {
       text-align: center;
-      user-select: none;
-      margin-bottom: 20px;
+      margin-bottom: 40px;
     }
 
-    #final-message {
+    #pantalla-azul {
       display: none;
-      font-size: 64px;
-      font-weight: bold;
+      background-color: #0047ab; /* azul vibrante */
+      color: #f0f0f0;
+      height: 100vh;
+      width: 100vw;
+      overflow-y: auto;
+      padding: 40px;
+      box-sizing: border-box;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #pantalla-azul h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #ffdd57;
       text-align: center;
-      color: white;
+      text-shadow: 2px 2px 8px #222;
+    }
+
+    #pantalla-azul p {
+      font-size: 18px;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto 20px auto;
+      text-align: justify;
+    }
+
+    #pantalla-azul ul {
+      max-width: 900px;
+      margin: 0 auto 40px auto;
+      font-size: 18px;
+      list-style-type: square;
+    }
+
+    #pantalla-azul blockquote {
+      max-width: 700px;
+      margin: 30px auto;
+      font-style: italic;
+      border-left: 4px solid #ffdd57;
+      padding-left: 20px;
+      color: #fff1b0;
+      background: rgba(255, 221, 87, 0.1);
+    }
+
+    /* Scrollbar styling for pantalla-azul */
+    #pantalla-azul::-webkit-scrollbar {
+      width: 12px;
+    }
+    #pantalla-azul::-webkit-scrollbar-track {
+      background: #00357a;
+    }
+    #pantalla-azul::-webkit-scrollbar-thumb {
+      background-color: #ffdd57;
+      border-radius: 6px;
+      border: 3px solid #00357a;
     }
   </style>
 </head>
 <body>
-  <div id="contenido-principal">
-    <h1 id="main-text">Presiona F6 + Flecha Izquierda</h1>
-    <p id="main-text">Mantén ambas teclas presionadas durante 5 segundos para revelar el mensaje oculto.</p>
-    <div id="contador"></div>
+  <div id="contenido-inicial">
+    <div id="pantalla-inicial">
+      <h1>Presiona F6 + Flecha Izquierda</h1>
+      <p>Mantén ambas teclas presionadas durante 5 segundos para revelar el mensaje oculto.</p>
+    </div>
+    <div id="contador" style="display:none;">0</div>
   </div>
 
-  <div id="final-message">Has descubierto esto</div>
+  <div id="pantalla-azul">
+    <h1>Has descubierto esto</h1>
+    <p>
+      Bienvenido a una dimensión paralela donde el tiempo se dilata y las ideas fluyen sin restricciones.
+      Aquí, cada pensamiento es un universo y cada universo, una oportunidad infinita para explorar.
+    </p>
+    <p>
+      La lógica tradicional desaparece, dando paso a una realidad de colores vibrantes y sonidos inesperados.
+      Sumérgete en un océano de palabras que no buscan sentido, sino emoción y asombro.
+    </p>
+    <ul>
+      <li>Fragmentos de sueños olvidados</li>
+      <li>Ecos de memorias no vividas</li>
+      <li>Susurros de futuros imposibles</li>
+      <li>Ritmos de estrellas errantes</li>
+      <li>Pinceladas de caos organizado</li>
+    </ul>
+    <blockquote>
+      "El verdadero descubrimiento no está en encontrar nuevas tierras, sino en ver con nuevos ojos." – Marcel Proust
+    </blockquote>
+    <p>
+      Navega entre estas palabras como quien se pierde para encontrarse, como quien escucha el silencio para entender la melodía oculta.
+      Aquí no hay certezas, solo la invitación a imaginar y crear sin límites.
+    </p>
+    <p>
+      La aventura acaba de comenzar. ¿Te atreves a seguir explorando?
+    </p>
+  </div>
 
   <script>
     let keysPressed = {};
     let intervalId = null;
     let count = 0;
 
-    function iniciarContador() {
-      const contadorEl = document.getElementById('contador');
-      const contenidoPrincipal = document.getElementById('contenido-principal');
-      const finalMessage = document.getElementById('final-message');
+    const contadorEl = document.getElementById('contador');
+    const pantallaInicial = document.getElementById('contenido-inicial');
+    const pantallaAzul = document.getElementById('pantalla-azul');
 
+    function iniciarContador() {
       count = 0;
       contadorEl.textContent = '0';
       contadorEl.style.display = 'block';
-      finalMessage.style.display = 'none';
 
       intervalId = setInterval(() => {
         count++;
         contadorEl.textContent = count;
 
-        // Ajustar brillo y tamaño para animación
         const brillo = 2.5 - (count * 0.3);
         const escala = 1.2 - (count * 0.04);
         contadorEl.style.filter = `brightness(${brillo})`;
@@ -88,62 +163,39 @@
 
           alert('¡Has mantenido F6 + Flecha Izquierda durante 5 segundos!');
 
-          // Eliminar todo el contenido visible
-          contenidoPrincipal.innerHTML = '';
+          // Ocultar pantalla inicial y contador
+          pantallaInicial.style.display = 'none';
 
-          // Cambiar el fondo a azul
-          document.body.style.backgroundColor = 'blue';
+          // Mostrar pantalla azul con contenido diferente
+          pantallaAzul.style.display = 'block';
 
-          // Mostrar mensaje grande
-          finalMessage.style.display = 'block';
-
-          // Ocultar contador
-          contadorEl.style.display = 'none';
+          // Cambiar el fondo a azul (ya está en pantalla azul)
+          document.body.style.backgroundColor = '#0047ab';
         }
       }, 1000);
     }
 
     function cancelarContador() {
-      const contadorEl = document.getElementById('contador');
-      const contenidoPrincipal = document.getElementById('contenido-principal');
-      const finalMessage = document.getElementById('final-message');
-
       if (intervalId) {
         clearInterval(intervalId);
         intervalId = null;
       }
-
       contadorEl.style.display = 'none';
       contadorEl.textContent = '';
-      finalMessage.style.display = 'none';
-      // Restaurar fondo original por si se cancela
-      document.body.style.backgroundColor = '#1a1a1a';
-
-      // Restaurar el contenido principal si vacío
-      if (contenidoPrincipal.innerHTML.trim() === '') {
-        contenidoPrincipal.innerHTML = `
-          <h1 id="main-text">Presiona F6 + Flecha Izquierda</h1>
-          <p id="main-text">Mantén ambas teclas presionadas durante 5 segundos para revelar el mensaje oculto.</p>
-        `;
-      }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.addEventListener('keydown', (event) => {
-        keysPressed[event.keyCode] = true;
+    document.addEventListener('keydown', (event) => {
+      keysPressed[event.keyCode] = true;
+      if (keysPressed[117] && keysPressed[37] && !intervalId) {
+        iniciarContador();
+      }
+    });
 
-        if (keysPressed[117] && keysPressed[37] && !intervalId) {
-          iniciarContador();
-        }
-      });
-
-      document.addEventListener('keyup', (event) => {
-        delete keysPressed[event.keyCode];
-
-        if (!keysPressed[117] || !keysPressed[37]) {
-          cancelarContador();
-        }
-      });
+    document.addEventListener('keyup', (event) => {
+      delete keysPressed[event.keyCode];
+      if (!keysPressed[117] || !keysPressed[37]) {
+        cancelarContador();
+      }
     });
   </script>
 </body>
