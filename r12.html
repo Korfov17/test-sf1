@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Detector de F6</title>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('keydown', (event) => {
+        if (event.keyCode === 117) { // F6
+          alert('¡Has presionado F6!');
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Presiona F6</h1>
+  <p>Presiona la tecla F6 para ver una alerta.</p>
+</body>
+</html>
