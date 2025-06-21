@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="css/general.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <style>
-    /* Estilos de la pantalla de carga */
+    /* Estilos de la pantalla de carga - MODIFICADO */
     #loading-screen {
       position: fixed;
       top: 0;
@@ -17,16 +17,17 @@
       display: none;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: stretch; /* Cambiado para estirar */
       z-index: 1000;
       color: white;
       font-family: Arial, sans-serif;
+      padding: 0 10px; /* Pequeño margen lateral */
+      box-sizing: border-box;
     }
     
     #loading-content {
       text-align: center;
-      width: 95%;
-      max-width: 600px;
+      width: 100%; /* Ahora ocupa todo el ancho */
     }
     
     #progress-container {
@@ -37,8 +38,6 @@
       margin: 20px 0;
       overflow: hidden;
       border-radius: 0;
-      padding: 0 2px;
-      box-sizing: border-box;
     }
     
     #progress-bar {
@@ -46,7 +45,6 @@
       width: 0%;
       background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
       transition: width 0.1s linear;
-      margin: 0 -1px;
     }
     
     #progress-text {
