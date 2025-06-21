@@ -187,27 +187,56 @@
     </center>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const loadingScreen = document.getElementById('loading-screen');
-      const mainContent = document.getElementById('main-content');
-      const progressBar = document.getElementById('progress-bar');
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loadingScreen = document.getElementById('loading-screen');
+    const mainContent = document.getElementById('main-content');
+    const userAgentText = document.getElementById('filterUserAgent');
 
-      loadingScreen.style.display = 'flex';
-      let percent = 0;
+    const isPS4 = /PlayStation 4|Mozilla\/5.0 \(PlayStation 4/i.test(navigator.userAgent);
+    userAgentText.textContent = isPS4 ? "PlayStation 4 detectada" : "Bienvenido desde PC/Navegador";
 
-      const interval = setInterval(() => {
-        percent += 2;
+    loadingScreen.innerHTML = `
+      <div id="loading-content">
+        <div id="progress-text">Cargando...</div>
+        <div id="progress-container">
+          <div id="progress-bar"></div>
+        </div>
+      </div>
+    `;
+    loadingScreen.style.display = 'flex';
+    mainContent.classList.add('hidden');
+
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+
+    // Simulación de carga en 10 segundos (10000ms)
+    let percent = 0;
+    const duration = 10000; // 10 segundos
+    const stepTime = 100; // cada 100ms
+    const increment = 100 / (duration / stepTime);
+
+    const interval = setInterval(() => {
+      percent += increment;
+      if (percent >= 100) {
+        percent = 100;
+        clearInterval(interval);
+        progressBar.style.width = '100%';
+
+        const message = document.createElement('div');
+        message.className = 'reload-message';
+        message.textContent = '¡Carga completa! Puedes comenzar';
+        loadingScreen.insertBefore(message, loadingScreen.firstChild);
+
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+          mainContent.classList.remove('hidden');
+        }, 2000); // Mostrar mensaje por 2 segundos
+      } else {
         progressBar.style.width = percent + '%';
-        if (percent >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            mainContent.classList.remove('hidden');
-          }, 2000);
-        }
-      }, 50);
-    });
-  </script>
+      }
+    }, stepTime);
+  });
+</script>
 </body>
 </html>
