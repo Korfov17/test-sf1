@@ -8,58 +8,26 @@
   <style>
     body {
       margin: 0;
-      background: #1c1c1c;
-      color: white;
+      background: #2a2a2a;
       font-family: Arial, sans-serif;
+      color: white;
     }
 
     #loading-screen {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #2a2a2a;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      background: #2a2a2a;
       z-index: 1000;
     }
 
     #loading-content {
-      text-align: center;
       width: 80%;
-    }
-
-    #progress-container {
-      width: 100%;
-      height: 20px;
-      background: transparent;
-      margin: 30px 0 30px;
-      overflow: hidden;
-      position: relative;
-      border-radius: 8px;
-      border: 2px solid transparent;
-      animation: glow-border 2s infinite alternate;
-    }
-
-    @keyframes glow-border {
-      0% {
-        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.2);
-      }
-      100% {
-        box-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
-        border-color: rgba(255, 255, 255, 0.8);
-      }
-    }
-
-    #progress-bar {
-      height: 100%;
-      width: 0%;
-      background: rgba(255, 255, 255, 0.1);
-      transition: width 0.1s linear, background 0.3s ease;
+      text-align: center;
     }
 
     #progress-text {
@@ -68,149 +36,111 @@
       text-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
-    .hidden {
-      display: none !important;
+    #progress-container {
+      width: 100%;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid #fff;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 0 10px #fff;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: white;
+      transition: width 0.2s linear;
+      opacity: 0.1;
     }
 
     .reload-message {
-      font-size: 20px;
-      font-weight: bold;
-      background: none;
-      color: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      text-shadow: 0 0 8px #fff;
-      animation: shine 2s infinite alternate;
-    }
-
-    @keyframes shine {
-      0% { opacity: 0.7; text-shadow: 0 0 5px #fff; }
-      50% { opacity: 1; text-shadow: 0 0 20px #fff; }
-      100% { opacity: 0.7; text-shadow: 0 0 5px #fff; }
-    }
-
-    /* Resto del CSS igual que antes (puedes mantener tus botones y estilos aquí) */
-
-    .small-button-container {
-      margin: 20px auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .small-button {
-      padding: 10px 15px;
-      background: #333;
-      color: white;
-      text-decoration: none;
+      margin-top: 25px;
+      font-size: 18px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 20px;
       border-radius: 5px;
-      transition: all 0.3s ease;
+      border: 1px solid white;
+      animation: glowText 2s infinite;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .large-button-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 90%;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .classname, .classname1 {
-      padding: 15px;
-      background: #444;
+    .reload-btn {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: transparent;
       color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.3s ease;
+      border: 2px solid white;
+      border-radius: 5px;
+      cursor: pointer;
+      animation: glowText 2s infinite;
     }
 
-    .arcoiris {
-      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      padding: 0 15px;
+    @keyframes glowText {
+      0%   { text-shadow: 0 0 5px white; opacity: 0.7; }
+      50%  { text-shadow: 0 0 15px white; opacity: 1; }
+      100% { text-shadow: 0 0 5px white; opacity: 0.7; }
+    }
+
+    #main-content {
+      display: none;
     }
   </style>
 </head>
-
 <body>
-  <div id="loading-screen"></div>
 
-  <div id="main-content" class="hidden">
+  <div id="loading-screen">
+    <div id="loading-content">
+      <div id="progress-text">Cargando contenido...</div>
+      <div id="progress-container">
+        <div id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="main-content">
     <center>
-      <br /><br />
-      <h2>
-        <i class="fa-brands fa-playstation"></i>
-        <span class="arcoiris">TU PS4 HEN</span>
-        <i class="fa-brands fa-playstation"></i>
-      </h2>
-
+      <h2><i class="fa-brands fa-playstation"></i> <span class="arcoiris">TU PS4 HEN</span> <i class="fa-brands fa-playstation"></i></h2>
       <h3>¡Bienvenido al sitio web oficial de Tu PS4 Hen!</h3>
-      <h3>¡Si necesitas ayuda sobre Jailbreak de PS4 puedes unirte a nuestro Grupo de Telegram!</h3>
-      <h3 id="filterUserAgent"></h3>
-
-      <!-- botones omitidos por brevedad, iguales al ejemplo anterior -->
-
-      <h4>Creado por TheZodiacoX</h4>
-      <h4>Credits: PS4 Homebrew Devs || TheFlow, SiSTR0, Kameleon, EchoStretch, LM, etc</h4>
     </center>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const loadingScreen = document.getElementById('loading-screen');
-      const mainContent = document.getElementById('main-content');
-      const userAgentText = document.getElementById('filterUserAgent');
-
-      const isPS4 = /PlayStation 4|Mozilla\/5.0 \(PlayStation 4/i.test(navigator.userAgent);
-      userAgentText.textContent = isPS4 ? "PlayStation 4 detectada" : "Bienvenido desde PC/Navegador";
-
-      loadingScreen.innerHTML = `
-        <div id="loading-content">
-          <div id="progress-text">Cargando...</div>
-          <div id="progress-container">
-            <div id="progress-bar"></div>
-          </div>
-        </div>
-      `;
-
+    document.addEventListener('DOMContentLoaded', () => {
       const progressBar = document.getElementById('progress-bar');
       const progressText = document.getElementById('progress-text');
+      const loadingScreen = document.getElementById('loading-screen');
+      const loadingContent = document.getElementById('loading-content');
 
-      let percent = 0;
-      const duration = 10000;
-      const stepTime = 100;
-      const increment = 100 / (duration / stepTime);
+      let duration = 10 * 1000; // 10 seconds
+      let interval = 100; // update every 100ms
+      let elapsed = 0;
 
-      const interval = setInterval(() => {
-        percent += increment;
-        if (percent >= 100) {
-          percent = 100;
-          clearInterval(interval);
-          progressBar.style.width = '100%';
-          progressBar.style.background = '#fff';
+      let timer = setInterval(() => {
+        elapsed += interval;
+        let percent = Math.min((elapsed / duration) * 100, 100);
+        progressBar.style.width = percent + '%';
+        progressBar.style.opacity = 0.1 + (percent / 100 * 0.9); // increases opacity gradually
 
-          const message = document.createElement('div');
-          message.className = 'reload-message';
-          message.textContent = '¡Carga completa! Puedes comenzar';
-          loadingScreen.insertBefore(message, loadingScreen.firstChild);
-
-          setTimeout(() => {
-            loadingScreen.style.display = 'none';
-            mainContent.classList.remove('hidden');
-          }, 2000);
-        } else {
-          progressBar.style.width = percent + '%';
-          progressBar.style.background = `rgba(255, 255, 255, ${percent / 100})`;
+        if (elapsed >= duration) {
+          clearInterval(timer);
+          showReload();
         }
-      }, stepTime);
+      }, interval);
+
+      function showReload() {
+        progressText.innerHTML = '<div class="reload-message">¡Carga completada! Recarga manualmente.</div>';
+        const button = document.createElement('button');
+        button.textContent = 'Volver a pantalla de carga';
+        button.className = 'reload-btn';
+        button.onclick = () => location.reload();
+        loadingContent.appendChild(button);
+      }
     });
   </script>
+
 </body>
 </html>
