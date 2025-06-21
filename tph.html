@@ -32,17 +32,17 @@
       width: 100%;
       height: 20px;
       background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.6); /* Borde más brillante */
-      margin: 20px 0;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      margin: 20px 0 10px; /* Reducido margen inferior */
       overflow: hidden;
       border-radius: 0;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Efecto brillo */
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     }
     
     #progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #f5f5f5 0%, #e0e0e0 100%); /* Degradado blanco */
+      background: linear-gradient(90deg, #f5f5f5 0%, #e0e0e0 100%);
       transition: width 0.1s linear;
     }
     
@@ -59,15 +59,17 @@
     .reload-message {
       color: #ffffff;
       font-weight: bold;
-      font-size: 21.6px; /* Aumentado 20% (de 18px) */
+      font-size: 21.6px;
       background: rgba(0, 0, 0, 0.5);
-      padding: 18px 30px; /* Aumentado 20% (de 15px 25px) */
+      padding: 12px 40px; /* Más ancho (40px) y menos alto (12px) */
       border-radius: 0;
       border: 1px solid rgba(255, 255, 255, 0.4);
       animation: pulse 1.5s infinite;
       width: fit-content;
-      margin: 0 auto;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); /* Brillo adicional */
+      margin: 0 auto 15px; /* Margen solo abajo */
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      position: relative; /* Para posicionar encima */
+      z-index: 2; /* Encima de otros elementos */
     }
     
     @keyframes pulse {
@@ -257,13 +259,24 @@
           });
           
           appCache.addEventListener('cached', function() {
-            progressText.innerHTML = '<div class="reload-message">¡Caché lista! Recargue manualmente</div>';
+            // Primero completamos la barra
             progressBar.style.width = '100%';
+            
+            // Luego mostramos el mensaje ENCIMA de todo
+            const message = document.createElement('div');
+            message.className = 'reload-message';
+            message.textContent = '¡Caché lista! Recargue manualmente';
+            loadingScreen.insertBefore(message, loadingScreen.firstChild);
+            
             localStorage.setItem('ps4CacheDone', 'true');
           });
           
           appCache.addEventListener('error', function() {
-            progressText.innerHTML = '<div class="reload-message">Error de caché. Recargue manualmente</div>';
+            // Mostrar mensaje de error ENCIMA de todo
+            const message = document.createElement('div');
+            message.className = 'reload-message';
+            message.textContent = 'Error de caché. Recargue manualmente';
+            loadingScreen.insertBefore(message, loadingScreen.firstChild);
           });
           
           // Iniciar progreso si ya está en proceso
