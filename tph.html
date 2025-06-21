@@ -6,28 +6,42 @@
   <link rel="stylesheet" href="css/general.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <style>
-    body {
-      margin: 0;
-      background: #2a2a2a;
-      font-family: Arial, sans-serif;
-      color: white;
-    }
-
     #loading-screen {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      display: flex;
+      background: #2a2a2a;
+      display: none;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      background: #2a2a2a;
       z-index: 1000;
+      color: white;
+      font-family: Arial, sans-serif;
     }
 
     #loading-content {
-      width: 80%;
       text-align: center;
+      width: 80%;
+    }
+
+    #progress-container {
+      width: 100%;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #fff;
+      margin: 20px 0;
+      overflow: hidden;
+      border-radius: 0;
+      box-shadow: 0 0 10px white;
+    }
+
+    #progress-bar {
+      height: 100%;
+      width: 0%;
+      background: white;
+      transition: width 0.1s linear;
+      opacity: 0.1;
     }
 
     #progress-text {
@@ -36,62 +50,49 @@
       text-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
 
-    #progress-container {
-      width: 100%;
-      height: 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid #fff;
-      border-radius: 5px;
-      overflow: hidden;
-      box-shadow: 0 0 10px #fff;
-    }
-
-    #progress-bar {
-      height: 100%;
-      width: 0%;
-      background: white;
-      transition: width 0.2s linear;
-      opacity: 0.1;
-    }
-
     .reload-message {
-      margin-top: 25px;
+      color: #ffffff;
+      font-weight: bold;
       font-size: 18px;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 10px 20px;
-      border-radius: 5px;
-      border: 1px solid white;
-      animation: glowText 2s infinite;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px 25px;
+      border-radius: 0;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: pulse 1.5s infinite;
       width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto;
     }
 
     .reload-btn {
-      margin-top: 15px;
+      margin-top: 20px;
       padding: 10px 20px;
-      font-size: 16px;
       background: transparent;
       color: white;
       border: 2px solid white;
-      border-radius: 5px;
+      font-size: 16px;
       cursor: pointer;
       animation: glowText 2s infinite;
     }
 
-    @keyframes glowText {
-      0%   { text-shadow: 0 0 5px white; opacity: 0.7; }
-      50%  { text-shadow: 0 0 15px white; opacity: 1; }
-      100% { text-shadow: 0 0 5px white; opacity: 0.7; }
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
     }
 
-    #main-content {
-      display: none;
+    @keyframes glowText {
+      0%, 100% { text-shadow: 0 0 5px white; opacity: 0.7; }
+      50% { text-shadow: 0 0 15px white; opacity: 1; }
+    }
+
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
-<body>
 
+<body>
+  <!-- Pantalla de carga (simulada 10s) -->
   <div id="loading-screen">
     <div id="loading-content">
       <div id="progress-text">Cargando contenido...</div>
@@ -101,46 +102,56 @@
     </div>
   </div>
 
-  <div id="main-content">
+  <!-- Contenido principal -->
+  <div id="main-content" class="hidden">
     <center>
-      <h2><i class="fa-brands fa-playstation"></i> <span class="arcoiris">TU PS4 HEN</span> <i class="fa-brands fa-playstation"></i></h2>
+      <br /><br />
+      <h2>
+        <i class="fa-brands fa-playstation"></i>
+        <span class="arcoiris">TU PS4 HEN</span>
+        <i class="fa-brands fa-playstation"></i>
+      </h2>
       <h3>¡Bienvenido al sitio web oficial de Tu PS4 Hen!</h3>
+      <h3>¡Si necesitas ayuda sobre Jailbreak de PS4 puedes unirte a nuestro Grupo de Telegram!</h3>
+      <h3 id="filterUserAgent"></h3>
+      <!-- Resto de contenido igual -->
     </center>
   </div>
 
+  <!-- Scripts -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadingScreen = document.getElementById('loading-screen');
+      const mainContent = document.getElementById('main-content');
       const progressBar = document.getElementById('progress-bar');
       const progressText = document.getElementById('progress-text');
-      const loadingScreen = document.getElementById('loading-screen');
       const loadingContent = document.getElementById('loading-content');
 
-      let duration = 10 * 1000; // 10 seconds
-      let interval = 100; // update every 100ms
+      // Mostrar pantalla de carga
+      loadingScreen.style.display = 'flex';
+      mainContent.classList.add('hidden');
+
+      let duration = 10000;
+      let interval = 100;
       let elapsed = 0;
 
-      let timer = setInterval(() => {
+      const timer = setInterval(() => {
         elapsed += interval;
         let percent = Math.min((elapsed / duration) * 100, 100);
         progressBar.style.width = percent + '%';
-        progressBar.style.opacity = 0.1 + (percent / 100 * 0.9); // increases opacity gradually
+        progressBar.style.opacity = 0.1 + (percent / 100 * 0.9);
 
         if (elapsed >= duration) {
           clearInterval(timer);
-          showReload();
+          progressText.innerHTML = '<div class="reload-message">¡Carga completada! Recarga manualmente.</div>';
+          const btn = document.createElement('button');
+          btn.className = 'reload-btn';
+          btn.innerText = 'Volver a pantalla de carga';
+          btn.onclick = () => location.reload();
+          loadingContent.appendChild(btn);
         }
       }, interval);
-
-      function showReload() {
-        progressText.innerHTML = '<div class="reload-message">¡Carga completada! Recarga manualmente.</div>';
-        const button = document.createElement('button');
-        button.textContent = 'Volver a pantalla de carga';
-        button.className = 'reload-btn';
-        button.onclick = () => location.reload();
-        loadingContent.appendChild(button);
-      }
     });
   </script>
-
 </body>
 </html>
