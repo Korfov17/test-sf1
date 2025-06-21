@@ -2,56 +2,86 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Barra</title>
+  <title>Barra con Arcoíris</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      height: 100vh;
-      background: linear-gradient(to bottom right, #0a0a23, #001f3f);
+      background-color: #111;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    .reload-message {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px 25px;
+      border: 3px solid transparent;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 20px;
+    }
+
+    .reload-message::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      z-index: -1;
+      background: linear-gradient(270deg, red, orange, yellow, lime, cyan, blue, violet, red);
+      background-size: 400% 400%;
+      border-radius: 10px;
+      animation: rainbow-border 5s linear infinite;
+    }
+
+    @keyframes rainbow-border {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    #progress-container {
+      width: calc(100% - 60px);
+      max-width: 800px;
+      height: 12px;
+      background: rgba(0, 0, 0, 0.3);
       overflow: hidden;
+      position: relative;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.6);
     }
 
-    .bar-container {
-      width: 70%;
-      height: 16px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid white;
-    }
-
-    .bar {
-      width: 0%;
+    #progress-bar {
       height: 100%;
-      background: white;
-      box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
-      transition: width 0.1s linear;
+      width: 0%;
+      background: linear-gradient(90deg, #ffffff 0%, #cccccc 100%);
+      transition: width 10s linear;
     }
   </style>
 </head>
 <body>
-  <div class="bar-container">
-    <div class="bar" id="progressBar"></div>
+
+  <div class="reload-message">Cargando contenido...</div>
+
+  <div id="progress-container">
+    <div id="progress-bar"></div>
   </div>
 
   <script>
-    const progressBar = document.getElementById('progressBar');
-    let percent = 0;
-
-    const interval = setInterval(() => {
-      percent += 1;
-      progressBar.style.width = percent + '%';
-
-      if (percent >= 100) {
-        clearInterval(interval);
-      }
-    }, 60);
+    // Espera un momento antes de iniciar la animación (opcional)
+    window.addEventListener('load', () => {
+      document.getElementById('progress-bar').style.width = '100%';
+    });
   </script>
+
 </body>
 </html>
