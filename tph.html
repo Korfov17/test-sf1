@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" manifest="offline.cache">
+<html lang="es" manifest=offline.cache">
 <head>
   <meta charset="UTF-8" />
   <title>🎮 TU PS4 HEN | Menu 🎮</title>
@@ -13,7 +13,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: #1a1a1a; /* Fondo oscuro uniforme */
+      background: #2a2a2a; /* Fondo gris oscuro */
       display: none;
       flex-direction: column;
       justify-content: center;
@@ -25,57 +25,30 @@
     
     #loading-content {
       text-align: center;
-      width: 80%;
-      background: rgba(30, 30, 30, 0.8); /* Fondo semitransparente para el contenido */
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      width: 80%; /* 80% del ancho de pantalla */
     }
     
     #progress-container {
       width: 100%;
       height: 20px;
       background: rgba(255, 255, 255, 0.1);
-      margin: 20px 0 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      margin: 20px 0;
       overflow: hidden;
       border-radius: 0;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-      position: relative;
-    }
-    
-    /* Borde animado arcoiris */
-    #progress-container::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(90deg, 
-        red, orange, yellow, green, blue, indigo, violet, red);
-      background-size: 400% 400%;
-      z-index: -1;
-      animation: rainbowBorder 3s linear infinite;
-    }
-    
-    @keyframes rainbowBorder {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
     }
     
     #progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #f5f5f5 0%, #e0e0e0 100%);
+      background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
       transition: width 0.1s linear;
-      position: relative;
     }
     
     #progress-text {
       font-size: 22px;
       margin-bottom: 15px;
       text-shadow: 0 0 5px rgba(0,0,0,0.5);
-      color: #fff;
     }
     
     .hidden {
@@ -85,35 +58,23 @@
     .reload-message {
       color: #ffffff;
       font-weight: bold;
-      font-size: 21.6px;
-      background: rgba(20, 20, 20, 0.9); /* Fondo más oscuro */
-      padding: 12px 40px;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px 25px; /* 10% más grande */
       border-radius: 0;
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       animation: pulse 1.5s infinite;
       width: fit-content;
-      margin: 0 auto 15px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-      position: relative;
-      z-index: 2;
-      border-image: linear-gradient(90deg, 
-        red, orange, yellow, green, blue, indigo, violet) 1;
-      animation: pulse 1.5s infinite, rainbowBorder 3s linear infinite;
+      margin: 0 auto;
     }
     
     @keyframes pulse {
-      0% { opacity: 0.8; }
+      0% { opacity: 0.6; }
       50% { opacity: 1; }
-      100% { opacity: 0.8; }
+      100% { opacity: 0.6; }
     }
     
-    /* Estilos para el contenido principal */
-    #main-content {
-      background: #1a1a1a; /* Mismo fondo oscuro */
-      color: white;
-      min-height: 100vh;
-    }
-    
+    /* Estilos originales */
     .small-button-container {
       margin: 20px auto;
       display: flex;
@@ -142,7 +103,7 @@
     
     .classname, .classname1 {
       padding: 15px;
-      background: #2a2a2a;
+      background: #444;
       color: white;
       text-decoration: none;
       border-radius: 8px;
@@ -150,7 +111,6 @@
       align-items: center;
       justify-content: space-between;
       transition: all 0.3s ease;
-      border: 1px solid #333;
     }
     
     .arcoiris {
@@ -159,11 +119,6 @@
       background-clip: text;
       color: transparent;
       padding: 0 15px;
-    }
-    
-    /* Mejoras de contraste y legibilidad */
-    h2, h3, h4 {
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
   </style>
 </head>
@@ -300,32 +255,27 @@
           });
           
           appCache.addEventListener('cached', function() {
+            progressText.innerHTML = '<div class="reload-message">¡Caché lista! Recargue manualmente</div>';
             progressBar.style.width = '100%';
-            
-            const message = document.createElement('div');
-            message.className = 'reload-message';
-            message.textContent = '¡Caché lista! Recargue manualmente';
-            loadingScreen.insertBefore(message, loadingScreen.firstChild);
-            
             localStorage.setItem('ps4CacheDone', 'true');
           });
           
           appCache.addEventListener('error', function() {
-            const message = document.createElement('div');
-            message.className = 'reload-message';
-            message.textContent = 'Error de caché. Recargue manualmente';
-            loadingScreen.insertBefore(message, loadingScreen.firstChild);
+            progressText.innerHTML = '<div class="reload-message">Error de caché. Recargue manualmente</div>';
           });
           
+          // Iniciar progreso si ya está en proceso
           if (appCache.status === appCache.DOWNLOADING) {
             progressText.textContent = 'Preparando caché...';
             progressBar.style.width = '0%';
           }
         } else {
+          // Caché ya lista o no necesaria
           loadingScreen.style.display = 'none';
           mainContent.classList.remove('hidden');
         }
       } else {
+        // Para PC/otros dispositivos
         userAgentText.textContent = "Bienvenido desde PC/Navegador";
         loadingScreen.style.display = 'none';
         mainContent.classList.remove('hidden');
@@ -333,4 +283,4 @@
     });
   </script>
 </body>
-</html>
+            </hroun.
