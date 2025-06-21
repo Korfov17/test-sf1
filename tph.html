@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" manifest="offline.cache">
+<html lang="es" manifest="tups4hen.cache">
 <head>
   <meta charset="UTF-8" />
   <title>🎮 TU PS4 HEN | Menu 🎮</title>
@@ -13,28 +13,26 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      background: #2a2a2a; /* Fondo gris oscuro */
       display: none;
       flex-direction: column;
       justify-content: center;
-      align-items: stretch; /* Cambiado para estirar */
+      align-items: center;
       z-index: 1000;
       color: white;
       font-family: Arial, sans-serif;
-      padding: 0 10px; /* Pequeño margen lateral */
-      box-sizing: border-box;
     }
     
     #loading-content {
       text-align: center;
-      width: 100%; /* Ahora ocupa todo el ancho */
+      width: 80%; /* 80% del ancho de pantalla */
     }
     
     #progress-container {
       width: 100%;
       height: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       margin: 20px 0;
       overflow: hidden;
       border-radius: 0;
@@ -61,11 +59,13 @@
       color: #ffffff;
       font-weight: bold;
       font-size: 18px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px 25px; /* 10% más grande */
       border-radius: 0;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       animation: pulse 1.5s infinite;
+      width: fit-content;
+      margin: 0 auto;
     }
     
     @keyframes pulse {
