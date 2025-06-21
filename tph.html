@@ -6,7 +6,14 @@
   <link rel="stylesheet" href="css/general.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <style>
-    /* Estilos de la pantalla de carga - MODIFICADO */
+    body {
+      background: #2a2a2a;
+      color: white;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
     #loading-screen {
       position: fixed;
       top: 0;
@@ -19,248 +26,110 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      color: white;
-      font-family: Arial, sans-serif;
     }
-    
+
     #loading-content {
       text-align: center;
-      width: 80%;
+      width: 100%;
+      max-width: 800px;
+      padding: 0 20px;
+      box-sizing: border-box;
     }
-    
+
     #progress-container {
       width: 100%;
       height: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      margin: 30px 0 30px;
+      background: transparent;
+      margin: 20px auto 10px;
       overflow: hidden;
       border-radius: 0;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       position: relative;
+      border: 2px solid black;
     }
-    
-    /* Borde animado arcoiris */
-    #progress-container::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(90deg, 
-        red, orange, yellow, green, blue, indigo, violet, red);
-      background-size: 400% 400%;
-      z-index: -1;
-      animation: rainbowBorder 3s linear infinite;
-    }
-    
-    @keyframes rainbowBorder {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
-    
+
     #progress-bar {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #f5f5f5 0%, #e0e0e0 100%);
       transition: width 0.1s linear;
-      position: relative;
     }
-    
+
     #progress-text {
       font-size: 22px;
       margin-bottom: 15px;
       text-shadow: 0 0 5px rgba(0,0,0,0.5);
     }
-    
-    .hidden {
-      display: none !important;
-    }
-    
+
     .reload-message {
       color: #ffffff;
       font-weight: bold;
-      font-size: 21.6px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 12px 120px;
-      border-radius: 0;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      animation: pulse 1.5s infinite;
-      width: fit-content;
-      margin: 0 auto 23px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-      position: relative;
-      z-index: 2;
-      /* Borde arcoiris para el mensaje */
-      border-image: linear-gradient(90deg, 
-        red, orange, yellow, green, blue, indigo, violet) 1;
-      animation: pulse 1.5s infinite, rainbowBorder 3s linear infinite;
-    }
-    
-    @keyframes pulse {
-      0% { opacity: 0.6; }
-      50% { opacity: 1; }
-      100% { opacity: 0.6; }
-    }
-    
-    /* Estilos originales */
-    .small-button-container {
-      margin: 20px auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-    
-    .small-button {
-      padding: 10px 15px;
-      background: #333;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      transition: all 0.3s ease;
-    }
-    
-    .large-button-container {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 90%;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .classname, .classname1 {
-      padding: 15px;
-      background: #444;
-      color: white;
-      text-decoration: none;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px 25px;
       border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+      animation: pulse 1.5s infinite;
+      overflow: hidden;
     }
-    
-    .arcoiris {
-      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      padding: 0 15px;
+
+    .reload-message::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 3px;
+      background: linear-gradient(270deg, red, orange, yellow, lime, cyan, blue, violet, red);
+      background-size: 400% 400%;
+      border-radius: inherit;
+      z-index: -1;
+      animation: rainbow-border 5s linear infinite;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: destination-out;
     }
+
+    @keyframes rainbow-border {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 0.7;
+        text-shadow: 0 0 5px rgba(255,255,255,0.5);
+      }
+      50% {
+        opacity: 1;
+        text-shadow: 0 0 15px rgba(255,255,255,0.8);
+      }
+      100% {
+        opacity: 0.7;
+        text-shadow: 0 0 5px rgba(255,255,255,0.5);
+      }
+    }
+
+    .hidden { display: none !important; }
   </style>
 </head>
-
 <body>
-  <!-- Pantalla de carga (solo primera vez en PS4) -->
   <div id="loading-screen"></div>
 
-  <!-- Contenido principal -->
-  <div id="main-content">
-    <center>
-      <br /><br />
-      <h2>
-        <i class="fa-brands fa-playstation"></i>
-        <span class="arcoiris">TU PS4 HEN</span>
-        <i class="fa-brands fa-playstation"></i>
-      </h2>
-
-      <h3>¡Bienvenido al sitio web oficial de Tu PS4 Hen!</h3>
-      <h3>¡Si necesitas ayuda sobre Jailbreak de PS4 puedes unirte a nuestro Grupo de Telegram!</h3>
-      <h3 id="filterUserAgent"></h3>
-
-      <main>
-        <div class="small-button-container">
-          <a href="settings.html" class="small-button">Ajustes</a>
-          <a href="https://nanospeedgameryt.github.io/" class="small-button">[PS4] NanoHost 9.00</a>
-          <a href="https://www.kmeps4.site/psphive/" class="small-button">[PS4] PS-Phive Host 9.00</a>
-          <a href="https://es7in1.site/ps4/index.php" class="small-button">[PS4] MultiHost 7in1</a>
-          <a href="https://kmeps4.site/pppwn/" class="small-button">[PS4] PPPwn Host</a>
-        </div>
-
-        <div class="large-button-container">
-          <a href="https://t.me/tups4hen" class="classname">
-            <i class="fa-brands fa-telegram"></i>
-            <span> TU PS4 HEN Telegram </span>
-            <i class="fa-brands fa-telegram"></i>
-          </a>
-
-          <a href="https://dlpsgame.com/category/ps4/" class="classname">
-            <i class="fa-brands fa-playstation"></i>
-            <span> Descargar Juegos </span>
-            <i class="fa-brands fa-playstation"></i>
-          </a>
-
-          <a href="https://darthsternie.net/ps4-firmwares/" class="classname1">
-            <i class="fa-solid fa-cog"></i>
-            <span> Descargar Firmwares </span>
-            <i class="fa-solid fa-cog"></i>
-          </a>
-
-          <a href="https://www.thetechgame.com/Downloads/cid=90/ps4-game-saves-sets.html" class="classname1">
-            <i class="fa-solid fa-save"></i>
-            <span> Descargar Savedatas </span>
-            <i class="fa-solid fa-save"></i>
-          </a>
-
-          <a href="https://ko-fi.com/sistro/shop" class="classname1">
-            <i class="fa-solid fa-star"></i>
-            <span> Descargar GoldHEN </span>
-            <i class="fa-solid fa-star"></i>
-          </a>
-
-          <a href="https://github.com/EchoStretch/ps4-hen-vtx/releases" class="classname1">
-            <i class="fa-solid fa-diamond"></i>
-            <span> Descargar HEN-VTX </span>
-            <i class="fa-solid fa-diamond"></i>
-          </a>
-
-          <a href="https://pkg-zone.com/" class="classname1">
-            <i class="fa-solid fa-wrench"></i>
-            <span> Descargar Homebrew </span>
-            <i class="fa-solid fa-wrench"></i>
-          </a>
-
-          <a href="https://github.com/EchoStretch/ps4-payload-sdk/releases" class="classname1">
-            <i class="fa-solid fa-syringe"></i>
-            <span> Pack Payloads 12.02 </span>
-            <i class="fa-solid fa-syringe"></i>
-          </a>
-        </div>
-      </main>
-
-      <h4>Creado por TheZodiacoX</h4>
-      <h4>Credits: PS4 Homebrew Devs || TheFlow, SiSTR0, Kameleon, EchoStretch, LM, etc</h4>
-    </center>
+  <div id="main-content" class="hidden">
+    <!-- Contenido habitual de tu página -->
   </div>
 
-  <!-- Scripts -->
-  <script src="javascript/autoscript.js"></script>
-  <script src="javascript/easteregg.js"></script>
-  <script src="javascript/menu1.js"></script>
-  <script src="javascript/menu2.js"></script>
-  <script src="javascript/menu3.js"></script>
-
-  <!-- Script mejorado con progreso en tiempo real -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const loadingScreen = document.getElementById('loading-screen');
       const mainContent = document.getElementById('main-content');
-      const userAgentText = document.getElementById('filterUserAgent');
-      
-      // Detección de PS4
+
       const isPS4 = /PlayStation 4|Mozilla\/5.0 \(PlayStation 4/i.test(navigator.userAgent);
       const appCache = window.applicationCache;
-      
-      // Verificar si ya completamos el caché
       const cacheAlreadyDone = localStorage.getItem('ps4CacheDone');
-      
+
       if (isPS4) {
-        userAgentText.textContent = "PlayStation 4 detectada";
-        
         if (!cacheAlreadyDone && appCache.status !== appCache.UNCACHED) {
-          // Configurar pantalla de carga
           loadingScreen.innerHTML = `
             <div id="loading-content">
               <div id="progress-text">Preparando caché...</div>
@@ -271,38 +140,37 @@
           `;
           loadingScreen.style.display = 'flex';
           mainContent.classList.add('hidden');
-          
+
           const progressBar = document.getElementById('progress-bar');
           const progressText = document.getElementById('progress-text');
-          
-          // Evento para actualizar progreso en tiempo real
+
           appCache.addEventListener('progress', function(e) {
             if (e.lengthComputable) {
               const percent = Math.round((e.loaded / e.total) * 100);
               progressBar.style.width = percent + '%';
             }
           });
-          
+
           appCache.addEventListener('cached', function() {
             progressBar.style.width = '100%';
-            
+            if (progressText) progressText.remove();
+
             const message = document.createElement('div');
             message.className = 'reload-message';
             message.textContent = '¡Caché lista! Recargue manualmente';
             loadingScreen.insertBefore(message, loadingScreen.firstChild);
-            
+
             localStorage.setItem('ps4CacheDone', 'true');
           });
-          
+
           appCache.addEventListener('error', function() {
             const message = document.createElement('div');
             message.className = 'reload-message';
             message.textContent = 'Error de caché. Recargue manualmente';
             loadingScreen.insertBefore(message, loadingScreen.firstChild);
           });
-          
+
           if (appCache.status === appCache.DOWNLOADING) {
-            progressText.textContent = 'Preparando caché...';
             progressBar.style.width = '0%';
           }
         } else {
@@ -310,7 +178,6 @@
           mainContent.classList.remove('hidden');
         }
       } else {
-        userAgentText.textContent = "Bienvenido desde PC/Navegador";
         loadingScreen.style.display = 'none';
         mainContent.classList.remove('hidden');
       }
