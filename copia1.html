@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Animación Arcoíris con Progreso</title>
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    .device-info {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .reload-message {
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 18px;
+      background: #000; /* Fondo negro sólido */
+      padding: 14px 28px;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 30px;
+    }
+
+    .reload-message::before {
+      content: "";
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      z-index: -1;
+      border-radius: 12px;
+      background: linear-gradient(90deg,
+        red, orange, yellow, lime, cyan, blue, violet, red);
+      background-size: 400% 400%;
+      animation: rainbow-border 10s ease-in-out infinite alternate;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes rainbow-border {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .bar-container {
+      width: 70%;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid white;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); /* Brillo */
+      overflow: hidden;
+      border-radius: 5px;
+    }
+
+    .bar {
+      width: 0%;
+      height: 100%;
+      background: white;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.7); /* Brillo */
+      transition: width 0.1s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="device-info">PlayStation 4 – v00.00</div>
+
+  <div class="reload-message">Cargando contenido...</div>
+
+  <div class="bar-container">
+    <div class="bar" id="progress-bar"></div>
+  </div>
+
+  <script>
+    const bar = document.getElementById('progress-bar');
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 1;
+      if (progress <= 100) {
+        bar.style.width = progress + '%';
+      } else {
+        clearInterval(interval);
+      }
+    }, 100); // 10 segundos (100ms * 100)
+  </script>
+
+</body>
+</html>
