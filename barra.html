@@ -26,7 +26,7 @@
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       position: relative;
       z-index: 1;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     .reload-message::before {
@@ -49,22 +49,20 @@
       100% { background-position: 0% 50%; }
     }
 
-    #progress-container {
-      width: calc(100% - 60px);
-      max-width: 800px;
-      height: 12px;
-      background: rgba(0, 0, 0, 0.3);
+    .bar-container {
+      width: 70%;
+      height: 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid white;
       overflow: hidden;
-      position: relative;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.6);
     }
 
-    #progress-bar {
-      height: 100%;
+    .bar {
       width: 0%;
-      background: linear-gradient(90deg, #ffffff 0%, #cccccc 100%);
-      transition: width 10s linear;
+      height: 100%;
+      background: white;
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+      transition: width 0.1s linear;
     }
   </style>
 </head>
@@ -72,15 +70,22 @@
 
   <div class="reload-message">Cargando contenido...</div>
 
-  <div id="progress-container">
-    <div id="progress-bar"></div>
+  <div class="bar-container">
+    <div class="bar" id="progress-bar"></div>
   </div>
 
   <script>
-    // Espera un momento antes de iniciar la animación (opcional)
-    window.addEventListener('load', () => {
-      document.getElementById('progress-bar').style.width = '100%';
-    });
+    // Progreso animado en 10 segundos (actualiza cada 100ms)
+    const bar = document.getElementById('progress-bar');
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 1;
+      if (progress <= 100) {
+        bar.style.width = progress + '%';
+      } else {
+        clearInterval(interval);
+      }
+    }, 100); // 100ms × 100 = 10 segundos
   </script>
 
 </body>
