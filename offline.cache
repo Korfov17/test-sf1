@@ -1,0 +1,35 @@
+CACHE MANIFEST 
+# TU PS4 HEN Website	
+
+tph.html
+web-fonts/Lemon_Tuesday.otf
+web-fonts/Minecrafter.Reg.ttf
+web-fonts/SignPainterHouseScript.ttf
+web-fonts/chinese_rocks_rg.otf
+web-fonts/MinecraftFifty-Solid.otfweb-fonts/Vampire_Wars_Italic.otf
+web-fonts/GODOFWAR.TTF
+web-fonts/Pricedown.otf
+web-fonts/Pokemon_Solid.ttf
+web-fonts/Road_Rage.otf
+background/default.jpg
+background/extra3.jpg
+background/extra11.jpg
+background/extra7.jpg
+background/extra12.jpg
+background/extra5.jpg
+background/extra14.jpg
+background/extra6.jpg
+background/extra9.jpg
+background/extra13.jpg
+background/extra10.jpg
+background/extra1.jpg
+background/extra2.jpg
+background/extra8.jpg
+background/extra4.jpg
+background
+
+NETWORK:
+*
+
+SETTINGS:
+prefer-online:
