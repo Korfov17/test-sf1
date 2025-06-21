@@ -32,11 +32,31 @@
       width: 100%;
       height: 20px;
       background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      margin: 20px 0 10px; /* Reducido margen inferior */
+      margin: 20px 0 10px;
       overflow: hidden;
       border-radius: 0;
       box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      position: relative;
+    }
+    
+    /* Borde animado arcoiris */
+    #progress-container::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(90deg, 
+        red, orange, yellow, green, blue, indigo, violet, red);
+      background-size: 400% 400%;
+      z-index: -1;
+      animation: rainbowBorder 3s linear infinite;
+    }
+    
+    @keyframes rainbowBorder {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
     }
     
     #progress-bar {
@@ -44,6 +64,7 @@
       width: 0%;
       background: linear-gradient(90deg, #f5f5f5 0%, #e0e0e0 100%);
       transition: width 0.1s linear;
+      position: relative;
     }
     
     #progress-text {
@@ -61,15 +82,19 @@
       font-weight: bold;
       font-size: 21.6px;
       background: rgba(0, 0, 0, 0.5);
-      padding: 12px 40px; /* Más ancho (40px) y menos alto (12px) */
+      padding: 12px 40px;
       border-radius: 0;
       border: 1px solid rgba(255, 255, 255, 0.4);
       animation: pulse 1.5s infinite;
       width: fit-content;
-      margin: 0 auto 15px; /* Margen solo abajo */
+      margin: 0 auto 15px;
       box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-      position: relative; /* Para posicionar encima */
-      z-index: 2; /* Encima de otros elementos */
+      position: relative;
+      z-index: 2;
+      /* Borde arcoiris para el mensaje */
+      border-image: linear-gradient(90deg, 
+        red, orange, yellow, green, blue, indigo, violet) 1;
+      animation: pulse 1.5s infinite, rainbowBorder 3s linear infinite;
     }
     
     @keyframes pulse {
@@ -259,10 +284,8 @@
           });
           
           appCache.addEventListener('cached', function() {
-            // Primero completamos la barra
             progressBar.style.width = '100%';
             
-            // Luego mostramos el mensaje ENCIMA de todo
             const message = document.createElement('div');
             message.className = 'reload-message';
             message.textContent = '¡Caché lista! Recargue manualmente';
@@ -272,25 +295,21 @@
           });
           
           appCache.addEventListener('error', function() {
-            // Mostrar mensaje de error ENCIMA de todo
             const message = document.createElement('div');
             message.className = 'reload-message';
             message.textContent = 'Error de caché. Recargue manualmente';
             loadingScreen.insertBefore(message, loadingScreen.firstChild);
           });
           
-          // Iniciar progreso si ya está en proceso
           if (appCache.status === appCache.DOWNLOADING) {
             progressText.textContent = 'Preparando caché...';
             progressBar.style.width = '0%';
           }
         } else {
-          // Caché ya lista o no necesaria
           loadingScreen.style.display = 'none';
           mainContent.classList.remove('hidden');
         }
       } else {
-        // Para PC/otros dispositivos
         userAgentText.textContent = "Bienvenido desde PC/Navegador";
         loadingScreen.style.display = 'none';
         mainContent.classList.remove('hidden');
