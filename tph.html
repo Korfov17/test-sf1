@@ -6,6 +6,13 @@
   <link rel="stylesheet" href="css/general.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <style>
+    body {
+      margin: 0;
+      background: #1c1c1c;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
     #loading-screen {
       position: fixed;
       top: 0;
@@ -13,13 +20,11 @@
       width: 100%;
       height: 100%;
       background: #2a2a2a;
-      display: none;
+      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      color: white;
-      font-family: Arial, sans-serif;
     }
 
     #loading-content {
@@ -33,22 +38,23 @@
       background: rgba(255, 255, 255, 0.1);
       margin: 30px 0 30px;
       overflow: hidden;
-      border-radius: 0;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
       position: relative;
+      border-radius: 8px;
+      border: 2px solid black;
     }
 
     #progress-container::before {
       content: '';
       position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
       background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet, red);
       background-size: 400% 400%;
       z-index: -1;
       animation: rainbowBorder 3s linear infinite;
+      border-radius: 10px;
     }
 
     @keyframes rainbowBorder {
@@ -77,25 +83,41 @@
     .reload-message {
       color: #ffffff;
       font-weight: bold;
-      font-size: 21.6px;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 12px 120px;
-      border-radius: 0;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      animation: pulse 1.5s infinite;
-      width: fit-content;
-      margin: 0 auto 23px;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 12px 25px;
+      border-radius: 8px;
       position: relative;
-      z-index: 2;
-      border-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet) 1;
-      animation: pulse 1.5s infinite, rainbowBorder 3s linear infinite;
+      z-index: 1;
+      animation: pulse 1.5s infinite;
+      overflow: hidden;
+    }
+
+    .reload-message::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 3px;
+      background: linear-gradient(270deg, red, orange, yellow, lime, cyan, blue, violet, red);
+      background-size: 400% 400%;
+      border-radius: inherit;
+      z-index: -1;
+      animation: rainbow-border 5s linear infinite;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: destination-out;
+    }
+
+    @keyframes rainbow-border {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     @keyframes pulse {
-      0% { opacity: 0.6; }
-      50% { opacity: 1; }
-      100% { opacity: 0.6; }
+      0% { opacity: 0.7; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+      50% { opacity: 1; text-shadow: 0 0 15px rgba(255,255,255,0.8); }
+      100% { opacity: 0.7; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
     }
 
     .small-button-container {
@@ -145,23 +167,23 @@
     }
   </style>
 </head>
+
 <body>
-  <div id="loading-screen">
-    <div id="loading-content">
-      <div id="progress-text">Cargando contenido...</div>
-      <div id="progress-container">
-        <div id="progress-bar"></div>
-      </div>
-      <div class="reload-message">Carga completada. Recarga manualmente para continuar.</div>
-    </div>
-  </div>
+  <div id="loading-screen"></div>
 
   <div id="main-content" class="hidden">
     <center>
       <br /><br />
-      <h2><i class="fa-brands fa-playstation"></i> <span class="arcoiris">TU PS4 HEN</span> <i class="fa-brands fa-playstation"></i></h2>
+      <h2>
+        <i class="fa-brands fa-playstation"></i>
+        <span class="arcoiris">TU PS4 HEN</span>
+        <i class="fa-brands fa-playstation"></i>
+      </h2>
+
       <h3>¡Bienvenido al sitio web oficial de Tu PS4 Hen!</h3>
       <h3>¡Si necesitas ayuda sobre Jailbreak de PS4 puedes unirte a nuestro Grupo de Telegram!</h3>
+      <h3 id="filterUserAgent"></h3>
+
       <main>
         <div class="small-button-container">
           <a href="settings.html" class="small-button">Ajustes</a>
@@ -172,71 +194,118 @@
         </div>
 
         <div class="large-button-container">
-          <a href="https://t.me/tups4hen" class="classname"><i class="fa-brands fa-telegram"></i><span> TU PS4 HEN Telegram </span><i class="fa-brands fa-telegram"></i></a>
-          <a href="https://dlpsgame.com/category/ps4/" class="classname"><i class="fa-brands fa-playstation"></i><span> Descargar Juegos </span><i class="fa-brands fa-playstation"></i></a>
-          <a href="https://darthsternie.net/ps4-firmwares/" class="classname1"><i class="fa-solid fa-cog"></i><span> Descargar Firmwares </span><i class="fa-solid fa-cog"></i></a>
-          <a href="https://www.thetechgame.com/Downloads/cid=90/ps4-game-saves-sets.html" class="classname1"><i class="fa-solid fa-save"></i><span> Descargar Savedatas </span><i class="fa-solid fa-save"></i></a>
-          <a href="https://ko-fi.com/sistro/shop" class="classname1"><i class="fa-solid fa-star"></i><span> Descargar GoldHEN </span><i class="fa-solid fa-star"></i></a>
-          <a href="https://github.com/EchoStretch/ps4-hen-vtx/releases" class="classname1"><i class="fa-solid fa-diamond"></i><span> Descargar HEN-VTX </span><i class="fa-solid fa-diamond"></i></a>
-          <a href="https://pkg-zone.com/" class="classname1"><i class="fa-solid fa-wrench"></i><span> Descargar Homebrew </span><i class="fa-solid fa-wrench"></i></a>
-          <a href="https://github.com/EchoStretch/ps4-payload-sdk/releases" class="classname1"><i class="fa-solid fa-syringe"></i><span> Pack Payloads 12.02 </span><i class="fa-solid fa-syringe"></i></a>
+          <a href="https://t.me/tups4hen" class="classname">
+            <i class="fa-brands fa-telegram"></i>
+            <span> TU PS4 HEN Telegram </span>
+            <i class="fa-brands fa-telegram"></i>
+          </a>
+
+          <a href="https://dlpsgame.com/category/ps4/" class="classname">
+            <i class="fa-brands fa-playstation"></i>
+            <span> Descargar Juegos </span>
+            <i class="fa-brands fa-playstation"></i>
+          </a>
+
+          <a href="https://darthsternie.net/ps4-firmwares/" class="classname1">
+            <i class="fa-solid fa-cog"></i>
+            <span> Descargar Firmwares </span>
+            <i class="fa-solid fa-cog"></i>
+          </a>
+
+          <a href="https://www.thetechgame.com/Downloads/cid=90/ps4-game-saves-sets.html" class="classname1">
+            <i class="fa-solid fa-save"></i>
+            <span> Descargar Savedatas </span>
+            <i class="fa-solid fa-save"></i>
+          </a>
+
+          <a href="https://ko-fi.com/sistro/shop" class="classname1">
+            <i class="fa-solid fa-star"></i>
+            <span> Descargar GoldHEN </span>
+            <i class="fa-solid fa-star"></i>
+          </a>
+
+          <a href="https://github.com/EchoStretch/ps4-hen-vtx/releases" class="classname1">
+            <i class="fa-solid fa-diamond"></i>
+            <span> Descargar HEN-VTX </span>
+            <i class="fa-solid fa-diamond"></i>
+          </a>
+
+          <a href="https://pkg-zone.com/" class="classname1">
+            <i class="fa-solid fa-wrench"></i>
+            <span> Descargar Homebrew </span>
+            <i class="fa-solid fa-wrench"></i>
+          </a>
+
+          <a href="https://github.com/EchoStretch/ps4-payload-sdk/releases" class="classname1">
+            <i class="fa-solid fa-syringe"></i>
+            <span> Pack Payloads 12.02 </span>
+            <i class="fa-solid fa-syringe"></i>
+          </a>
         </div>
       </main>
+
       <h4>Creado por TheZodiacoX</h4>
       <h4>Credits: PS4 Homebrew Devs || TheFlow, SiSTR0, Kameleon, EchoStretch, LM, etc</h4>
     </center>
   </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const loadingScreen = document.getElementById('loading-screen');
-    const mainContent = document.getElementById('main-content');
-    const userAgentText = document.getElementById('filterUserAgent');
+  <!-- Scripts adicionales si los necesitas -->
+  <script src="javascript/autoscript.js"></script>
+  <script src="javascript/easteregg.js"></script>
+  <script src="javascript/menu1.js"></script>
+  <script src="javascript/menu2.js"></script>
+  <script src="javascript/menu3.js"></script>
 
-    const isPS4 = /PlayStation 4|Mozilla\/5.0 \(PlayStation 4/i.test(navigator.userAgent);
-    userAgentText.textContent = isPS4 ? "PlayStation 4 detectada" : "Bienvenido desde PC/Navegador";
+  <!-- Carga simulada de 10 segundos -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loadingScreen = document.getElementById('loading-screen');
+      const mainContent = document.getElementById('main-content');
+      const userAgentText = document.getElementById('filterUserAgent');
 
-    loadingScreen.innerHTML = `
-      <div id="loading-content">
-        <div id="progress-text">Cargando...</div>
-        <div id="progress-container">
-          <div id="progress-bar"></div>
+      const isPS4 = /PlayStation 4|Mozilla\/5.0 \(PlayStation 4/i.test(navigator.userAgent);
+      userAgentText.textContent = isPS4 ? "PlayStation 4 detectada" : "Bienvenido desde PC/Navegador";
+
+      loadingScreen.innerHTML = `
+        <div id="loading-content">
+          <div id="progress-text">Cargando...</div>
+          <div id="progress-container">
+            <div id="progress-bar"></div>
+          </div>
         </div>
-      </div>
-    `;
-    loadingScreen.style.display = 'flex';
-    mainContent.classList.add('hidden');
+      `;
+      loadingScreen.style.display = 'flex';
+      mainContent.classList.add('hidden');
 
-    const progressBar = document.getElementById('progress-bar');
-    const progressText = document.getElementById('progress-text');
+      const progressBar = document.getElementById('progress-bar');
+      const progressText = document.getElementById('progress-text');
 
-    // Simulación de carga en 10 segundos (10000ms)
-    let percent = 0;
-    const duration = 10000; // 10 segundos
-    const stepTime = 100; // cada 100ms
-    const increment = 100 / (duration / stepTime);
+      let percent = 0;
+      const duration = 10000;
+      const stepTime = 100;
+      const increment = 100 / (duration / stepTime);
 
-    const interval = setInterval(() => {
-      percent += increment;
-      if (percent >= 100) {
-        percent = 100;
-        clearInterval(interval);
-        progressBar.style.width = '100%';
+      const interval = setInterval(() => {
+        percent += increment;
+        if (percent >= 100) {
+          percent = 100;
+          clearInterval(interval);
+          progressBar.style.width = '100%';
 
-        const message = document.createElement('div');
-        message.className = 'reload-message';
-        message.textContent = '¡Carga completa! Puedes comenzar';
-        loadingScreen.insertBefore(message, loadingScreen.firstChild);
+          const message = document.createElement('div');
+          message.className = 'reload-message';
+          message.textContent = '¡Carga completa! Puedes comenzar';
+          loadingScreen.insertBefore(message, loadingScreen.firstChild);
 
-        setTimeout(() => {
-          loadingScreen.style.display = 'none';
-          mainContent.classList.remove('hidden');
-        }, 2000); // Mostrar mensaje por 2 segundos
-      } else {
-        progressBar.style.width = percent + '%';
-      }
-    }, stepTime);
-  });
-</script>
+          setTimeout(() => {
+            loadingScreen.style.display = 'none';
+            mainContent.classList.remove('hidden');
+          }, 2000);
+        } else {
+          progressBar.style.width = percent + '%';
+        }
+      }, stepTime);
+    });
+  </script>
 </body>
 </html>
