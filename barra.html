@@ -2,18 +2,18 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Animación Arcoíris con Progreso</title>
+  <title>Barra con Arcoíris y Fondo Negro</title>
   <style>
     body {
       background-color: #111;
       color: white;
+      font-family: sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
       margin: 0;
-      font-family: sans-serif;
     }
 
     .device-info {
@@ -27,42 +27,42 @@
       color: #ffffff;
       font-weight: bold;
       font-size: 18px;
-      background: #000; /* Fondo negro sólido */
-      padding: 14px 28px;
-      border: 3px solid transparent;
-      border-radius: 10px;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.4); /* Fondo negro semitransparente */
+      padding: 12px 25px;
+      border-radius: 8px;
       position: relative;
       z-index: 1;
-      margin-bottom: 30px;
+      animation: pulse 1.5s infinite;
+      overflow: hidden;
     }
 
     .reload-message::before {
       content: "";
       position: absolute;
-      top: -3px;
-      left: -3px;
-      right: -3px;
-      bottom: -3px;
-      z-index: -1;
-      border-radius: 12px;
-      background: linear-gradient(90deg,
-        red, orange, yellow, lime, cyan, blue, violet, red);
+      inset: 0;
+      padding: 3px;
+      background: linear-gradient(270deg, red, orange, yellow, lime, cyan, blue, violet, red);
       background-size: 400% 400%;
-      animation: rainbow-border 10s ease-in-out infinite alternate;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      border-radius: inherit;
+      z-index: -1;
+      animation: rainbow-border 5s linear infinite;
+      mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0); 
+      mask-composite: exclude;
+      -webkit-mask-composite: destination-out;
     }
 
     @keyframes rainbow-border {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.7; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+      50% { opacity: 1; text-shadow: 0 0 15px rgba(255,255,255,0.8); }
+      100% { opacity: 0.7; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
     }
 
     .bar-container {
@@ -70,16 +70,16 @@
       height: 16px;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid white;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); /* Brillo */
-      overflow: hidden;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
       border-radius: 5px;
+      overflow: hidden;
     }
 
     .bar {
       width: 0%;
       height: 100%;
       background: white;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.7); /* Brillo */
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
       transition: width 0.1s linear;
     }
   </style>
@@ -104,7 +104,7 @@
       } else {
         clearInterval(interval);
       }
-    }, 100); // 10 segundos (100ms * 100)
+    }, 100); // 100ms x 100 = 10s
   </script>
 
 </body>
