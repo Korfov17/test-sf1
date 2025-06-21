@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Barra con Arcoíris</title>
+  <title>Barra con Arcoíris y Fondo Negro</title>
   <style>
     body {
       background-color: #111;
@@ -19,7 +19,7 @@
       color: #ffffff;
       font-weight: bold;
       font-size: 18px;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.8); /* Más opaco */
       padding: 12px 25px;
       border: 3px solid transparent;
       border-radius: 8px;
@@ -37,16 +37,20 @@
       right: -3px;
       bottom: -3px;
       z-index: -1;
-      background: linear-gradient(270deg, red, orange, yellow, lime, cyan, blue, violet, red);
-      background-size: 400% 400%;
       border-radius: 10px;
-      animation: rainbow-border 5s linear infinite;
+      background: linear-gradient(90deg,
+        red, orange, yellow, lime, cyan, blue, violet, red);
+      background-size: 600% 600%;
+      animation: rainbow-border 6s ease-in-out infinite alternate;
     }
 
     @keyframes rainbow-border {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
     }
 
     .bar-container {
@@ -75,7 +79,6 @@
   </div>
 
   <script>
-    // Progreso animado en 10 segundos (actualiza cada 100ms)
     const bar = document.getElementById('progress-bar');
     let progress = 0;
     const interval = setInterval(() => {
@@ -85,7 +88,7 @@
       } else {
         clearInterval(interval);
       }
-    }, 100); // 100ms × 100 = 10 segundos
+    }, 100); // 10 segundos en total
   </script>
 
 </body>
