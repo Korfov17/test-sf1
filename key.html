@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detector de Teclas</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #9face6);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      max-width: 600px;
+    }
+
+    .info-box {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+  </style>
+</head>
+<body>
+  <h1>Presiona F6 + ←</h1>
+  <p>Cuando presiones ambas teclas a la vez, se mostrará información detallada del navegador.</p>
+
+  <div class="info-box">
+    <strong>Nota:</strong> Asegúrate de que la ventana del navegador esté activa.
+  </div>
+
+  <script>
+    let keysPressed = {};
+
+    document.addEventListener('keydown', function (e) {
+      keysPressed[e.keyCode] = true;
+
+      if (keysPressed[117] && keysPressed[37]) { // F6 + Flecha Izquierda
+        const info = `
+        Navegador: ${navigator.appName}
+        Versión: ${navigator.appVersion}
+        Plataforma: ${navigator.platform}
+        Idioma: ${navigator.language}
+        User-Agent: ${navigator.userAgent}
+        Cookies habilitadas: ${navigator.cookieEnabled}
+        Online: ${navigator.onLine}
+        `;
+
+        alert("Información del navegador:\n" + info);
+        
+        // Evitar múltiples alertas
+        keysPressed = {};
+      }
+    });
+
+    document.addEventListener('keyup', function (e) {
+      delete keysPressed[e.keyCode];
+    });
+  </script>
+</body>
+</html>
