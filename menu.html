@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Menú con Select Estilo Botón</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f4f8;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .select-button {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-color: #007BFF;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .select-button:focus {
+      outline: 2px solid #0056b3;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    p {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <select class="select-button" id="menuSelect" onchange="mostrarSeccion()">
+      <option value="inicio">Inicio</option>
+      <option value="servicios">Servicios</option>
+      <option value="contacto">Contacto</option>
+    </select>
+
+    <div id="inicio" class="section active">
+      <h2>Bienvenido</h2>
+      <p>Esta es una pequeña demostración de cómo usar un select estilizado como botón para mostrar contenido dinámico. ¡Explora el menú!</p>
+    </div>
+
+    <div id="servicios" class="section">
+      <h2>Nuestros Servicios</h2>
+      <p>Ofrecemos soluciones creativas en diseño web, desarrollo de apps y marketing digital adaptadas a tu negocio.</p>
+    </div>
+
+    <div id="contacto" class="section">
+      <h2>Contáctanos</h2>
+      <p>Puedes escribirnos a contacto@ejemplo.com o seguirnos en nuestras redes sociales para más información.</p>
+    </div>
+  </div>
+
+  <script>
+    function mostrarSeccion() {
+      const valor = document.getElementById('menuSelect').value;
+      const secciones = document.querySelectorAll('.section');
+      secciones.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(valor).classList.add('active');
+    }
+  </script>
+</body>
+</html>
