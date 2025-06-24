@@ -51,7 +51,9 @@
 
   <h2 data-text="title">Administrador de Opciones</h2>
 
-  <select id="dropdown" class="btn"></select>
+  <select id="dropdown" class="btn">
+    <option disabled selected>-- Selecciona una opción --</option>
+  </select>
 
   <h3 data-text="externalButtons">Botones físicos fuera del desplegable:</h3>
   <div id="outsideContainer"></div>
@@ -123,6 +125,7 @@
     const styleTag = document.getElementById('customStyle');
     const configStatus = document.getElementById('configStatus');
     const customSelect = document.getElementById('customSelect');
+    const dropdown = document.getElementById('dropdown');
 
     function aplicarConfiguracion() {
       const css = `
@@ -163,7 +166,10 @@
     function importarDesdeURL() {
       const params = new URLSearchParams(window.location.search);
       const cadena = params.get('config');
-      if (!cadena) return;
+      if (!cadena || !/^BG\d-TXT\d-FS\d-BTN\d$/.test(cadena)) {
+        console.warn("Configuración no válida o no encontrada en la URL.");
+        return;
+      }
       importTheme(cadena);
     }
 
@@ -182,7 +188,11 @@
       const val = customSelect.value;
       if (val === 'IMPORT') {
         const cadena = prompt("Ingresa la cadena de configuración (ej: BG2-TXT2-FS2-BTN2):");
-        if (cadena) importTheme(cadena);
+        if (cadena && /^BG\d-TXT\d-FS\d-BTN\d$/.test(cadena)) {
+          importTheme(cadena);
+        } else {
+          alert("Cadena de configuración no válida.");
+        }
       } else if (val === 'preset1') {
         importTheme('BG2-TXT2-FS1-BTN1');
       } else if (val === 'preset2') {
@@ -197,6 +207,20 @@
       customSelect.selectedIndex = 0;
     });
 
+    function poblarDropdownInicial() {
+      const opciones = [
+        { value: 'crearInterno', label: 'Crear opción interna' },
+        { value: 'crearExterno', label: 'Crear botón externo' }
+      ];
+      opciones.forEach(op => {
+        const opt = document.createElement('option');
+        opt.value = op.value;
+        opt.textContent = op.label;
+        dropdown.appendChild(opt);
+      });
+    }
+
+    poblarDropdownInicial();
     aplicarConfiguracion();
     importarDesdeURL();
   </script>
