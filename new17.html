@@ -2,12 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gestión de Botones Internos y Externos</title>
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administrador de Opciones</title>
+  <style id="customStyle">
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
+      background-color: #ffffff;
+      color: #000000;
+      font-size: 16px;
     }
     .btn {
       display: block;
@@ -29,138 +32,173 @@
     h3 {
       margin-top: 25px;
     }
+    .preview-box {
+      display: inline-block;
+      padding: 10px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Administrador de Opciones</h2>
+  <select id="languageSelect" class="btn">
+    <option value="es">Español</option>
+    <option value="en">English</option>
+  </select>
+
+  <h2 data-text="title">Administrador de Opciones</h2>
 
   <select id="dropdown" class="btn"></select>
 
-  <h3>Botones físicos fuera del desplegable:</h3>
+  <h3 data-text="externalButtons">Botones físicos fuera del desplegable:</h3>
   <div id="outsideContainer"></div>
 
   <button id="finalBtn" class="btn" style="background-color: #28a745;">
     Mostrar y eliminar opciones
   </button>
 
+  <hr>
+  <h2 data-text="customization">Personalización de Página</h2>
+
+  <select id="customSelect" class="btn">
+    <option disabled selected>-- Personalizar --</option>
+    <option value="BG1">Fondo Claro (BG1)</option>
+    <option value="BG2">Fondo Oscuro (BG2)</option>
+    <option value="TXT1">Texto Negro (TXT1)</option>
+    <option value="TXT2">Texto Blanco (TXT2)</option>
+    <option value="FS1">Fuente Normal (FS1)</option>
+    <option value="FS2">Fuente Grande (FS2)</option>
+    <option value="BTN1">Botones Azules (BTN1)</option>
+    <option value="BTN2">Botones Verdes (BTN2)</option>
+    <option disabled>--- Temas Predefinidos ---</option>
+    <option value="preset1">Tema Oscuro</option>
+    <option value="preset2">Tema Aumentado</option>
+    <option value="IMPORT">Importar Configuración</option>
+  </select>
+
+  <p><strong data-text="currentConfig">Configuración actual:</strong> <span id="configStatus">[BG1, TXT1, FS1, BTN1]</span></p>
+
+  <div>
+    <p data-text="previewTitle"><strong>Vista previa de tema:</strong></p>
+    <div class="preview-box" onclick="importTheme('BG2-TXT2-FS1-BTN1')">Tema Oscuro</div>
+    <div class="preview-box" onclick="importTheme('BG1-TXT1-FS2-BTN2')">Tema Aumentado</div>
+  </div>
+
   <script>
-    const dropdown = document.getElementById('dropdown');
-    const outsideContainer = document.getElementById('outsideContainer');
-    const finalBtn = document.getElementById('finalBtn');
+    const langText = {
+      es: {
+        title: "Administrador de Opciones",
+        externalButtons: "Botones físicos fuera del desplegable:",
+        customization: "Personalización de Página",
+        currentConfig: "Configuración actual:",
+        previewTitle: "Vista previa de tema:"
+      },
+      en: {
+        title: "Option Manager",
+        externalButtons: "Physical buttons outside dropdown:",
+        customization: "Page Customization",
+        currentConfig: "Current configuration:",
+        previewTitle: "Theme Preview:"
+      }
+    };
 
-    const botones = {}; // { id: { nombre, mensaje, ubicacion, boton? } }
+    document.getElementById('languageSelect').addEventListener('change', e => {
+      const lang = e.target.value;
+      document.querySelectorAll('[data-text]').forEach(el => {
+        const key = el.getAttribute('data-text');
+        el.textContent = langText[lang][key];
+      });
+    });
 
-    const LIMITE_INTERNOS = 5;
+    const customStatus = {
+      BG: 'BG1',
+      TXT: 'TXT1',
+      FS: 'FS1',
+      BTN: 'BTN1'
+    };
 
-    function generarId() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-      let id;
-      do {
-        id = chars.charAt(Math.floor(Math.random() * chars.length));
-      } while (id in botones);
-      return id;
-    }
+    const styleTag = document.getElementById('customStyle');
+    const configStatus = document.getElementById('configStatus');
+    const customSelect = document.getElementById('customSelect');
 
-    function actualizarDropdown() {
-      dropdown.innerHTML = `
-        <option disabled selected>-- Acciones --</option>
-        <option value="createInside">🟦 Crear opción interna</option>
-        <option value="createOutside">🟨 Crear botón fuera</option>
+    function aplicarConfiguracion() {
+      const css = `
+        body {
+          font-family: Arial, sans-serif;
+          padding: 20px;
+          background-color: ${customStatus.BG === 'BG2' ? '#222' : '#ffffff'};
+          color: ${customStatus.TXT === 'TXT2' ? '#ffffff' : '#000000'};
+          font-size: ${customStatus.FS === 'FS2' ? '20px' : '16px'};
+        }
+        .btn {
+          display: block;
+          margin: 5px 0;
+          padding: 10px 15px;
+          background-color: ${customStatus.BTN === 'BTN2' ? '#28a745' : '#007bff'};
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          width: fit-content;
+        }
+        .btn:hover {
+          background-color: ${customStatus.BTN === 'BTN2' ? '#1e7e34' : '#0056b3'};
+        }
       `;
-
-      for (let id in botones) {
-        if (botones[id].ubicacion === 'inside') {
-          dropdown.innerHTML += `<option value="${id}">${id} = ${botones[id].nombre}</option>`;
-        }
-      }
+      styleTag.innerHTML = css;
+      configStatus.textContent = `[${customStatus.BG}, ${customStatus.TXT}, ${customStatus.FS}, ${customStatus.BTN}]`;
+      actualizarURL();
     }
 
-    function crearOpcionInterna() {
-      const internos = Object.values(botones).filter(b => b.ubicacion === 'inside').length;
-      if (internos >= LIMITE_INTERNOS) {
-        alert(`Has alcanzado el límite de ${LIMITE_INTERNOS} opciones internas.`);
-        return;
-      }
-
-      const nombre = prompt("Nombre de la opción interna:");
-      if (!nombre) return;
-
-      const mensaje = prompt("Mensaje que debe mostrar:");
-      if (!mensaje) return;
-
-      const id = generarId();
-      botones[id] = { nombre, mensaje, ubicacion: 'inside' };
-      actualizarDropdown();
+    function actualizarURL() {
+      const cadena = `${customStatus.BG}-${customStatus.TXT}-${customStatus.FS}-${customStatus.BTN}`;
+      const url = new URL(window.location);
+      url.searchParams.set('config', cadena);
+      history.replaceState(null, '', url);
     }
 
-    function crearBotonFuera() {
-      const nombre = prompt("Nombre del botón físico:");
-      if (!nombre) return;
-
-      const mensaje = prompt("Mensaje que debe mostrar:");
-      if (!mensaje) return;
-
-      const id = generarId();
-      const nuevoBtn = document.createElement('button');
-      nuevoBtn.textContent = nombre;
-      nuevoBtn.className = 'btn';
-      nuevoBtn.addEventListener('click', () => alert(mensaje));
-      outsideContainer.appendChild(nuevoBtn);
-
-      botones[id] = { nombre, mensaje, ubicacion: 'outside', boton: nuevoBtn };
+    function importarDesdeURL() {
+      const params = new URLSearchParams(window.location.search);
+      const cadena = params.get('config');
+      if (!cadena) return;
+      importTheme(cadena);
     }
 
-    dropdown.addEventListener('change', () => {
-      const val = dropdown.value;
+    function importTheme(cadena) {
+      const partes = cadena.split('-');
+      partes.forEach(id => {
+        if (id.startsWith('BG')) customStatus.BG = id;
+        if (id.startsWith('TXT')) customStatus.TXT = id;
+        if (id.startsWith('FS')) customStatus.FS = id;
+        if (id.startsWith('BTN')) customStatus.BTN = id;
+      });
+      aplicarConfiguracion();
+    }
 
-      if (val === 'createInside') {
-        crearOpcionInterna();
-      } else if (val === 'createOutside') {
-        crearBotonFuera();
-      } else if (botones[val]) {
-        const b = botones[val];
-        alert(`Mensaje de "${b.nombre}":\n\n${b.mensaje}`);
-        const eliminar = confirm(`¿Deseas eliminar "${b.nombre}" (ID: ${val})?`);
-        if (eliminar) {
-          if (b.ubicacion === 'outside') {
-            outsideContainer.removeChild(b.boton);
-          }
-          delete botones[val];
-          actualizarDropdown();
-        }
+    customSelect.addEventListener('change', () => {
+      const val = customSelect.value;
+      if (val === 'IMPORT') {
+        const cadena = prompt("Ingresa la cadena de configuración (ej: BG2-TXT2-FS2-BTN2):");
+        if (cadena) importTheme(cadena);
+      } else if (val === 'preset1') {
+        importTheme('BG2-TXT2-FS1-BTN1');
+      } else if (val === 'preset2') {
+        importTheme('BG1-TXT1-FS2-BTN2');
+      } else {
+        if (val.startsWith('BG')) customStatus.BG = val;
+        if (val.startsWith('TXT')) customStatus.TXT = val;
+        if (val.startsWith('FS')) customStatus.FS = val;
+        if (val.startsWith('BTN')) customStatus.BTN = val;
+        aplicarConfiguracion();
       }
-
-      dropdown.selectedIndex = 0;
+      customSelect.selectedIndex = 0;
     });
 
-    finalBtn.addEventListener('click', () => {
-      if (Object.keys(botones).length === 0) {
-        alert("No hay elementos para mostrar.");
-        return;
-      }
-
-      let resumen = "Opciones actuales:\n";
-      for (let id in botones) {
-        const tipo = botones[id].ubicacion === 'inside' ? "Interna" : "Externa";
-        resumen += `${id} = ${botones[id].nombre} (${tipo})\n`;
-      }
-
-      const accion = prompt(resumen + "\nEscribe un ID para eliminarlo, o deja vacío para cancelar:");
-      if (accion && botones[accion]) {
-        const b = botones[accion];
-        if (b.ubicacion === 'outside') {
-          outsideContainer.removeChild(b.boton);
-        }
-        delete botones[accion];
-        actualizarDropdown();
-        alert(`Eliminado: ${accion}`);
-      } else if (accion) {
-        alert("ID inválido.");
-      }
-    });
-
-    actualizarDropdown();
+    aplicarConfiguracion();
+    importarDesdeURL();
   </script>
 </body>
 </html>
