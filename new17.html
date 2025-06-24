@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Desplegable Dinámico</title>
+  <title>Gestión de Botones Dinámicos</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -23,83 +23,138 @@
     .btn:hover {
       background-color: #0056b3;
     }
-    #container {
-      margin-top: 15px;
-      margin-bottom: 15px;
+    #container, #outsideContainer {
+      margin: 15px 0;
+    }
+    h3 {
+      margin-top: 25px;
     }
   </style>
 </head>
 <body>
 
-  <h2>Desplegable Dinámico</h2>
+  <h2>Administrador de Botones Dinámicos</h2>
 
-  <select id="dropdown" class="btn">
-    <option disabled selected>-- Acciones --</option>
-    <option value="create">Crear nueva opción</option>
-  </select>
+  <select id="dropdown" class="btn"></select>
 
+  <h3>Botones dentro del contenedor:</h3>
   <div id="container"></div>
 
-  <button id="finalBtn" class="btn" style="background-color: #28a745;">Mostrar y eliminar opciones</button>
+  <h3>Botones fuera del contenedor:</h3>
+  <div id="outsideContainer"></div>
+
+  <button id="finalBtn" class="btn" style="background-color: #28a745;">
+    Mostrar y eliminar opciones manualmente
+  </button>
 
   <script>
     const dropdown = document.getElementById('dropdown');
     const container = document.getElementById('container');
+    const outsideContainer = document.getElementById('outsideContainer');
     const finalBtn = document.getElementById('finalBtn');
-    const botones = {}; // clave aleatoria -> nombre + función
 
-    // Generar identificador aleatorio único
+    const botones = {}; // { id: { nombre, mensaje, boton, ubicacion: 'inside' | 'outside' } }
+
     function generarId() {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       let id;
       do {
         id = chars.charAt(Math.floor(Math.random() * chars.length));
-      } while (id in botones); // Evitar duplicados
+      } while (id in botones);
       return id;
     }
 
-    dropdown.addEventListener('change', () => {
-      if (dropdown.value === 'create') {
-        const nombre = prompt("Nombre del botón:");
-        if (!nombre) return;
+    function actualizarDropdown() {
+      dropdown.innerHTML = `
+        <option disabled selected>-- Acciones --</option>
+        <option value="createInside">🟦 Crear botón dentro</option>
+        <option value="createOutside">🟨 Crear botón fuera</option>
+      `;
 
-        const mensaje = prompt("Mensaje que debe mostrar el botón:");
-        if (!mensaje) return;
+      for (let id in botones) {
+        const nombre = botones[id].nombre;
+        dropdown.innerHTML += `<option value="${id}">${id} = ${nombre}</option>`;
+      }
+    }
 
-        const id = generarId();
-        const nuevoBtn = document.createElement('button');
-        nuevoBtn.textContent = nombre;
-        nuevoBtn.className = 'btn';
-        nuevoBtn.addEventListener('click', () => alert(mensaje));
+    function crearBoton(ubicacion) {
+      const nombre = prompt("Nombre del botón:");
+      if (!nombre) return;
 
-        container.insertBefore(nuevoBtn, finalBtn);
-        botones[id] = { nombre, boton: nuevoBtn };
+      const mensaje = prompt("Mensaje que debe mostrar el botón:");
+      if (!mensaje) return;
+
+      const id = generarId();
+      const nuevoBtn = document.createElement('button');
+      nuevoBtn.textContent = nombre;
+      nuevoBtn.className = 'btn';
+      nuevoBtn.addEventListener('click', () => alert(mensaje));
+
+      if (ubicacion === 'inside') {
+        container.appendChild(nuevoBtn);
+      } else {
+        outsideContainer.appendChild(nuevoBtn);
       }
 
-      dropdown.selectedIndex = 0; // Reiniciar selección
+      botones[id] = { nombre, mensaje, boton: nuevoBtn, ubicacion };
+      actualizarDropdown();
+    }
+
+    dropdown.addEventListener('change', () => {
+      const val = dropdown.value;
+
+      if (val === 'createInside') {
+        crearBoton('inside');
+      } else if (val === 'createOutside') {
+        crearBoton('outside');
+      } else if (botones[val]) {
+        // Mostrar info y preguntar si eliminar
+        alert(`Mensaje del botón "${botones[val].nombre}":\n\n${botones[val].mensaje}`);
+        const eliminar = confirm(`¿Quieres eliminar el botón "${botones[val].nombre}" (ID: ${val})?`);
+        if (eliminar) {
+          const info = botones[val];
+          if (info.ubicacion === 'inside') {
+            container.removeChild(info.boton);
+          } else {
+            outsideContainer.removeChild(info.boton);
+          }
+          delete botones[val];
+          actualizarDropdown();
+        }
+      }
+
+      dropdown.selectedIndex = 0; // reinicia selección
     });
 
     finalBtn.addEventListener('click', () => {
-      let resumen = "Opciones actuales:\n";
-      for (let id in botones) {
-        resumen += `${id} = ${botones[id].nombre}\n`;
-      }
-
       if (Object.keys(botones).length === 0) {
-        alert("No hay opciones disponibles.");
+        alert("No hay botones creados.");
         return;
       }
 
-      const accion = prompt(resumen + "\nEscribe un identificador para eliminarlo, o dejar vacío para salir:");
+      let resumen = "Opciones actuales:\n";
+      for (let id in botones) {
+        const loc = botones[id].ubicacion === 'inside' ? "Dentro" : "Fuera";
+        resumen += `${id} = ${botones[id].nombre} (${loc})\n`;
+      }
 
+      const accion = prompt(resumen + "\nEscribe un identificador para eliminarlo, o deja vacío para cancelar:");
       if (accion && botones[accion]) {
-        container.removeChild(botones[accion].boton);
+        const info = botones[accion];
+        if (info.ubicacion === 'inside') {
+          container.removeChild(info.boton);
+        } else {
+          outsideContainer.removeChild(info.boton);
+        }
         delete botones[accion];
+        actualizarDropdown();
         alert(`Eliminado: ${accion}`);
       } else if (accion) {
         alert("Identificador inválido.");
       }
     });
+
+    actualizarDropdown(); // iniciar
   </script>
 </body>
 </html>
