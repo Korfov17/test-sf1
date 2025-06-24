@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Desplegable Dinámico</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .btn {
+      display: block;
+      margin: 5px 0;
+      padding: 10px 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: fit-content;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    #container {
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Desplegable Dinámico</h2>
+
+  <select id="dropdown" class="btn">
+    <option disabled selected>-- Acciones --</option>
+    <option value="create">Crear nueva opción</option>
+  </select>
+
+  <div id="container"></div>
+
+  <button id="finalBtn" class="btn" style="background-color: #28a745;">Mostrar y eliminar opciones</button>
+
+  <script>
+    const dropdown = document.getElementById('dropdown');
+    const container = document.getElementById('container');
+    const finalBtn = document.getElementById('finalBtn');
+    const botones = {}; // clave aleatoria -> nombre + función
+
+    // Generar identificador aleatorio único
+    function generarId() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let id;
+      do {
+        id = chars.charAt(Math.floor(Math.random() * chars.length));
+      } while (id in botones); // Evitar duplicados
+      return id;
+    }
+
+    dropdown.addEventListener('change', () => {
+      if (dropdown.value === 'create') {
+        const nombre = prompt("Nombre del botón:");
+        if (!nombre) return;
+
+        const mensaje = prompt("Mensaje que debe mostrar el botón:");
+        if (!mensaje) return;
+
+        const id = generarId();
+        const nuevoBtn = document.createElement('button');
+        nuevoBtn.textContent = nombre;
+        nuevoBtn.className = 'btn';
+        nuevoBtn.addEventListener('click', () => alert(mensaje));
+
+        container.insertBefore(nuevoBtn, finalBtn);
+        botones[id] = { nombre, boton: nuevoBtn };
+      }
+
+      dropdown.selectedIndex = 0; // Reiniciar selección
+    });
+
+    finalBtn.addEventListener('click', () => {
+      let resumen = "Opciones actuales:\n";
+      for (let id in botones) {
+        resumen += `${id} = ${botones[id].nombre}\n`;
+      }
+
+      if (Object.keys(botones).length === 0) {
+        alert("No hay opciones disponibles.");
+        return;
+      }
+
+      const accion = prompt(resumen + "\nEscribe un identificador para eliminarlo, o dejar vacío para salir:");
+
+      if (accion && botones[accion]) {
+        container.removeChild(botones[accion].boton);
+        delete botones[accion];
+        alert(`Eliminado: ${accion}`);
+      } else if (accion) {
+        alert("Identificador inválido.");
+      }
+    });
+  </script>
+</body>
+</html>
