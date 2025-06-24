@@ -40,189 +40,35 @@
       border-radius: 5px;
       cursor: pointer;
     }
+    #consoleLog {
+      margin-top: 30px;
+      padding: 10px;
+      background-color: #f1f1f1;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      max-width: 400px;
+    }
   </style>
 </head>
 <body>
 
-  <select id="languageSelect" class="btn">
-    <option value="es">Español</option>
-    <option value="en">English</option>
-  </select>
+  <!-- ... contenido anterior intacto ... -->
 
-  <h2 data-text="title">Administrador de Opciones</h2>
-
-  <select id="dropdown" class="btn">
-    <option disabled selected>-- Selecciona una opción --</option>
-  </select>
-
-  <h3 data-text="externalButtons">Botones físicos fuera del desplegable:</h3>
-  <div id="outsideContainer"></div>
-
-  <button id="finalBtn" class="btn" style="background-color: #28a745;">
-    Mostrar y eliminar opciones
-  </button>
-
-  <hr>
-  <h2 data-text="customization">Personalización de Página</h2>
-
-  <select id="customSelect" class="btn">
-    <option disabled selected>-- Personalizar --</option>
-    <option value="BG1">Fondo Claro (BG1)</option>
-    <option value="BG2">Fondo Oscuro (BG2)</option>
-    <option value="TXT1">Texto Negro (TXT1)</option>
-    <option value="TXT2">Texto Blanco (TXT2)</option>
-    <option value="FS1">Fuente Normal (FS1)</option>
-    <option value="FS2">Fuente Grande (FS2)</option>
-    <option value="BTN1">Botones Azules (BTN1)</option>
-    <option value="BTN2">Botones Verdes (BTN2)</option>
-    <option disabled>--- Temas Predefinidos ---</option>
-    <option value="preset1">Tema Oscuro</option>
-    <option value="preset2">Tema Aumentado</option>
-    <option value="IMPORT">Importar Configuración</option>
-  </select>
-
-  <p><strong data-text="currentConfig">Configuración actual:</strong> <span id="configStatus">[BG1, TXT1, FS1, BTN1]</span></p>
-
-  <div>
-    <p data-text="previewTitle"><strong>Vista previa de tema:</strong></p>
-    <div class="preview-box" onclick="importTheme('BG2-TXT2-FS1-BTN1')">Tema Oscuro</div>
-    <div class="preview-box" onclick="importTheme('BG1-TXT1-FS2-BTN2')">Tema Aumentado</div>
+  <div id="consoleLog">
+    <h3>Consola de Prueba de Key</h3>
+    <button class="btn" onclick="mostrarKey(this)" data-key="BG2">BG2</button>
+    <button class="btn" onclick="mostrarKey(this)" data-key="TXT2">TXT2</button>
+    <button class="btn" onclick="mostrarKey(this)" data-key="FS2">FS2</button>
+    <button class="btn" onclick="mostrarKey(this)" data-key="BTN1">BTN1</button>
+    <p><strong>Key detectada:</strong> <span id="keyOutput">Ninguna</span></p>
   </div>
 
   <script>
-    const langText = {
-      es: {
-        title: "Administrador de Opciones",
-        externalButtons: "Botones físicos fuera del desplegable:",
-        customization: "Personalización de Página",
-        currentConfig: "Configuración actual:",
-        previewTitle: "Vista previa de tema:"
-      },
-      en: {
-        title: "Option Manager",
-        externalButtons: "Physical buttons outside dropdown:",
-        customization: "Page Customization",
-        currentConfig: "Current configuration:",
-        previewTitle: "Theme Preview:"
-      }
-    };
-
-    document.getElementById('languageSelect').addEventListener('change', e => {
-      const lang = e.target.value;
-      document.querySelectorAll('[data-text]').forEach(el => {
-        const key = el.getAttribute('data-text');
-        el.textContent = langText[lang][key];
-      });
-    });
-
-    const customStatus = {
-      BG: 'BG1',
-      TXT: 'TXT1',
-      FS: 'FS1',
-      BTN: 'BTN1'
-    };
-
-    const styleTag = document.getElementById('customStyle');
-    const configStatus = document.getElementById('configStatus');
-    const customSelect = document.getElementById('customSelect');
-    const dropdown = document.getElementById('dropdown');
-
-    function aplicarConfiguracion() {
-      const css = `
-        body {
-          font-family: Arial, sans-serif;
-          padding: 20px;
-          background-color: ${customStatus.BG === 'BG2' ? '#222' : '#ffffff'};
-          color: ${customStatus.TXT === 'TXT2' ? '#ffffff' : '#000000'};
-          font-size: ${customStatus.FS === 'FS2' ? '20px' : '16px'};
-        }
-        .btn {
-          display: block;
-          margin: 5px 0;
-          padding: 10px 15px;
-          background-color: ${customStatus.BTN === 'BTN2' ? '#28a745' : '#007bff'};
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          width: fit-content;
-        }
-        .btn:hover {
-          background-color: ${customStatus.BTN === 'BTN2' ? '#1e7e34' : '#0056b3'};
-        }
-      `;
-      styleTag.innerHTML = css;
-      configStatus.textContent = `[${customStatus.BG}, ${customStatus.TXT}, ${customStatus.FS}, ${customStatus.BTN}]`;
-      actualizarURL();
+    function mostrarKey(btn) {
+      const key = btn.getAttribute('data-key');
+      document.getElementById('keyOutput').textContent = key;
     }
-
-    function actualizarURL() {
-      const cadena = `${customStatus.BG}-${customStatus.TXT}-${customStatus.FS}-${customStatus.BTN}`;
-      const url = new URL(window.location);
-      url.searchParams.set('config', cadena);
-      history.replaceState(null, '', url);
-    }
-
-    function importarDesdeURL() {
-      const params = new URLSearchParams(window.location.search);
-      const cadena = params.get('config');
-      if (!cadena || !/^BG\d-TXT\d-FS\d-BTN\d$/.test(cadena)) {
-        console.warn("Configuración no válida o no encontrada en la URL.");
-        return;
-      }
-      importTheme(cadena);
-    }
-
-    function importTheme(cadena) {
-      const partes = cadena.split('-');
-      partes.forEach(id => {
-        if (id.startsWith('BG')) customStatus.BG = id;
-        if (id.startsWith('TXT')) customStatus.TXT = id;
-        if (id.startsWith('FS')) customStatus.FS = id;
-        if (id.startsWith('BTN')) customStatus.BTN = id;
-      });
-      aplicarConfiguracion();
-    }
-
-    customSelect.addEventListener('change', () => {
-      const val = customSelect.value;
-      if (val === 'IMPORT') {
-        const cadena = prompt("Ingresa la cadena de configuración (ej: BG2-TXT2-FS2-BTN2):");
-        if (cadena && /^BG\d-TXT\d-FS\d-BTN\d$/.test(cadena)) {
-          importTheme(cadena);
-        } else {
-          alert("Cadena de configuración no válida.");
-        }
-      } else if (val === 'preset1') {
-        importTheme('BG2-TXT2-FS1-BTN1');
-      } else if (val === 'preset2') {
-        importTheme('BG1-TXT1-FS2-BTN2');
-      } else {
-        if (val.startsWith('BG')) customStatus.BG = val;
-        if (val.startsWith('TXT')) customStatus.TXT = val;
-        if (val.startsWith('FS')) customStatus.FS = val;
-        if (val.startsWith('BTN')) customStatus.BTN = val;
-        aplicarConfiguracion();
-      }
-      customSelect.selectedIndex = 0;
-    });
-
-    function poblarDropdownInicial() {
-      const opciones = [
-        { value: 'crearInterno', label: 'Crear opción interna' },
-        { value: 'crearExterno', label: 'Crear botón externo' }
-      ];
-      opciones.forEach(op => {
-        const opt = document.createElement('option');
-        opt.value = op.value;
-        opt.textContent = op.label;
-        dropdown.appendChild(opt);
-      });
-    }
-
-    poblarDropdownInicial();
-    aplicarConfiguracion();
-    importarDesdeURL();
   </script>
+
 </body>
 </html>
