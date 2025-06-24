@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gestión de Botones Dinámicos</title>
+  <title>Gestión de Botones Internos y Externos</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -23,8 +23,8 @@
     .btn:hover {
       background-color: #0056b3;
     }
-    #container, #outsideContainer {
-      margin: 15px 0;
+    #outsideContainer {
+      margin: 20px 0;
     }
     h3 {
       margin-top: 25px;
@@ -33,27 +33,25 @@
 </head>
 <body>
 
-  <h2>Administrador de Botones Dinámicos</h2>
+  <h2>Administrador de Opciones</h2>
 
   <select id="dropdown" class="btn"></select>
 
-  <h3>Botones dentro del contenedor:</h3>
-  <div id="container"></div>
-
-  <h3>Botones fuera del contenedor:</h3>
+  <h3>Botones físicos fuera del desplegable:</h3>
   <div id="outsideContainer"></div>
 
   <button id="finalBtn" class="btn" style="background-color: #28a745;">
-    Mostrar y eliminar opciones manualmente
+    Mostrar y eliminar opciones
   </button>
 
   <script>
     const dropdown = document.getElementById('dropdown');
-    const container = document.getElementById('container');
     const outsideContainer = document.getElementById('outsideContainer');
     const finalBtn = document.getElementById('finalBtn');
 
-    const botones = {}; // { id: { nombre, mensaje, boton, ubicacion: 'inside' | 'outside' } }
+    const botones = {}; // { id: { nombre, mensaje, ubicacion, boton? } }
+
+    const LIMITE_INTERNOS = 5;
 
     function generarId() {
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -67,21 +65,40 @@
     function actualizarDropdown() {
       dropdown.innerHTML = `
         <option disabled selected>-- Acciones --</option>
-        <option value="createInside">🟦 Crear botón dentro</option>
+        <option value="createInside">🟦 Crear opción interna</option>
         <option value="createOutside">🟨 Crear botón fuera</option>
       `;
 
       for (let id in botones) {
-        const nombre = botones[id].nombre;
-        dropdown.innerHTML += `<option value="${id}">${id} = ${nombre}</option>`;
+        if (botones[id].ubicacion === 'inside') {
+          dropdown.innerHTML += `<option value="${id}">${id} = ${botones[id].nombre}</option>`;
+        }
       }
     }
 
-    function crearBoton(ubicacion) {
-      const nombre = prompt("Nombre del botón:");
+    function crearOpcionInterna() {
+      const internos = Object.values(botones).filter(b => b.ubicacion === 'inside').length;
+      if (internos >= LIMITE_INTERNOS) {
+        alert(`Has alcanzado el límite de ${LIMITE_INTERNOS} opciones internas.`);
+        return;
+      }
+
+      const nombre = prompt("Nombre de la opción interna:");
       if (!nombre) return;
 
-      const mensaje = prompt("Mensaje que debe mostrar el botón:");
+      const mensaje = prompt("Mensaje que debe mostrar:");
+      if (!mensaje) return;
+
+      const id = generarId();
+      botones[id] = { nombre, mensaje, ubicacion: 'inside' };
+      actualizarDropdown();
+    }
+
+    function crearBotonFuera() {
+      const nombre = prompt("Nombre del botón físico:");
+      if (!nombre) return;
+
+      const mensaje = prompt("Mensaje que debe mostrar:");
       if (!mensaje) return;
 
       const id = generarId();
@@ -89,72 +106,61 @@
       nuevoBtn.textContent = nombre;
       nuevoBtn.className = 'btn';
       nuevoBtn.addEventListener('click', () => alert(mensaje));
+      outsideContainer.appendChild(nuevoBtn);
 
-      if (ubicacion === 'inside') {
-        container.appendChild(nuevoBtn);
-      } else {
-        outsideContainer.appendChild(nuevoBtn);
-      }
-
-      botones[id] = { nombre, mensaje, boton: nuevoBtn, ubicacion };
-      actualizarDropdown();
+      botones[id] = { nombre, mensaje, ubicacion: 'outside', boton: nuevoBtn };
     }
 
     dropdown.addEventListener('change', () => {
       const val = dropdown.value;
 
       if (val === 'createInside') {
-        crearBoton('inside');
+        crearOpcionInterna();
       } else if (val === 'createOutside') {
-        crearBoton('outside');
+        crearBotonFuera();
       } else if (botones[val]) {
-        // Mostrar info y preguntar si eliminar
-        alert(`Mensaje del botón "${botones[val].nombre}":\n\n${botones[val].mensaje}`);
-        const eliminar = confirm(`¿Quieres eliminar el botón "${botones[val].nombre}" (ID: ${val})?`);
+        const b = botones[val];
+        alert(`Mensaje de "${b.nombre}":\n\n${b.mensaje}`);
+        const eliminar = confirm(`¿Deseas eliminar "${b.nombre}" (ID: ${val})?`);
         if (eliminar) {
-          const info = botones[val];
-          if (info.ubicacion === 'inside') {
-            container.removeChild(info.boton);
-          } else {
-            outsideContainer.removeChild(info.boton);
+          if (b.ubicacion === 'outside') {
+            outsideContainer.removeChild(b.boton);
           }
           delete botones[val];
           actualizarDropdown();
         }
       }
 
-      dropdown.selectedIndex = 0; // reinicia selección
+      dropdown.selectedIndex = 0;
     });
 
     finalBtn.addEventListener('click', () => {
       if (Object.keys(botones).length === 0) {
-        alert("No hay botones creados.");
+        alert("No hay elementos para mostrar.");
         return;
       }
 
       let resumen = "Opciones actuales:\n";
       for (let id in botones) {
-        const loc = botones[id].ubicacion === 'inside' ? "Dentro" : "Fuera";
-        resumen += `${id} = ${botones[id].nombre} (${loc})\n`;
+        const tipo = botones[id].ubicacion === 'inside' ? "Interna" : "Externa";
+        resumen += `${id} = ${botones[id].nombre} (${tipo})\n`;
       }
 
-      const accion = prompt(resumen + "\nEscribe un identificador para eliminarlo, o deja vacío para cancelar:");
+      const accion = prompt(resumen + "\nEscribe un ID para eliminarlo, o deja vacío para cancelar:");
       if (accion && botones[accion]) {
-        const info = botones[accion];
-        if (info.ubicacion === 'inside') {
-          container.removeChild(info.boton);
-        } else {
-          outsideContainer.removeChild(info.boton);
+        const b = botones[accion];
+        if (b.ubicacion === 'outside') {
+          outsideContainer.removeChild(b.boton);
         }
         delete botones[accion];
         actualizarDropdown();
         alert(`Eliminado: ${accion}`);
       } else if (accion) {
-        alert("Identificador inválido.");
+        alert("ID inválido.");
       }
     });
 
-    actualizarDropdown(); // iniciar
+    actualizarDropdown();
   </script>
 </body>
 </html>
