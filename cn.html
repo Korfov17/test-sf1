@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirmación Personalizada con Cambio de Color</title>
+  <title>Confirmación Personalizada</title>
   <style>
     /* Estilos del fondo */
     .overlay {
@@ -45,33 +45,34 @@
       background-color: #4CAF50;
       color: white;
     }
-
-    /* Estilo para el texto que se cambiará de color */
-    #textToChange {
-      font-size: 24px;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
   </style>
 </head>
 <body>
 
-  <h1>Prueba de cambio de color con confirmación personalizada</h1>
-  <p id="textToChange">Este es el texto que cambiará de color.</p>
-  <a href="#" onclick="showConfirmChangeColor()">Hacer que el texto cambie de color</a>
+  <h1>Emulando un Confirm con texto personalizado</h1>
+  <p id="textToChange">Este es el texto que cambiará si haces click en "Sí".</p>
+  <a href="#" onclick="customConfirm('¿Estás seguro de cambiar el color del texto?', 'Sí, cambiar color', 'No, cancelar', changeTextColor)">Cambiar color de texto</a>
 
   <div class="overlay" id="confirmOverlay">
     <div class="confirm-box">
-      <p>¿Estás seguro de que deseas cambiar el color del texto?</p>
+      <p id="confirmMessage">¿Estás seguro de hacer esto?</p>
       <button class="cancel" onclick="handleCancel()">No, cancelar</button>
-      <button class="confirm" onclick="handleConfirm()">Sí, cambiar color</button>
+      <button class="confirm" onclick="handleConfirm()">Sí, continuar</button>
     </div>
   </div>
 
   <script>
-    // Función para mostrar el cuadro de confirmación
-    function showConfirmChangeColor() {
+    // Muestra el cuadro de confirmación con los textos personalizados
+    function customConfirm(message, confirmText, cancelText, callback) {
+      document.getElementById('confirmMessage').textContent = message;
+      document.querySelector('.confirm').textContent = confirmText;
+      document.querySelector('.cancel').textContent = cancelText;
+      
+      // Muestra el modal
       document.getElementById('confirmOverlay').style.display = 'flex';
+
+      // Asigna la función a llamar cuando el usuario confirma
+      window.confirmCallback = callback;
     }
 
     // Función para manejar el click en "Cancelar"
@@ -82,9 +83,16 @@
 
     // Función para manejar el click en "Aceptar"
     function handleConfirm() {
-      console.log('Color cambiado');
-      document.getElementById('textToChange').style.color = 'blue'; // Cambia el color del texto
+      console.log('Acción confirmada');
+      if (window.confirmCallback) {
+        window.confirmCallback(); // Ejecuta el callback personalizado
+      }
       document.getElementById('confirmOverlay').style.display = 'none';
+    }
+
+    // Función que cambiará el color del texto
+    function changeTextColor() {
+      document.getElementById('textToChange').style.color = 'blue'; // Cambia el color del texto
     }
   </script>
 
