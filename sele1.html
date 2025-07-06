@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selector Oculto con F6</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: white;
+      transition: background-color 0.3s;
+    }
+
+    #hiddenSelect {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Presiona F6 para cambiar el color de fondo</h1>
+
+<select id="hiddenSelect" disabled onchange="changeBackground(this.value)">
+  <option value="">-- Elige un color --</option>
+  <option value="white">Blanco</option>
+  <option value="lightblue">Celeste</option>
+  <option value="lightgreen">Verde claro</option>
+  <option value="black">Negro</option>
+</select>
+
+<script>
+  const select = document.getElementById('hiddenSelect');
+
+  // Cambia el color de fondo
+  function changeBackground(color) {
+    if (color) {
+      document.body.style.backgroundColor = color;
+    }
+  }
+
+  // Escuchar la tecla F6 (keyCode 117)
+  window.addEventListener('keydown', function(e) {
+    if (e.keyCode === 117) {
+      select.disabled = false;
+      select.style.opacity = '1';
+      select.style.pointerEvents = 'auto';
+
+      // Simula un clic para abrir el select (no siempre funciona en todos los navegadores)
+      const evt = new MouseEvent('mousedown', { bubbles: true });
+      select.dispatchEvent(evt);
+
+      // Opcional: volver a deshabilitarlo tras abrir
+      setTimeout(() => {
+        select.disabled = true;
+        select.style.opacity = '0';
+        select.style.pointerEvents = 'none';
+      }, 3000); // vuelve a ocultarse después de 3 segundos
+    }
+  });
+</script>
+
+</body>
+</html>
