@@ -1,35 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Select que aparece y desaparece rápido</title>
+  <meta charset="UTF-8">
+  <title>Selector Oculto con F6</title>
   <style>
     body {
       font-family: sans-serif;
-      margin: 2rem;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end; /* para que el select esté abajo */
+      background-color: white;
+      transition: background-color 0.3s;
     }
 
     #hiddenSelect {
-      width: 200px;
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease;
-      margin-bottom: 10px;
-    }
-
-    #hiddenSelect.visible {
-      opacity: 1;
-      pointer-events: auto;
+      transition: opacity 0.3s;
     }
   </style>
 </head>
 <body>
 
-<h1>Presiona F6 para abrir el select brevemente abajo</h1>
+<h1>Presiona F6 para cambiar el color de fondo</h1>
 
 <select id="hiddenSelect" disabled onchange="changeBackground(this.value)">
   <option value="">-- Elige un color --</option>
@@ -43,32 +36,27 @@
   const select = document.getElementById('hiddenSelect');
 
   function changeBackground(color) {
-    if(color) {
+    if (color) {
       document.body.style.backgroundColor = color;
     }
   }
 
-  function openSelectBriefly(durationMs = 500) {
-    select.disabled = false;
-    select.classList.add('visible');
-    
-    // Foco para abrir el select
-    select.focus();
+  window.addEventListener('keydown', function(e) {
+    if (e.keyCode === 117) { // F6
+      select.disabled = false;
+      select.style.opacity = '1';
+      select.style.pointerEvents = 'auto';
 
-    // Intenta abrir el dropdown (esto funciona en algunos navegadores)
-    select.size = select.options.length; // abre el select mostrando opciones
+      // Simula un clic para abrir el select (no garantizado que funcione en todos los navegadores)
+      const evt = new MouseEvent('mousedown', { bubbles: true });
+      select.dispatchEvent(evt);
 
-    // Después de durationMs, se cierra y oculta
-    setTimeout(() => {
-      select.size = 1; // cierra el select
-      select.classList.remove('visible');
-      select.disabled = true;
-    }, durationMs);
-  }
-
-  window.addEventListener('keydown', e => {
-    if(e.keyCode === 117) { // F6
-      openSelectBriefly(500); // 500 ms visible y abierto
+      // Oculta rápidamente en 100 ms
+      setTimeout(() => {
+        select.disabled = true;
+        select.style.opacity = '0';
+        select.style.pointerEvents = 'none';
+      }, 100);
     }
   });
 </script>
