@@ -2,28 +2,43 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Selector Secreto</title>
+  <title>Menú Secreto</title>
   <style>
-    /* Oculta todo el contenido inicialmente */
     body {
-      background-color: #ffffff;
       margin: 0;
       padding: 0;
+      background-color: white;
     }
 
-    #select-container {
+    #menu-container {
       display: none;
-      padding: 20px;
+      position: absolute;
+      top: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      font-family: Arial, sans-serif;
+      font-size: 16px;
     }
 
-    select {
-      padding: 10px;
-      font-size: 16px;
+    .menu-item {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    .menu-item:hover {
+      background-color: #f0f0f0;
     }
   </style>
 </head>
 <body>
-  <div id="select-container"></div>
+  <div id="menu-container">
+    <div class="menu-item">Opción 1</div>
+    <div class="menu-item">Opción 2</div>
+    <div class="menu-item">Opción 3</div>
+  </div>
 
   <script>
     let keysPressed = {};
@@ -32,7 +47,7 @@
       keysPressed[event.keyCode] = true;
 
       if (keysPressed[38] && keysPressed[117]) {
-        mostrarSelect();
+        abrirMenu();
       }
     });
 
@@ -40,28 +55,17 @@
       delete keysPressed[event.keyCode];
     });
 
-    function mostrarSelect() {
-      const container = document.getElementById("select-container");
-
-      // Si ya existe un select, no lo vuelvas a crear
-      if (!document.getElementById("dynamic-select")) {
-        const select = document.createElement("select");
-        select.id = "dynamic-select";
-
-        const opciones = ["Opción 1", "Opción 2", "Opción 3"];
-        opciones.forEach((texto, idx) => {
-          const option = document.createElement("option");
-          option.value = idx + 1;
-          option.textContent = texto;
-          select.appendChild(option);
-        });
-
-        container.appendChild(select);
-      }
-
-      // Muestra el contenedor del select
-      container.style.display = "block";
+    function abrirMenu() {
+      const menu = document.getElementById("menu-container");
+      menu.style.display = "block";
     }
+
+    // Puedes añadir eventos a los ítems del menú si quieres:
+    document.querySelectorAll('.menu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        alert('Has elegido: ' + item.textContent);
+      });
+    });
   </script>
 </body>
 </html>
