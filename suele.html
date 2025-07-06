@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Dinámico con Teclas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    #dynamic-select {
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pulsa Flecha Arriba (38) + F6 (117)</h1>
+  <div id="select-container"></div>
+
+  <script>
+    let keysPressed = {};
+
+    document.addEventListener('keydown', function (event) {
+      keysPressed[event.keyCode] = true;
+
+      if (keysPressed[38] && keysPressed[117]) {
+        // Evita crear múltiples selects si ya existe uno
+        if (!document.getElementById("dynamic-select")) {
+          createDynamicSelect();
+        }
+      }
+    });
+
+    document.addEventListener('keyup', function (event) {
+      delete keysPressed[event.keyCode];
+    });
+
+    function createDynamicSelect() {
+      const container = document.getElementById("select-container");
+      const select = document.createElement("select");
+      select.id = "dynamic-select";
+
+      const options = ["Opción 1", "Opción 2", "Opción 3"];
+      options.forEach((text, index) => {
+        const option = document.createElement("option");
+        option.value = index + 1;
+        option.textContent = text;
+        select.appendChild(option);
+      });
+
+      container.appendChild(select);
+    }
+  </script>
+</body>
+</html>
