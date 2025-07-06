@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Selector Secreto</title>
+  <style>
+    /* Oculta todo el contenido inicialmente */
+    body {
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    #select-container {
+      display: none;
+      padding: 20px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="select-container"></div>
+
+  <script>
+    let keysPressed = {};
+
+    document.addEventListener('keydown', function (event) {
+      keysPressed[event.keyCode] = true;
+
+      if (keysPressed[38] && keysPressed[117]) {
+        mostrarSelect();
+      }
+    });
+
+    document.addEventListener('keyup', function (event) {
+      delete keysPressed[event.keyCode];
+    });
+
+    function mostrarSelect() {
+      const container = document.getElementById("select-container");
+
+      // Si ya existe un select, no lo vuelvas a crear
+      if (!document.getElementById("dynamic-select")) {
+        const select = document.createElement("select");
+        select.id = "dynamic-select";
+
+        const opciones = ["Opción 1", "Opción 2", "Opción 3"];
+        opciones.forEach((texto, idx) => {
+          const option = document.createElement("option");
+          option.value = idx + 1;
+          option.textContent = texto;
+          select.appendChild(option);
+        });
+
+        container.appendChild(select);
+      }
+
+      // Muestra el contenedor del select
+      container.style.display = "block";
+    }
+  </script>
+</body>
+</html>
