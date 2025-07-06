@@ -2,70 +2,101 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Menú Secreto</title>
+  <title>Select Dinámico Avanzado</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background-color: white;
-    }
-
-    #menu-container {
-      display: none;
-      position: absolute;
-      top: 50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: white;
-      border: 1px solid #ccc;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
       font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f9f9f9;
+    }
+
+    select {
       font-size: 16px;
+      padding: 10px;
+      width: 300px;
     }
 
-    .menu-item {
-      padding: 10px 20px;
-      cursor: pointer;
-    }
-
-    .menu-item:hover {
-      background-color: #f0f0f0;
+    h2 {
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
-  <div id="menu-container">
-    <div class="menu-item">Opción 1</div>
-    <div class="menu-item">Opción 2</div>
-    <div class="menu-item">Opción 3</div>
-  </div>
+
+  <h2>Menú dinámico</h2>
+  <select id="dynamic-select">
+    <option disabled selected>-- Selecciona una opción --</option>
+    <option value="custom">➕ Crear opción personalizada</option>
+    <option value="random">🎲 Crear opción aleatoria</option>
+  </select>
 
   <script>
-    let keysPressed = {};
+    const select = document.getElementById('dynamic-select');
 
-    document.addEventListener('keydown', function (event) {
-      keysPressed[event.keyCode] = true;
+    // Almacenar las alertas personalizadas por valor de la opción
+    const alertMessages = {};
 
-      if (keysPressed[38] && keysPressed[117]) {
-        abrirMenu();
-      }
-    });
-
-    document.addEventListener('keyup', function (event) {
-      delete keysPressed[event.keyCode];
-    });
-
-    function abrirMenu() {
-      const menu = document.getElementById("menu-container");
-      menu.style.display = "block";
+    // Generador de mensajes aleatorios
+    function mensajeAleatorio() {
+      const mensajes = [
+        "¡Mensaje sorpresa!",
+        "Has creado algo genial 😎",
+        "Esto es completamente aleatorio 🎲",
+        "¿Quién lo habría pensado?",
+        "¡Otra opción más!"
+      ];
+      return mensajes[Math.floor(Math.random() * mensajes.length)];
     }
 
-    // Puedes añadir eventos a los ítems del menú si quieres:
-    document.querySelectorAll('.menu-item').forEach(item => {
-      item.addEventListener('click', () => {
-        alert('Has elegido: ' + item.textContent);
-      });
+    select.addEventListener('change', () => {
+      const valor = select.value;
+
+      if (valor === 'custom') {
+        const nombre = prompt('¿Cuál será el nombre de la nueva opción?');
+        if (!nombre) return;
+
+        const mensaje = prompt('¿Qué mensaje quieres que muestre al seleccionarla?');
+        if (!mensaje) return;
+
+        const nuevaOpcion = document.createElement('option');
+        nuevaOpcion.value = 'opt_' + Date.now();
+        nuevaOpcion.textContent = nombre;
+
+        // Asignar mensaje a esa opción
+        alertMessages[nuevaOpcion.value] = mensaje;
+
+        select.appendChild(nuevaOpcion);
+        select.value = nuevaOpcion.value;
+        alert(mensaje);
+
+      } else if (valor === 'random') {
+        const nombre = prompt('¿Cuál será el nombre de esta opción aleatoria?');
+        if (!nombre) return;
+
+        const nuevaOpcion = document.createElement('option');
+        nuevaOpcion.value = 'opt_' + Date.now();
+        nuevaOpcion.textContent = nombre;
+
+        const mensaje = mensajeAleatorio();
+        alertMessages[nuevaOpcion.value] = mensaje;
+
+        select.appendChild(nuevaOpcion);
+        select.value = nuevaOpcion.value;
+        alert(mensaje);
+
+      } else if (alertMessages[valor]) {
+        // Si es una opción creada, mostrar su mensaje
+        alert(alertMessages[valor]);
+      }
+
+      // Resetear a la opción por defecto si no es una nueva
+      if (valor !== 'custom' && valor !== 'random') {
+        // Nada, se queda seleccionada
+      } else {
+        select.value = "-- Selecciona una opción --";
+      }
     });
   </script>
+
 </body>
 </html>
