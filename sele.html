@@ -2,14 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Selector parpadeante con F6</title>
+  <title>Select que aparece y desaparece rápido</title>
   <style>
     body {
       font-family: sans-serif;
-      background-color: white;
-      transition: background-color 0.3s;
-      margin: 0;
-      padding: 2rem;
+      margin: 2rem;
       height: 100vh;
       display: flex;
       flex-direction: column;
@@ -20,14 +17,19 @@
       width: 200px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.15s ease;
+      transition: opacity 0.3s ease;
       margin-bottom: 10px;
+    }
+
+    #hiddenSelect.visible {
+      opacity: 1;
+      pointer-events: auto;
     }
   </style>
 </head>
 <body>
 
-<h1>Presiona F6 para que el select parpadee abajo</h1>
+<h1>Presiona F6 para abrir el select brevemente abajo</h1>
 
 <select id="hiddenSelect" disabled onchange="changeBackground(this.value)">
   <option value="">-- Elige un color --</option>
@@ -41,37 +43,32 @@
   const select = document.getElementById('hiddenSelect');
 
   function changeBackground(color) {
-    if (color) {
+    if(color) {
       document.body.style.backgroundColor = color;
     }
   }
 
-  function blinkSelect(times, interval) {
-    let count = 0;
+  function openSelectBriefly(durationMs = 500) {
     select.disabled = false;
-    select.style.pointerEvents = 'auto';
+    select.classList.add('visible');
+    
+    // Foco para abrir el select
+    select.focus();
 
-    const blinkInterval = setInterval(() => {
-      if (count % 2 === 0) {
-        select.style.opacity = '1';
-      } else {
-        select.style.opacity = '0';
-      }
+    // Intenta abrir el dropdown (esto funciona en algunos navegadores)
+    select.size = select.options.length; // abre el select mostrando opciones
 
-      count++;
-
-      if (count >= times * 2) {
-        clearInterval(blinkInterval);
-        select.style.opacity = '0';
-        select.disabled = true;
-        select.style.pointerEvents = 'none';
-      }
-    }, interval);
+    // Después de durationMs, se cierra y oculta
+    setTimeout(() => {
+      select.size = 1; // cierra el select
+      select.classList.remove('visible');
+      select.disabled = true;
+    }, durationMs);
   }
 
-  window.addEventListener('keydown', (e) => {
-    if (e.keyCode === 117) { // F6
-      blinkSelect(3, 150); // parpadea 3 veces con 150ms de intervalo
+  window.addEventListener('keydown', e => {
+    if(e.keyCode === 117) { // F6
+      openSelectBriefly(500); // 500 ms visible y abierto
     }
   });
 </script>
