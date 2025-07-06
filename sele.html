@@ -1,114 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Select Dinámico Avanzado</title>
+  <meta charset="UTF-8" />
+  <title>Selector parpadeante con F6</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      background-color: #f9f9f9;
+      font-family: sans-serif;
+      background-color: white;
+      transition: background-color 0.3s;
+      margin: 0;
+      padding: 2rem;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end; /* para que el select esté abajo */
     }
 
-    select {
-      font-size: 16px;
-      padding: 10px;
-      width: 350px;
-    }
-
-    h2 {
+    #hiddenSelect {
+      width: 200px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s ease;
       margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
 
-  <h2>🌩️ Menú dinámico con control de orden</h2>
-  <select id="dynamic-select">
-    <option disabled selected>-- Selecciona una opción --</option>
-    <option value="custom">🌩️ Crear opción personalizada</option>
-    <option value="random">🌩️ Crear opción aleatoria</option>
-  </select>
+<h1>Presiona F6 para que el select parpadee abajo</h1>
 
-  <script>
-    const select = document.getElementById('dynamic-select');
-    const alertMessages = {};
+<select id="hiddenSelect" disabled onchange="changeBackground(this.value)">
+  <option value="">-- Elige un color --</option>
+  <option value="white">Blanco</option>
+  <option value="lightblue">Celeste</option>
+  <option value="lightgreen">Verde claro</option>
+  <option value="black">Negro</option>
+</select>
 
-    function mensajeAleatorio() {
-      const mensajes = [
-        "🌩️ Mensaje sorpresa ⚡",
-        "🌩️ ¡Qué buena elección!",
-        "🌩️ Este mensaje es aleatorio 🎲",
-        "🌩️ Nadie esperaba esto",
-        "🌩️ Boom! Una nueva opción"
-      ];
-      return mensajes[Math.floor(Math.random() * mensajes.length)];
+<script>
+  const select = document.getElementById('hiddenSelect');
+
+  function changeBackground(color) {
+    if (color) {
+      document.body.style.backgroundColor = color;
     }
+  }
 
-    select.addEventListener('change', () => {
-      const valor = select.value;
+  function blinkSelect(times, interval) {
+    let count = 0;
+    select.disabled = false;
+    select.style.pointerEvents = 'auto';
 
-      if (valor === 'custom') {
-        const nombre = prompt('🌩️ ¿Cuál será el nombre de la nueva opción personalizada?');
-        if (!nombre) return;
-
-        const mensaje = prompt('🌩️ ¿Qué mensaje debe mostrar esta opción?');
-        if (!mensaje) return;
-
-        const nuevaOpcion = document.createElement('option');
-        const valueId = 'opt_' + Date.now();
-        nuevaOpcion.value = valueId;
-        nuevaOpcion.textContent = '🌩️ ' + nombre;
-
-        alertMessages[valueId] = mensaje;
-
-        // Insertar debajo de la opción "custom" y antes de "random"
-        const opciones = Array.from(select.options);
-        const customIndex = opciones.findIndex(opt => opt.value === 'custom');
-        const randomIndex = opciones.findIndex(opt => opt.value === 'random');
-
-        // Insertamos justo después de la opción "custom" y antes de "random"
-        select.add(nuevaOpcion, select.options[randomIndex]);
-
-        select.value = valueId;
-        alert(mensaje);
-
-      } else if (valor === 'random') {
-        const nombre = prompt('🌩️ ¿Cuál será el nombre de esta opción aleatoria?');
-        if (!nombre) return;
-
-        const mensaje = mensajeAleatorio();
-        const nuevaOpcion = document.createElement('option');
-        const valueId = 'opt_' + Date.now();
-        nuevaOpcion.value = valueId;
-        nuevaOpcion.textContent = '🌩️ ' + nombre;
-
-        alertMessages[valueId] = mensaje;
-
-        // Insertar justo después de la opción "random"
-        const opciones = Array.from(select.options);
-        const randomIndex = opciones.findIndex(opt => opt.value === 'random');
-
-        // Si hay ya opciones aleatorias, insertamos al final después de ellas
-        let insertIndex = randomIndex + 1;
-        while (insertIndex < select.options.length && select.options[insertIndex].value.startsWith("opt_")) {
-          insertIndex++;
-        }
-
-        select.add(nuevaOpcion, select.options[insertIndex] || null);
-        select.value = valueId;
-        alert(mensaje);
-
-      } else if (alertMessages[valor]) {
-        alert(alertMessages[valor]);
+    const blinkInterval = setInterval(() => {
+      if (count % 2 === 0) {
+        select.style.opacity = '1';
+      } else {
+        select.style.opacity = '0';
       }
 
-      // Volver a la opción por defecto si fue "crear"
-      if (valor === 'custom' || valor === 'random') {
-        select.value = '-- Selecciona una opción --';
+      count++;
+
+      if (count >= times * 2) {
+        clearInterval(blinkInterval);
+        select.style.opacity = '0';
+        select.disabled = true;
+        select.style.pointerEvents = 'none';
       }
-    });
-  </script>
+    }, interval);
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.keyCode === 117) { // F6
+      blinkSelect(3, 150); // parpadea 3 veces con 150ms de intervalo
+    }
+  });
+</script>
 
 </body>
 </html>
