@@ -13,7 +13,7 @@
     select {
       font-size: 16px;
       padding: 10px;
-      width: 300px;
+      width: 350px;
     }
 
     h2 {
@@ -23,27 +23,24 @@
 </head>
 <body>
 
-  <h2>Menú dinámico</h2>
+  <h2>🌩️ Menú dinámico con control de orden</h2>
   <select id="dynamic-select">
     <option disabled selected>-- Selecciona una opción --</option>
-    <option value="custom">➕ Crear opción personalizada</option>
-    <option value="random">🎲 Crear opción aleatoria</option>
+    <option value="custom">🌩️ Crear opción personalizada</option>
+    <option value="random">🌩️ Crear opción aleatoria</option>
   </select>
 
   <script>
     const select = document.getElementById('dynamic-select');
-
-    // Almacenar las alertas personalizadas por valor de la opción
     const alertMessages = {};
 
-    // Generador de mensajes aleatorios
     function mensajeAleatorio() {
       const mensajes = [
-        "¡Mensaje sorpresa!",
-        "Has creado algo genial 😎",
-        "Esto es completamente aleatorio 🎲",
-        "¿Quién lo habría pensado?",
-        "¡Otra opción más!"
+        "🌩️ Mensaje sorpresa ⚡",
+        "🌩️ ¡Qué buena elección!",
+        "🌩️ Este mensaje es aleatorio 🎲",
+        "🌩️ Nadie esperaba esto",
+        "🌩️ Boom! Una nueva opción"
       ];
       return mensajes[Math.floor(Math.random() * mensajes.length)];
     }
@@ -52,48 +49,63 @@
       const valor = select.value;
 
       if (valor === 'custom') {
-        const nombre = prompt('¿Cuál será el nombre de la nueva opción?');
+        const nombre = prompt('🌩️ ¿Cuál será el nombre de la nueva opción personalizada?');
         if (!nombre) return;
 
-        const mensaje = prompt('¿Qué mensaje quieres que muestre al seleccionarla?');
+        const mensaje = prompt('🌩️ ¿Qué mensaje debe mostrar esta opción?');
         if (!mensaje) return;
 
         const nuevaOpcion = document.createElement('option');
-        nuevaOpcion.value = 'opt_' + Date.now();
-        nuevaOpcion.textContent = nombre;
+        const valueId = 'opt_' + Date.now();
+        nuevaOpcion.value = valueId;
+        nuevaOpcion.textContent = '🌩️ ' + nombre;
 
-        // Asignar mensaje a esa opción
-        alertMessages[nuevaOpcion.value] = mensaje;
+        alertMessages[valueId] = mensaje;
 
-        select.appendChild(nuevaOpcion);
-        select.value = nuevaOpcion.value;
+        // Insertar debajo de la opción "custom" y antes de "random"
+        const opciones = Array.from(select.options);
+        const customIndex = opciones.findIndex(opt => opt.value === 'custom');
+        const randomIndex = opciones.findIndex(opt => opt.value === 'random');
+
+        // Insertamos justo después de la opción "custom" y antes de "random"
+        select.add(nuevaOpcion, select.options[randomIndex]);
+
+        select.value = valueId;
         alert(mensaje);
 
       } else if (valor === 'random') {
-        const nombre = prompt('¿Cuál será el nombre de esta opción aleatoria?');
+        const nombre = prompt('🌩️ ¿Cuál será el nombre de esta opción aleatoria?');
         if (!nombre) return;
 
-        const nuevaOpcion = document.createElement('option');
-        nuevaOpcion.value = 'opt_' + Date.now();
-        nuevaOpcion.textContent = nombre;
-
         const mensaje = mensajeAleatorio();
-        alertMessages[nuevaOpcion.value] = mensaje;
+        const nuevaOpcion = document.createElement('option');
+        const valueId = 'opt_' + Date.now();
+        nuevaOpcion.value = valueId;
+        nuevaOpcion.textContent = '🌩️ ' + nombre;
 
-        select.appendChild(nuevaOpcion);
-        select.value = nuevaOpcion.value;
+        alertMessages[valueId] = mensaje;
+
+        // Insertar justo después de la opción "random"
+        const opciones = Array.from(select.options);
+        const randomIndex = opciones.findIndex(opt => opt.value === 'random');
+
+        // Si hay ya opciones aleatorias, insertamos al final después de ellas
+        let insertIndex = randomIndex + 1;
+        while (insertIndex < select.options.length && select.options[insertIndex].value.startsWith("opt_")) {
+          insertIndex++;
+        }
+
+        select.add(nuevaOpcion, select.options[insertIndex] || null);
+        select.value = valueId;
         alert(mensaje);
 
       } else if (alertMessages[valor]) {
-        // Si es una opción creada, mostrar su mensaje
         alert(alertMessages[valor]);
       }
 
-      // Resetear a la opción por defecto si no es una nueva
-      if (valor !== 'custom' && valor !== 'random') {
-        // Nada, se queda seleccionada
-      } else {
-        select.value = "-- Selecciona una opción --";
+      // Volver a la opción por defecto si fue "crear"
+      if (valor === 'custom' || valor === 'random') {
+        select.value = '-- Selecciona una opción --';
       }
     });
   </script>
