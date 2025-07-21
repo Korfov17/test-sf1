@@ -140,6 +140,63 @@
             color: rgba(255, 255, 255, 0.8);
         }
         
+        /* Sección de tipos de plantas */
+        .plant-types {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .plant-types h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #a1ffce;
+        }
+        
+        .plant-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .plant-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .plant-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .plant-img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1.5rem;
+            object-fit: contain;
+        }
+        
+        .plant-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #4facfe;
+        }
+        
+        .plant-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        
         /* Sección de notas */
         .notes-section {
             padding: 2rem;
@@ -260,6 +317,10 @@
             .hero h1 {
                 font-size: 2rem;
             }
+            
+            .plant-cards {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -270,7 +331,7 @@
         <div class="nav-links">
             <a href="#">Inicio</a>
             <a href="#">Categorías</a>
-            <a href="#">Sobre Nosotros</a>
+            <a href="#">Tipos de Plantas</a>
             <a href="#">Contacto</a>
         </div>
     </nav>
@@ -288,6 +349,54 @@
         <p>Las plantas son organismos esenciales para la vida en nuestro planeta. No solo producen el oxígeno que respiramos, sino que también forman la base de la cadena alimentaria y proporcionan hábitats para innumerables especies.</p>
         <p>Desde las majestuosas secuoyas que alcanzan los 100 metros de altura hasta las diminutas lentejas de agua que flotan en estanques, las plantas exhiben una diversidad asombrosa. Algunas pueden vivir miles de años, mientras que otras completan su ciclo de vida en solo unas semanas.</p>
         <p>Además de su importancia ecológica, las plantas han sido fundamentales para el desarrollo humano, proporcionando alimentos, medicinas, materiales de construcción y belleza estética a nuestras vidas.</p>
+    </section>
+    
+    <!-- Nueva sección de tipos de plantas -->
+    <section class="plant-types">
+        <h2>Tipos de Plantas</h2>
+        <div class="plant-cards">
+            <!-- Card 1 -->
+            <div class="plant-card">
+                <img src="https://www.freeiconspng.com/uploads/leaf-icon-png-1.png" alt="Árboles" class="plant-img">
+                <h3>Árboles</h3>
+                <p>Plantas leñosas de gran tamaño con un tronco principal que se ramifica a cierta altura del suelo. Proporcionan sombra, madera y son esenciales para los ecosistemas.</p>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="plant-card">
+                <img src="https://www.freeiconspng.com/uploads/green-leaf-icon-0.png" alt="Arbustos" class="plant-img">
+                <h3>Arbustos</h3>
+                <p>Plantas leñosas de menor tamaño que los árboles, con varios tallos que surgen desde la base. Ideales para jardinería y setos.</p>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="plant-card">
+                <img src="https://www.freeiconspng.com/uploads/leaf-icon-5.png" alt="Hierbas" class="plant-img">
+                <h3>Hierbas</h3>
+                <p>Plantas no leñosas con tallos verdes y suaves. Incluyen muchas especies comestibles y medicinales, como la menta y el romero.</p>
+            </div>
+            
+            <!-- Card 4 -->
+            <div class="plant-card">
+                <img src="https://www.freeiconspng.com/uploads/leaf-icon-png-12.png" alt="Trepadoras" class="plant-img">
+                <h3>Trepadoras</h3>
+                <p>Plantas que crecen apoyándose en estructuras u otras plantas. Ideales para cubrir muros y pérgolas, como la hiedra o la pasionaria.</p>
+            </div>
+            
+            <!-- Card 5 -->
+            <div class="plant-card">
+                <img src="https://www.freeiconspng.com/uploads/leaf-icon-png-24.png" alt="Suculentas" class="plant-img">
+                <h3>Suculentas</h3>
+                <p>Plantas con tejidos carnosos para almacenar agua. Muy resistentes a la sequía, como los cactus y las echeverias.</p>
+            </div>
+            
+            <!-- Card 6 -->
+            <div class="plant-card">
+                <img src="https://www.freeiconspng.com/uploads/leaf-icon-png-23.png" alt="Acuáticas" class="plant-img">
+                <h3>Acuáticas</h3>
+                <p>Plantas que viven en el agua o en ambientes muy húmedos. Incluyen nenúfares, lentejas de agua y plantas para acuarios.</p>
+            </div>
+        </div>
     </section>
     
     <!-- Sección de notas -->
