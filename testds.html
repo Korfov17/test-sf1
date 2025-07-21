@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notas sobre Plantas</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #2d3436);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        /* Barra de navegación con efecto glass */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Portada con botón */
+        .hero {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1526397751294-331021109fbd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat;
+            opacity: 0.4;
+            z-index: -1;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #a1ffce, #faffd1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .hero-btn {
+            padding: 0.8rem 2rem;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+        }
+        
+        /* Sección sobre plantas */
+        .plant-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .plant-section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #4facfe;
+        }
+        
+        .plant-section p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Sección de notas */
+        .notes-section {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .notes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .note-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .note-form h3 {
+            margin-bottom: 1rem;
+            color: #a1ffce;
+        }
+        
+        .note-form input,
+        .note-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: white;
+        }
+        
+        .note-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .note-form button {
+            background: linear-gradient(45deg, #a1ffce, #faffd1);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            color: #1a1a1a;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .note-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(161, 255, 206, 0.3);
+        }
+        
+        .note {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .note h3 {
+            margin-bottom: 0.5rem;
+            color: #4facfe;
+        }
+        
+        .note p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+        
+        .note .delete-btn {
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff6b6b;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .note .delete-btn:hover {
+            background: rgba(255, 0, 0, 0.3);
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                margin-top: 1rem;
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar">
+        <div class="logo">PlantNotes</div>
+        <div class="nav-links">
+            <a href="#">Inicio</a>
+            <a href="#">Categorías</a>
+            <a href="#">Sobre Nosotros</a>
+            <a href="#">Contacto</a>
+        </div>
+    </nav>
+    
+    <!-- Portada con botón -->
+    <section class="hero">
+        <h1>Descubre el Mundo de las Plantas</h1>
+        <p>Explora, aprende y toma notas sobre el fascinante reino vegetal que nos rodea.</p>
+        <button class="hero-btn">Explorar Especies</button>
+    </section>
+    
+    <!-- Sección sobre plantas -->
+    <section class="plant-section">
+        <h2>El Maravilloso Mundo de las Plantas</h2>
+        <p>Las plantas son organismos esenciales para la vida en nuestro planeta. No solo producen el oxígeno que respiramos, sino que también forman la base de la cadena alimentaria y proporcionan hábitats para innumerables especies.</p>
+        <p>Desde las majestuosas secuoyas que alcanzan los 100 metros de altura hasta las diminutas lentejas de agua que flotan en estanques, las plantas exhiben una diversidad asombrosa. Algunas pueden vivir miles de años, mientras que otras completan su ciclo de vida en solo unas semanas.</p>
+        <p>Además de su importancia ecológica, las plantas han sido fundamentales para el desarrollo humano, proporcionando alimentos, medicinas, materiales de construcción y belleza estética a nuestras vidas.</p>
+    </section>
+    
+    <!-- Sección de notas -->
+    <section class="notes-section">
+        <div class="note-form">
+            <h3>Crea una Nueva Nota</h3>
+            <input type="text" id="note-title" placeholder="Título de la nota">
+            <textarea id="note-content" placeholder="Escribe tu nota aquí..."></textarea>
+            <button id="save-note">Guardar Nota</button>
+        </div>
+        
+        <h2>Tus Notas sobre Plantas</h2>
+        <div class="notes-container" id="notes-container">
+            <!-- Las notas se agregarán aquí dinámicamente -->
+        </div>
+    </section>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveBtn = document.getElementById('save-note');
+            const notesContainer = document.getElementById('notes-container');
+            
+            // Cargar notas guardadas al iniciar
+            loadNotes();
+            
+            // Guardar nueva nota
+            saveBtn.addEventListener('click', function() {
+                const title = document.getElementById('note-title').value;
+                const content = document.getElementById('note-content').value;
+                
+                if (title && content) {
+                    const note = { title, content };
+                    saveNote(note);
+                    addNoteToDOM(note);
+                    
+                    // Limpiar campos
+                    document.getElementById('note-title').value = '';
+                    document.getElementById('note-content').value = '';
+                }
+            });
+            
+            // Guardar nota en localStorage
+            function saveNote(note) {
+                let notes = JSON.parse(localStorage.getItem('plant-notes')) || [];
+                notes.push(note);
+                localStorage.setItem('plant-notes', JSON.stringify(notes));
+            }
+            
+            // Cargar notas desde localStorage
+            function loadNotes() {
+                const notes = JSON.parse(localStorage.getItem('plant-notes')) || [];
+                notes.forEach(note => addNoteToDOM(note));
+            }
+            
+            // Agregar nota al DOM con animación
+            function addNoteToDOM(note) {
+                const noteElement = document.createElement('div');
+                noteElement.className = 'note';
+                noteElement.style.animationDelay = `${notesContainer.children.length * 0.1}s`;
+                
+                noteElement.innerHTML = `
+                    <h3>${note.title}</h3>
+                    <p>${note.content}</p>
+                    <button class="delete-btn" onclick="deleteNote(this)">Eliminar</button>
+                `;
+                
+                notesContainer.appendChild(noteElement);
+            }
+        });
+        
+        // Función para eliminar nota (debe ser global para que funcione en el onclick)
+        function deleteNote(button) {
+            const noteElement = button.parentElement;
+            const title = noteElement.querySelector('h3').textContent;
+            const content = noteElement.querySelector('p').textContent;
+            
+            // Eliminar del localStorage
+            let notes = JSON.parse(localStorage.getItem('plant-notes')) || [];
+            notes = notes.filter(note => note.title !== title || note.content !== content);
+            localStorage.setItem('plant-notes', JSON.stringify(notes));
+            
+            // Eliminar del DOM con animación
+            noteElement.style.animation = 'fadeOut 0.3s forwards';
+            setTimeout(() => noteElement.remove(), 300);
+        }
+        
+        // Añadir keyframe para la animación de eliminación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                to {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
