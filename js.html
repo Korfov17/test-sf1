@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tarjetas desde JSON embebido</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .contenedor {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .cuadro {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .tarjeta {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 20px;
+      width: 250px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .tarjeta:hover {
+      transform: translateY(-5px);
+    }
+
+    .tarjeta h2 {
+      margin-top: 0;
+      font-size: 1.2em;
+      color: #333;
+    }
+
+    .tarjeta p {
+      margin: 10px 0 0;
+      color: #666;
+    }
+
+    pre {
+      background: #eee;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor">
+    <h1>Listado de Tarjetas</h1>
+    <div id="tarjetas-container" class="cuadro"></div>
+    
+    <h2>Datos JSON utilizados</h2>
+    <pre id="json-output"></pre>
+  </div>
+
+  <script>
+    // Simulación del archivo JSON embebido
+    const datos = [
+      {
+        "titulo": "Tarjeta 1",
+        "descripcion": "Esta es la descripción de la tarjeta número uno."
+      },
+      {
+        "titulo": "Tarjeta 2",
+        "descripcion": "Contenido de la tarjeta dos, ejemplo simple."
+      },
+      {
+        "titulo": "Tarjeta 3",
+        "descripcion": "Información de la tarjeta tres para prueba visual."
+      },
+      {
+        "titulo": "Tarjeta 4",
+        "descripcion": "Esta tarjeta contiene un texto un poco más largo para ver cómo se comporta el diseño con textos grandes."
+      }
+    ];
+
+    const container = document.getElementById("tarjetas-container");
+    const jsonOutput = document.getElementById("json-output");
+
+    datos.forEach(item => {
+      const tarjeta = document.createElement("div");
+      tarjeta.className = "tarjeta";
+      tarjeta.innerHTML = `
+        <h2>${item.titulo}</h2>
+        <p>${item.descripcion}</p>
+      `;
+      container.appendChild(tarjeta);
+    });
+
+    // Mostrar el JSON debajo del cuadro
+    jsonOutput.textContent = JSON.stringify(datos, null, 2);
+  </script>
+
+</body>
+</html>
