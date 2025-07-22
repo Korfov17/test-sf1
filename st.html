@@ -32,7 +32,7 @@
         }
 
         .glass:hover {
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
             transform: translateY(-5px);
         }
 
@@ -82,6 +82,7 @@
         .nav-links a:hover {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(5px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         /* Portada hero */
@@ -110,11 +111,12 @@
 
         .hero-content {
             max-width: 800px;
-            padding: 2rem;
+            padding: 3rem;
+            text-align: center;
         }
 
         .hero h1 {
-            font-size: 3.8rem;
+            font-size: 3.5rem;
             margin-bottom: 1.5rem;
             text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
             line-height: 1.2;
@@ -130,12 +132,18 @@
             opacity: 0.9;
         }
 
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
         .cta-button {
             padding: 1.1rem 3rem;
             font-size: 1.1rem;
             font-weight: 600;
-            color: #111;
-            background: rgba(255, 215, 0, 0.8);
             border: none;
             border-radius: 30px;
             cursor: pointer;
@@ -145,10 +153,28 @@
             text-transform: uppercase;
         }
 
-        .cta-button:hover {
-            background: rgba(255, 215, 0, 0.95);
+        .main-cta {
+            background: rgba(255, 255, 255, 0.9);
+            color: #111;
+            padding: 1.2rem 3.5rem;
+            font-size: 1.2rem;
+        }
+
+        .main-cta:hover {
+            background: rgba(255, 255, 255, 1);
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .secondary-cta {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .secondary-cta:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         /* Sección de características */
@@ -174,6 +200,7 @@
         .feature-card:hover {
             transform: translateY(-10px);
             backdrop-filter: blur(15px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .feature-icon {
@@ -245,6 +272,10 @@
             min-width: 350px;
             scroll-snap-align: start;
             padding: 2.5rem;
+        }
+
+        .testimonial-card:hover {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .testimonial-text {
@@ -337,7 +368,7 @@
 
         .newsletter-input:focus {
             background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
         }
 
         .newsletter-input::placeholder {
@@ -359,6 +390,7 @@
         .newsletter-button:hover {
             background: rgba(255, 215, 0, 0.95);
             transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         /* Sección de marcas */
@@ -388,7 +420,7 @@
         .brand-logo:hover {
             opacity: 1;
             transform: scale(1.1);
-            filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+            filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
         }
 
         /* Sección de categorías */
@@ -419,6 +451,7 @@
         .category-card:hover {
             transform: translateY(-10px);
             backdrop-filter: blur(15px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .category-image {
@@ -458,6 +491,7 @@
         .view-button:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         /* Página de producto */
@@ -511,6 +545,7 @@
             opacity: 1;
             transform: scale(1.05);
             border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .product-info {
@@ -571,12 +606,14 @@
         .size-option:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .size-option.selected {
             background: rgba(255, 215, 0, 0.2);
             border-color: #ffd700;
             color: #ffd700;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
         }
 
         .add-to-cart {
@@ -599,7 +636,7 @@
         .add-to-cart:hover {
             background: rgba(255, 215, 0, 0.95);
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .add-to-cart::before {
@@ -625,6 +662,7 @@
         .back-button:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateX(-5px);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .back-button::before {
@@ -775,9 +813,13 @@
 
     <section class="hero" id="homeSection">
         <div class="hero-content glass">
-            <h1>Colección Otoño/Invierno 2023</h1>
-            <p>Descubre prendas diseñadas para destacar, con la calidad y estilo que nos caracteriza</p>
-            <button class="cta-button" id="exploreButton">Explorar Colección</button>
+            <h1>Bienvenido a ModaGlass</h1>
+            <p>Descubre una nueva forma de vestir con nuestras colecciones exclusivas. Calidad, estilo y confort en cada prenda.</p>
+            
+            <div class="hero-buttons">
+                <button class="cta-button main-cta" id="discoverButton">Descubre tu estilo</button>
+                <button class="cta-button secondary-cta" id="collectionsButton">Ver colecciones</button>
+            </div>
         </div>
     </section>
 
@@ -1065,7 +1107,8 @@
         const homeLogo = document.getElementById('homeLogo');
         const navHome = document.querySelector('.nav-home');
         const navCategories = document.querySelector('.nav-categories');
-        const exploreButton = document.getElementById('exploreButton');
+        const discoverButton = document.getElementById('discoverButton');
+        const collectionsButton = document.getElementById('collectionsButton');
         const backButton = document.getElementById('backButton');
 
         // Función para generar las tarjetas de categorías
@@ -1171,7 +1214,10 @@
                 categoriesSection.scrollIntoView({ behavior: 'smooth' });
             }, 100);
         });
-        exploreButton.addEventListener('click', () => {
+        discoverButton.addEventListener('click', () => {
+            alert("¡Gracias por tu interés! Te ayudaremos a encontrar tu estilo perfecto.");
+        });
+        collectionsButton.addEventListener('click', () => {
             categoriesSection.scrollIntoView({ behavior: 'smooth' });
         });
         backButton.addEventListener('click', backToCategories);
