@@ -16,31 +16,30 @@
     }
 
     .panel {
-      max-width: 700px;
-      margin: 0 auto 40px auto;
+      max-width: 900px;
+      margin: 0 auto 50px auto;
     }
 
     .panel h2 {
       text-shadow: 2px 2px 4px black;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
 
     .button-group {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px 25px;
       justify-content: center;
-      gap: 15px;
     }
 
     .button-group button {
-      padding: 10px 20px;
-      font-size: 18px;
+      padding: 12px 18px;
+      font-size: 17px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
       box-shadow: 2px 2px 5px black;
       color: white;
-      min-width: 180px;
       transition: transform 0.2s ease, filter 0.2s ease;
     }
 
@@ -49,9 +48,9 @@
       filter: brightness(1.1);
     }
 
-    @media (max-width: 600px) {
-      .button-group button {
-        min-width: 100%;
+    @media (max-width: 500px) {
+      .button-group {
+        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
       }
     }
   </style>
