@@ -18,7 +18,8 @@
 
     #hen-panel {
       text-align: center;
-      margin-top: 20px;
+      max-width: 700px;
+      margin: auto;
     }
 
     #hen-panel h2 {
@@ -27,32 +28,51 @@
       margin-bottom: 20px;
     }
 
-    #hen-panel button {
+    .hen-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .hen-buttons button {
       padding: 10px 20px;
       font-size: 18px;
-      margin: 10px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
       box-shadow: 2px 2px 5px black;
+      color: white;
+      min-width: 180px;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .hen-buttons button:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    @media (max-width: 600px) {
+      .hen-buttons button {
+        min-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
   <div id="hen-panel">
     <h2>Selecciona un HEN</h2>
-
-    <button style="background-color:#d40606; color:white;">
-      GoldHEN
-    </button>
-
-    <button style="background-color:#065fd4; color:white;">
-      GoldHEN 2.2.5b
-    </button>
-
-    <button style="background-color:#0a820a; color:white;">
-      Custom HEN
-    </button>
+    <div class="hen-buttons">
+      <button style="background-color:#d40606;">GoldHEN</button>
+      <button style="background-color:#065fd4;">GoldHEN 2.2.5b</button>
+      <button style="background-color:#0a820a;">Custom HEN</button>
+      <button style="background-color:#9c27b0;">GoldHEN 2.3</button>
+      <button style="background-color:#ff9800;">GoldHEN Beta</button>
+      <button style="background-color:#607d8b;">GoldHEN 2.2.4</button>
+      <button style="background-color:#e91e63;">Payload 1</button>
+      <button style="background-color:#03a9f4;">Payload 2</button>
+      <button style="background-color:#4caf50;">Payload 3</button>
+    </div>
   </div>
 </body>
 </html>
