@@ -20,29 +20,26 @@
             min-height: 100vh;
         }
 
-        /* Efecto glass */
+        /* Efecto glass modificado */
         .glass {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
         }
 
-        .glass:hover {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
-            transform: translateY(-5px);
-        }
-
-        /* Header y navegación */
+        /* Header estático */
         header {
             position: fixed;
             top: 0;
             width: 100%;
             padding: 1rem;
             z-index: 1000;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         nav {
@@ -74,18 +71,16 @@
             font-weight: 600;
             padding: 0.6rem 1.2rem;
             border-radius: 25px;
-            transition: all 0.4s ease;
             font-size: 0.95rem;
             letter-spacing: 0.5px;
+            transition: background 0.3s ease;
         }
 
         .nav-links a:hover {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Portada hero */
+        /* Portada hero sin efecto hover */
         .hero {
             height: 100vh;
             display: flex;
@@ -174,7 +169,6 @@
 
         .secondary-cta:hover {
             background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         /* Sección de características */
@@ -194,13 +188,6 @@
         .feature-card {
             padding: 2.5rem;
             text-align: center;
-            transition: all 0.4s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .feature-icon {
@@ -223,6 +210,48 @@
             line-height: 1.7;
             opacity: 0.9;
             font-size: 0.95rem;
+        }
+
+        /* Sección "Sobre nosotros" */
+        .about {
+            padding: 4rem 1rem;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .about h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .about p {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        .about-image {
+            flex: 1;
+            min-width: 300px;
+            height: 400px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         /* Sección de testimonios */
@@ -250,32 +279,12 @@
             gap: 2rem;
             padding: 1.5rem 0;
             scroll-snap-type: x mandatory;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.3) transparent;
-        }
-
-        .testimonial-slider::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .testimonial-slider::-webkit-scrollbar-track {
-            background: transparent;
-            border-radius: 10px;
-        }
-
-        .testimonial-slider::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
         }
 
         .testimonial-card {
             min-width: 350px;
             scroll-snap-align: start;
             padding: 2.5rem;
-        }
-
-        .testimonial-card:hover {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .testimonial-text {
@@ -390,7 +399,6 @@
         .newsletter-button:hover {
             background: rgba(255, 215, 0, 0.95);
             transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         /* Sección de marcas */
@@ -420,7 +428,6 @@
         .brand-logo:hover {
             opacity: 1;
             transform: scale(1.1);
-            filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
         }
 
         /* Sección de categorías */
@@ -444,14 +451,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: all 0.4s ease;
             cursor: pointer;
-        }
-
-        .category-card:hover {
-            transform: translateY(-10px);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .category-image {
@@ -491,7 +491,6 @@
         .view-button:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         /* Página de producto */
@@ -545,7 +544,6 @@
             opacity: 1;
             transform: scale(1.05);
             border-color: rgba(255, 215, 0, 0.5);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .product-info {
@@ -606,14 +604,12 @@
         .size-option:hover {
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 215, 0, 0.5);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .size-option.selected {
             background: rgba(255, 215, 0, 0.2);
             border-color: #ffd700;
             color: #ffd700;
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
         }
 
         .add-to-cart {
@@ -636,7 +632,7 @@
         .add-to-cart:hover {
             background: rgba(255, 215, 0, 0.95);
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .add-to-cart::before {
@@ -662,7 +658,6 @@
         .back-button:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: translateX(-5px);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
         }
 
         .back-button::before {
@@ -799,7 +794,7 @@
     </style>
 </head>
 <body>
-    <header class="glass">
+    <header>
         <nav>
             <div class="logo" id="homeLogo">ModaGlass</div>
             <div class="nav-links">
@@ -841,6 +836,19 @@
                 <h3 class="feature-title">Calidad Premium</h3>
                 <p class="feature-text">Materiales seleccionados y confección artesanal para una durabilidad excepcional.</p>
             </div>
+        </div>
+    </section>
+
+    <!-- Sección "Sobre nosotros" -->
+    <section class="about">
+        <div class="about-container">
+            <div class="about-text glass" style="padding: 2rem;">
+                <h2>Sobre ModaGlass</h2>
+                <p>ModaGlass es tu destino de moda premium, donde el estilo se encuentra con la calidad. Fundada en 2023, nuestra misión es ofrecer prendas que combinan diseño contemporáneo con artesanía excepcional.</p>
+                <p>Cada pieza en nuestro catálogo ha sido cuidadosamente seleccionada por nuestro equipo de expertos en moda, asegurando que solo ofrecemos lo mejor en términos de calidad, comodidad y estilo.</p>
+                <p>Nos enorgullecemos de trabajar con diseñadores emergentes y marcas establecidas que comparten nuestro compromiso con la sostenibilidad y la innovación en la moda.</p>
+            </div>
+            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Nuestra tienda" class="about-image glass">
         </div>
     </section>
 
@@ -899,11 +907,11 @@
     <section class="brands">
         <h2 class="section-title">Marcas Colaboradoras</h2>
         <div class="brands-container">
-            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=ELITE" alt="Marca Elite" class="brand-logo">
-            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=URBAN+" alt="Marca Urban+" class="brand-logo">
-            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=COTTON" alt="Marca Cotton" class="brand-logo">
-            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=PREMIUM" alt="Marca Premium" class="brand-logo">
-            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=MODA23" alt="Marca Moda23" class="brand-logo">
+            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=ELITE" alt="Marca Elite" class="brand-logo glass">
+            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=URBAN+" alt="Marca Urban+" class="brand-logo glass">
+            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=COTTON" alt="Marca Cotton" class="brand-logo glass">
+            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=PREMIUM" alt="Marca Premium" class="brand-logo glass">
+            <img src="https://via.placeholder.com/150x60/ffffff/000000?text=MODA23" alt="Marca Moda23" class="brand-logo glass">
         </div>
     </section>
 
@@ -922,7 +930,7 @@
         </button>
         <div class="product-container">
             <div class="product-gallery">
-                <img src="" alt="Producto" class="main-image" id="mainProductImage">
+                <img src="" alt="Producto" class="main-image glass" id="mainProductImage">
                 <div class="thumbnail-container" id="thumbnailContainer">
                     <!-- Miniaturas se generarán con JS -->
                 </div>
@@ -935,11 +943,11 @@
                 <div class="size-selector">
                     <h3>Selecciona tu talla:</h3>
                     <div class="size-options">
-                        <div class="size-option">XS</div>
-                        <div class="size-option selected">S</div>
-                        <div class="size-option">M</div>
-                        <div class="size-option">L</div>
-                        <div class="size-option">XL</div>
+                        <div class="size-option glass">XS</div>
+                        <div class="size-option glass selected">S</div>
+                        <div class="size-option glass">M</div>
+                        <div class="size-option glass">L</div>
+                        <div class="size-option glass">XL</div>
                     </div>
                 </div>
                 
@@ -951,7 +959,7 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <div class="footer-column">
+            <div class="footer-column glass" style="padding: 1.5rem;">
                 <h3>ModaGlass</h3>
                 <ul>
                     <li><a href="#">Nuestra historia</a></li>
@@ -960,7 +968,7 @@
                     <li><a href="#">Blog de moda</a></li>
                 </ul>
             </div>
-            <div class="footer-column">
+            <div class="footer-column glass" style="padding: 1.5rem;">
                 <h3>Ayuda</h3>
                 <ul>
                     <li><a href="#">Preguntas frecuentes</a></li>
@@ -969,7 +977,7 @@
                     <li><a href="#">Contactar soporte</a></li>
                 </ul>
             </div>
-            <div class="footer-column">
+            <div class="footer-column glass" style="padding: 1.5rem;">
                 <h3>Legal</h3>
                 <ul>
                     <li><a href="#">Términos y condiciones</a></li>
@@ -977,7 +985,7 @@
                     <li><a href="#">Política de cookies</a></li>
                 </ul>
             </div>
-            <div class="footer-column">
+            <div class="footer-column glass" style="padding: 1.5rem;">
                 <h3>Contacto</h3>
                 <ul>
                     <li><a href="#">info@modaglass.com</a></li>
@@ -1249,12 +1257,6 @@
         // Inicializar la tienda
         document.addEventListener('DOMContentLoaded', () => {
             generateCategoryCards();
-            
-            // Efecto de parallax para el hero
-            window.addEventListener('scroll', () => {
-                const scrollPosition = window.pageYOffset;
-                homeSection.style.backgroundPositionY = scrollPosition * 0.5 + 'px';
-            });
         });
     </script>
 </body>
