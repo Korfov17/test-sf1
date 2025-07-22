@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tarjetas desde JSON embebido</title>
+  <title>Tarjetas Mejoradas desde JSON</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,7 +13,7 @@
     }
 
     .contenedor {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 50px auto;
       padding: 20px;
       background: #ffffff;
@@ -37,25 +37,64 @@
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 10px;
-      padding: 20px;
-      width: 250px;
+      width: 280px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       transition: transform 0.2s ease;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .tarjeta:hover {
       transform: translateY(-5px);
     }
 
+    .tarjeta img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .tarjeta-content {
+      padding: 15px;
+      flex: 1;
+    }
+
     .tarjeta h2 {
-      margin-top: 0;
       font-size: 1.2em;
+      margin: 0 0 10px;
       color: #333;
     }
 
+    .tarjeta .categoria {
+      font-size: 0.85em;
+      color: #777;
+      margin-bottom: 10px;
+      font-style: italic;
+    }
+
     .tarjeta p {
-      margin: 10px 0 0;
-      color: #666;
+      font-size: 0.95em;
+      margin-bottom: 15px;
+      color: #555;
+    }
+
+    .tarjeta .boton {
+      background-color: #007bff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .tarjeta .boton:hover {
+      background-color: #0056b3;
     }
 
     pre {
@@ -63,37 +102,50 @@
       padding: 10px;
       border-radius: 8px;
       overflow-x: auto;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
 
   <div class="contenedor">
-    <h1>Listado de Tarjetas</h1>
+    <h1>Tarjetas Dinámicas con Imagen y Detalles</h1>
     <div id="tarjetas-container" class="cuadro"></div>
-    
-    <h2>Datos JSON utilizados</h2>
+
+    <h2>JSON embebido</h2>
     <pre id="json-output"></pre>
   </div>
 
   <script>
-    // Simulación del archivo JSON embebido
+    // Datos simulando base de datos embebida (JSON)
     const datos = [
       {
-        "titulo": "Tarjeta 1",
-        "descripcion": "Esta es la descripción de la tarjeta número uno."
+        "titulo": "Montaña Nevada",
+        "descripcion": "Una vista panorámica de una montaña cubierta de nieve.",
+        "categoria": "Naturaleza",
+        "imagen": "https://source.unsplash.com/280x160/?mountain,snow",
+        "enlace": "#"
       },
       {
-        "titulo": "Tarjeta 2",
-        "descripcion": "Contenido de la tarjeta dos, ejemplo simple."
+        "titulo": "Ciudad Nocturna",
+        "descripcion": "Luces y rascacielos de una gran ciudad por la noche.",
+        "categoria": "Urbano",
+        "imagen": "https://source.unsplash.com/280x160/?city,night",
+        "enlace": "#"
       },
       {
-        "titulo": "Tarjeta 3",
-        "descripcion": "Información de la tarjeta tres para prueba visual."
+        "titulo": "Playa Tropical",
+        "descripcion": "Relax y sol en una playa con aguas cristalinas.",
+        "categoria": "Vacaciones",
+        "imagen": "https://source.unsplash.com/280x160/?beach,tropical",
+        "enlace": "#"
       },
       {
-        "titulo": "Tarjeta 4",
-        "descripcion": "Esta tarjeta contiene un texto un poco más largo para ver cómo se comporta el diseño con textos grandes."
+        "titulo": "Selva Amazónica",
+        "descripcion": "Rica biodiversidad en el corazón de Sudamérica.",
+        "categoria": "Ecología",
+        "imagen": "https://source.unsplash.com/280x160/?jungle,amazon",
+        "enlace": "#"
       }
     ];
 
@@ -103,14 +155,21 @@
     datos.forEach(item => {
       const tarjeta = document.createElement("div");
       tarjeta.className = "tarjeta";
+
       tarjeta.innerHTML = `
-        <h2>${item.titulo}</h2>
-        <p>${item.descripcion}</p>
+        <img src="${item.imagen}" alt="${item.titulo}">
+        <div class="tarjeta-content">
+          <h2>${item.titulo}</h2>
+          <div class="categoria">${item.categoria}</div>
+          <p>${item.descripcion}</p>
+          <a href="${item.enlace}" class="boton">Ver más</a>
+        </div>
       `;
+
       container.appendChild(tarjeta);
     });
 
-    // Mostrar el JSON debajo del cuadro
+    // Mostrar el JSON embebido debajo
     jsonOutput.textContent = JSON.stringify(datos, null, 2);
   </script>
 
