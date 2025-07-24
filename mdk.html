@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Notas Markdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            resize: vertical;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .preview {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #f9f9f9;
+        }
+
+        .notes-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .note {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .note-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .note-actions button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            background: #ddd;
+            cursor: pointer;
+        }
+
+        .note-actions button:hover {
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Editor de Notas Markdown</h1>
+        <textarea id="markdown-input" placeholder="Escribe tu nota en Markdown..."></textarea>
+        <div id="preview" class="preview"></div>
+        <button id="save-note">Guardar Nota</button>
+    </div>
+    <div class="notes-container">
+        <h2>Notas Guardadas</h2>
+        <div id="notes-list"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const markdownInput = document.getElementById('markdown-input');
+            const preview = document.getElementById('preview');
+            const saveNoteButton = document.getElementById('save-note');
+            const notesList = document.getElementById('notes-list');
+
+            // Load saved notes from local storage
+            loadNotes();
+
+            // Update preview on input
+            markdownInput.addEventListener('input', () => {
+                const markdownText = markdownInput.value;
+                preview.innerHTML = marked(markdownText);
+            });
+
+            // Save note on button click
+            saveNoteButton.addEventListener('click', () => {
+                const markdownText = markdownInput.value;
+                if (markdownText.trim()) {
+                    saveNote(markdownText);
+                    loadNotes();
+                    markdownInput.value = '';
+                    preview.innerHTML = '';
+                }
+            });
+
+            // Functions to handle notes
+            function saveNote(noteContent) {
+                let notes = JSON.parse(localStorage.getItem('notes')) || [];
+                notes.push({ content: noteContent, timestamp: new Date().toISOString() });
+                localStorage.setItem('notes', JSON.stringify(notes));
+            }
+
+            function loadNotes() {
+                let notes = JSON.parse(localStorage.getItem('notes')) || [];
+                notesList.innerHTML = '';
+                notes.forEach((note, index) => {
+                    const noteDiv = document.createElement('div');
+                    noteDiv.className = 'note';
+                    noteDiv.innerHTML = marked(note.content);
+
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.className = 'note-actions';
+
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Editar';
+                    editButton.addEventListener('click', () => {
+                        markdownInput.value = note.content;
+                        preview.innerHTML = marked(note.content);
+                        deleteNote(index);
+                    });
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Eliminar';
+                    deleteButton.addEventListener('click', () => {
+                        deleteNote(index);
+                        loadNotes();
+                    });
+
+                    actionsDiv.appendChild(editButton);
+                    actionsDiv.appendChild(deleteButton);
+                    noteDiv.appendChild(actionsDiv);
+                    notesList.appendChild(noteDiv);
+                });
+            }
+
+            function deleteNote(index) {
+                let notes = JSON.parse(localStorage.getItem('notes')) || [];
+                notes.splice(index, 1);
+                localStorage.setItem('notes', JSON.stringify(notes));
+            }
+        });
+    </script>
+</body>
+</html>
