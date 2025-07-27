@@ -5,279 +5,311 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carta Especial</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap');
+        
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5fff7 0%, #e1f5e8 100%);
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #2e7d32;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .top-bar {
+            width: 100%;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
         }
 
         .container {
             max-width: 800px;
-            width: 100%;
+            width: 90%;
+            margin-top: 150px;
+            margin-bottom: 50px;
+        }
+
+        .locked-message {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            color: #4a5568;
         }
 
         .letter {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.2);
-            padding: 30px;
-            margin-bottom: 30px;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 25px rgba(46, 125, 50, 0.08);
             position: relative;
             overflow: hidden;
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
         }
 
-        .letter:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 10px;
-            background: linear-gradient(90deg, #4caf50 0%, #81c784 100%);
+        .letter.unlocked {
+            filter: none;
+            pointer-events: auto;
+            user-select: auto;
         }
 
-        .letter-title {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+        .letter h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 25px;
             text-align: center;
-            color: #1b5e20;
-            font-weight: bold;
+            color: #1a365d;
+            font-weight: 700;
+            line-height: 1.2;
         }
 
-        .letter-content {
-            font-size: 1.5rem;
-            line-height: 1.6;
+        .letter p {
+            font-size: 1.1rem;
             margin-bottom: 20px;
         }
 
         .letter-date {
             text-align: right;
             font-style: italic;
-            color: #666;
+            color: #718096;
+            margin-top: 30px;
+        }
+
+        .lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            color: #2c5282;
+            z-index: 5;
         }
 
         .chest-container {
             text-align: center;
-            margin-top: 40px;
-            position: relative;
+            margin-top: 60px;
         }
 
         .chest {
-            width: 200px;
-            height: 150px;
-            background-color: #8d6e63;
+            width: 180px;
+            height: 120px;
+            background-color: #e2e8f0;
             border-radius: 5px;
             position: relative;
             margin: 0 auto;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             overflow: hidden;
+            transition: all 0.3s ease;
+            filter: blur(3px);
+            pointer-events: none;
+        }
+
+        .chest.unlocked {
+            filter: none;
+            pointer-events: auto;
+        }
+
+        .chest:hover {
+            transform: translateY(-5px);
         }
 
         .chest-lid {
-            width: 220px;
-            height: 30px;
-            background-color: #6d4c41;
+            width: 200px;
+            height: 25px;
+            background-color: #cbd5e0;
             position: absolute;
-            top: -15px;
+            top: -12px;
             left: -10px;
             border-radius: 5px 5px 0 0;
             z-index: 2;
+            transition: all 0.5s ease;
         }
 
         .chest-lock {
-            width: 40px;
-            height: 40px;
-            background-color: #ffd700;
+            width: 35px;
+            height: 35px;
+            background-color: #f6ad55;
             border-radius: 50%;
             position: absolute;
-            top: -25px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 3;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
-        .chest-lock:after {
-            content: "";
-            width: 20px;
-            height: 20px;
-            background-color: #795548;
-            border-radius: 5px;
-            position: absolute;
-            top: 20px;
+        .chest-lock i {
+            color: white;
+            font-size: 1.2rem;
         }
 
         .chest-content {
             width: 100%;
             height: 100%;
             position: relative;
-            filter: blur(15px);
-            pointer-events: none;
-            user-select: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .chest-content img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .locked-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 4;
-        }
-
-        .lock-icon {
-            font-size: 3rem;
-            color: #ffd700;
-            margin-bottom: 10px;
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
         }
 
         .timer {
-            margin-top: 20px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #d32f2f;
+            margin-top: 25px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2b6cb0;
+            font-family: 'Courier New', monospace;
         }
 
         .chest-message {
-            margin-top: 10px;
-            font-size: 1.2rem;
-            color: #5d4037;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            color: #4a5568;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <div class="top-bar"></div>
+    
     <div class="container">
-        <div class="letter">
-            <h1 class="letter-title">Mi Mensaje Especial</h1>
-            <div class="letter-content">
-                <p>Querido/a [Nombre],</p>
-                <p>En este día tan especial, quería tomarme un momento para expresarte todo lo que siento. A veces las palabras se quedan cortas para describir emociones tan grandes, pero hoy intentaré transmitirte lo importante que eres para mí.</p>
-                <p>La vida nos ha dado la oportunidad de conocernos y compartir momentos inolvidables. Cada risa, cada conversación y cada instante a tu lado ha dejado una huella en mi corazón.</p>
-                <p>Por eso, he preparado algo especial para ti. Dentro de tres días podrás descubrirlo. Mientras tanto, quiero que sepas que eres una persona increíble y que te aprecio más de lo que las palabras pueden expresar.</p>
-                <p>Con todo mi cariño,</p>
-                <p>[Tu nombre]</p>
-            </div>
+        <div class="locked-message" id="letter-message">
+            <i class="fas fa-lock"></i> Esta carta estará disponible el 1 de Diciembre de 2025
+        </div>
+        
+        <div class="letter" id="letter">
+            <div class="lock-icon" id="letter-lock"><i class="fas fa-lock"></i></div>
+            
+            <h1>Un Mensaje Muy Especial</h1>
+            
+            <p>Querido/a [Nombre],</p>
+            
+            <p>Hay momentos en la vida que merecen ser detenidos, guardados como tesoros en el corazón. Este es uno de ellos.</p>
+            
+            <p>Quiero que sepas lo importante que eres para mí, lo mucho que valoro cada risa compartida, cada conversación bajo las estrellas, cada silencio cómplice.</p>
+            
+            <p>La vida es un conjunto de instantes fugaces, pero hay algunos que permanecen. Los que he vivido a tu lado son de esos que el tiempo no borra.</p>
+            
+            <p>Por eso hoy, en este día tan especial, quiero regalarte estas palabras y una pequeña sorpresa que podrás descubrir más adelante.</p>
+            
+            <p>Con todo mi cariño,</p>
+            
+            <p>[Tu Nombre]</p>
+            
             <div class="letter-date">1 de Diciembre de 2025</div>
         </div>
 
         <div class="chest-container">
-            <div class="chest-message">¡Próxima sorpresa disponible en:</div>
-            <div class="chest">
+            <div class="chest-message" id="chest-message">¡Próxima sorpresa disponible después del 1 de Diciembre!</div>
+            
+            <div class="chest" id="chest">
                 <div class="chest-lid"></div>
-                <div class="chest-lock">
-                    <i class="fas fa-lock lock-icon"></i>
-                </div>
+                <div class="chest-lock"><i class="fas fa-lock"></i></div>
                 <div class="chest-content">
                     <a href="#sorpresa" id="sorpresa-link">
-                        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Sorpresa">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3392/3392986.png" alt="Sorpresa" style="filter: drop-shadow(0 0 8px rgba(74, 85, 104, 0.3));">
                     </a>
                 </div>
-                <div class="locked-overlay">
-                    <i class="fas fa-lock lock-icon"></i>
-                </div>
             </div>
+            
             <div class="timer" id="countdown">00d 00h 00m 00s</div>
         </div>
     </div>
 
     <script>
         // Fechas importantes
-        const letterDate = new Date('December 1, 2025 00:00:00').getTime();
-        const chestUnlockDate = new Date('December 4, 2025 00:00:00').getTime(); // 3 días después
+        const unlockDate = new Date('December 1, 2025 00:00:00').getTime();
         
         // Elementos del DOM
         const countdownElement = document.getElementById('countdown');
-        const chestContent = document.querySelector('.chest-content');
-        const lockedOverlay = document.querySelector('.locked-overlay');
-        const chestLock = document.querySelector('.chest-lock');
-        const chest = document.querySelector('.chest');
+        const letter = document.getElementById('letter');
+        const letterLock = document.getElementById('letter-lock');
+        const letterMessage = document.getElementById('letter-message');
+        const chest = document.getElementById('chest');
+        const chestMessage = document.getElementById('chest-message');
+        const chestLock = document.querySelector('.chest-lock i');
         const sorpresaLink = document.getElementById('sorpresa-link');
 
         // Actualizar el cronómetro
         function updateCountdown() {
             const now = new Date().getTime();
-            let distance;
+            const distance = unlockDate - now;
             
-            if (now < letterDate) {
-                // Si aún no es la fecha de la carta
-                distance = letterDate - now;
-                document.querySelector('.chest-message').textContent = "La carta estará disponible en:";
-            } else if (now < chestUnlockDate) {
-                // Si es después de la carta pero antes de desbloquear el cofre
-                distance = chestUnlockDate - now;
-                document.querySelector('.chest-message').textContent = "¡Próxima sorpresa disponible en:";
-            } else {
-                // Si ya pasó la fecha de desbloqueo
-                distance = 0;
-                unlockChest();
+            if (distance <= 0) {
+                unlockContent();
+                return;
             }
 
-            if (distance > 0) {
-                // Cálculos de tiempo
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            // Cálculos de tiempo
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                // Mostrar el resultado
-                countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-            }
+            // Mostrar el resultado
+            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
 
-        // Desbloquear el cofre
-        function unlockChest() {
-            countdownElement.innerHTML = "¡Ya puedes abrir el cofre!";
-            document.querySelector('.chest-message').textContent = "¡Haz clic en el cofre para ver tu sorpresa!";
+        // Desbloquear contenido
+        function unlockContent() {
+            // Desbloquear carta
+            letter.classList.add('unlocked');
+            letterLock.style.display = 'none';
+            letterMessage.innerHTML = '<i class="fas fa-lock-open"></i> ¡La carta está disponible!';
             
-            // Cambiar el candado a abierto
-            chestLock.innerHTML = '<i class="fas fa-lock-open lock-icon"></i>';
+            // Desbloquear cofre
+            chest.classList.add('unlocked');
+            chestLock.classList.remove('fa-lock');
+            chestLock.classList.add('fa-lock-open');
+            chestMessage.textContent = "¡Haz clic en el cofre para ver tu sorpresa!";
+            countdownElement.textContent = "¡Ya puedes abrir tu regalo!";
             
-            // Configurar el evento de clic
+            // Configurar evento para el cofre
             chest.addEventListener('click', function() {
-                lockedOverlay.style.display = 'none';
-                chestContent.style.filter = 'none';
-                chestContent.style.pointerEvents = 'auto';
-                
-                // Animación de apertura
                 document.querySelector('.chest-lid').style.transform = 'rotateX(180deg)';
-                document.querySelector('.chest-lid').style.top = '-40px';
+                document.querySelector('.chest-lid').style.top = '-30px';
+                setTimeout(() => {
+                    sorpresaLink.click();
+                }, 800);
             });
         }
-
-        // Actualizar el cronómetro cada segundo
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
 
         // Prevenir clic en el enlace si está bloqueado
         sorpresaLink.addEventListener('click', function(e) {
             const now = new Date().getTime();
-            if (now < chestUnlockDate) {
+            if (now < unlockDate) {
                 e.preventDefault();
-                alert("El cofre aún está cerrado. Por favor espera hasta la fecha indicada.");
+                alert("El contenido aún no está disponible. Por favor espera hasta el 1 de Diciembre de 2025.");
             }
         });
+
+        // Actualizar el cronómetro cada segundo
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
