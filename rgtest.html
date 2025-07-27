@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Especial</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #f1f8e9 50%, #e8f5e9 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .top-bar {
+            width: 100%;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            position: fixed;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .top-bar h2 {
+            color: #2e7d32;
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin-top: 120px;
+            margin-bottom: 50px;
+        }
+
+        .unlock-countdown {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .unlock-countdown h3 {
+            color: #1b5e20;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .letter {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 25px rgba(46, 125, 50, 0.1);
+            position: relative;
+            overflow: hidden;
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+            border: 1px solid rgba(46, 125, 50, 0.1);
+        }
+
+        .letter.unlocked {
+            filter: none;
+            pointer-events: auto;
+            user-select: auto;
+            animation: fadeIn 1s ease;
+        }
+
+        .letter h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #2e7d32;
+            font-weight: 700;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #1b5e20 0%, #4caf50 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .letter p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #4a5568;
+        }
+
+        .letter-date {
+            text-align: right;
+            font-style: italic;
+            color: #718096;
+            margin-top: 30px;
+        }
+
+        .lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            color: #2e7d32;
+            z-index: 5;
+            opacity: 0.8;
+        }
+
+        .chest-container {
+            text-align: center;
+            margin-top: 60px;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .chest {
+            width: 180px;
+            height: 120px;
+            background-color: #e8f5e9;
+            border-radius: 5px;
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            filter: blur(3px);
+            pointer-events: none;
+        }
+
+        .chest.unlocked {
+            filter: none;
+            pointer-events: auto;
+        }
+
+        .chest:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .chest-lid {
+            width: 200px;
+            height: 25px;
+            background: linear-gradient(135deg, #a5d6a7 0%, #81c784 100%);
+            position: absolute;
+            top: -12px;
+            left: -10px;
+            border-radius: 5px 5px 0 0;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+
+        .chest-lock {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .chest-lock i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .chest-content {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chest-content img {
+            width: 60%;
+            height: 60%;
+            object-fit: contain;
+        }
+
+        .timer {
+            margin-top: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1b5e20;
+            font-family: 'Courier New', monospace;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .chest-message {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #2e7d32;
+            font-weight: 500;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="top-bar">
+        <h2>Carta Especial</h2>
+    </div>
+    
+    <div class="container">
+        <div class="unlock-countdown">
+            <h3>Tiempo de desbloqueo</h3>
+            <div class="timer" id="letter-countdown">Carta: 5s</div>
+            <div class="timer" id="chest-countdown">Cofre: 15s</div>
+        </div>
+        
+        <div class="letter" id="letter">
+            <div class="lock-icon" id="letter-lock"><i class="fas fa-lock"></i></div>
+            
+            <h1>Un Mensaje Muy Especial</h1>
+            
+            <p>Querido/a [Nombre],</p>
+            
+            <p>Hay momentos en la vida que merecen ser detenidos, guardados como tesoros en el corazón. Este es uno de ellos.</p>
+            
+            <p>Quiero que sepas lo importante que eres para mí, lo mucho que valoro cada risa compartida, cada conversación bajo las estrellas, cada silencio cómplice.</p>
+            
+            <p>La vida es un conjunto de instantes fugaces, pero hay algunos que permanecen. Los que he vivido a tu lado son de esos que el tiempo no borra.</p>
+            
+            <p>Por eso hoy, en este día tan especial, quiero regalarte estas palabras y una pequeña sorpresa que podrás descubrir más adelante.</p>
+            
+            <p>Con todo mi cariño,</p>
+            
+            <p>[Tu Nombre]</p>
+            
+            <div class="letter-date">1 de Diciembre de 2025</div>
+        </div>
+
+        <div class="chest-container">
+            <div class="chest-message" id="chest-message">Tu sorpresa especial</div>
+            
+            <div class="chest" id="chest">
+                <div class="chest-lid"></div>
+                <div class="chest-lock"><i class="fas fa-lock"></i></div>
+                <div class="chest-content">
+                    <a href="#sorpresa" id="sorpresa-link">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3392/3392986.png" alt="Sorpresa" style="filter: drop-shadow(0 0 8px rgba(46, 125, 50, 0.3));">
+                    </a>
+                </div>
+            </div>
+            
+            <div class="timer" id="chest-timer">Cofre se desbloqueará en: 15s</div>
+        </div>
+    </div>
+
+    <script>
+        // Elementos del DOM
+        const letterCountdown = document.getElementById('letter-countdown');
+        const chestCountdown = document.getElementById('chest-countdown');
+        const chestTimer = document.getElementById('chest-timer');
+        const letter = document.getElementById('letter');
+        const letterLock = document.getElementById('letter-lock');
+        const chest = document.getElementById('chest');
+        const chestMessage = document.getElementById('chest-message');
+        const chestLock = document.querySelector('.chest-lock i');
+        const sorpresaLink = document.getElementById('sorpresa-link');
+
+        // Temporizador para la carta (5 segundos)
+        let letterTimeLeft = 5;
+        const letterTimer = setInterval(() => {
+            letterCountdown.textContent = `Carta: ${letterTimeLeft}s`;
+            letterTimeLeft--;
+            
+            if (letterTimeLeft < 0) {
+                clearInterval(letterTimer);
+                unlockLetter();
+            }
+        }, 1000);
+
+        // Temporizador para el cofre (15 segundos)
+        let chestTimeLeft = 15;
+        const chestTimerInterval = setInterval(() => {
+            chestCountdown.textContent = `Cofre: ${chestTimeLeft}s`;
+            chestTimer.textContent = `Cofre se desbloqueará en: ${chestTimeLeft}s`;
+            chestTimeLeft--;
+            
+            if (chestTimeLeft < 0) {
+                clearInterval(chestTimerInterval);
+                unlockChest();
+            }
+        }, 1000);
+
+        // Desbloquear carta
+        function unlockLetter() {
+            letter.classList.add('unlocked');
+            letterLock.style.display = 'none';
+            letterCountdown.textContent = '¡Carta desbloqueada!';
+        }
+
+        // Desbloquear cofre
+        function unlockChest() {
+            chest.classList.add('unlocked');
+            chestLock.classList.remove('fa-lock');
+            chestLock.classList.add('fa-lock-open');
+            chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
+            chestCountdown.textContent = '¡Cofre desbloqueado!';
+            chestTimer.textContent = '¡Ábrelo ahora!';
+            
+            // Configurar evento para el cofre
+            chest.addEventListener('click', function() {
+                document.querySelector('.chest-lid').style.transform = 'rotateX(180deg)';
+                document.querySelector('.chest-lid').style.top = '-30px';
+                setTimeout(() => {
+                    sorpresaLink.click();
+                }, 800);
+            });
+        }
+
+        // Prevenir clic en el enlace si está bloqueado
+        sorpresaLink.addEventListener('click', function(e) {
+            if (!chest.classList.contains('unlocked')) {
+                e.preventDefault();
+                alert("El cofre aún está cerrado. Por favor espera hasta que se desbloquee.");
+            }
+        });
+    </script>
+</body>
+</html>
