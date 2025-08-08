@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consola - Menú</title>
+<style>
+    body {
+        margin: 0;
+        background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+        font-family: Arial, sans-serif;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    header {
+        width: 100%;
+        padding: 15px;
+        display: flex;
+        justify-content: flex-end;
+        background-color: rgba(0,0,0,0.4);
+        position: relative;
+    }
+
+    .settings-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        filter: invert(100%);
+        width: 30px;
+        height: 30px;
+    }
+
+    main {
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        max-width: 1000px;
+        width: 100%;
+    }
+
+    .folder {
+        background-color: #222;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .folder:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px #0ff;
+    }
+
+    .folder img {
+        width: 60px;
+        margin-bottom: 10px;
+    }
+
+    /* Menú emergente de ajustes */
+    .settings-menu {
+        position: absolute;
+        top: 50px;
+        right: 15px;
+        background-color: #222;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        display: none;
+        flex-direction: column;
+        min-width: 180px;
+        z-index: 10;
+    }
+
+    .settings-menu.active {
+        display: flex;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .settings-option {
+        padding: 12px 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .settings-option:hover {
+        background-color: #0ff;
+        color: #000;
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(-10px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <button class="settings-btn" onclick="toggleSettings()">
+        <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="Ajustes" width="30">
+    </button>
+    <div class="settings-menu" id="settingsMenu">
+        <div class="settings-option">⚙️ Configuración</div>
+        <div class="settings-option">🌐 Red</div>
+        <div class="settings-option">🔊 Sonido</div>
+        <div class="settings-option">🎮 Controladores</div>
+        <div class="settings-option">⏻ Apagar</div>
+    </div>
+</header>
+
+<main>
+    <div class="folder" onclick="openFolder('Juegos')">
+        <img src="https://cdn-icons-png.flaticon.com/512/716/716784.png" alt="Juegos">
+        <span>Juegos</span>
+    </div>
+    <div class="folder" onclick="openFolder('Aplicaciones')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2920/2920321.png" alt="Apps">
+        <span>Aplicaciones</span>
+    </div>
+    <div class="folder" onclick="openFolder('Multimedia')">
+        <img src="https://cdn-icons-png.flaticon.com/512/727/727240.png" alt="Multimedia">
+        <span>Multimedia</span>
+    </div>
+    <div class="folder" onclick="openFolder('Descargas')">
+        <img src="https://cdn-icons-png.flaticon.com/512/992/992651.png" alt="Descargas">
+        <span>Descargas</span>
+    </div>
+</main>
+
+<script>
+    function toggleSettings() {
+        document.getElementById('settingsMenu').classList.toggle('active');
+    }
+
+    function openFolder(name) {
+        alert(`📂 Abriendo carpeta: ${name}`);
+    }
+
+    // Cierra el menú si haces clic fuera
+    document.addEventListener('click', function(event) {
+        const settingsMenu = document.getElementById('settingsMenu');
+        const settingsBtn = document.querySelector('.settings-btn');
+
+        if (!settingsMenu.contains(event.target) && !settingsBtn.contains(event.target)) {
+            settingsMenu.classList.remove('active');
+        }
+    });
+</script>
+
+</body>
+</html>
