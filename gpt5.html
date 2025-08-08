@@ -3,160 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Consola - Menú</title>
+<title>Menú PS5 - Juegos y Multimedia</title>
 <style>
     body {
         margin: 0;
         background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
         font-family: Arial, sans-serif;
         color: white;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        height: 100vh;
-        overflow: hidden;
+        overflow-x: hidden;
     }
 
+    /* --- MENÚ SUPERIOR --- */
     header {
-        width: 100%;
-        padding: 15px;
         display: flex;
-        justify-content: flex-end;
-        background-color: rgba(0,0,0,0.4);
+        justify-content: center;
+        gap: 50px;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.4);
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    header div {
+        cursor: pointer;
+        padding-bottom: 5px;
+        transition: color 0.3s ease, border-bottom 0.3s ease;
+    }
+
+    header div.active {
+        color: #0ff;
+        border-bottom: 3px solid #0ff;
+    }
+
+    /* --- CONTENEDOR DEL CARRUSEL --- */
+    .carousel-container {
+        position: relative;
+        padding: 30px;
+        display: flex;
+        align-items: center;
+    }
+
+    .carousel {
+        display: flex;
+        gap: 20px;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding-bottom: 10px;
+    }
+
+    .carousel::-webkit-scrollbar {
+        display: none;
+    }
+
+    .game-card {
+        flex: 0 0 250px;
+        height: 350px;
+        background-color: #222;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
         position: relative;
     }
 
-    .settings-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        filter: invert(100%);
-        width: 30px;
-        height: 30px;
-    }
-
-    main {
-        flex: 1;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 20px;
-        padding: 20px;
-        max-width: 1000px;
+    .game-card img {
         width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
-    .folder {
-        background-color: #222;
-        border-radius: 10px;
-        box-shadow: 0 0 15px rgba(0,0,0,0.5);
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    .game-card:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px #0ff;
+        z-index: 5;
+    }
+
+    /* --- BOTONES DE NAVEGACIÓN --- */
+    .nav-btn {
+        background: rgba(0, 0, 0, 0.5);
+        border: none;
+        color: white;
+        font-size: 30px;
         cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .folder:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 20px #0ff;
-    }
-
-    .folder img {
-        width: 60px;
-        margin-bottom: 10px;
-    }
-
-    /* Menú emergente de ajustes */
-    .settings-menu {
+        padding: 10px;
         position: absolute;
-        top: 50px;
-        right: 15px;
-        background-color: #222;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 0 15px rgba(0,0,0,0.5);
-        display: none;
-        flex-direction: column;
-        min-width: 180px;
+        top: 50%;
+        transform: translateY(-50%);
         z-index: 10;
+        border-radius: 50%;
+        transition: background 0.3s ease;
     }
 
-    .settings-menu.active {
-        display: flex;
-        animation: fadeIn 0.3s ease;
+    .nav-btn:hover {
+        background: rgba(0, 255, 255, 0.7);
     }
 
-    .settings-option {
-        padding: 12px 15px;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-    .settings-option:hover {
-        background-color: #0ff;
-        color: #000;
-    }
-
-    @keyframes fadeIn {
-        from {opacity: 0; transform: translateY(-10px);}
-        to {opacity: 1; transform: translateY(0);}
-    }
+    .prev { left: 5px; }
+    .next { right: 5px; }
 </style>
 </head>
 <body>
 
 <header>
-    <button class="settings-btn" onclick="toggleSettings()">
-        <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="Ajustes" width="30">
-    </button>
-    <div class="settings-menu" id="settingsMenu">
-        <div class="settings-option">⚙️ Configuración</div>
-        <div class="settings-option">🌐 Red</div>
-        <div class="settings-option">🔊 Sonido</div>
-        <div class="settings-option">🎮 Controladores</div>
-        <div class="settings-option">⏻ Apagar</div>
-    </div>
+    <div id="tab-juegos" class="active" onclick="showSection('juegos')">Juegos</div>
+    <div id="tab-multimedia" onclick="showSection('multimedia')">Multimedia</div>
 </header>
 
-<main>
-    <div class="folder" onclick="openFolder('Juegos')">
-        <img src="https://cdn-icons-png.flaticon.com/512/716/716784.png" alt="Juegos">
-        <span>Juegos</span>
+<!-- Sección Juegos -->
+<section id="section-juegos" class="carousel-container">
+    <button class="nav-btn prev" onclick="scrollCarousel('juegos', -1)">&#10094;</button>
+    <div class="carousel" id="carousel-juegos">
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Juego+1"></div>
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Juego+2"></div>
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Juego+3"></div>
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Juego+4"></div>
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Juego+5"></div>
     </div>
-    <div class="folder" onclick="openFolder('Aplicaciones')">
-        <img src="https://cdn-icons-png.flaticon.com/512/2920/2920321.png" alt="Apps">
-        <span>Aplicaciones</span>
+    <button class="nav-btn next" onclick="scrollCarousel('juegos', 1)">&#10095;</button>
+</section>
+
+<!-- Sección Multimedia -->
+<section id="section-multimedia" class="carousel-container" style="display:none;">
+    <button class="nav-btn prev" onclick="scrollCarousel('multimedia', -1)">&#10094;</button>
+    <div class="carousel" id="carousel-multimedia">
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Película+1"></div>
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Película+2"></div>
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Serie+1"></div>
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Serie+2"></div>
+        <div class="game-card"><img src="https://via.placeholder.com/250x350.png?text=Película+3"></div>
     </div>
-    <div class="folder" onclick="openFolder('Multimedia')">
-        <img src="https://cdn-icons-png.flaticon.com/512/727/727240.png" alt="Multimedia">
-        <span>Multimedia</span>
-    </div>
-    <div class="folder" onclick="openFolder('Descargas')">
-        <img src="https://cdn-icons-png.flaticon.com/512/992/992651.png" alt="Descargas">
-        <span>Descargas</span>
-    </div>
-</main>
+    <button class="nav-btn next" onclick="scrollCarousel('multimedia', 1)">&#10095;</button>
+</section>
 
 <script>
-    function toggleSettings() {
-        document.getElementById('settingsMenu').classList.toggle('active');
+    function showSection(section) {
+        document.getElementById("section-juegos").style.display = section === "juegos" ? "flex" : "none";
+        document.getElementById("section-multimedia").style.display = section === "multimedia" ? "flex" : "none";
+        document.getElementById("tab-juegos").classList.toggle("active", section === "juegos");
+        document.getElementById("tab-multimedia").classList.toggle("active", section === "multimedia");
     }
 
-    function openFolder(name) {
-        alert(`📂 Abriendo carpeta: ${name}`);
+    function scrollCarousel(type, direction) {
+        const carousel = document.getElementById(`carousel-${type}`);
+        const scrollAmount = 300;
+        carousel.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
     }
-
-    // Cierra el menú si haces clic fuera
-    document.addEventListener('click', function(event) {
-        const settingsMenu = document.getElementById('settingsMenu');
-        const settingsBtn = document.querySelector('.settings-btn');
-
-        if (!settingsMenu.contains(event.target) && !settingsBtn.contains(event.target)) {
-            settingsMenu.classList.remove('active');
-        }
-    });
 </script>
 
 </body>
