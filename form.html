@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Reparación - TecnoRepair</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.js"></script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .form-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+        }
+        
+        .radio-option input, .checkbox-option input {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+        }
+        
+        .btn-accent:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .equipment-photo {
+            width: 150px;
+            height: 150px;
+            border: 2px dashed #ccc;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .equipment-photo img {
+            max-width: 100%;
+            max-height: 100%;
+            display: none;
+        }
+        
+        .photo-placeholder {
+            text-align: center;
+            color: #777;
+        }
+        
+        .photo-placeholder i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
+            color: var(--primary-color);
+        }
+        
+        .signature-pad {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .signature-clear {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #ddd;
+        }
+        
+        .signature-clear:hover {
+            background-color: #e9ecef;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>TecnoRepair Solutions</h1>
+            <p>Formulario de recepción de equipos para reparación</p>
+        </header>
+        
+        <div class="form-container">
+            <form id="repairForm">
+                <!-- Sección de información del cliente -->
+                <div class="form-section">
+                    <h2>Información del Cliente</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientName">Nombre completo*</label>
+                            <input type="text" id="clientName" name="clientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientEmail">Correo electrónico*</label>
+                            <input type="email" id="clientEmail" name="clientEmail" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientPhone">Teléfono*</label>
+                            <input type="tel" id="clientPhone" name="clientPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientId">Identificación (DNI/CIF/NIE)</label>
+                            <input type="text" id="clientId" name="clientId">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientAddress">Dirección</label>
+                        <input type="text" id="clientAddress" name="clientAddress">
+                    </div>
+                </div>
+                
+                <!-- Sección de información del equipo -->
+                <div class="form-section">
+                    <h2>Información del Equipo</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="equipmentType">Tipo de equipo*</label>
+                            <select id="equipmentType" name="equipmentType" required>
+                                <option value="">Seleccione...</option>
+                                <option value="laptop">Portátil/Laptop</option>
+                                <option value="desktop">Ordenador de sobremesa</option>
+                                <option value="tablet">Tablet</option>
+                                <option value="smartphone">Smartphone</option>
+                                <option value="printer">Impresora</option>
+                                <option value="monitor">Monitor</option>
+                                <option value="other">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipmentBrand">Marca*</label>
+                            <input type="text" id="equipmentBrand" name="equipmentBrand" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="equipmentModel">Modelo*</label>
+                            <input type="text" id="equipmentModel" name="equipmentModel" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="serialNumber">Número de serie</label>
+                            <input type="text" id="serialNumber" name="serialNumber">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="purchaseDate">Fecha de compra (aproximada)</label>
+                        <input type="date" id="purchaseDate" name="purchaseDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="warranty">¿En garantía?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="warrantyYes" name="warranty" value="Sí">
+                                <label for="warrantyYes">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="warrantyNo" name="warranty" value="No" checked>
+                                <label for="warrantyNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="equipmentCondition">Estado físico del equipo*</label>
+                        <textarea id="equipmentCondition" name="equipmentCondition" required placeholder="Describa el estado físico del equipo (golpes, rayones, piezas faltantes, etc.)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Fotografía del equipo</label>
+                        <div class="equipment-photo" id="photoContainer">
+                            <div class="photo-placeholder">
+                                <div>📷</div>
+                                <span>Haga clic para agregar foto</span>
+                            </div>
+                            <img id="equipmentPhoto" src="" alt="Foto del equipo">
+                        </div>
+                        <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                
+                <!-- Sección de descripción del problema -->
+                <div class="form-section">
+                    <h2>Descripción del Problema</h2>
+                    <div class="form-group">
+                        <label for="problemDescription">Descripción detallada del problema*</label>
+                        <textarea id="problemDescription" name="problemDescription" required placeholder="Describa con el mayor detalle posible qué problema presenta el equipo, cuándo comenzó, qué ha intentado para solucionarlo, etc."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="errorMessages">Mensajes de error (si aplica)</label>
+                        <textarea id="errorMessages" name="errorMessages" placeholder="Escriba los mensajes de error exactos que muestra el equipo, si los hay"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>¿Qué componentes/software incluye?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="includesCharger" name="includesCharger">
+                                <label for="includesCharger">Cargador</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="includesBattery" name="includesBattery">
+                                <label for="includesBattery">Batería</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="includesCase" name="includesCase">
+                                <label for="includesCase">Funda/carcasa</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="includesSoftware" name="includesSoftware">
+                                <label for="includesSoftware">Software/Disco de instalación</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección de términos y condiciones -->
+                <div class="form-section">
+                    <h2>Términos y Condiciones</h2>
+                    <div class="form-group">
+                        <label for="diagnosticFee">Tarifa de diagnóstico*</label>
+                        <input type="number" id="diagnosticFee" name="diagnosticFee" required min="0" step="0.01" value="25.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="estimatedTime">Tiempo estimado de diagnóstico*</label>
+                        <select id="estimatedTime" name="estimatedTime" required>
+                            <option value="24-48 horas">24-48 horas</option>
+                            <option value="3-5 días">3-5 días</option>
+                            <option value="1 semana">1 semana</option>
+                            <option value="Más de 1 semana">Más de 1 semana</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="termsConditions">He leído y acepto los términos y condiciones*</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="termsYes" name="termsConditions" value="Aceptado" required>
+                                <label for="termsYes">Acepto</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="termsNo" name="termsConditions" value="No aceptado">
+                                <label for="termsNo">No acepto</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientSignature">Firma del cliente*</label>
+                        <div id="signaturePad" class="signature-pad" style="width: 100%; height: 150px;"></div>
+                        <button type="button" id="clearSignature" class="btn signature-clear">Limpiar firma</button>
+                        <input type="hidden" id="clientSignature" name="clientSignature" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-accent btn-block">Generar documento de recepción</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para seleccionar formato de descarga -->
+    <div id="downloadModal" class="modal">
+        <div class="modal-content">
+            <h2>Documento generado con éxito</h2>
+            <p>Seleccione el formato en el que desea descargar el documento de recepción:</p>
+            <div class="modal-buttons">
+                <button id="downloadPdf" class="btn btn-accent">Descargar PDF</button>
+                <button id="downloadDocx" class="btn btn-success">Descargar DOCX</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>TecnoRepair Solutions &copy; 2023 - Todos los derechos reservados</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+    <script>
+        // Inicializar el pad de firma
+        const canvas = document.createElement('canvas');
+        canvas.width = document.getElementById('signaturePad').offsetWidth;
+        canvas.height = 150;
+        document.getElementById('signaturePad').appendChild(canvas);
+        
+        const signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)',
+            penColor: 'rgb(0, 0, 0)'
+        });
+        
+        document.getElementById('clearSignature').addEventListener('click', function() {
+            signaturePad.clear();
+            document.getElementById('clientSignature').value = '';
+        });
+        
+        // Manejar cambios en el pad de firma
+        canvas.addEventListener('mouseup', updateSignatureValue);
+        canvas.addEventListener('touchend', updateSignatureValue);
+        
+        function updateSignatureValue() {
+            if (!signaturePad.isEmpty()) {
+                document.getElementById('clientSignature').value = signaturePad.toDataURL();
+            } else {
+                document.getElementById('clientSignature').value = '';
+            }
+        }
+        
+        // Manejar la subida de fotos
+        document.getElementById('photoContainer').addEventListener('click', function() {
+            document.getElementById('photoInput').click();
+        });
+        
+        document.getElementById('photoInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.getElementById('equipmentPhoto');
+                    img.src = event.target.result;
+                    img.style.display = 'block';
+                    document.querySelector('.photo-placeholder').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Manejar el envío del formulario
+        document.getElementById('repairForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validar firma
+            if (signaturePad.isEmpty()) {
+                alert('Por favor, proporcione su firma');
+                return;
+            }
+            
+            // Mostrar modal de descarga
+            document.getElementById('downloadModal').style.display = 'flex';
+        });
+        
+        // Configurar botones de descarga
+        document.getElementById('downloadPdf').addEventListener('click', generatePdf);
+        document.getElementById('downloadDocx').addEventListener('click', generateDocx);
+        
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('downloadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+        
+        // Función para generar PDF
+        function generatePdf() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Configuración inicial
+            doc.setFont('helvetica');
+            doc.setFontSize(18);
+            doc.setTextColor(40, 53, 147);
+            doc.text('TecnoRepair Solutions', 105, 20, { align: 'center' });
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Documento de Recepción de Equipo', 105, 30, { align: 'center' });
+            
+            // Fecha y número de ticket
+            const now = new Date();
+            doc.setFontSize(10);
+            doc.text(`Fecha: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 14, 40);
+            doc.text(`Ticket #${Math.floor(Math.random() * 10000)}`, 186, 40, { align: 'right' });
+            
+            // Línea separadora
+            doc.setDrawColor(200, 200, 200);
+            doc.line(14, 45, 196, 45);
+            
+            // Información del cliente
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('INFORMACIÓN DEL CLIENTE', 14, 55);
+            doc.setFont('helvetica', 'normal');
+            
+            let y = 65;
+            doc.text(`Nombre: ${document.getElementById('clientName').value}`, 14, y);
+            y += 7;
+            doc.text(`Correo: ${document.getElementById('clientEmail').value}`, 14, y);
+            y += 7;
+            doc.text(`Teléfono: ${document.getElementById('clientPhone').value}`, 14, y);
+            y += 7;
+            doc.text(`Identificación: ${document.getElementById('clientId').value || 'No proporcionada'}`, 14, y);
+            y += 7;
+            doc.text(`Dirección: ${document.getElementById('clientAddress').value || 'No proporcionada'}`, 14, y);
+            y += 12;
+            
+            // Información del equipo
+            doc.setFont('helvetica', 'bold');
+            doc.text('INFORMACIÓN DEL EQUIPO', 14, y);
+            doc.setFont('helvetica', 'normal');
+            y += 7;
+            
+            doc.text(`Tipo: ${document.getElementById('equipmentType').value}`, 14, y);
+            y += 7;
+            doc.text(`Marca: ${document.getElementById('equipmentBrand').value}`, 14, y);
+            y += 7;
+            doc.text(`Modelo: ${document.getElementById('equipmentModel').value}`, 14, y);
+            y += 7;
+            doc.text(`Número de serie: ${document.getElementById('serialNumber').value || 'No proporcionado'}`, 14, y);
+            y += 7;
+            doc.text(`Fecha compra: ${document.getElementById('purchaseDate').value || 'No proporcionada'}`, 14, y);
+            y += 7;
+            doc.text(`Garantía: ${document.querySelector('input[name="warranty"]:checked').value}`, 14, y);
+            y += 7;
+            
+            // Estado del equipo (puede ser multilínea)
+            const conditionLines = doc.splitTextToSize(
+                `Estado físico: ${document.getElementById('equipmentCondition').value}`, 
+                180
+            );
+            doc.text(conditionLines, 14, y);
+            y += conditionLines.length * 7;
+            
+            // Componentes incluidos
+            const includes = [];
+            if (document.getElementById('includesCharger').checked) includes.push('Cargador');
+            if (document.getElementById('includesBattery').checked) includes.push('Batería');
+            if (document.getElementById('includesCase').checked) includes.push('Funda/carcasa');
+            if (document.getElementById('includesSoftware').checked) includes.push('Software/Disco');
+            
+            doc.text(`Componentes incluidos: ${includes.join(', ') || 'Ninguno especificado'}`, 14, y);
+            y += 12;
+            
+            // Descripción del problema
+            doc.setFont('helvetica', 'bold');
+            doc.text('DESCRIPCIÓN DEL PROBLEMA', 14, y);
+            doc.setFont('helvetica', 'normal');
+            y += 7;
+            
+            const problemLines = doc.splitTextToSize(
+                document.getElementById('problemDescription').value, 
+                180
+            );
+            doc.text(problemLines, 14, y);
+            y += problemLines.length * 7;
+            
+            if (document.getElementById('errorMessages').value) {
+                y += 5;
+                doc.text('Mensajes de error:', 14, y);
+                y += 7;
+                
+                const errorLines = doc.splitTextToSize(
+                    document.getElementById('errorMessages').value, 
+                    180
+                );
+                doc.text(errorLines, 20, y);
+                y += errorLines.length * 7;
+            }
+            
+            y += 12;
+            
+            // Términos y condiciones
+            doc.setFont('helvetica', 'bold');
+            doc.text('TÉRMINOS Y CONDICIONES', 14, y);
+            doc.setFont('helvetica', 'normal');
+            y += 7;
+            
+            doc.text(`Tarifa de diagnóstico: $${document.getElementById('diagnosticFee').value}`, 14, y);
+            y += 7;
+            doc.text(`Tiempo estimado: ${document.getElementById('estimatedTime').value}`, 14, y);
+            y += 7;
+            doc.text(`Términos aceptados: ${document.querySelector('input[name="termsConditions"]:checked').value}`, 14, y);
+            y += 12;
+            
+            // Firma
+            doc.text('Firma del cliente:', 14, y);
+            
+            try {
+                const signatureData = document.getElementById('clientSignature').value;
+                if (signatureData) {
+                    doc.addImage(signatureData, 'PNG', 14, y + 5, 60, 20);
+                }
+            } catch (e) {
+                console.error('Error al agregar la firma:', e);
+            }
+            
+            // Foto del equipo (si existe)
+            const photoInput = document.getElementById('photoInput');
+            if (photoInput.files && photoInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        doc.addPage();
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('FOTOGRAFÍA DEL EQUIPO', 105, 20, { align: 'center' });
+                        doc.setFont('helvetica', 'normal');
+                        
+                        // Ajustar la imagen al ancho de la página manteniendo la relación de aspecto
+                        const img = new Image();
+                        img.src = event.target.result;
+                        
+                        img.onload = function() {
+                            const ratio = img.width / img.height;
+                            let width = 180;
+                            let height = width / ratio;
+                            
+                            if (height > 150) {
+                                height = 150;
+                                width = height * ratio;
+                            }
+                            
+                            doc.addImage(img, 'JPEG', (210 - width) / 2, 30, width, height);
+                            doc.save('recepcion_equipo.pdf');
+                            document.getElementById('downloadModal').style.display = 'none';
+                        };
+                    } catch (e) {
+                        console.error('Error al agregar la foto:', e);
+                        doc.save('recepcion_equipo.pdf');
+                        document.getElementById('downloadModal').style.display = 'none';
+                    }
+                };
+                reader.readAsDataURL(photoInput.files[0]);
+            } else {
+                doc.save('recepcion_equipo.pdf');
+                document.getElementById('downloadModal').style.display = 'none';
+            }
+        }
+        
+        // Función para generar DOCX
+        function generateDocx() {
+            const { Document, Paragraph, TextRun, HeadingLevel, Packer, Table, TableRow, TableCell, WidthType, AlignmentType } = docx;
+            
+            // Crear el documento
+            const doc = new Document({
+                sections: [{
+                    properties: {},
+                    children: [
+                        // Encabezado
+                        new Paragraph({
+                            text: "TecnoRepair Solutions",
+                            heading: HeadingLevel.HEADING_1,
+                            alignment: AlignmentType.CENTER,
+                            spacing: { after: 200 },
+                            thematicBreak: true
+                        }),
+                        new Paragraph({
+                            text: "Documento de Recepción de Equipo",
+                            heading: HeadingLevel.HEADING_2,
+                            alignment: AlignmentType.CENTER,
+                            spacing: { after: 300 }
+                        }),
+                        
+                        // Información del cliente
+                        new Paragraph({
+                            text: "INFORMACIÓN DEL CLIENTE",
+                            heading: HeadingLevel.HEADING_3,
+                            spacing: { before: 400, after: 200 }
+                        }),
+                        createInfoTable([
+                            ["Nombre", document.getElementById('clientName').value],
+                            ["Correo", document.getElementById('clientEmail').value],
+                            ["Teléfono", document.getElementById('clientPhone').value],
+                            ["Identificación", document.getElementById('clientId').value || "No proporcionada"],
+                            ["Dirección", document.getElementById('clientAddress').value || "No proporcionada"]
+                        ]),
+                        
+                        // Información del equipo
+                        new Paragraph({
+                            text: "INFORMACIÓN DEL EQUIPO",
+                            heading: HeadingLevel.HEADING_3,
+                            spacing: { before: 400, after: 200 }
+                        }),
+                        createInfoTable([
+                            ["Tipo de equipo", document.getElementById('equipmentType').value],
+                            ["Marca", document.getElementById('equipmentBrand').value],
+                            ["Modelo", document.getElementById('equipmentModel').value],
+                            ["Número de serie", document.getElementById('serialNumber').value || "No proporcionado"],
+                            ["Fecha de compra", document.getElementById('purchaseDate').value || "No proporcionada"],
+                            ["En garantía", document.querySelector('input[name="warranty"]:checked').value],
+                            ["Estado físico", document.getElementById('equipmentCondition').value],
+                            ["Componentes incluidos", getIncludedComponents()]
+                        ]),
+                        
+                        // Descripción del problema
+                        new Paragraph({
+                            text: "DESCRIPCIÓN DEL PROBLEMA",
+                            heading: HeadingLevel.HEADING_3,
+                            spacing: { before: 400, after: 200 }
+                        }),
+                        new Paragraph({
+                            children: [new TextRun(document.getElementById('problemDescription').value)],
+                            spacing: { after: 200 }
+                        }),
+                        
+                        // Mensajes de error (si existen)
+                        document.getElementById('errorMessages').value ? new Paragraph({
+                            text: "MENSAJES DE ERROR:",
+                            heading: HeadingLevel.HEADING_4,
+                            spacing: { before: 200, after: 100 }
+                        }) : null,
+                        document.getElementById('errorMessages').value ? new Paragraph({
+                            children: [new TextRun(document.getElementById('errorMessages').value)],
+                            spacing: { after: 200 }
+                        }) : null,
+                        
+                        // Términos y condiciones
+                        new Paragraph({
+                            text: "TÉRMINOS Y CONDICIONES",
+                            heading: HeadingLevel.HEADING_3,
+                            spacing: { before: 400, after: 200 }
+                        }),
+                        createInfoTable([
+                            ["Tarifa de diagnóstico", `$${document.getElementById('diagnosticFee').value}`],
+                            ["Tiempo estimado", document.getElementById('estimatedTime').value],
+                            ["Términos aceptados", document.querySelector('input[name="termsConditions"]:checked').value]
+                        ]),
+                        
+                        // Firma
+                        new Paragraph({
+                            text: "FIRMA DEL CLIENTE",
+                            heading: HeadingLevel.HEADING_4,
+                            spacing: { before: 400, after: 200 }
+                        }),
+                        new Paragraph({
+                            text: "Firma recibida electrónicamente",
+                            italics: true,
+                            spacing: { after: 400 }
+                        })
+                    ].filter(Boolean) // Eliminar elementos nulos
+                }]
+            });
+            
+            // Generar y descargar el documento
+            Packer.toBlob(doc).then(blob => {
+                saveAs(blob, "recepcion_equipo.docx");
+                document.getElementById('downloadModal').style.display = 'none';
+            });
+            
+            function getIncludedComponents() {
+                const includes = [];
+                if (document.getElementById('includesCharger').checked) includes.push('Cargador');
+                if (document.getElementById('includesBattery').checked) includes.push('Batería');
+                if (document.getElementById('includesCase').checked) includes.push('Funda/carcasa');
+                if (document.getElementById('includesSoftware').checked) includes.push('Software/Disco');
+                return includes.join(', ') || 'Ninguno especificado';
+            }
+            
+            function createInfoTable(rows) {
+                return new Table({
+                    rows: rows.map(row => new TableRow({
+                        children: [
+                            new TableCell({
+                                children: [new Paragraph({
+                                    children: [new TextRun({
+                                        text: row[0],
+                                        bold: true
+                                    })],
+                                    alignment: AlignmentType.LEFT
+                                })],
+                                width: { size: 30, type: WidthType.PERCENTAGE }
+                            }),
+                            new TableCell({
+                                children: [new Paragraph({
+                                    children: [new TextRun(row[1])],
+                                    alignment: AlignmentType.LEFT
+                                })],
+                                width: { size: 70, type: WidthType.PERCENTAGE }
+                            })
+                        ]
+                    })),
+                    width: { size: 100, type: WidthType.PERCENTAGE }
+                });
+            }
+        }
+        
+        // Función auxiliar para guardar el blob
+        function saveAs(blob, fileName) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
