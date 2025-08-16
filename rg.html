@@ -76,19 +76,16 @@
         }
 
         .top-bar h2 {
-            background: linear-gradient(135deg, var(--light-green) 0%, var(--primary-green) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             font-family: 'Playfair Display', serif;
             margin: 0;
             font-size: 1.8rem;
             letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(29, 185, 84, 0.2);
+            color: var(--primary-green);
             transition: var(--transition);
         }
 
         .light-mode .top-bar h2 {
-            background: linear-gradient(135deg, var(--light-green-light) 0%, var(--primary-green-light) 100%);
+            color: var(--primary-green-light);
         }
 
         .container {
@@ -120,24 +117,20 @@
         }
 
         .unlock-countdown h3 {
-            background: linear-gradient(135deg, var(--light-green) 0%, var(--primary-green) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             margin-top: 0;
             margin-bottom: 15px;
             font-size: 1.4rem;
             font-weight: 600;
+            color: var(--primary-green);
             transition: var(--transition);
         }
 
         .light-mode .unlock-countdown h3 {
-            background: linear-gradient(135deg, var(--light-green-light) 0%, var(--primary-green-light) 100%);
+            color: var(--primary-green-light);
         }
 
         .letter {
             background-color: var(--card-dark);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
             border-radius: 12px;
             padding: 40px;
             margin-bottom: 40px;
@@ -148,7 +141,6 @@
             user-select: none;
             border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
-            opacity: 0.3;
         }
 
         .light-mode .letter {
@@ -162,7 +154,6 @@
         }
 
         .letter.unlocked {
-            opacity: 1;
             pointer-events: auto;
             user-select: auto;
             animation: fadeIn 1s ease;
@@ -175,16 +166,18 @@
             text-align: center;
             font-weight: 700;
             line-height: 1.2;
-            background: linear-gradient(135deg, var(--light-green) 0%, var(--primary-green) 50%, var(--dark-green) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-green);
             letter-spacing: 1px;
-            text-shadow: 0 0 15px rgba(29, 185, 84, 0.3);
             transition: var(--transition);
+            filter: blur(5px);
         }
 
         .light-mode .letter h1 {
-            background: linear-gradient(135deg, var(--light-green-light) 0%, var(--primary-green-light) 50%, #1b5e20 100%);
+            color: var(--primary-green-light);
+        }
+
+        .letter.unlocked h1 {
+            filter: none;
         }
 
         .letter p {
@@ -193,10 +186,15 @@
             color: var(--text-light);
             line-height: 1.8;
             transition: var(--transition);
+            filter: blur(5px);
         }
 
         .light-mode .letter p {
             color: var(--text-dark);
+        }
+
+        .letter.unlocked p {
+            filter: none;
         }
 
         .letter-date {
@@ -206,10 +204,15 @@
             margin-top: 30px;
             font-size: 0.95rem;
             transition: var(--transition);
+            filter: blur(5px);
         }
 
         .light-mode .letter-date {
             color: var(--text-muted-light);
+        }
+
+        .letter.unlocked .letter-date {
+            filter: none;
         }
 
         .lock-icon {
@@ -224,19 +227,16 @@
             text-shadow: 0 0 15px rgba(29, 185, 84, 0.5);
             transition: var(--transition);
             filter: none !important;
+            animation: glow 2s infinite alternate;
         }
 
         .light-mode .lock-icon {
             color: var(--primary-green-light);
+            text-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
         }
 
-        .letter-content {
-            transition: var(--transition);
-            opacity: 0;
-        }
-
-        .letter.unlocked .letter-content {
-            opacity: 1;
+        .letter.unlocked .lock-icon {
+            display: none;
         }
 
         .chest-container {
@@ -273,7 +273,7 @@
             transition: var(--transition);
             pointer-events: none;
             border: 1px solid rgba(84, 204, 22, 0.1);
-            opacity: 0.3;
+            filter: blur(3px);
         }
 
         .light-mode .chest {
@@ -281,7 +281,7 @@
         }
 
         .chest.unlocked {
-            opacity: 1;
+            filter: none;
             pointer-events: auto;
         }
 
@@ -366,18 +366,14 @@
             border-radius: 8px;
             display: inline-block;
             letter-spacing: 1px;
-            background: linear-gradient(135deg, var(--card-darker) 0%, var(--dark-green) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-green);
             text-shadow: 0 0 10px rgba(29, 185, 84, 0.2);
             border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
         }
 
         .light-mode .timer {
-            background: linear-gradient(135deg, var(--card-lighter) 0%, var(--primary-green-light) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-green-light);
             border: 1px solid rgba(76, 175, 80, 0.2);
         }
 
@@ -385,15 +381,13 @@
             margin-bottom: 20px;
             font-size: 1.3rem;
             font-weight: 500;
-            background: linear-gradient(135deg, var(--light-green) 0%, var(--primary-green) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-green);
             letter-spacing: 0.5px;
             transition: var(--transition);
         }
 
         .light-mode .chest-message {
-            background: linear-gradient(135deg, var(--light-green-light) 0%, var(--primary-green-light) 100%);
+            color: var(--primary-green-light);
         }
 
         .theme-toggle {
@@ -445,6 +439,20 @@
             100% { transform: scale(1); }
         }
 
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(29, 185, 84, 0.5); }
+            to { text-shadow: 0 0 20px rgba(29, 185, 84, 0.8), 0 0 30px rgba(29, 185, 84, 0.6); }
+        }
+
+        .light-mode .lock-icon {
+            animation: glow-light 2s infinite alternate;
+        }
+
+        @keyframes glow-light {
+            from { text-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+            to { text-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 0 30px rgba(76, 175, 80, 0.6); }
+        }
+
         .pulse {
             animation: pulse 2s infinite;
         }
@@ -489,25 +497,23 @@
         <div class="letter" id="letter">
             <div class="lock-icon" id="letter-lock"><i class="fas fa-lock"></i></div>
             
-            <div class="letter-content">
-                <h1>Un Mensaje Muy Especial</h1>
-                
-                <p>Querido/a [Nombre],</p>
-                
-                <p>Hay momentos en la vida que merecen ser detenidos, guardados como tesoros en el corazón. Este es uno de ellos.</p>
-                
-                <p>Quiero que sepas lo importante que eres para mí, lo mucho que valoro cada risa compartida, cada conversación bajo las estrellas, cada silencio cómplice.</p>
-                
-                <p>La vida es un conjunto de instantes fugaces, pero hay algunos que permanecen. Los que he vivido a tu lado son de esos que el tiempo no borra.</p>
-                
-                <p>Por eso hoy, en este día tan especial, quiero regalarte estas palabras y una pequeña sorpresa que podrás descubrir más adelante.</p>
-                
-                <p>Con todo mi cariño,</p>
-                
-                <p>[Tu Nombre]</p>
-                
-                <div class="letter-date">1 de Diciembre de 2025</div>
-            </div>
+            <h1>Un Mensaje Muy Especial</h1>
+            
+            <p>Querido/a [Nombre],</p>
+            
+            <p>Hay momentos en la vida que merecen ser detenidos, guardados como tesoros en el corazón. Este es uno de ellos.</p>
+            
+            <p>Quiero que sepas lo importante que eres para mí, lo mucho que valoro cada risa compartida, cada conversación bajo las estrellas, cada silencio cómplice.</p>
+            
+            <p>La vida es un conjunto de instantes fugaces, pero hay algunos que permanecen. Los que he vivido a tu lado son de esos que el tiempo no borra.</p>
+            
+            <p>Por eso hoy, en este día tan especial, quiero regalarte estas palabras y una pequeña sorpresa que podrás descubrir más adelante.</p>
+            
+            <p>Con todo mi cariño,</p>
+            
+            <p>[Tu Nombre]</p>
+            
+            <div class="letter-date">1 de Diciembre de 2025</div>
         </div>
 
         <div class="chest-container">
