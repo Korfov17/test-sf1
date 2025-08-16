@@ -62,7 +62,7 @@
             color: var(--text-dark);
         }
 
-        /* Fondo de símbolos de dólar en 3D */
+        /* Fondo de símbolos de dólar en 3D mejorado */
         .dollar-bg {
             position: fixed;
             top: 0;
@@ -71,40 +71,83 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
+            perspective: 1000px;
         }
 
         .dollar-sign {
             position: absolute;
-            color: rgba(29, 185, 84, 0.6);
+            color: rgba(29, 185, 84, 0.8);
             font-family: Arial, sans-serif;
             font-weight: bold;
             font-size: 40px;
-            opacity: 0.7;
+            opacity: 0;
             transform-style: preserve-3d;
             animation: floatUp linear infinite;
-            text-shadow: 0 0 5px rgba(0,0,0,0.3);
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.3),
+                0 0 15px rgba(29, 185, 84, 0.5);
             user-select: none;
+            will-change: transform, opacity;
         }
 
         .light-mode .dollar-sign {
-            color: rgba(76, 175, 80, 0.5);
+            color: rgba(76, 175, 80, 0.7);
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.5),
+                0 0 10px rgba(76, 175, 80, 0.4);
         }
 
         @keyframes floatUp {
             0% {
-                transform: translateY(100vh) rotateX(45deg) rotateY(15deg) rotateZ(var(--rotateZ, 0deg)) scale(var(--scale, 1));
+                transform: 
+                    translateY(100vh) 
+                    translateX(calc(var(--tx) * 1vw))
+                    rotateX(calc(var(--rx) * 1deg))
+                    rotateY(calc(var(--ry) * 1deg))
+                    rotateZ(calc(var(--rz) * 1deg))
+                    scale(var(--scale, 1));
                 opacity: 0;
             }
-            10% {
-                opacity: 0.7;
+            20% {
+                opacity: var(--opacity);
             }
-            90% {
-                opacity: 0.7;
+            80% {
+                opacity: var(--opacity);
             }
             100% {
-                transform: translateY(-100px) rotateX(45deg) rotateY(15deg) rotateZ(var(--rotateZ, 0deg)) scale(var(--scale, 1));
+                transform: 
+                    translateY(-100px) 
+                    translateX(calc(var(--tx-end) * 1vw))
+                    rotateX(calc(var(--rx-end) * 1deg))
+                    rotateY(calc(var(--ry-end) * 1deg))
+                    rotateZ(calc(var(--rz-end) * 1deg))
+                    scale(var(--scale-end, 1));
                 opacity: 0;
             }
+        }
+
+        /* Efecto de brillo intermitente para algunos dólares */
+        .dollar-sign.glowing {
+            animation: floatUp, glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: var(--opacity); }
+            50% { 
+                opacity: calc(var(--opacity) * 1.5);
+                text-shadow: 
+                    0 0 10px rgba(255,255,255,0.5),
+                    0 0 25px rgba(29, 185, 84, 0.8);
+            }
+        }
+
+        /* Efecto de rotación 3D más pronunciada */
+        .dollar-sign.spinning {
+            animation: floatUp, spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotateY(360deg); }
         }
 
         .top-bar {
@@ -803,7 +846,7 @@
                 <div class="timeline-content">
                     <p>Optimización del diseño para ambos modos de color.</p>
                     <p>Mejora en la experiencia de usuario con feedback visual.</p>
-                    <p>Fondo de símbolos de dólar en 3D flotando.</p>
+                    <p>Fondo de símbolos de dólar en 3D con efectos mejorados.</p>
                 </div>
             </div>
         </div>
@@ -838,31 +881,53 @@
         const closeSurprise = document.getElementById('close-surprise');
         const dollarBg = document.getElementById('dollar-bg');
 
-        // Crear símbolos de dólar flotantes
+        // Crear símbolos de dólar flotantes con efectos mejorados
         function createDollarSigns() {
-            const signCount = 20;
+            const signCount = 25;
+            const effects = ['', 'glowing', 'spinning', 'glowing spinning'];
             
             for (let i = 0; i < signCount; i++) {
                 const sign = document.createElement('div');
                 sign.classList.add('dollar-sign');
+                
+                // Aplicar efectos aleatorios
+                const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+                if (randomEffect) sign.classList.add(...randomEffect.split(' '));
+                
                 sign.textContent = '$';
                 
-                // Posición horizontal aleatoria
+                // Configuración de propiedades aleatorias
                 const posX = Math.random() * 100;
-                
-                // Tamaño aleatorio
+                const posXEnd = (Math.random() - 0.5) * 20;
                 const size = Math.random() * 0.8 + 0.5;
+                const sizeEnd = size * (Math.random() * 0.4 + 0.8);
+                const opacity = Math.random() * 0.5 + 0.3;
                 
-                // Rotación aleatoria
-                const rotateZ = Math.random() * 360;
+                // Rotaciones 3D iniciales y finales
+                const rx = Math.random() * 60 - 30;
+                const ry = Math.random() * 360;
+                const rz = Math.random() * 30 - 15;
+                const rxEnd = rx + (Math.random() * 60 - 30);
+                const ryEnd = ry + (Math.random() * 360 - 180);
+                const rzEnd = rz + (Math.random() * 30 - 15);
                 
-                // Duración de animación aleatoria
+                // Duración y delay de animación
                 const duration = Math.random() * 15 + 10;
-                const delay = Math.random() * 10;
+                const delay = Math.random() * 15;
                 
+                // Aplicar propiedades CSS
                 sign.style.left = `${posX}%`;
+                sign.style.setProperty('--tx', posX/10 - 5);
+                sign.style.setProperty('--tx-end', posXEnd);
+                sign.style.setProperty('--rx', rx);
+                sign.style.setProperty('--ry', ry);
+                sign.style.setProperty('--rz', rz);
+                sign.style.setProperty('--rx-end', rxEnd);
+                sign.style.setProperty('--ry-end', ryEnd);
+                sign.style.setProperty('--rz-end', rzEnd);
                 sign.style.setProperty('--scale', size);
-                sign.style.setProperty('--rotateZ', `${rotateZ}deg`);
+                sign.style.setProperty('--scale-end', sizeEnd);
+                sign.style.setProperty('--opacity', opacity);
                 sign.style.animationDuration = `${duration}s`;
                 sign.style.animationDelay = `${delay}s`;
                 
