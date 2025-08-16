@@ -419,6 +419,46 @@
             margin-right: 10px;
         }
         
+        .service-selection {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .service-option {
+            background: rgba(30, 30, 30, 0.7);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            width: 300px;
+        }
+        
+        .service-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
+            border-color: var(--primary-color);
+        }
+        
+        .service-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(138, 43, 226, 0.1);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+        
+        .service-option h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .service-option p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
         footer {
             text-align: center;
             padding: 30px;
@@ -449,6 +489,16 @@
             .software-options {
                 grid-template-columns: 1fr;
             }
+            
+            .service-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .service-option {
+                width: 100%;
+                max-width: 300px;
+            }
         }
     </style>
 </head>
@@ -459,25 +509,43 @@
             <p>Formulario avanzado de recepción de equipos</p>
         </header>
         
-        <div class="form-container">
+        <!-- Selección de servicio -->
+        <div id="serviceSelection" class="form-container">
+            <h2 style="text-align: center; margin-bottom: 40px;">Seleccione el tipo de servicio</h2>
+            <div class="service-selection">
+                <div class="service-option" id="osInstallationOption">
+                    <h3>Instalación de Sistema Operativo</h3>
+                    <p>Incluye instalación limpia del SO, drivers, software básico y configuración inicial</p>
+                </div>
+                <div class="service-option" id="problemResolutionOption">
+                    <h3>Resolución de Problema</h3>
+                    <p>Diagnóstico y reparación de problemas de hardware o software en el equipo</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Formulario de instalación de SO -->
+        <div id="osInstallationForm" class="form-container" style="display: none;">
             <form id="repairForm">
+                <input type="hidden" id="serviceType" name="serviceType" value="osInstallation">
+                
                 <!-- Sección de información del cliente -->
                 <div class="form-section">
                     <h2>Información del Cliente</h2>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="clientName">Nombre completo*</label>
-                            <input type="text" id="clientName" name="clientName" required>
+                            <label for="clientName">Nombre completo</label>
+                            <input type="text" id="clientName" name="clientName">
                         </div>
                         <div class="form-group">
-                            <label for="clientEmail">Correo electrónico*</label>
-                            <input type="email" id="clientEmail" name="clientEmail" required>
+                            <label for="clientEmail">Correo electrónico</label>
+                            <input type="email" id="clientEmail" name="clientEmail">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="clientPhone">Teléfono*</label>
-                            <input type="tel" id="clientPhone" name="clientPhone" required>
+                            <label for="clientPhone">Teléfono</label>
+                            <input type="tel" id="clientPhone" name="clientPhone">
                         </div>
                         <div class="form-group">
                             <label for="clientId">Identificación (DNI/CIF/NIE)</label>
@@ -495,8 +563,8 @@
                     <h2>Información del Equipo</h2>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="equipmentType">Tipo de equipo*</label>
-                            <select id="equipmentType" name="equipmentType" required>
+                            <label for="equipmentType">Tipo de equipo</label>
+                            <select id="equipmentType" name="equipmentType">
                                 <option value="" selected disabled>Seleccione...</option>
                                 <option value="laptop">Portátil/Laptop</option>
                                 <option value="desktop">Ordenador de sobremesa</option>
@@ -510,14 +578,14 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="equipmentBrand">Marca*</label>
-                            <input type="text" id="equipmentBrand" name="equipmentBrand" required>
+                            <label for="equipmentBrand">Marca</label>
+                            <input type="text" id="equipmentBrand" name="equipmentBrand">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="equipmentModel">Modelo*</label>
-                            <input type="text" id="equipmentModel" name="equipmentModel" required>
+                            <label for="equipmentModel">Modelo</label>
+                            <input type="text" id="equipmentModel" name="equipmentModel">
                         </div>
                         <div class="form-group">
                             <label for="serialNumber">Número de serie</label>
@@ -544,7 +612,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="operatingSystem">Sistema operativo*</label>
+                        <label for="operatingSystem">Sistema operativo a instalar</label>
                         <div class="radio-group">
                             <div class="radio-option">
                                 <input type="radio" id="osWindows" name="operatingSystem" value="Windows">
@@ -565,12 +633,12 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="osVersion">Versión del sistema operativo</label>
+                        <label for="osVersion">Versión específica</label>
                         <input type="text" id="osVersion" name="osVersion" placeholder="Ej: Windows 10 Pro, Ubuntu 22.04, etc.">
                     </div>
                     <div class="form-group">
-                        <label for="equipmentCondition">Estado físico del equipo*</label>
-                        <textarea id="equipmentCondition" name="equipmentCondition" required placeholder="Describa el estado físico del equipo (golpes, rayones, piezas faltantes, líquidos derramados, etc.)"></textarea>
+                        <label for="equipmentCondition">Estado físico del equipo</label>
+                        <textarea id="equipmentCondition" name="equipmentCondition" placeholder="Describa el estado físico del equipo (golpes, rayones, piezas faltantes, líquidos derramados, etc.)"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Fotografía del equipo</label>
@@ -697,12 +765,165 @@
                     </div>
                 </div>
                 
+                <!-- Sección de notas adicionales -->
+                <div class="form-section">
+                    <h2>Notas Adicionales</h2>
+                    <div class="form-group">
+                        <label for="additionalNotes">Instrucciones especiales o requisitos adicionales</label>
+                        <textarea id="additionalNotes" name="additionalNotes" placeholder="Describa cualquier requisito especial para la instalación"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Sección de firma -->
+                <div class="form-section">
+                    <h2>Confirmación</h2>
+                    <div class="form-group">
+                        <label for="clientSignature">Firma del cliente</label>
+                        <div id="signaturePad" class="signature-pad" style="width: 100%; height: 150px;"></div>
+                        <button type="button" id="clearSignature" class="btn signature-clear">Limpiar firma</button>
+                        <input type="hidden" id="clientSignature" name="clientSignature">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-accent btn-block">Generar documento de recepción</button>
+            </form>
+        </div>
+        
+        <!-- Formulario de resolución de problemas -->
+        <div id="problemResolutionForm" class="form-container" style="display: none;">
+            <form id="problemResolutionForm">
+                <input type="hidden" id="serviceType" name="serviceType" value="problemResolution">
+                
+                <!-- Sección de información del cliente -->
+                <div class="form-section">
+                    <h2>Información del Cliente</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientName">Nombre completo</label>
+                            <input type="text" id="clientName" name="clientName">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientEmail">Correo electrónico</label>
+                            <input type="email" id="clientEmail" name="clientEmail">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientPhone">Teléfono</label>
+                            <input type="tel" id="clientPhone" name="clientPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientId">Identificación (DNI/CIF/NIE)</label>
+                            <input type="text" id="clientId" name="clientId">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientAddress">Dirección</label>
+                        <input type="text" id="clientAddress" name="clientAddress">
+                    </div>
+                </div>
+                
+                <!-- Sección de información del equipo -->
+                <div class="form-section">
+                    <h2>Información del Equipo</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="equipmentType">Tipo de equipo</label>
+                            <select id="equipmentType" name="equipmentType">
+                                <option value="" selected disabled>Seleccione...</option>
+                                <option value="laptop">Portátil/Laptop</option>
+                                <option value="desktop">Ordenador de sobremesa</option>
+                                <option value="tablet">Tablet</option>
+                                <option value="smartphone">Smartphone</option>
+                                <option value="printer">Impresora</option>
+                                <option value="monitor">Monitor</option>
+                                <option value="server">Servidor</option>
+                                <option value="network">Equipo de red</option>
+                                <option value="other">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="equipmentBrand">Marca</label>
+                            <input type="text" id="equipmentBrand" name="equipmentBrand">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="equipmentModel">Modelo</label>
+                            <input type="text" id="equipmentModel" name="equipmentModel">
+                        </div>
+                        <div class="form-group">
+                            <label for="serialNumber">Número de serie</label>
+                            <input type="text" id="serialNumber" name="serialNumber">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="purchaseDate">Fecha de compra (aproximada)</label>
+                            <input type="date" id="purchaseDate" name="purchaseDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="warranty">¿En garantía?</label>
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="warrantyYes" name="warranty" value="Sí">
+                                    <label for="warrantyYes">Sí</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="warrantyNo" name="warranty" value="No">
+                                    <label for="warrantyNo">No</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="operatingSystem">Sistema operativo actual</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="osWindows" name="operatingSystem" value="Windows">
+                                <label for="osWindows">Windows</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="osLinux" name="operatingSystem" value="Linux">
+                                <label for="osLinux">Linux</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="osMac" name="operatingSystem" value="macOS">
+                                <label for="osMac">macOS</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="osOther" name="operatingSystem" value="Otro">
+                                <label for="osOther">Otro</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="osVersion">Versión del sistema operativo</label>
+                        <input type="text" id="osVersion" name="osVersion" placeholder="Ej: Windows 10 Pro, Ubuntu 22.04, etc.">
+                    </div>
+                    <div class="form-group">
+                        <label for="equipmentCondition">Estado físico del equipo</label>
+                        <textarea id="equipmentCondition" name="equipmentCondition" placeholder="Describa el estado físico del equipo (golpes, rayones, piezas faltantes, líquidos derramados, etc.)"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Fotografía del equipo</label>
+                        <div class="equipment-photo" id="photoContainer">
+                            <div class="photo-placeholder">
+                                <div>📷</div>
+                                <span>Haga clic para agregar foto</span>
+                            </div>
+                            <img id="equipmentPhoto" src="" alt="Foto del equipo">
+                        </div>
+                        <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                    </div>
+                </div>
+                
                 <!-- Sección de descripción del problema -->
                 <div class="form-section">
                     <h2>Descripción del Problema</h2>
                     <div class="form-group">
-                        <label for="problemDescription">Descripción detallada del problema*</label>
-                        <textarea id="problemDescription" name="problemDescription" required placeholder="Describa con el mayor detalle posible qué problema presenta el equipo, cuándo comenzó, qué ha intentado para solucionarlo, etc."></textarea>
+                        <label for="problemDescription">Descripción detallada del problema</label>
+                        <textarea id="problemDescription" name="problemDescription" placeholder="Describa con el mayor detalle posible qué problema presenta el equipo, cuándo comenzó, qué ha intentado para solucionarlo, etc."></textarea>
                     </div>
                     <div class="form-group">
                         <label for="errorMessages">Mensajes de error (si aplica)</label>
@@ -727,14 +948,51 @@
                     </div>
                 </div>
                 
+                <!-- Sección de servicios adicionales -->
+                <div class="form-section">
+                    <h2>Servicios Adicionales</h2>
+                    <div class="form-group">
+                        <label for="backupRequired">¿Requiere backup de datos?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="backupYes" name="backupRequired" value="Sí">
+                                <label for="backupYes">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="backupNo" name="backupRequired" value="No">
+                                <label for="backupNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="backupDetailsGroup" style="display: none;">
+                        <label for="backupDetails">Detalles del backup</label>
+                        <textarea id="backupDetails" name="backupDetails" placeholder="Especifique qué datos necesita respaldar y ubicación aproximada"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dataRecovery">¿Requiere recuperación de datos?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="recoveryYes" name="dataRecovery" value="Sí">
+                                <label for="recoveryYes">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="recoveryNo" name="dataRecovery" value="No">
+                                <label for="recoveryNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Sección de firma -->
                 <div class="form-section">
                     <h2>Confirmación</h2>
                     <div class="form-group">
-                        <label for="clientSignature">Firma del cliente*</label>
+                        <label for="clientSignature">Firma del cliente</label>
                         <div id="signaturePad" class="signature-pad" style="width: 100%; height: 150px;"></div>
                         <button type="button" id="clearSignature" class="btn signature-clear">Limpiar firma</button>
-                        <input type="hidden" id="clientSignature" name="clientSignature" required>
+                        <input type="hidden" id="clientSignature" name="clientSignature">
                     </div>
                 </div>
                 
@@ -761,6 +1019,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
     <script>
+        // Auto-limpieza al cargar la página
+        window.addEventListener('load', function() {
+            resetForm();
+        });
+
         // Inicializar el pad de firma
         const canvas = document.createElement('canvas');
         canvas.width = document.getElementById('signaturePad').offsetWidth;
@@ -822,15 +1085,33 @@
                 this.checked ? 'block' : 'none';
         });
         
+        // Selección de servicio
+        document.getElementById('osInstallationOption').addEventListener('click', function() {
+            document.getElementById('serviceSelection').style.display = 'none';
+            document.getElementById('osInstallationForm').style.display = 'block';
+            document.querySelector('input[name="serviceType"]').value = 'osInstallation';
+            this.classList.add('selected');
+            document.getElementById('problemResolutionOption').classList.remove('selected');
+        });
+        
+        document.getElementById('problemResolutionOption').addEventListener('click', function() {
+            document.getElementById('serviceSelection').style.display = 'none';
+            document.getElementById('problemResolutionForm').style.display = 'block';
+            document.querySelector('input[name="serviceType"]').value = 'problemResolution';
+            this.classList.add('selected');
+            document.getElementById('osInstallationOption').classList.remove('selected');
+        });
+        
         // Manejar el envío del formulario
         document.getElementById('repairForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Validar firma
-            if (signaturePad.isEmpty()) {
-                alert('Por favor, proporcione su firma');
-                return;
-            }
+            // Mostrar modal de descarga
+            document.getElementById('downloadModal').style.display = 'flex';
+        });
+        
+        document.getElementById('problemResolutionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
             // Mostrar modal de descarga
             document.getElementById('downloadModal').style.display = 'flex';
@@ -856,7 +1137,9 @@
         
         // Función para resetear el formulario
         function resetForm() {
-            document.getElementById('repairForm').reset();
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => form.reset());
+            
             signaturePad.clear();
             document.getElementById('clientSignature').value = '';
             document.getElementById('equipmentPhoto').style.display = 'none';
@@ -865,6 +1148,13 @@
             document.getElementById('backupDetailsGroup').style.display = 'none';
             document.getElementById('customSoftwareList').style.display = 'none';
             document.getElementById('downloadModal').style.display = 'none';
+            
+            // Volver a la selección de servicio
+            document.getElementById('serviceSelection').style.display = 'block';
+            document.getElementById('osInstallationForm').style.display = 'none';
+            document.getElementById('problemResolutionForm').style.display = 'none';
+            document.getElementById('osInstallationOption').classList.remove('selected');
+            document.getElementById('problemResolutionOption').classList.remove('selected');
         }
         
         // Función para generar PDF (formato blanco)
@@ -872,13 +1162,17 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
+            // Obtener el tipo de servicio
+            const serviceType = document.querySelector('input[name="serviceType"]').value;
+            const isOsInstallation = serviceType === 'osInstallation';
+            
             // Configuración inicial
             doc.setFont('helvetica');
             doc.setFontSize(22);
             doc.setTextColor(0, 0, 0);
             doc.text('TecnoRepair Pro', 105, 20, { align: 'center' });
             doc.setFontSize(16);
-            doc.text('DOCUMENTO DE RECEPCIÓN DE EQUIPO', 105, 30, { align: 'center' });
+            doc.text(`DOCUMENTO DE ${isOsInstallation ? 'INSTALACIÓN DE SISTEMA OPERATIVO' : 'RESOLUCIÓN DE PROBLEMA'}`, 105, 30, { align: 'center' });
             
             // Fecha y número de ticket
             const now = new Date();
@@ -898,11 +1192,11 @@
             doc.setFont('helvetica', 'normal');
             
             let y = 65;
-            doc.text(`Nombre: ${document.getElementById('clientName').value}`, 14, y);
+            doc.text(`Nombre: ${document.getElementById('clientName').value || 'No proporcionado'}`, 14, y);
             y += 7;
-            doc.text(`Correo: ${document.getElementById('clientEmail').value}`, 14, y);
+            doc.text(`Correo: ${document.getElementById('clientEmail').value || 'No proporcionado'}`, 14, y);
             y += 7;
-            doc.text(`Teléfono: ${document.getElementById('clientPhone').value}`, 14, y);
+            doc.text(`Teléfono: ${document.getElementById('clientPhone').value || 'No proporcionado'}`, 14, y);
             y += 7;
             doc.text(`Identificación: ${document.getElementById('clientId').value || 'No proporcionada'}`, 14, y);
             y += 7;
@@ -915,11 +1209,11 @@
             doc.setFont('helvetica', 'normal');
             y += 7;
             
-            doc.text(`Tipo: ${document.getElementById('equipmentType').value}`, 14, y);
+            doc.text(`Tipo: ${document.getElementById('equipmentType').value || 'No proporcionado'}`, 14, y);
             y += 7;
-            doc.text(`Marca: ${document.getElementById('equipmentBrand').value}`, 14, y);
+            doc.text(`Marca: ${document.getElementById('equipmentBrand').value || 'No proporcionada'}`, 14, y);
             y += 7;
-            doc.text(`Modelo: ${document.getElementById('equipmentModel').value}`, 14, y);
+            doc.text(`Modelo: ${document.getElementById('equipmentModel').value || 'No proporcionado'}`, 14, y);
             y += 7;
             doc.text(`Número de serie: ${document.getElementById('serialNumber').value || 'No proporcionado'}`, 14, y);
             y += 7;
@@ -932,89 +1226,116 @@
             
             // Estado del equipo (puede ser multilínea)
             const conditionLines = doc.splitTextToSize(
-                `Estado físico: ${document.getElementById('equipmentCondition').value}`, 
+                `Estado físico: ${document.getElementById('equipmentCondition').value || 'No proporcionado'}`, 
                 180
             );
             doc.text(conditionLines, 14, y);
             y += conditionLines.length * 7;
             
-            // Componentes incluidos
-            const includes = [];
-            if (document.getElementById('includesCharger').checked) includes.push('Cargador');
-            if (document.getElementById('includesBattery').checked) includes.push('Batería');
-            if (document.getElementById('includesCase').checked) includes.push('Funda/carcasa');
-            
-            doc.text(`Componentes incluidos: ${includes.join(', ') || 'Ninguno especificado'}`, 14, y);
-            y += 12;
-            
-            // Software a instalar
-            const softwareToInstall = [];
-            if (document.getElementById('office').checked) softwareToInstall.push('Microsoft Office');
-            if (document.getElementById('libreoffice').checked) softwareToInstall.push('LibreOffice');
-            if (document.getElementById('googleWorkspace').checked) softwareToInstall.push('Google Workspace');
-            if (document.getElementById('antivirus').checked) softwareToInstall.push('Antivirus');
-            if (document.getElementById('vpn').checked) softwareToInstall.push('VPN');
-            if (document.getElementById('firewall').checked) softwareToInstall.push('Firewall');
-            if (document.getElementById('adobe').checked) softwareToInstall.push('Adobe Creative Cloud');
-            if (document.getElementById('autocad').checked) softwareToInstall.push('AutoCAD');
-            if (document.getElementById('vscode').checked) softwareToInstall.push('VS Code');
-            if (document.getElementById('git').checked) softwareToInstall.push('Git');
-            if (document.getElementById('customSoftware').checked) {
-                softwareToInstall.push('Software personalizado: ' + document.getElementById('customSoftwareList').value);
-            }
-            
-            if (softwareToInstall.length > 0) {
-                doc.text('Software a instalar:', 14, y);
-                y += 7;
+            // Componentes incluidos (solo para resolución de problemas)
+            if (!isOsInstallation) {
+                const includes = [];
+                if (document.getElementById('includesCharger')?.checked) includes.push('Cargador');
+                if (document.getElementById('includesBattery')?.checked) includes.push('Batería');
+                if (document.getElementById('includesCase')?.checked) includes.push('Funda/carcasa');
                 
-                const softwareLines = doc.splitTextToSize(
-                    softwareToInstall.join(', '), 
-                    180
-                );
-                doc.text(softwareLines, 20, y);
-                y += softwareLines.length * 7;
-                y += 5;
-            }
-            
-            // Servicios adicionales
-            if (document.getElementById('backupYes').checked) {
-                doc.text(`Backup requerido: Sí - ${document.getElementById('backupDetails').value || 'Sin detalles'}`, 14, y);
-                y += 7;
-            }
-            
-            if (document.getElementById('recoveryYes').checked) {
-                doc.text('Recuperación de datos requerida: Sí', 14, y);
+                doc.text(`Componentes incluidos: ${includes.join(', ') || 'Ninguno especificado'}`, 14, y);
                 y += 7;
             }
             
             y += 5;
             
-            // Descripción del problema
+            // Sección específica según el tipo de servicio
+            if (isOsInstallation) {
+                // Software a instalar
+                const softwareToInstall = [];
+                if (document.getElementById('office')?.checked) softwareToInstall.push('Microsoft Office');
+                if (document.getElementById('libreoffice')?.checked) softwareToInstall.push('LibreOffice');
+                if (document.getElementById('googleWorkspace')?.checked) softwareToInstall.push('Google Workspace');
+                if (document.getElementById('antivirus')?.checked) softwareToInstall.push('Antivirus');
+                if (document.getElementById('vpn')?.checked) softwareToInstall.push('VPN');
+                if (document.getElementById('firewall')?.checked) softwareToInstall.push('Firewall');
+                if (document.getElementById('adobe')?.checked) softwareToInstall.push('Adobe Creative Cloud');
+                if (document.getElementById('autocad')?.checked) softwareToInstall.push('AutoCAD');
+                if (document.getElementById('vscode')?.checked) softwareToInstall.push('VS Code');
+                if (document.getElementById('git')?.checked) softwareToInstall.push('Git');
+                if (document.getElementById('customSoftware')?.checked) {
+                    softwareToInstall.push('Software personalizado: ' + (document.getElementById('customSoftwareList').value || 'No especificado'));
+                }
+                
+                if (softwareToInstall.length > 0) {
+                    doc.text('Software a instalar:', 14, y);
+                    y += 7;
+                    
+                    const softwareLines = doc.splitTextToSize(
+                        softwareToInstall.join(', '), 
+                        180
+                    );
+                    doc.text(softwareLines, 20, y);
+                    y += softwareLines.length * 7;
+                }
+                
+                // Notas adicionales
+                if (document.getElementById('additionalNotes')?.value) {
+                    y += 5;
+                    doc.text('Notas adicionales:', 14, y);
+                    y += 7;
+                    
+                    const notesLines = doc.splitTextToSize(
+                        document.getElementById('additionalNotes').value, 
+                        180
+                    );
+                    doc.text(notesLines, 20, y);
+                    y += notesLines.length * 7;
+                }
+            } else {
+                // Descripción del problema para resolución
+                doc.setFont('helvetica', 'bold');
+                doc.text('DESCRIPCIÓN DEL PROBLEMA', 14, y);
+                doc.setFont('helvetica', 'normal');
+                y += 7;
+                
+                const problemLines = doc.splitTextToSize(
+                    document.getElementById('problemDescription').value || 'No proporcionada', 
+                    180
+                );
+                doc.text(problemLines, 14, y);
+                y += problemLines.length * 7;
+                
+                if (document.getElementById('errorMessages')?.value) {
+                    y += 5;
+                    doc.text('Mensajes de error:', 14, y);
+                    y += 7;
+                    
+                    const errorLines = doc.splitTextToSize(
+                        document.getElementById('errorMessages').value, 
+                        180
+                    );
+                    doc.text(errorLines, 20, y);
+                    y += errorLines.length * 7;
+                }
+            }
+            
+            // Servicios adicionales (comunes a ambos)
+            y += 5;
             doc.setFont('helvetica', 'bold');
-            doc.text('DESCRIPCIÓN DEL PROBLEMA', 14, y);
+            doc.text('SERVICIOS ADICIONALES', 14, y);
             doc.setFont('helvetica', 'normal');
             y += 7;
             
-            const problemLines = doc.splitTextToSize(
-                document.getElementById('problemDescription').value, 
-                180
-            );
-            doc.text(problemLines, 14, y);
-            y += problemLines.length * 7;
+            doc.text(`Backup de datos: ${document.querySelector('input[name="backupRequired"]:checked')?.value || 'No'}`, 14, y);
+            y += 7;
             
-            if (document.getElementById('errorMessages').value) {
-                y += 5;
-                doc.text('Mensajes de error:', 14, y);
-                y += 7;
-                
-                const errorLines = doc.splitTextToSize(
-                    document.getElementById('errorMessages').value, 
+            if (document.querySelector('input[name="backupRequired"]:checked')?.value === 'Sí') {
+                const backupLines = doc.splitTextToSize(
+                    `Detalles: ${document.getElementById('backupDetails').value || 'No proporcionados'}`, 
                     180
                 );
-                doc.text(errorLines, 20, y);
-                y += errorLines.length * 7;
+                doc.text(backupLines, 20, y);
+                y += backupLines.length * 7;
             }
             
+            doc.text(`Recuperación de datos: ${document.querySelector('input[name="dataRecovery"]:checked')?.value || 'No'}`, 14, y);
             y += 12;
             
             // Firma
@@ -1061,11 +1382,11 @@
                             doc.setFontSize(10);
                             doc.text('TecnoRepair Pro - Soluciones tecnológicas avanzadas', 105, 280, { align: 'center' });
                             
-                            doc.save('recepcion_equipo_tecno.pdf');
+                            doc.save(`${isOsInstallation ? 'instalacion_so' : 'resolucion_problema'}_tecno.pdf`);
                         };
                     } catch (e) {
                         console.error('Error al agregar la foto:', e);
-                        doc.save('recepcion_equipo_tecno.pdf');
+                        doc.save(`${isOsInstallation ? 'instalacion_so' : 'resolucion_problema'}_tecno.pdf`);
                     }
                 };
                 reader.readAsDataURL(photoInput.files[0]);
@@ -1074,7 +1395,7 @@
                 doc.setFontSize(10);
                 doc.text('TecnoRepair Pro - Soluciones tecnológicas avanzadas', 105, 280, { align: 'center' });
                 
-                doc.save('recepcion_equipo_tecno.pdf');
+                doc.save(`${isOsInstallation ? 'instalacion_so' : 'resolucion_problema'}_tecno.pdf`);
             }
         }
         
@@ -1082,27 +1403,35 @@
         function generateDocx() {
             const { Document, Paragraph, TextRun, HeadingLevel, Packer, Table, TableRow, TableCell, WidthType, AlignmentType } = docx;
             
-            // Obtener software a instalar
+            // Obtener el tipo de servicio
+            const serviceType = document.querySelector('input[name="serviceType"]').value;
+            const isOsInstallation = serviceType === 'osInstallation';
+            
+            // Obtener software a instalar (solo para instalación de SO)
             const softwareToInstall = [];
-            if (document.getElementById('office').checked) softwareToInstall.push('Microsoft Office');
-            if (document.getElementById('libreoffice').checked) softwareToInstall.push('LibreOffice');
-            if (document.getElementById('googleWorkspace').checked) softwareToInstall.push('Google Workspace');
-            if (document.getElementById('antivirus').checked) softwareToInstall.push('Antivirus');
-            if (document.getElementById('vpn').checked) softwareToInstall.push('VPN');
-            if (document.getElementById('firewall').checked) softwareToInstall.push('Firewall');
-            if (document.getElementById('adobe').checked) softwareToInstall.push('Adobe Creative Cloud');
-            if (document.getElementById('autocad').checked) softwareToInstall.push('AutoCAD');
-            if (document.getElementById('vscode').checked) softwareToInstall.push('VS Code');
-            if (document.getElementById('git').checked) softwareToInstall.push('Git');
-            if (document.getElementById('customSoftware').checked) {
-                softwareToInstall.push('Software personalizado: ' + document.getElementById('customSoftwareList').value);
+            if (isOsInstallation) {
+                if (document.getElementById('office')?.checked) softwareToInstall.push('Microsoft Office');
+                if (document.getElementById('libreoffice')?.checked) softwareToInstall.push('LibreOffice');
+                if (document.getElementById('googleWorkspace')?.checked) softwareToInstall.push('Google Workspace');
+                if (document.getElementById('antivirus')?.checked) softwareToInstall.push('Antivirus');
+                if (document.getElementById('vpn')?.checked) softwareToInstall.push('VPN');
+                if (document.getElementById('firewall')?.checked) softwareToInstall.push('Firewall');
+                if (document.getElementById('adobe')?.checked) softwareToInstall.push('Adobe Creative Cloud');
+                if (document.getElementById('autocad')?.checked) softwareToInstall.push('AutoCAD');
+                if (document.getElementById('vscode')?.checked) softwareToInstall.push('VS Code');
+                if (document.getElementById('git')?.checked) softwareToInstall.push('Git');
+                if (document.getElementById('customSoftware')?.checked) {
+                    softwareToInstall.push('Software personalizado: ' + (document.getElementById('customSoftwareList').value || 'No especificado'));
+                }
             }
             
-            // Obtener componentes incluidos
+            // Obtener componentes incluidos (solo para resolución de problemas)
             const includes = [];
-            if (document.getElementById('includesCharger').checked) includes.push('Cargador');
-            if (document.getElementById('includesBattery').checked) includes.push('Batería');
-            if (document.getElementById('includesCase').checked) includes.push('Funda/carcasa');
+            if (!isOsInstallation) {
+                if (document.getElementById('includesCharger')?.checked) includes.push('Cargador');
+                if (document.getElementById('includesBattery')?.checked) includes.push('Batería');
+                if (document.getElementById('includesCase')?.checked) includes.push('Funda/carcasa');
+            }
             
             // Crear el documento
             const doc = new Document({
@@ -1127,7 +1456,7 @@
                             border: { bottom: { color: "000000", size: 8, style: "single" } }
                         }),
                         new Paragraph({
-                            text: "DOCUMENTO DE RECEPCIÓN DE EQUIPO",
+                            text: `DOCUMENTO DE ${isOsInstallation ? 'INSTALACIÓN DE SISTEMA OPERATIVO' : 'RESOLUCIÓN DE PROBLEMA'}`,
                             heading: HeadingLevel.HEADING_2,
                             alignment: AlignmentType.CENTER,
                             spacing: { after: 300 }
@@ -1155,9 +1484,9 @@
                             spacing: { before: 400, after: 200 }
                         }),
                         createInfoTable([
-                            ["Nombre", document.getElementById('clientName').value],
-                            ["Correo electrónico", document.getElementById('clientEmail').value],
-                            ["Teléfono", document.getElementById('clientPhone').value],
+                            ["Nombre", document.getElementById('clientName').value || "No proporcionado"],
+                            ["Correo electrónico", document.getElementById('clientEmail').value || "No proporcionado"],
+                            ["Teléfono", document.getElementById('clientPhone').value || "No proporcionado"],
                             ["Identificación", document.getElementById('clientId').value || "No proporcionada"],
                             ["Dirección", document.getElementById('clientAddress').value || "No proporcionada"]
                         ]),
@@ -1169,61 +1498,82 @@
                             spacing: { before: 400, after: 200 }
                         }),
                         createInfoTable([
-                            ["Tipo de equipo", document.getElementById('equipmentType').value],
-                            ["Marca", document.getElementById('equipmentBrand').value],
-                            ["Modelo", document.getElementById('equipmentModel').value],
+                            ["Tipo de equipo", document.getElementById('equipmentType').value || "No proporcionado"],
+                            ["Marca", document.getElementById('equipmentBrand').value || "No proporcionada"],
+                            ["Modelo", document.getElementById('equipmentModel').value || "No proporcionado"],
                             ["Número de serie", document.getElementById('serialNumber').value || "No proporcionado"],
                             ["Fecha de compra", document.getElementById('purchaseDate').value || "No proporcionada"],
                             ["En garantía", document.querySelector('input[name="warranty"]:checked')?.value || "No especificado"],
                             ["Sistema operativo", `${document.querySelector('input[name="operatingSystem"]:checked')?.value || "No especificado"} ${document.getElementById('osVersion').value || ''}`],
-                            ["Estado físico", document.getElementById('equipmentCondition').value],
-                            ["Componentes incluidos", includes.join(', ') || "Ninguno especificado"]
+                            ["Estado físico", document.getElementById('equipmentCondition').value || "No proporcionado"]
                         ]),
                         
-                        // Software a instalar (si hay)
-                        softwareToInstall.length > 0 ? new Paragraph({
+                        // Componentes incluidos (solo para resolución de problemas)
+                        !isOsInstallation ? new Paragraph({
+                            text: "COMPONENTES INCLUIDOS",
+                            heading: HeadingLevel.HEADING_4,
+                            spacing: { before: 400, after: 200 }
+                        }) : null,
+                        !isOsInstallation ? new Paragraph({
+                            children: [new TextRun(includes.join(', ') || "Ninguno especificado")],
+                            spacing: { after: 200 }
+                        }) : null,
+                        
+                        // Software a instalar (solo para instalación de SO)
+                        isOsInstallation && softwareToInstall.length > 0 ? new Paragraph({
                             text: "SOFTWARE A INSTALAR",
                             heading: HeadingLevel.HEADING_4,
                             spacing: { before: 400, after: 200 }
                         }) : null,
-                        softwareToInstall.length > 0 ? new Paragraph({
+                        isOsInstallation && softwareToInstall.length > 0 ? new Paragraph({
                             children: [new TextRun(softwareToInstall.join(', '))],
                             spacing: { after: 200 }
                         }) : null,
                         
-                        // Servicios adicionales
+                        // Notas adicionales (solo para instalación de SO)
+                        isOsInstallation && document.getElementById('additionalNotes')?.value ? new Paragraph({
+                            text: "NOTAS ADICIONALES",
+                            heading: HeadingLevel.HEADING_4,
+                            spacing: { before: 400, after: 200 }
+                        }) : null,
+                        isOsInstallation && document.getElementById('additionalNotes')?.value ? new Paragraph({
+                            children: [new TextRun(document.getElementById('additionalNotes').value)],
+                            spacing: { after: 200 }
+                        }) : null,
+                        
+                        // Descripción del problema (solo para resolución de problemas)
+                        !isOsInstallation ? new Paragraph({
+                            text: "DESCRIPCIÓN DEL PROBLEMA",
+                            heading: HeadingLevel.HEADING_3,
+                            spacing: { before: 400, after: 200 }
+                        }) : null,
+                        !isOsInstallation ? new Paragraph({
+                            children: [new TextRun(document.getElementById('problemDescription').value || "No proporcionada")],
+                            spacing: { after: 200 }
+                        }) : null,
+                        
+                        // Mensajes de error (solo para resolución de problemas)
+                        !isOsInstallation && document.getElementById('errorMessages')?.value ? new Paragraph({
+                            text: "MENSAJES DE ERROR:",
+                            heading: HeadingLevel.HEADING_4,
+                            spacing: { before: 200, after: 100 }
+                        }) : null,
+                        !isOsInstallation && document.getElementById('errorMessages')?.value ? new Paragraph({
+                            children: [new TextRun(document.getElementById('errorMessages').value)],
+                            spacing: { after: 200 }
+                        }) : null,
+                        
+                        // Servicios adicionales (comunes a ambos)
                         new Paragraph({
                             text: "SERVICIOS ADICIONALES",
                             heading: HeadingLevel.HEADING_4,
                             spacing: { before: 400, after: 200 }
                         }),
                         createInfoTable([
-                            ["Backup de datos", document.getElementById('backupYes').checked ? 
+                            ["Backup de datos", document.querySelector('input[name="backupRequired"]:checked')?.value === 'Sí' ? 
                                 `Sí - ${document.getElementById('backupDetails').value || 'Sin detalles'}` : "No"],
-                            ["Recuperación de datos", document.getElementById('recoveryYes').checked ? "Sí" : "No"]
+                            ["Recuperación de datos", document.querySelector('input[name="dataRecovery"]:checked')?.value || "No"]
                         ]),
-                        
-                        // Descripción del problema
-                        new Paragraph({
-                            text: "DESCRIPCIÓN DEL PROBLEMA",
-                            heading: HeadingLevel.HEADING_3,
-                            spacing: { before: 400, after: 200 }
-                        }),
-                        new Paragraph({
-                            children: [new TextRun(document.getElementById('problemDescription').value)],
-                            spacing: { after: 200 }
-                        }),
-                        
-                        // Mensajes de error (si existen)
-                        document.getElementById('errorMessages').value ? new Paragraph({
-                            text: "MENSAJES DE ERROR:",
-                            heading: HeadingLevel.HEADING_4,
-                            spacing: { before: 200, after: 100 }
-                        }) : null,
-                        document.getElementById('errorMessages').value ? new Paragraph({
-                            children: [new TextRun(document.getElementById('errorMessages').value)],
-                            spacing: { after: 200 }
-                        }) : null,
                         
                         // Firma
                         new Paragraph({
@@ -1250,7 +1600,7 @@
             
             // Generar y descargar el documento
             Packer.toBlob(doc).then(blob => {
-                saveAs(blob, "recepcion_equipo_tecno.docx");
+                saveAs(blob, `${isOsInstallation ? 'instalacion_so' : 'resolucion_problema'}_tecno.docx`);
             });
             
             function createInfoTable(rows) {
