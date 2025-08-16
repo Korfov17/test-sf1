@@ -112,8 +112,7 @@
         }
 
         .unlock-countdown:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(29, 185, 84, 0.2);
+            box-shadow: 0 4px 25px rgba(29, 185, 84, 0.4);
         }
 
         .unlock-countdown h3 {
@@ -149,8 +148,7 @@
         }
 
         .letter:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(29, 185, 84, 0.25);
+            box-shadow: 0 8px 35px rgba(29, 185, 84, 0.4);
         }
 
         .letter.unlocked {
@@ -256,28 +254,19 @@
         }
 
         .chest-container:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(29, 185, 84, 0.25);
+            box-shadow: 0 8px 35px rgba(29, 185, 84, 0.4);
         }
 
         .chest {
-            width: 180px;
-            height: 120px;
-            background-color: var(--card-darker);
-            border-radius: 8px;
+            width: 200px;
+            height: 150px;
             position: relative;
             margin: 0 auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             cursor: pointer;
-            overflow: hidden;
-            transition: var(--transition);
             pointer-events: none;
-            border: 1px solid rgba(84, 204, 22, 0.1);
             filter: blur(3px);
-        }
-
-        .light-mode .chest {
-            background-color: var(--card-lighter);
+            transition: var(--transition);
+            perspective: 1000px;
         }
 
         .chest.unlocked {
@@ -285,32 +274,51 @@
             pointer-events: auto;
         }
 
-        .chest:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 15px 40px rgba(29, 185, 84, 0.4);
+        .chest:hover .chest-body {
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.6);
+        }
+
+        .chest-body {
+            width: 180px;
+            height: 120px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border-radius: 5px;
+            position: relative;
+            margin: 0 auto;
+            transition: var(--transition);
+            transform-style: preserve-3d;
         }
 
         .chest-lid {
             width: 200px;
             height: 25px;
-            background: linear-gradient(135deg, var(--card-darker) 0%, var(--dark-green) 100%);
+            background: linear-gradient(135deg, #CD853F 0%, #D2B48C 100%);
             position: absolute;
-            top: -12px;
+            top: -10px;
             left: -10px;
-            border-radius: 8px 8px 0 0;
+            border-radius: 5px 5px 0 0;
             z-index: 2;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-bottom: 1px solid rgba(84, 204, 22, 0.3);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: top center;
+            transform-style: preserve-3d;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .light-mode .chest-lid {
-            background: linear-gradient(135deg, var(--card-lighter) 0%, var(--light-green-light) 100%);
+        .chest-lid-front {
+            position: absolute;
+            width: 100%;
+            height: 10px;
+            background: #D2B48C;
+            bottom: -10px;
+            left: 0;
+            transform-origin: top center;
+            transform: rotateX(-90deg);
         }
 
         .chest-lock {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, var(--dark-green) 0%, var(--primary-green) 100%);
+            background: linear-gradient(135deg, #B8860B 0%, #DAA520 100%);
             border-radius: 50%;
             position: absolute;
             top: -20px;
@@ -324,14 +332,38 @@
             transition: var(--transition);
         }
 
-        .light-mode .chest-lock {
-            background: linear-gradient(135deg, var(--primary-green-light) 0%, var(--light-green-light) 100%);
-        }
-
         .chest-lock i {
-            color: var(--text-lighter);
+            color: #FFD700;
             font-size: 1.3rem;
             transition: var(--transition);
+        }
+
+        .chest-decoration {
+            position: absolute;
+            width: 160px;
+            height: 20px;
+            background: #DAA520;
+            top: 30px;
+            left: 10px;
+            border-radius: 3px;
+        }
+
+        .chest-decoration::before,
+        .chest-decoration::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #DAA520;
+            border-radius: 50%;
+        }
+
+        .chest-decoration::before {
+            left: -10px;
+        }
+
+        .chest-decoration::after {
+            right: -10px;
         }
 
         .chest-content {
@@ -342,7 +374,7 @@
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: var(--transition);
+            transition: opacity 0.5s ease 0.4s;
         }
 
         .chest.unlocked .chest-content {
@@ -353,8 +385,16 @@
             width: 60%;
             height: 60%;
             object-fit: contain;
-            filter: drop-shadow(0 0 12px rgba(29, 185, 84, 0.5));
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
             transition: var(--transition);
+        }
+
+        .chest.open .chest-lid {
+            transform: rotateX(-160deg);
+        }
+
+        .chest.open .chest-lid-front {
+            transform: rotateX(-90deg) translateZ(-15px);
         }
 
         .timer {
@@ -414,8 +454,7 @@
         }
 
         .theme-toggle:hover {
-            transform: translateY(-3px) rotate(30deg);
-            box-shadow: 0 6px 20px rgba(29, 185, 84, 0.3);
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
         }
 
         .theme-toggle i {
@@ -520,12 +559,17 @@
             <div class="chest-message" id="chest-message">Tu sorpresa especial</div>
             
             <div class="chest" id="chest">
-                <div class="chest-lid"></div>
-                <div class="chest-lock"><i class="fas fa-lock"></i></div>
-                <div class="chest-content">
-                    <a href="#sorpresa" id="sorpresa-link">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3392/3392986.png" alt="Sorpresa">
-                    </a>
+                <div class="chest-lid">
+                    <div class="chest-lid-front"></div>
+                </div>
+                <div class="chest-lock"><i class="fas fa-lock" id="chest-lock-icon"></i></div>
+                <div class="chest-body">
+                    <div class="chest-decoration"></div>
+                    <div class="chest-content">
+                        <a href="#sorpresa" id="sorpresa-link">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3392/3392986.png" alt="Sorpresa">
+                        </a>
+                    </div>
                 </div>
             </div>
             
@@ -548,11 +592,13 @@
         const letterLock = document.getElementById('letter-lock');
         const chest = document.getElementById('chest');
         const chestMessage = document.getElementById('chest-message');
-        const chestLock = document.querySelector('.chest-lock i');
+        const chestLockIcon = document.getElementById('chest-lock-icon');
         const sorpresaLink = document.getElementById('sorpresa-link');
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = themeToggle.querySelector('i');
         const particlesContainer = document.getElementById('particles');
+        const chestLid = document.querySelector('.chest-lid');
+        const chestLidFront = document.querySelector('.chest-lid-front');
 
         // Crear partículas
         function createParticles() {
@@ -619,8 +665,8 @@
             
             // Desbloquear cofre
             chest.classList.add('unlocked');
-            chestLock.classList.remove('fa-lock');
-            chestLock.classList.add('fa-lock-open');
+            chestLockIcon.classList.remove('fa-lock');
+            chestLockIcon.classList.add('fa-lock-open');
             chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
             mainCountdown.textContent = "¡Disponible ahora!";
             chestCountdown.textContent = "¡Ábrelo ahora!";
@@ -630,11 +676,14 @@
             
             // Configurar evento para el cofre
             chest.addEventListener('click', function() {
-                document.querySelector('.chest-lid').style.transform = 'rotateX(180deg)';
-                document.querySelector('.chest-lid').style.top = '-30px';
-                setTimeout(() => {
-                    sorpresaLink.click();
-                }, 800);
+                if (!chest.classList.contains('open')) {
+                    chest.classList.add('open');
+                    chestLockIcon.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        sorpresaLink.click();
+                    }, 1000);
+                }
             });
         }
 
