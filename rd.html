@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode README Generator</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --primary-color: #bb86fc;
+            --secondary-color: #03dac6;
+            --accent-color: #3700b3;
+            --border-color: #333;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --error-color: #cf6679;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-style: italic;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: #000;
+        }
+
+        .btn-secondary:hover {
+            background-color: #018786;
+            color: white;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 5px;
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .preview {
+            white-space: pre-wrap;
+            font-family: monospace;
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .badge-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .badge-option {
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .badge-option:hover, .badge-option.selected {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .features-list {
+            list-style-type: none;
+        }
+
+        .features-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-group {
+            margin-right: 10px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+
+        .result-container {
+            position: relative;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .error {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>README Generator</h1>
+            <p class="subtitle">Create professional README files for your projects with ease</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <div class="tabs">
+                    <div class="tab active" data-tab="basic">Basic Info</div>
+                    <div class="tab" data-tab="sections">Sections</div>
+                    <div class="tab" data-tab="badges">Badges</div>
+                </div>
+
+                <div id="basic" class="tab-content active">
+                    <div class="form-group">
+                        <label for="project-name">Project Name</label>
+                        <input type="text" id="project-name" placeholder="My Awesome Project">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project-description">Description</label>
+                        <textarea id="project-description" placeholder="A brief description of your project"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project-features">Key Features (one per line)</label>
+                        <textarea id="project-features" placeholder="Feature 1\nFeature 2\nFeature 3"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="installation">Installation Instructions</label>
+                        <textarea id="installation" placeholder="npm install\nor\nyarn install"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="usage">Usage Examples</label>
+                        <textarea id="usage" placeholder="How to use your project"></textarea>
+                    </div>
+                </div>
+
+                <div id="sections" class="tab-content">
+                    <div class="form-group">
+                        <label>Include Sections:</label>
+                        <ul class="features-list">
+                            <li>
+                                <input type="checkbox" id="include-contributing" class="checkbox-group" checked>
+                                <label for="include-contributing">Contributing Guidelines</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="include-license" class="checkbox-group" checked>
+                                <label for="include-license">License</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="include-tests" class="checkbox-group" checked>
+                                <label for="include-tests">Tests</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="include-faq" class="checkbox-group">
+                                <label for="include-faq">FAQ</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="include-support" class="checkbox-group" checked>
+                                <label for="include-support">Support</label>
+                            </li>
+                            <li>
+                                <input type="checkbox" id="include-authors" class="checkbox-group">
+                                <label for="include-authors">Authors</label>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="license">License</label>
+                        <select id="license">
+                            <option value="MIT">MIT</option>
+                            <option value="Apache-2.0">Apache 2.0</option>
+                            <option value="GPL-3.0">GPL 3.0</option>
+                            <option value="BSD-3-Clause">BSD 3-Clause</option>
+                            <option value="Unlicense">Unlicense</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contributing">Contributing Guidelines</label>
+                        <textarea id="contributing" placeholder="How to contribute to your project">## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request</textarea>
+                    </div>
+                </div>
+
+                <div id="badges" class="tab-content">
+                    <div class="form-group">
+                        <label>Select Badges:</label>
+                        <div class="badge-selector" id="badge-selector">
+                            <!-- Badges will be added here by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="custom-badges">Custom Badges (Markdown format, one per line)</label>
+                        <textarea id="custom-badges" placeholder="[![Custom Badge](https://img.shields.io/badge/Custom-Badge-blue)]()"></textarea>
+                    </div>
+                </div>
+
+                <button id="generate-btn" class="btn">Generate README</button>
+                <button id="reset-btn" class="btn btn-secondary">Reset Form</button>
+            </div>
+
+            <div class="card">
+                <h2>README Preview</h2>
+                <div class="result-container">
+                    <button id="copy-btn" class="btn copy-btn">Copy to Clipboard</button>
+                    <div class="preview" id="readme-preview">
+                        Your generated README will appear here...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Copied to clipboard!</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove active class from all tabs and content
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    tab.classList.add('active');
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Badge data
+            const badges = [
+                { name: 'Version', url: 'https://img.shields.io/badge/version-1.0.0-blue' },
+                { name: 'License', url: 'https://img.shields.io/badge/license-MIT-green' },
+                { name: 'Build', url: 'https://img.shields.io/badge/build-passing-brightgreen' },
+                { name: 'Tests', url: 'https://img.shields.io/badge/tests-100%25-brightgreen' },
+                { name: 'Coverage', url: 'https://img.shields.io/badge/coverage-90%25-yellowgreen' },
+                { name: 'Downloads', url: 'https://img.shields.io/badge/downloads-1k%2Fmonth-blue' },
+                { name: 'Stars', url: 'https://img.shields.io/badge/stars-100-yellow' },
+                { name: 'Issues', url: 'https://img.shields.io/badge/issues-5%20open-orange' },
+                { name: 'PRs', url: 'https://img.shields.io/badge/PRs-welcome-brightgreen' },
+                { name: 'Maintenance', url: 'https://img.shields.io/badge/Maintained%3F-yes-green' },
+                { name: 'Dependencies', url: 'https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen' },
+                { name: 'Twitter', url: 'https://img.shields.io/badge/twitter-@handle-blue' }
+            ];
+
+            // Populate badge selector
+            const badgeSelector = document.getElementById('badge-selector');
+            badges.forEach(badge => {
+                const badgeElement = document.createElement('div');
+                badgeElement.className = 'badge-option';
+                badgeElement.innerHTML = `<img src="${badge.url}" alt="${badge.name} badge">`;
+                badgeElement.addEventListener('click', function() {
+                    this.classList.toggle('selected');
+                });
+                badgeSelector.appendChild(badgeElement);
+            });
+
+            // Generate README function
+            document.getElementById('generate-btn').addEventListener('click', generateReadme);
+
+            // Reset form function
+            document.getElementById('reset-btn').addEventListener('click', resetForm);
+
+            // Copy to clipboard function
+            document.getElementById('copy-btn').addEventListener('click', copyToClipboard);
+
+            function generateReadme() {
+                const projectName = document.getElementById('project-name').value || 'Project Name';
+                const description = document.getElementById('project-description').value || 'A short description of your project.';
+                const features = document.getElementById('project-features').value.split('\n').filter(line => line.trim() !== '');
+                const installation = document.getElementById('installation').value || 'Installation instructions will go here.';
+                const usage = document.getElementById('usage').value || 'Usage examples will go here.';
+                const license = document.getElementById('license').value;
+                const contributing = document.getElementById('contributing').value;
+                const customBadges = document.getElementById('custom-badges').value.split('\n').filter(line => line.trim() !== '');
+
+                // Get selected badges
+                const selectedBadges = [];
+                document.querySelectorAll('.badge-option.selected').forEach(badge => {
+                    selectedBadges.push(badge.innerHTML);
+                });
+
+                // Check which sections to include
+                const includeContributing = document.getElementById('include-contributing').checked;
+                const includeLicense = document.getElementById('include-license').checked;
+                const includeTests = document.getElementById('include-tests').checked;
+                const includeFaq = document.getElementById('include-faq').checked;
+                const includeSupport = document.getElementById('include-support').checked;
+                const includeAuthors = document.getElementById('include-authors').checked;
+
+                // Start building the README
+                let readme = `# ${projectName}\n\n`;
+
+                // Add badges
+                if (selectedBadges.length > 0 || customBadges.length > 0) {
+                    readme += '## Badges\n\n';
+                    selectedBadges.forEach(badge => {
+                        readme += badge + ' ';
+                    });
+                    customBadges.forEach(badge => {
+                        readme += badge + ' ';
+                    });
+                    readme += '\n\n';
+                }
+
+                // Description
+                readme += `## Description\n\n${description}\n\n`;
+
+                // Features
+                if (features.length > 0) {
+                    readme += `## Features\n\n`;
+                    features.forEach(feature => {
+                        readme += `- ${feature}\n`;
+                    });
+                    readme += '\n';
+                }
+
+                // Installation
+                readme += `## Installation\n\n\`\`\`bash\n${installation}\n\`\`\`\n\n`;
+
+                // Usage
+                readme += `## Usage\n\n${usage}\n\n`;
+
+                // Contributing
+                if (includeContributing) {
+                    readme += `## Contributing\n\n${contributing}\n\n`;
+                }
+
+                // License
+                if (includeLicense) {
+                    readme += `## License\n\nThis project is licensed under the ${license} License.\n\n`;
+                }
+
+                // Tests
+                if (includeTests) {
+                    readme += `## Running Tests\n\nTo run tests, run the following command:\n\n\`\`\`bash\nnpm test\n\`\`\`\n\n`;
+                }
+
+                // FAQ
+                if (includeFaq) {
+                    readme += `## FAQ\n\n#### Question 1?\nAnswer 1\n\n#### Question 2?\nAnswer 2\n\n`;
+                }
+
+                // Support
+                if (includeSupport) {
+                    readme += `## Support\n\nFor support, email example@example.com or join our Slack channel.\n\n`;
+                }
+
+                // Authors
+                if (includeAuthors) {
+                    readme += `## Authors\n\n- [@yourname](https://www.github.com/yourusername)\n\n`;
+                }
+
+                // Update preview
+                document.getElementById('readme-preview').textContent = readme;
+            }
+
+            function resetForm() {
+                if (confirm('Are you sure you want to reset the form? All your input will be lost.')) {
+                    document.querySelectorAll('input[type="text"], textarea').forEach(element => {
+                        element.value = '';
+                    });
+                    document.getElementById('license').value = 'MIT';
+                    document.querySelectorAll('.badge-option').forEach(badge => {
+                        badge.classList.remove('selected');
+                    });
+                    document.getElementById('readme-preview').textContent = 'Your generated README will appear here...';
+                    
+                    // Reset checkboxes
+                    document.getElementById('include-contributing').checked = true;
+                    document.getElementById('include-license').checked = true;
+                    document.getElementById('include-tests').checked = true;
+                    document.getElementById('include-faq').checked = false;
+                    document.getElementById('include-support').checked = true;
+                    document.getElementById('include-authors').checked = false;
+                    
+                    showToast('Form reset successfully!');
+                }
+            }
+
+            function copyToClipboard() {
+                const preview = document.getElementById('readme-preview');
+                const text = preview.textContent;
+                
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('Copied to clipboard!');
+                }).catch(err => {
+                    showToast('Failed to copy!', true);
+                    console.error('Failed to copy: ', err);
+                });
+            }
+
+            function showToast(message, isError = false) {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                
+                if (isError) {
+                    toast.style.backgroundColor = 'var(--error-color)';
+                } else {
+                    toast.style.backgroundColor = 'var(--secondary-color)';
+                }
+                
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+
+            // Initialize with a basic README
+            generateReadme();
+        });
+    </script>
+</body>
+</html>
