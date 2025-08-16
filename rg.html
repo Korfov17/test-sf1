@@ -282,7 +282,7 @@
         }
 
         .chest:hover .toolbox-icon {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.1);
             filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.8));
         }
 
@@ -297,7 +297,7 @@
         }
 
         .toolbox-icon {
-            font-size: 3.5rem;
+            font-size: 5rem; /* Tamaño aumentado */
             color: #35b154;
             transition: var(--transition);
             filter: drop-shadow(0 0 10px rgba(53, 177, 84, 0.5));
@@ -414,7 +414,7 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0.8);
             width: 80%;
             max-width: 600px;
             max-height: 80vh;
@@ -427,6 +427,13 @@
             flex-direction: column;
             border: 1px solid rgba(84, 204, 22, 0.2);
             overflow-y: auto;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .history-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
         }
 
         .light-mode .history-modal {
@@ -537,7 +544,7 @@
             position: fixed;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%) scale(0.8);
             width: 80%;
             max-width: 500px;
             background: var(--card-dark);
@@ -549,6 +556,13 @@
             flex-direction: column;
             border: 1px solid rgba(84, 204, 22, 0.2);
             text-align: center;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .surprise-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
         }
 
         .light-mode .surprise-modal {
@@ -580,7 +594,7 @@
         }
 
         .surprise-modal .toolbox-icon {
-            font-size: 4rem;
+            font-size: 5rem; /* Tamaño aumentado */
             color: #35b154;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.5));
@@ -621,6 +635,11 @@
         @keyframes glow {
             from { text-shadow: 0 0 10px rgba(29, 185, 84, 0.5); }
             to { text-shadow: 0 0 20px rgba(29, 185, 84, 0.8), 0 0 30px rgba(29, 185, 84, 0.6); }
+        }
+
+        @keyframes modalIn {
+            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
         .light-mode .lock-icon {
@@ -692,7 +711,7 @@
             
             <p>[Tu Nombre]</p>
             
-            <div class="letter-date">1 de Diciembre de 2025</div>
+            <div class="letter-date">4 de Diciembre de 2025</div>
         </div>
 
         <div class="chest-container">
@@ -761,8 +780,8 @@
     </div>
 
     <script>
-        // Fechas importantes
-        const unlockDate = new Date('December 1, 2025 00:00:00').getTime();
+        // Fechas importantes (cambiado a 4 de diciembre)
+        const unlockDate = new Date('December 4, 2025 00:00:00').getTime();
         
         // Elementos del DOM
         const mainCountdown = document.getElementById('main-countdown');
@@ -856,9 +875,26 @@
             
             // Configurar evento para el cofre
             chest.addEventListener('click', function() {
-                surpriseModal.style.display = 'flex';
-                mainContainer.classList.add('blur-content');
+                showModal(surpriseModal);
             });
+        }
+
+        // Mostrar modal con animación
+        function showModal(modal) {
+            modal.style.display = 'flex';
+            mainContainer.classList.add('blur-content');
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+        }
+
+        // Ocultar modal con animación
+        function hideModal(modal) {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                mainContainer.classList.remove('blur-content');
+            }, 300);
         }
 
         // Prevenir clic en el enlace si está bloqueado
@@ -866,11 +902,10 @@
             const now = new Date().getTime();
             if (now < unlockDate) {
                 e.preventDefault();
-                alert("El contenido aún no está disponible. Por favor espera hasta el 1 de Diciembre de 2025.");
+                alert("El contenido aún no está disponible. Por favor espera hasta el 4 de Diciembre de 2025.");
             } else {
                 e.preventDefault();
-                surpriseModal.style.display = 'flex';
-                mainContainer.classList.add('blur-content');
+                showModal(surpriseModal);
             }
         });
 
@@ -889,30 +924,37 @@
 
         // Mostrar/ocultar historial
         historyToggle.addEventListener('click', function() {
-            historyModal.style.display = 'flex';
-            mainContainer.classList.add('blur-content');
+            showModal(historyModal);
         });
 
         closeHistory.addEventListener('click', function() {
-            historyModal.style.display = 'none';
-            mainContainer.classList.remove('blur-content');
+            hideModal(historyModal);
         });
 
         // Cerrar modal de sorpresa
         closeSurprise.addEventListener('click', function() {
-            surpriseModal.style.display = 'none';
-            mainContainer.classList.remove('blur-content');
+            hideModal(surpriseModal);
         });
 
         // Cerrar modales al hacer clic fuera
         window.addEventListener('click', function(e) {
             if (e.target === historyModal) {
-                historyModal.style.display = 'none';
-                mainContainer.classList.remove('blur-content');
+                hideModal(historyModal);
             }
             if (e.target === surpriseModal) {
-                surpriseModal.style.display = 'none';
-                mainContainer.classList.remove('blur-content');
+                hideModal(surpriseModal);
+            }
+        });
+
+        // Cerrar modales con tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (historyModal.style.display === 'flex') {
+                    hideModal(historyModal);
+                }
+                if (surpriseModal.style.display === 'flex') {
+                    hideModal(surpriseModal);
+                }
             }
         });
 
