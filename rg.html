@@ -54,11 +54,53 @@
             color: var(--text-light);
             line-height: 1.6;
             transition: var(--transition);
+            overflow-x: hidden;
         }
 
         body.light-mode {
             background: var(--bg-light);
             color: var(--text-dark);
+        }
+
+        /* Fondo de billetes en 3D */
+        .money-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .money-bill {
+            position: absolute;
+            width: 150px;
+            height: 70px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50"><rect width="100" height="50" fill="%23227744" rx="5" ry="5"/><text x="50" y="25" font-family="Arial" font-size="10" fill="white" text-anchor="middle" dominant-baseline="middle">$100</text></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.7;
+            transform-style: preserve-3d;
+            animation: floatUp linear infinite;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.3));
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotateX(45deg) rotateY(15deg) rotateZ(var(--rotateZ, 0deg));
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) rotateX(45deg) rotateY(15deg) rotateZ(var(--rotateZ, 0deg));
+                opacity: 0;
+            }
         }
 
         .top-bar {
@@ -664,35 +706,13 @@
         .pulse {
             animation: pulse 2s infinite;
         }
-
-        /* Efecto de partículas */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(29, 185, 84, 0.5);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .light-mode .particle {
-            background: rgba(76, 175, 80, 0.3);
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Precarga la fuente para mejor rendimiento -->
     <link rel="preload" href="Road_Rage.otf" as="font" type="font/otf" crossorigin>
 </head>
 <body>
-    <div class="particles" id="particles"></div>
+    <div class="money-bg" id="money-bg"></div>
     
     <div class="top-bar">
         <h2>Carta Especial</h2>
@@ -779,6 +799,7 @@
                 <div class="timeline-content">
                     <p>Optimización del diseño para ambos modos de color.</p>
                     <p>Mejora en la experiencia de usuario con feedback visual.</p>
+                    <p>Fondo de billetes en 3D flotando.</p>
                 </div>
             </div>
         </div>
@@ -811,38 +832,37 @@
         const mainContainer = document.getElementById('main-container');
         const surpriseModal = document.getElementById('surprise-modal');
         const closeSurprise = document.getElementById('close-surprise');
-        const particlesContainer = document.getElementById('particles');
+        const moneyBg = document.getElementById('money-bg');
 
-        // Crear partículas
-        function createParticles() {
-            const particleCount = 30;
+        // Crear billetes flotantes
+        function createMoneyBills() {
+            const billCount = 15;
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
+            for (let i = 0; i < billCount; i++) {
+                const bill = document.createElement('div');
+                bill.classList.add('money-bill');
                 
-                // Posición aleatoria
+                // Posición horizontal aleatoria
                 const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
                 
                 // Tamaño aleatorio
-                const size = Math.random() * 5 + 2;
+                const size = Math.random() * 0.5 + 0.5;
                 
-                // Opacidad aleatoria
-                const opacity = Math.random() * 0.5 + 0.1;
+                // Rotación aleatoria
+                const rotateZ = Math.random() * 360;
                 
-                // Animación aleatoria
-                const duration = Math.random() * 20 + 10;
+                // Duración de animación aleatoria
+                const duration = Math.random() * 15 + 10;
                 const delay = Math.random() * 10;
                 
-                particle.style.left = `${posX}%`;
-                particle.style.top = `${posY}%`;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.opacity = opacity;
-                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
+                bill.style.left = `${posX}%`;
+                bill.style.width = `${150 * size}px`;
+                bill.style.height = `${70 * size}px`;
+                bill.style.setProperty('--rotateZ', `${rotateZ}deg`);
+                bill.style.animationDuration = `${duration}s`;
+                bill.style.animationDelay = `${delay}s`;
                 
-                particlesContainer.appendChild(particle);
+                moneyBg.appendChild(bill);
             }
         }
 
@@ -974,27 +994,8 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // Crear partículas al cargar
-        createParticles();
-
-        // Añadir estilo para animación de partículas
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes float {
-                0% {
-                    transform: translateY(0) translateX(0);
-                    opacity: 0.1;
-                }
-                50% {
-                    opacity: 0.5;
-                }
-                100% {
-                    transform: translateY(-100vh) translateX(20px);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+        // Crear billetes flotantes al cargar
+        createMoneyBills();
     </script>
 </body>
 </html>
