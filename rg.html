@@ -61,7 +61,7 @@
             -webkit-backdrop-filter: blur(12px);
             position: fixed;
             top: 0;
-            z-index: 10;
+            z-index: 100;
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
             display: flex;
             justify-content: center;
@@ -93,6 +93,13 @@
             width: 90%;
             margin-top: 120px;
             margin-bottom: 50px;
+            transition: var(--transition);
+        }
+
+        .blur-content {
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
         }
 
         .unlock-countdown {
@@ -467,6 +474,163 @@
             color: var(--primary-green-light);
         }
 
+        .history-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .light-mode .history-toggle {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .history-toggle:hover {
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+        }
+
+        .history-toggle i {
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .light-mode .history-toggle i {
+            color: var(--primary-green-light);
+        }
+
+        .history-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            background: var(--card-dark);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(84, 204, 22, 0.2);
+            overflow-y: auto;
+        }
+
+        .light-mode .history-modal {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .history-modal h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-green);
+            margin-top: 0;
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+        }
+
+        .light-mode .history-modal h3 {
+            color: var(--primary-green-light);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-green);
+        }
+
+        .light-mode .timeline::before {
+            background: var(--primary-green-light);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed rgba(84, 204, 22, 0.3);
+        }
+
+        .light-mode .timeline-item {
+            border-bottom: 1px dashed rgba(76, 175, 80, 0.3);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-green);
+        }
+
+        .light-mode .timeline-item::before {
+            background: var(--primary-green-light);
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary-green);
+            margin-bottom: 5px;
+        }
+
+        .light-mode .timeline-date {
+            color: var(--primary-green-light);
+        }
+
+        .timeline-content {
+            color: var(--text-light);
+        }
+
+        .light-mode .timeline-content {
+            color: var(--text-dark);
+        }
+
+        .close-history {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .light-mode .close-history {
+            color: var(--primary-green-light);
+        }
+
+        .close-history:hover {
+            transform: rotate(90deg);
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -527,7 +691,7 @@
         <h2>Carta Especial</h2>
     </div>
     
-    <div class="container">
+    <div class="container" id="main-container">
         <div class="unlock-countdown">
             <h3>Se desbloqueará en:</h3>
             <div class="timer" id="main-countdown">00d 00h 00m 00s</div>
@@ -581,6 +745,45 @@
         <i class="fas fa-moon"></i>
     </div>
 
+    <div class="history-toggle" id="history-toggle">
+        <i class="fas fa-history"></i>
+    </div>
+
+    <div class="history-modal" id="history-modal">
+        <button class="close-history" id="close-history"><i class="fas fa-times"></i></button>
+        <h3>Historial de Desarrollo</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">Versión Inicial</div>
+                <div class="timeline-content">
+                    <p>Diseño básico de la carta con temporizador y cofre bloqueado.</p>
+                    <p>Implementación del modo oscuro con degradados verdes.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Primera Mejora</div>
+                <div class="timeline-content">
+                    <p>Rediseño del cofre del tesoro con animación de apertura.</p>
+                    <p>Ajuste del efecto blur para mostrar solo el candado cuando está bloqueado.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Segunda Mejora</div>
+                <div class="timeline-content">
+                    <p>Implementación del botón de historial y línea de tiempo.</p>
+                    <p>Mejora en las transiciones y efectos visuales.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Versión Actual</div>
+                <div class="timeline-content">
+                    <p>Optimización del diseño para ambos modos de color.</p>
+                    <p>Mejora en la experiencia de usuario con feedback visual.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Fechas importantes
         const unlockDate = new Date('December 1, 2025 00:00:00').getTime();
@@ -596,6 +799,10 @@
         const sorpresaLink = document.getElementById('sorpresa-link');
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = themeToggle.querySelector('i');
+        const historyToggle = document.getElementById('history-toggle');
+        const historyModal = document.getElementById('history-modal');
+        const closeHistory = document.getElementById('close-history');
+        const mainContainer = document.getElementById('main-container');
         const particlesContainer = document.getElementById('particles');
         const chestLid = document.querySelector('.chest-lid');
         const chestLidFront = document.querySelector('.chest-lid-front');
@@ -706,6 +913,25 @@
             } else {
                 themeIcon.classList.remove('fa-sun');
                 themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Mostrar/ocultar historial
+        historyToggle.addEventListener('click', function() {
+            historyModal.style.display = 'flex';
+            mainContainer.classList.add('blur-content');
+        });
+
+        closeHistory.addEventListener('click', function() {
+            historyModal.style.display = 'none';
+            mainContainer.classList.remove('blur-content');
+        });
+
+        // Cerrar modal al hacer clic fuera
+        window.addEventListener('click', function(e) {
+            if (e.target === historyModal) {
+                historyModal.style.display = 'none';
+                mainContainer.classList.remove('blur-content');
             }
         });
 
