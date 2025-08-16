@@ -281,125 +281,26 @@
             pointer-events: auto;
         }
 
-        .chest:hover .chest-body {
-            box-shadow: 0 0 20px rgba(29, 185, 84, 0.6);
+        .chest:hover .toolbox-icon {
+            transform: translateY(-5px);
+            filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.8));
         }
 
         .chest-body {
             width: 180px;
             height: 120px;
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            border-radius: 5px;
             position: relative;
             margin: 0 auto;
-            transition: var(--transition);
-            transform-style: preserve-3d;
-        }
-
-        .chest-lid {
-            width: 200px;
-            height: 25px;
-            background: linear-gradient(135deg, #CD853F 0%, #D2B48C 100%);
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            border-radius: 5px 5px 0 0;
-            z-index: 2;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: top center;
-            transform-style: preserve-3d;
-            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .chest-lid-front {
-            position: absolute;
-            width: 100%;
-            height: 10px;
-            background: #D2B48C;
-            bottom: -10px;
-            left: 0;
-            transform-origin: top center;
-            transform: rotateX(-90deg);
-        }
-
-        .chest-lock {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #B8860B 0%, #DAA520 100%);
-            border-radius: 50%;
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: var(--transition);
         }
 
-        .chest-lock i {
-            color: #FFD700;
-            font-size: 1.3rem;
-            transition: var(--transition);
-        }
-
-        .chest-decoration {
-            position: absolute;
-            width: 160px;
-            height: 20px;
-            background: #DAA520;
-            top: 30px;
-            left: 10px;
-            border-radius: 3px;
-        }
-
-        .chest-decoration::before,
-        .chest-decoration::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #DAA520;
-            border-radius: 50%;
-        }
-
-        .chest-decoration::before {
-            left: -10px;
-        }
-
-        .chest-decoration::after {
-            right: -10px;
-        }
-
-        .chest-content {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s ease 0.4s;
-        }
-
-        .chest.unlocked .chest-content {
-            opacity: 1;
-        }
-
-        .chest-content i {
+        .toolbox-icon {
             font-size: 3.5rem;
             color: #35b154;
             transition: var(--transition);
-        }
-
-        .chest.open .chest-lid {
-            transform: rotateX(-160deg);
-        }
-
-        .chest.open .chest-lid-front {
-            transform: rotateX(-90deg) translateZ(-15px);
+            filter: drop-shadow(0 0 10px rgba(53, 177, 84, 0.5));
         }
 
         .timer {
@@ -632,6 +533,80 @@
             transform: rotate(90deg);
         }
 
+        .surprise-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 500px;
+            background: var(--card-dark);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(84, 204, 22, 0.2);
+            text-align: center;
+        }
+
+        .light-mode .surprise-modal {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .surprise-modal h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-green);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .light-mode .surprise-modal h3 {
+            color: var(--primary-green-light);
+        }
+
+        .surprise-modal p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .light-mode .surprise-modal p {
+            color: var(--text-dark);
+        }
+
+        .surprise-modal .toolbox-icon {
+            font-size: 4rem;
+            color: #35b154;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.5));
+        }
+
+        .close-surprise {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 15px;
+        }
+
+        .light-mode .close-surprise {
+            background: linear-gradient(135deg, var(--primary-green-light) 0%, var(--light-green-light) 100%);
+        }
+
+        .close-surprise:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -724,17 +699,10 @@
             <div class="chest-message" id="chest-message">Tu sorpresa especial</div>
             
             <div class="chest" id="chest">
-                <div class="chest-lid">
-                    <div class="chest-lid-front"></div>
-                </div>
-                <div class="chest-lock"><i class="fas fa-lock" id="chest-lock-icon"></i></div>
                 <div class="chest-body">
-                    <div class="chest-decoration"></div>
-                    <div class="chest-content">
-                        <a href="#sorpresa" id="sorpresa-link">
-                            <i class="fa-solid fa-toolbox"></i>
-                        </a>
-                    </div>
+                    <a href="#sorpresa" id="sorpresa-link">
+                        <i class="fa-solid fa-toolbox toolbox-icon"></i>
+                    </a>
                 </div>
             </div>
             
@@ -785,6 +753,13 @@
         </div>
     </div>
 
+    <div class="surprise-modal" id="surprise-modal">
+        <i class="fa-solid fa-toolbox toolbox-icon"></i>
+        <h3>¡Sorpresa Especial!</h3>
+        <p>Este es un ejemplo del contenido de tu sorpresa. Podría incluir un mensaje personalizado, una foto especial, o cualquier detalle que quieras compartir con esa persona tan importante para ti.</p>
+        <button class="close-surprise" id="close-surprise">Cerrar</button>
+    </div>
+
     <script>
         // Fechas importantes
         const unlockDate = new Date('December 1, 2025 00:00:00').getTime();
@@ -796,7 +771,6 @@
         const letterLock = document.getElementById('letter-lock');
         const chest = document.getElementById('chest');
         const chestMessage = document.getElementById('chest-message');
-        const chestLockIcon = document.getElementById('chest-lock-icon');
         const sorpresaLink = document.getElementById('sorpresa-link');
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = themeToggle.querySelector('i');
@@ -804,9 +778,9 @@
         const historyModal = document.getElementById('history-modal');
         const closeHistory = document.getElementById('close-history');
         const mainContainer = document.getElementById('main-container');
+        const surpriseModal = document.getElementById('surprise-modal');
+        const closeSurprise = document.getElementById('close-surprise');
         const particlesContainer = document.getElementById('particles');
-        const chestLid = document.querySelector('.chest-lid');
-        const chestLidFront = document.querySelector('.chest-lid-front');
 
         // Crear partículas
         function createParticles() {
@@ -873,8 +847,6 @@
             
             // Desbloquear cofre
             chest.classList.add('unlocked');
-            chestLockIcon.classList.remove('fa-lock');
-            chestLockIcon.classList.add('fa-lock-open');
             chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
             mainCountdown.textContent = "¡Disponible ahora!";
             chestCountdown.textContent = "¡Ábrelo ahora!";
@@ -884,14 +856,8 @@
             
             // Configurar evento para el cofre
             chest.addEventListener('click', function() {
-                if (!chest.classList.contains('open')) {
-                    chest.classList.add('open');
-                    chestLockIcon.style.opacity = '0';
-                    
-                    setTimeout(() => {
-                        sorpresaLink.click();
-                    }, 1000);
-                }
+                surpriseModal.style.display = 'flex';
+                mainContainer.classList.add('blur-content');
             });
         }
 
@@ -901,6 +867,10 @@
             if (now < unlockDate) {
                 e.preventDefault();
                 alert("El contenido aún no está disponible. Por favor espera hasta el 1 de Diciembre de 2025.");
+            } else {
+                e.preventDefault();
+                surpriseModal.style.display = 'flex';
+                mainContainer.classList.add('blur-content');
             }
         });
 
@@ -928,10 +898,20 @@
             mainContainer.classList.remove('blur-content');
         });
 
-        // Cerrar modal al hacer clic fuera
+        // Cerrar modal de sorpresa
+        closeSurprise.addEventListener('click', function() {
+            surpriseModal.style.display = 'none';
+            mainContainer.classList.remove('blur-content');
+        });
+
+        // Cerrar modales al hacer clic fuera
         window.addEventListener('click', function(e) {
             if (e.target === historyModal) {
                 historyModal.style.display = 'none';
+                mainContainer.classList.remove('blur-content');
+            }
+            if (e.target === surpriseModal) {
+                surpriseModal.style.display = 'none';
                 mainContainer.classList.remove('blur-content');
             }
         });
