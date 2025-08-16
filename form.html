@@ -74,7 +74,7 @@
             100% { transform: rotate(360deg); }
         }
         
-        header h1 {
+        .tecno-text {
             font-size: 2.8rem;
             margin-bottom: 10px;
             position: relative;
@@ -83,6 +83,8 @@
             background-clip: text;
             color: transparent;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            font-weight: bold;
+            font-style: italic;
         }
         
         header p {
@@ -425,19 +427,13 @@
             margin-top: 50px;
         }
         
-        .toggle-container {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 20px;
-        }
-        
         @media (max-width: 768px) {
             .form-row {
                 flex-direction: column;
                 gap: 20px;
             }
             
-            header h1 {
+            .tecno-text {
                 font-size: 2.2rem;
             }
             
@@ -459,7 +455,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>TecnoRepair Pro</h1>
+            <div class="tecno-text">TecnoRepair Pro</div>
             <p>Formulario avanzado de recepción de equipos</p>
         </header>
         
@@ -501,7 +497,7 @@
                         <div class="form-group">
                             <label for="equipmentType">Tipo de equipo*</label>
                             <select id="equipmentType" name="equipmentType" required>
-                                <option value="">Seleccione...</option>
+                                <option value="" selected disabled>Seleccione...</option>
                                 <option value="laptop">Portátil/Laptop</option>
                                 <option value="desktop">Ordenador de sobremesa</option>
                                 <option value="tablet">Tablet</option>
@@ -541,7 +537,7 @@
                                     <label for="warrantyYes">Sí</label>
                                 </div>
                                 <div class="radio-option">
-                                    <input type="radio" id="warrantyNo" name="warranty" value="No" checked>
+                                    <input type="radio" id="warrantyNo" name="warranty" value="No">
                                     <label for="warrantyNo">No</label>
                                 </div>
                             </div>
@@ -551,7 +547,7 @@
                         <label for="operatingSystem">Sistema operativo*</label>
                         <div class="radio-group">
                             <div class="radio-option">
-                                <input type="radio" id="osWindows" name="operatingSystem" value="Windows" checked>
+                                <input type="radio" id="osWindows" name="operatingSystem" value="Windows">
                                 <label for="osWindows">Windows</label>
                             </div>
                             <div class="radio-option">
@@ -600,7 +596,7 @@
                                 <h4>Ofimática</h4>
                                 <div class="software-item">
                                     <input type="checkbox" id="office" name="office">
-                                    <label for="office">Microsoft Office (Word, Excel, PowerPoint)</label>
+                                    <label for="office">Microsoft Office</label>
                                 </div>
                                 <div class="software-item">
                                     <input type="checkbox" id="libreoffice" name="libreoffice">
@@ -610,14 +606,6 @@
                                     <input type="checkbox" id="googleWorkspace" name="googleWorkspace">
                                     <label for="googleWorkspace">Google Workspace</label>
                                 </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="wps" name="wps">
-                                    <label for="wps">WPS Office</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="latex" name="latex">
-                                    <label for="latex">LaTeX (TeX Live/MiKTeX)</label>
-                                </div>
                             </div>
                             
                             <!-- Seguridad -->
@@ -625,23 +613,15 @@
                                 <h4>Seguridad</h4>
                                 <div class="software-item">
                                     <input type="checkbox" id="antivirus" name="antivirus">
-                                    <label for="antivirus">Antivirus (Kaspersky, Norton, McAfee)</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="malwarebytes" name="malwarebytes">
-                                    <label for="malwarebytes">Malwarebytes</label>
+                                    <label for="antivirus">Antivirus</label>
                                 </div>
                                 <div class="software-item">
                                     <input type="checkbox" id="vpn" name="vpn">
-                                    <label for="vpn">VPN (NordVPN, ExpressVPN)</label>
+                                    <label for="vpn">VPN</label>
                                 </div>
                                 <div class="software-item">
                                     <input type="checkbox" id="firewall" name="firewall">
-                                    <label for="firewall">Firewall (ZoneAlarm, GlassWire)</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="passwordManager" name="passwordManager">
-                                    <label for="passwordManager">Gestor de contraseñas (LastPass, 1Password)</label>
+                                    <label for="firewall">Firewall</label>
                                 </div>
                             </div>
                             
@@ -650,23 +630,11 @@
                                 <h4>Diseño y Multimedia</h4>
                                 <div class="software-item">
                                     <input type="checkbox" id="adobe" name="adobe">
-                                    <label for="adobe">Adobe Creative Cloud (Photoshop, Illustrator)</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="coreldraw" name="coreldraw">
-                                    <label for="coreldraw">CorelDRAW</label>
+                                    <label for="adobe">Adobe Creative Cloud</label>
                                 </div>
                                 <div class="software-item">
                                     <input type="checkbox" id="autocad" name="autocad">
                                     <label for="autocad">AutoCAD</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="blender" name="blender">
-                                    <label for="blender">Blender (3D)</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="davinci" name="davinci">
-                                    <label for="davinci">DaVinci Resolve (Edición de video)</label>
                                 </div>
                             </div>
                             
@@ -678,70 +646,8 @@
                                     <label for="vscode">Visual Studio Code</label>
                                 </div>
                                 <div class="software-item">
-                                    <input type="checkbox" id="androidStudio" name="androidStudio">
-                                    <label for="androidStudio">Android Studio</label>
-                                </div>
-                                <div class="software-item">
                                     <input type="checkbox" id="git" name="git">
                                     <label for="git">Git</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="docker" name="docker">
-                                    <label for="docker">Docker</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="nodejs" name="nodejs">
-                                    <label for="nodejs">Node.js</label>
-                                </div>
-                            </div>
-                            
-                            <!-- Navegadores -->
-                            <div class="software-category">
-                                <h4>Navegadores</h4>
-                                <div class="software-item">
-                                    <input type="checkbox" id="chrome" name="chrome">
-                                    <label for="chrome">Google Chrome</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="firefox" name="firefox">
-                                    <label for="firefox">Mozilla Firefox</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="edge" name="edge">
-                                    <label for="edge">Microsoft Edge</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="opera" name="opera">
-                                    <label for="opera">Opera</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="brave" name="brave">
-                                    <label for="brave">Brave</label>
-                                </div>
-                            </div>
-                            
-                            <!-- Utilidades -->
-                            <div class="software-category">
-                                <h4>Utilidades</h4>
-                                <div class="software-item">
-                                    <input type="checkbox" id="winrar" name="winrar">
-                                    <label for="winrar">WinRAR / 7-Zip</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="ccleaner" name="ccleaner">
-                                    <label for="ccleaner">CCleaner</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="teamviewer" name="teamviewer">
-                                    <label for="teamviewer">TeamViewer</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="virtualbox" name="virtualbox">
-                                    <label for="virtualbox">VirtualBox</label>
-                                </div>
-                                <div class="software-item">
-                                    <input type="checkbox" id="vlc" name="vlc">
-                                    <label for="vlc">VLC Media Player</label>
                                 </div>
                             </div>
                             
@@ -765,7 +671,7 @@
                                 <label for="backupYes">Sí</label>
                             </div>
                             <div class="radio-option">
-                                <input type="radio" id="backupNo" name="backupRequired" value="No" checked>
+                                <input type="radio" id="backupNo" name="backupRequired" value="No">
                                 <label for="backupNo">No</label>
                             </div>
                         </div>
@@ -784,29 +690,10 @@
                                 <label for="recoveryYes">Sí</label>
                             </div>
                             <div class="radio-option">
-                                <input type="radio" id="recoveryNo" name="dataRecovery" value="No" checked>
+                                <input type="radio" id="recoveryNo" name="dataRecovery" value="No">
                                 <label for="recoveryNo">No</label>
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="osInstallation">¿Requiere instalación/actualización del sistema operativo?</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="osInstallYes" name="osInstallation" value="Sí">
-                                <label for="osInstallYes">Sí</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="osInstallNo" name="osInstallation" value="No" checked>
-                                <label for="osInstallNo">No</label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group" id="osInstallDetailsGroup" style="display: none;">
-                        <label for="osInstallDetails">Detalles de la instalación</label>
-                        <textarea id="osInstallDetails" name="osInstallDetails" placeholder="Especifique versión requerida y configuraciones especiales"></textarea>
                     </div>
                 </div>
                 
@@ -836,70 +723,18 @@
                                 <input type="checkbox" id="includesCase" name="includesCase">
                                 <label for="includesCase">Funda/carcasa</label>
                             </div>
-                            <div class="checkbox-option">
-                                <input type="checkbox" id="includesSoftware" name="includesSoftware">
-                                <label for="includesSoftware">Software/Disco de instalación</label>
-                            </div>
-                            <div class="checkbox-option">
-                                <input type="checkbox" id="includesDocs" name="includesDocs">
-                                <label for="includesDocs">Documentación</label>
-                            </div>
-                            <div class="checkbox-option">
-                                <input type="checkbox" id="includesPeripherals" name="includesPeripherals">
-                                <label for="includesPeripherals">Periféricos (ratón, teclado, etc.)</label>
-                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Sección de términos y condiciones -->
+                <!-- Sección de firma -->
                 <div class="form-section">
-                    <h2>Términos y Condiciones</h2>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="diagnosticFee">Tarifa de diagnóstico*</label>
-                            <input type="number" id="diagnosticFee" name="diagnosticFee" required min="0" step="0.01" value="35.00">
-                        </div>
-                        <div class="form-group">
-                            <label for="estimatedTime">Tiempo estimado de diagnóstico*</label>
-                            <select id="estimatedTime" name="estimatedTime" required>
-                                <option value="24-48 horas">24-48 horas</option>
-                                <option value="3-5 días">3-5 días</option>
-                                <option value="1 semana">1 semana</option>
-                                <option value="Más de 1 semana">Más de 1 semana</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="servicePriority">Prioridad del servicio</label>
-                        <select id="servicePriority" name="servicePriority">
-                            <option value="Normal">Normal (reparación estándar)</option>
-                            <option value="Urgente">Urgente (recargo del 30%)</option>
-                            <option value="Express">Express (recargo del 50%)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="termsConditions">He leído y acepto los términos y condiciones*</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="termsYes" name="termsConditions" value="Aceptado" required>
-                                <label for="termsYes">Acepto</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="termsNo" name="termsConditions" value="No aceptado">
-                                <label for="termsNo">No acepto</label>
-                            </div>
-                        </div>
-                    </div>
+                    <h2>Confirmación</h2>
                     <div class="form-group">
                         <label for="clientSignature">Firma del cliente*</label>
                         <div id="signaturePad" class="signature-pad" style="width: 100%; height: 150px;"></div>
                         <button type="button" id="clearSignature" class="btn signature-clear">Limpiar firma</button>
                         <input type="hidden" id="clientSignature" name="clientSignature" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="additionalNotes">Notas adicionales</label>
-                        <textarea id="additionalNotes" name="additionalNotes" placeholder="Alguna observación adicional que desee agregar"></textarea>
                     </div>
                 </div>
                 
@@ -916,14 +751,12 @@
             <div class="modal-buttons">
                 <button id="downloadPdf" class="btn btn-accent">Descargar PDF</button>
                 <button id="downloadDocx" class="btn btn-success">Descargar DOCX</button>
-                <button id="downloadBoth" class="btn">Ambos formatos</button>
             </div>
         </div>
     </div>
     
     <footer>
         <p>TecnoRepair Pro &copy; 2023 - Soluciones tecnológicas avanzadas</p>
-        <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.7;">Este formulario genera documentos profesionales para el proceso de recepción de equipos</p>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
@@ -983,14 +816,6 @@
             });
         });
         
-        // Mostrar/ocultar detalles de instalación de SO
-        document.querySelectorAll('input[name="osInstallation"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                document.getElementById('osInstallDetailsGroup').style.display = 
-                    this.value === 'Sí' ? 'block' : 'none';
-            });
-        });
-        
         // Mostrar/ocultar campo de software personalizado
         document.getElementById('customSoftware').addEventListener('change', function() {
             document.getElementById('customSoftwareList').style.display = 
@@ -1007,24 +832,19 @@
                 return;
             }
             
-            // Validar términos
-            if (!document.querySelector('input[name="termsConditions"]:checked') || 
-                document.querySelector('input[name="termsConditions"]:checked').value !== 'Aceptado') {
-                alert('Debe aceptar los términos y condiciones');
-                return;
-            }
-            
             // Mostrar modal de descarga
             document.getElementById('downloadModal').style.display = 'flex';
         });
         
         // Configurar botones de descarga
-        document.getElementById('downloadPdf').addEventListener('click', generatePdf);
-        document.getElementById('downloadDocx').addEventListener('click', generateDocx);
-        document.getElementById('downloadBoth').addEventListener('click', function() {
+        document.getElementById('downloadPdf').addEventListener('click', function() {
             generatePdf();
-            setTimeout(generateDocx, 1000);
-            document.getElementById('downloadModal').style.display = 'none';
+            resetForm();
+        });
+        
+        document.getElementById('downloadDocx').addEventListener('click', function() {
+            generateDocx();
+            resetForm();
         });
         
         // Cerrar modal al hacer clic fuera
@@ -1033,6 +853,19 @@
                 this.style.display = 'none';
             }
         });
+        
+        // Función para resetear el formulario
+        function resetForm() {
+            document.getElementById('repairForm').reset();
+            signaturePad.clear();
+            document.getElementById('clientSignature').value = '';
+            document.getElementById('equipmentPhoto').style.display = 'none';
+            document.querySelector('.photo-placeholder').style.display = 'block';
+            document.getElementById('photoInput').value = '';
+            document.getElementById('backupDetailsGroup').style.display = 'none';
+            document.getElementById('customSoftwareList').style.display = 'none';
+            document.getElementById('downloadModal').style.display = 'none';
+        }
         
         // Función para generar PDF (formato blanco)
         function generatePdf() {
@@ -1092,9 +925,9 @@
             y += 7;
             doc.text(`Fecha compra: ${document.getElementById('purchaseDate').value || 'No proporcionada'}`, 14, y);
             y += 7;
-            doc.text(`Garantía: ${document.querySelector('input[name="warranty"]:checked').value}`, 14, y);
+            doc.text(`Garantía: ${document.querySelector('input[name="warranty"]:checked')?.value || 'No especificado'}`, 14, y);
             y += 7;
-            doc.text(`Sistema operativo: ${document.querySelector('input[name="operatingSystem"]:checked').value} ${document.getElementById('osVersion').value || ''}`, 14, y);
+            doc.text(`Sistema operativo: ${document.querySelector('input[name="operatingSystem"]:checked')?.value || 'No especificado'} ${document.getElementById('osVersion').value || ''}`, 14, y);
             y += 7;
             
             // Estado del equipo (puede ser multilínea)
@@ -1110,9 +943,6 @@
             if (document.getElementById('includesCharger').checked) includes.push('Cargador');
             if (document.getElementById('includesBattery').checked) includes.push('Batería');
             if (document.getElementById('includesCase').checked) includes.push('Funda/carcasa');
-            if (document.getElementById('includesSoftware').checked) includes.push('Software/Disco');
-            if (document.getElementById('includesDocs').checked) includes.push('Documentación');
-            if (document.getElementById('includesPeripherals').checked) includes.push('Periféricos');
             
             doc.text(`Componentes incluidos: ${includes.join(', ') || 'Ninguno especificado'}`, 14, y);
             y += 12;
@@ -1122,33 +952,13 @@
             if (document.getElementById('office').checked) softwareToInstall.push('Microsoft Office');
             if (document.getElementById('libreoffice').checked) softwareToInstall.push('LibreOffice');
             if (document.getElementById('googleWorkspace').checked) softwareToInstall.push('Google Workspace');
-            if (document.getElementById('wps').checked) softwareToInstall.push('WPS Office');
-            if (document.getElementById('latex').checked) softwareToInstall.push('LaTeX');
             if (document.getElementById('antivirus').checked) softwareToInstall.push('Antivirus');
-            if (document.getElementById('malwarebytes').checked) softwareToInstall.push('Malwarebytes');
             if (document.getElementById('vpn').checked) softwareToInstall.push('VPN');
             if (document.getElementById('firewall').checked) softwareToInstall.push('Firewall');
-            if (document.getElementById('passwordManager').checked) softwareToInstall.push('Gestor de contraseñas');
             if (document.getElementById('adobe').checked) softwareToInstall.push('Adobe Creative Cloud');
-            if (document.getElementById('coreldraw').checked) softwareToInstall.push('CorelDRAW');
             if (document.getElementById('autocad').checked) softwareToInstall.push('AutoCAD');
-            if (document.getElementById('blender').checked) softwareToInstall.push('Blender');
-            if (document.getElementById('davinci').checked) softwareToInstall.push('DaVinci Resolve');
             if (document.getElementById('vscode').checked) softwareToInstall.push('VS Code');
-            if (document.getElementById('androidStudio').checked) softwareToInstall.push('Android Studio');
             if (document.getElementById('git').checked) softwareToInstall.push('Git');
-            if (document.getElementById('docker').checked) softwareToInstall.push('Docker');
-            if (document.getElementById('nodejs').checked) softwareToInstall.push('Node.js');
-            if (document.getElementById('chrome').checked) softwareToInstall.push('Chrome');
-            if (document.getElementById('firefox').checked) softwareToInstall.push('Firefox');
-            if (document.getElementById('edge').checked) softwareToInstall.push('Edge');
-            if (document.getElementById('opera').checked) softwareToInstall.push('Opera');
-            if (document.getElementById('brave').checked) softwareToInstall.push('Brave');
-            if (document.getElementById('winrar').checked) softwareToInstall.push('WinRAR/7-Zip');
-            if (document.getElementById('ccleaner').checked) softwareToInstall.push('CCleaner');
-            if (document.getElementById('teamviewer').checked) softwareToInstall.push('TeamViewer');
-            if (document.getElementById('virtualbox').checked) softwareToInstall.push('VirtualBox');
-            if (document.getElementById('vlc').checked) softwareToInstall.push('VLC');
             if (document.getElementById('customSoftware').checked) {
                 softwareToInstall.push('Software personalizado: ' + document.getElementById('customSoftwareList').value);
             }
@@ -1174,11 +984,6 @@
             
             if (document.getElementById('recoveryYes').checked) {
                 doc.text('Recuperación de datos requerida: Sí', 14, y);
-                y += 7;
-            }
-            
-            if (document.getElementById('osInstallYes').checked) {
-                doc.text(`Instalación SO requerida: Sí - ${document.getElementById('osInstallDetails').value || 'Sin detalles'}`, 14, y);
                 y += 7;
             }
             
@@ -1208,36 +1013,6 @@
                 );
                 doc.text(errorLines, 20, y);
                 y += errorLines.length * 7;
-            }
-            
-            y += 12;
-            
-            // Términos y condiciones
-            doc.setFont('helvetica', 'bold');
-            doc.text('TÉRMINOS Y CONDICIONES', 14, y);
-            doc.setFont('helvetica', 'normal');
-            y += 7;
-            
-            doc.text(`Tarifa de diagnóstico: $${document.getElementById('diagnosticFee').value}`, 14, y);
-            y += 7;
-            doc.text(`Tiempo estimado: ${document.getElementById('estimatedTime').value}`, 14, y);
-            y += 7;
-            doc.text(`Prioridad: ${document.getElementById('servicePriority').value}`, 14, y);
-            y += 7;
-            doc.text(`Términos aceptados: ${document.querySelector('input[name="termsConditions"]:checked').value}`, 14, y);
-            
-            // Notas adicionales
-            if (document.getElementById('additionalNotes').value) {
-                y += 12;
-                doc.text('Notas adicionales:', 14, y);
-                y += 7;
-                
-                const notesLines = doc.splitTextToSize(
-                    document.getElementById('additionalNotes').value, 
-                    180
-                );
-                doc.text(notesLines, 20, y);
-                y += notesLines.length * 7;
             }
             
             y += 12;
@@ -1287,12 +1062,10 @@
                             doc.text('TecnoRepair Pro - Soluciones tecnológicas avanzadas', 105, 280, { align: 'center' });
                             
                             doc.save('recepcion_equipo_tecno.pdf');
-                            document.getElementById('downloadModal').style.display = 'none';
                         };
                     } catch (e) {
                         console.error('Error al agregar la foto:', e);
                         doc.save('recepcion_equipo_tecno.pdf');
-                        document.getElementById('downloadModal').style.display = 'none';
                     }
                 };
                 reader.readAsDataURL(photoInput.files[0]);
@@ -1302,7 +1075,6 @@
                 doc.text('TecnoRepair Pro - Soluciones tecnológicas avanzadas', 105, 280, { align: 'center' });
                 
                 doc.save('recepcion_equipo_tecno.pdf');
-                document.getElementById('downloadModal').style.display = 'none';
             }
         }
         
@@ -1315,33 +1087,13 @@
             if (document.getElementById('office').checked) softwareToInstall.push('Microsoft Office');
             if (document.getElementById('libreoffice').checked) softwareToInstall.push('LibreOffice');
             if (document.getElementById('googleWorkspace').checked) softwareToInstall.push('Google Workspace');
-            if (document.getElementById('wps').checked) softwareToInstall.push('WPS Office');
-            if (document.getElementById('latex').checked) softwareToInstall.push('LaTeX');
             if (document.getElementById('antivirus').checked) softwareToInstall.push('Antivirus');
-            if (document.getElementById('malwarebytes').checked) softwareToInstall.push('Malwarebytes');
             if (document.getElementById('vpn').checked) softwareToInstall.push('VPN');
             if (document.getElementById('firewall').checked) softwareToInstall.push('Firewall');
-            if (document.getElementById('passwordManager').checked) softwareToInstall.push('Gestor de contraseñas');
             if (document.getElementById('adobe').checked) softwareToInstall.push('Adobe Creative Cloud');
-            if (document.getElementById('coreldraw').checked) softwareToInstall.push('CorelDRAW');
             if (document.getElementById('autocad').checked) softwareToInstall.push('AutoCAD');
-            if (document.getElementById('blender').checked) softwareToInstall.push('Blender');
-            if (document.getElementById('davinci').checked) softwareToInstall.push('DaVinci Resolve');
             if (document.getElementById('vscode').checked) softwareToInstall.push('VS Code');
-            if (document.getElementById('androidStudio').checked) softwareToInstall.push('Android Studio');
             if (document.getElementById('git').checked) softwareToInstall.push('Git');
-            if (document.getElementById('docker').checked) softwareToInstall.push('Docker');
-            if (document.getElementById('nodejs').checked) softwareToInstall.push('Node.js');
-            if (document.getElementById('chrome').checked) softwareToInstall.push('Chrome');
-            if (document.getElementById('firefox').checked) softwareToInstall.push('Firefox');
-            if (document.getElementById('edge').checked) softwareToInstall.push('Edge');
-            if (document.getElementById('opera').checked) softwareToInstall.push('Opera');
-            if (document.getElementById('brave').checked) softwareToInstall.push('Brave');
-            if (document.getElementById('winrar').checked) softwareToInstall.push('WinRAR/7-Zip');
-            if (document.getElementById('ccleaner').checked) softwareToInstall.push('CCleaner');
-            if (document.getElementById('teamviewer').checked) softwareToInstall.push('TeamViewer');
-            if (document.getElementById('virtualbox').checked) softwareToInstall.push('VirtualBox');
-            if (document.getElementById('vlc').checked) softwareToInstall.push('VLC');
             if (document.getElementById('customSoftware').checked) {
                 softwareToInstall.push('Software personalizado: ' + document.getElementById('customSoftwareList').value);
             }
@@ -1351,9 +1103,6 @@
             if (document.getElementById('includesCharger').checked) includes.push('Cargador');
             if (document.getElementById('includesBattery').checked) includes.push('Batería');
             if (document.getElementById('includesCase').checked) includes.push('Funda/carcasa');
-            if (document.getElementById('includesSoftware').checked) includes.push('Software/Disco');
-            if (document.getElementById('includesDocs').checked) includes.push('Documentación');
-            if (document.getElementById('includesPeripherals').checked) includes.push('Periféricos');
             
             // Crear el documento
             const doc = new Document({
@@ -1425,8 +1174,8 @@
                             ["Modelo", document.getElementById('equipmentModel').value],
                             ["Número de serie", document.getElementById('serialNumber').value || "No proporcionado"],
                             ["Fecha de compra", document.getElementById('purchaseDate').value || "No proporcionada"],
-                            ["En garantía", document.querySelector('input[name="warranty"]:checked').value],
-                            ["Sistema operativo", `${document.querySelector('input[name="operatingSystem"]:checked').value} ${document.getElementById('osVersion').value || ''}`],
+                            ["En garantía", document.querySelector('input[name="warranty"]:checked')?.value || "No especificado"],
+                            ["Sistema operativo", `${document.querySelector('input[name="operatingSystem"]:checked')?.value || "No especificado"} ${document.getElementById('osVersion').value || ''}`],
                             ["Estado físico", document.getElementById('equipmentCondition').value],
                             ["Componentes incluidos", includes.join(', ') || "Ninguno especificado"]
                         ]),
@@ -1451,9 +1200,7 @@
                         createInfoTable([
                             ["Backup de datos", document.getElementById('backupYes').checked ? 
                                 `Sí - ${document.getElementById('backupDetails').value || 'Sin detalles'}` : "No"],
-                            ["Recuperación de datos", document.getElementById('recoveryYes').checked ? "Sí" : "No"],
-                            ["Instalación SO", document.getElementById('osInstallYes').checked ? 
-                                `Sí - ${document.getElementById('osInstallDetails').value || 'Sin detalles'}` : "No"]
+                            ["Recuperación de datos", document.getElementById('recoveryYes').checked ? "Sí" : "No"]
                         ]),
                         
                         // Descripción del problema
@@ -1476,30 +1223,6 @@
                         document.getElementById('errorMessages').value ? new Paragraph({
                             children: [new TextRun(document.getElementById('errorMessages').value)],
                             spacing: { after: 200 }
-                        }) : null,
-                        
-                        // Términos y condiciones
-                        new Paragraph({
-                            text: "TÉRMINOS Y CONDICIONES",
-                            heading: HeadingLevel.HEADING_3,
-                            spacing: { before: 400, after: 200 }
-                        }),
-                        createInfoTable([
-                            ["Tarifa de diagnóstico", `$${document.getElementById('diagnosticFee').value}`],
-                            ["Tiempo estimado", document.getElementById('estimatedTime').value],
-                            ["Prioridad del servicio", document.getElementById('servicePriority').value],
-                            ["Términos aceptados", document.querySelector('input[name="termsConditions"]:checked').value]
-                        ]),
-                        
-                        // Notas adicionales (si existen)
-                        document.getElementById('additionalNotes').value ? new Paragraph({
-                            text: "NOTAS ADICIONALES:",
-                            heading: HeadingLevel.HEADING_4,
-                            spacing: { before: 400, after: 100 }
-                        }) : null,
-                        document.getElementById('additionalNotes').value ? new Paragraph({
-                            children: [new TextRun(document.getElementById('additionalNotes').value)],
-                            spacing: { after: 400 }
                         }) : null,
                         
                         // Firma
@@ -1528,7 +1251,6 @@
             // Generar y descargar el documento
             Packer.toBlob(doc).then(blob => {
                 saveAs(blob, "recepcion_equipo_tecno.docx");
-                document.getElementById('downloadModal').style.display = 'none';
             });
             
             function createInfoTable(rows) {
