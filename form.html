@@ -431,51 +431,6 @@
             margin-bottom: 20px;
         }
         
-        .toggle-theme {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-        
-        .toggle-theme input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #333;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background-color: #444;
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(30px);
-        }
-        
         @media (max-width: 768px) {
             .form-row {
                 flex-direction: column;
@@ -503,13 +458,6 @@
 </head>
 <body>
     <div class="container">
-        <div class="toggle-container">
-            <label class="toggle-theme">
-                <input type="checkbox" id="themeToggle">
-                <span class="slider"></span>
-            </label>
-        </div>
-        
         <header>
             <h1>TecnoRepair Pro</h1>
             <p>Formulario avanzado de recepción de equipos</p>
@@ -641,17 +589,18 @@
                     </div>
                 </div>
                 
-                <!-- Sección de software y servicios -->
+                <!-- Sección ampliada de software y servicios -->
                 <div class="form-section">
                     <h2>Software y Servicios</h2>
                     <div class="form-group">
                         <label>Seleccione el software a instalar:</label>
                         <div class="software-options">
+                            <!-- Ofimática -->
                             <div class="software-category">
                                 <h4>Ofimática</h4>
                                 <div class="software-item">
                                     <input type="checkbox" id="office" name="office">
-                                    <label for="office">Microsoft Office</label>
+                                    <label for="office">Microsoft Office (Word, Excel, PowerPoint)</label>
                                 </div>
                                 <div class="software-item">
                                     <input type="checkbox" id="libreoffice" name="libreoffice">
@@ -661,40 +610,142 @@
                                     <input type="checkbox" id="googleWorkspace" name="googleWorkspace">
                                     <label for="googleWorkspace">Google Workspace</label>
                                 </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="wps" name="wps">
+                                    <label for="wps">WPS Office</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="latex" name="latex">
+                                    <label for="latex">LaTeX (TeX Live/MiKTeX)</label>
+                                </div>
                             </div>
                             
+                            <!-- Seguridad -->
                             <div class="software-category">
                                 <h4>Seguridad</h4>
                                 <div class="software-item">
                                     <input type="checkbox" id="antivirus" name="antivirus">
-                                    <label for="antivirus">Antivirus</label>
+                                    <label for="antivirus">Antivirus (Kaspersky, Norton, McAfee)</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="malwarebytes" name="malwarebytes">
+                                    <label for="malwarebytes">Malwarebytes</label>
                                 </div>
                                 <div class="software-item">
                                     <input type="checkbox" id="vpn" name="vpn">
-                                    <label for="vpn">VPN</label>
+                                    <label for="vpn">VPN (NordVPN, ExpressVPN)</label>
                                 </div>
                                 <div class="software-item">
                                     <input type="checkbox" id="firewall" name="firewall">
-                                    <label for="firewall">Firewall</label>
+                                    <label for="firewall">Firewall (ZoneAlarm, GlassWire)</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="passwordManager" name="passwordManager">
+                                    <label for="passwordManager">Gestor de contraseñas (LastPass, 1Password)</label>
                                 </div>
                             </div>
                             
+                            <!-- Diseño y Multimedia -->
                             <div class="software-category">
-                                <h4>Herramientas</h4>
+                                <h4>Diseño y Multimedia</h4>
                                 <div class="software-item">
                                     <input type="checkbox" id="adobe" name="adobe">
-                                    <label for="adobe">Adobe Creative Cloud</label>
+                                    <label for="adobe">Adobe Creative Cloud (Photoshop, Illustrator)</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="coreldraw" name="coreldraw">
+                                    <label for="coreldraw">CorelDRAW</label>
                                 </div>
                                 <div class="software-item">
                                     <input type="checkbox" id="autocad" name="autocad">
                                     <label for="autocad">AutoCAD</label>
                                 </div>
                                 <div class="software-item">
-                                    <input type="checkbox" id="development" name="development">
-                                    <label for="development">Herramientas de desarrollo</label>
+                                    <input type="checkbox" id="blender" name="blender">
+                                    <label for="blender">Blender (3D)</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="davinci" name="davinci">
+                                    <label for="davinci">DaVinci Resolve (Edición de video)</label>
                                 </div>
                             </div>
                             
+                            <!-- Desarrollo -->
+                            <div class="software-category">
+                                <h4>Desarrollo</h4>
+                                <div class="software-item">
+                                    <input type="checkbox" id="vscode" name="vscode">
+                                    <label for="vscode">Visual Studio Code</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="androidStudio" name="androidStudio">
+                                    <label for="androidStudio">Android Studio</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="git" name="git">
+                                    <label for="git">Git</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="docker" name="docker">
+                                    <label for="docker">Docker</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="nodejs" name="nodejs">
+                                    <label for="nodejs">Node.js</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Navegadores -->
+                            <div class="software-category">
+                                <h4>Navegadores</h4>
+                                <div class="software-item">
+                                    <input type="checkbox" id="chrome" name="chrome">
+                                    <label for="chrome">Google Chrome</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="firefox" name="firefox">
+                                    <label for="firefox">Mozilla Firefox</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="edge" name="edge">
+                                    <label for="edge">Microsoft Edge</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="opera" name="opera">
+                                    <label for="opera">Opera</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="brave" name="brave">
+                                    <label for="brave">Brave</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Utilidades -->
+                            <div class="software-category">
+                                <h4>Utilidades</h4>
+                                <div class="software-item">
+                                    <input type="checkbox" id="winrar" name="winrar">
+                                    <label for="winrar">WinRAR / 7-Zip</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="ccleaner" name="ccleaner">
+                                    <label for="ccleaner">CCleaner</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="teamviewer" name="teamviewer">
+                                    <label for="teamviewer">TeamViewer</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="virtualbox" name="virtualbox">
+                                    <label for="virtualbox">VirtualBox</label>
+                                </div>
+                                <div class="software-item">
+                                    <input type="checkbox" id="vlc" name="vlc">
+                                    <label for="vlc">VLC Media Player</label>
+                                </div>
+                            </div>
+                            
+                            <!-- Personalizado -->
                             <div class="software-category">
                                 <h4>Personalizado</h4>
                                 <div class="software-item">
@@ -738,6 +789,25 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="osInstallation">¿Requiere instalación/actualización del sistema operativo?</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="osInstallYes" name="osInstallation" value="Sí">
+                                <label for="osInstallYes">Sí</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="osInstallNo" name="osInstallation" value="No" checked>
+                                <label for="osInstallNo">No</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="osInstallDetailsGroup" style="display: none;">
+                        <label for="osInstallDetails">Detalles de la instalación</label>
+                        <textarea id="osInstallDetails" name="osInstallDetails" placeholder="Especifique versión requerida y configuraciones especiales"></textarea>
+                    </div>
                 </div>
                 
                 <!-- Sección de descripción del problema -->
@@ -773,6 +843,10 @@
                             <div class="checkbox-option">
                                 <input type="checkbox" id="includesDocs" name="includesDocs">
                                 <label for="includesDocs">Documentación</label>
+                            </div>
+                            <div class="checkbox-option">
+                                <input type="checkbox" id="includesPeripherals" name="includesPeripherals">
+                                <label for="includesPeripherals">Periféricos (ratón, teclado, etc.)</label>
                             </div>
                         </div>
                     </div>
@@ -909,6 +983,14 @@
             });
         });
         
+        // Mostrar/ocultar detalles de instalación de SO
+        document.querySelectorAll('input[name="osInstallation"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('osInstallDetailsGroup').style.display = 
+                    this.value === 'Sí' ? 'block' : 'none';
+            });
+        });
+        
         // Mostrar/ocultar campo de software personalizado
         document.getElementById('customSoftware').addEventListener('change', function() {
             document.getElementById('customSoftwareList').style.display = 
@@ -952,7 +1034,7 @@
             }
         });
         
-        // Función para generar PDF
+        // Función para generar PDF (formato blanco)
         function generatePdf() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -960,35 +1042,27 @@
             // Configuración inicial
             doc.setFont('helvetica');
             doc.setFontSize(22);
-            doc.setTextColor(138, 43, 226);
+            doc.setTextColor(0, 0, 0);
             doc.text('TecnoRepair Pro', 105, 20, { align: 'center' });
             doc.setFontSize(16);
-            doc.setTextColor(255, 255, 255);
             doc.text('DOCUMENTO DE RECEPCIÓN DE EQUIPO', 105, 30, { align: 'center' });
-            
-            // Fondo degradado
-            doc.setFillColor(30, 30, 30);
-            doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
             
             // Fecha y número de ticket
             const now = new Date();
             doc.setFontSize(10);
-            doc.setTextColor(200, 200, 200);
             doc.text(`Fecha: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`, 14, 40);
             doc.text(`Ticket #${Math.floor(10000 + Math.random() * 90000)}`, 186, 40, { align: 'right' });
             
             // Línea separadora
-            doc.setDrawColor(138, 43, 226);
+            doc.setDrawColor(0, 0, 0);
             doc.setLineWidth(0.5);
             doc.line(14, 45, 196, 45);
             
             // Información del cliente
             doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
-            doc.setTextColor(138, 43, 226);
             doc.text('INFORMACIÓN DEL CLIENTE', 14, 55);
             doc.setFont('helvetica', 'normal');
-            doc.setTextColor(255, 255, 255);
             
             let y = 65;
             doc.text(`Nombre: ${document.getElementById('clientName').value}`, 14, y);
@@ -1004,10 +1078,8 @@
             
             // Información del equipo
             doc.setFont('helvetica', 'bold');
-            doc.setTextColor(138, 43, 226);
             doc.text('INFORMACIÓN DEL EQUIPO', 14, y);
             doc.setFont('helvetica', 'normal');
-            doc.setTextColor(255, 255, 255);
             y += 7;
             
             doc.text(`Tipo: ${document.getElementById('equipmentType').value}`, 14, y);
@@ -1040,6 +1112,7 @@
             if (document.getElementById('includesCase').checked) includes.push('Funda/carcasa');
             if (document.getElementById('includesSoftware').checked) includes.push('Software/Disco');
             if (document.getElementById('includesDocs').checked) includes.push('Documentación');
+            if (document.getElementById('includesPeripherals').checked) includes.push('Periféricos');
             
             doc.text(`Componentes incluidos: ${includes.join(', ') || 'Ninguno especificado'}`, 14, y);
             y += 12;
@@ -1049,12 +1122,33 @@
             if (document.getElementById('office').checked) softwareToInstall.push('Microsoft Office');
             if (document.getElementById('libreoffice').checked) softwareToInstall.push('LibreOffice');
             if (document.getElementById('googleWorkspace').checked) softwareToInstall.push('Google Workspace');
+            if (document.getElementById('wps').checked) softwareToInstall.push('WPS Office');
+            if (document.getElementById('latex').checked) softwareToInstall.push('LaTeX');
             if (document.getElementById('antivirus').checked) softwareToInstall.push('Antivirus');
+            if (document.getElementById('malwarebytes').checked) softwareToInstall.push('Malwarebytes');
             if (document.getElementById('vpn').checked) softwareToInstall.push('VPN');
             if (document.getElementById('firewall').checked) softwareToInstall.push('Firewall');
+            if (document.getElementById('passwordManager').checked) softwareToInstall.push('Gestor de contraseñas');
             if (document.getElementById('adobe').checked) softwareToInstall.push('Adobe Creative Cloud');
+            if (document.getElementById('coreldraw').checked) softwareToInstall.push('CorelDRAW');
             if (document.getElementById('autocad').checked) softwareToInstall.push('AutoCAD');
-            if (document.getElementById('development').checked) softwareToInstall.push('Herramientas de desarrollo');
+            if (document.getElementById('blender').checked) softwareToInstall.push('Blender');
+            if (document.getElementById('davinci').checked) softwareToInstall.push('DaVinci Resolve');
+            if (document.getElementById('vscode').checked) softwareToInstall.push('VS Code');
+            if (document.getElementById('androidStudio').checked) softwareToInstall.push('Android Studio');
+            if (document.getElementById('git').checked) softwareToInstall.push('Git');
+            if (document.getElementById('docker').checked) softwareToInstall.push('Docker');
+            if (document.getElementById('nodejs').checked) softwareToInstall.push('Node.js');
+            if (document.getElementById('chrome').checked) softwareToInstall.push('Chrome');
+            if (document.getElementById('firefox').checked) softwareToInstall.push('Firefox');
+            if (document.getElementById('edge').checked) softwareToInstall.push('Edge');
+            if (document.getElementById('opera').checked) softwareToInstall.push('Opera');
+            if (document.getElementById('brave').checked) softwareToInstall.push('Brave');
+            if (document.getElementById('winrar').checked) softwareToInstall.push('WinRAR/7-Zip');
+            if (document.getElementById('ccleaner').checked) softwareToInstall.push('CCleaner');
+            if (document.getElementById('teamviewer').checked) softwareToInstall.push('TeamViewer');
+            if (document.getElementById('virtualbox').checked) softwareToInstall.push('VirtualBox');
+            if (document.getElementById('vlc').checked) softwareToInstall.push('VLC');
             if (document.getElementById('customSoftware').checked) {
                 softwareToInstall.push('Software personalizado: ' + document.getElementById('customSoftwareList').value);
             }
@@ -1083,14 +1177,17 @@
                 y += 7;
             }
             
+            if (document.getElementById('osInstallYes').checked) {
+                doc.text(`Instalación SO requerida: Sí - ${document.getElementById('osInstallDetails').value || 'Sin detalles'}`, 14, y);
+                y += 7;
+            }
+            
             y += 5;
             
             // Descripción del problema
             doc.setFont('helvetica', 'bold');
-            doc.setTextColor(138, 43, 226);
             doc.text('DESCRIPCIÓN DEL PROBLEMA', 14, y);
             doc.setFont('helvetica', 'normal');
-            doc.setTextColor(255, 255, 255);
             y += 7;
             
             const problemLines = doc.splitTextToSize(
@@ -1117,10 +1214,8 @@
             
             // Términos y condiciones
             doc.setFont('helvetica', 'bold');
-            doc.setTextColor(138, 43, 226);
             doc.text('TÉRMINOS Y CONDICIONES', 14, y);
             doc.setFont('helvetica', 'normal');
-            doc.setTextColor(255, 255, 255);
             y += 7;
             
             doc.text(`Tarifa de diagnóstico: $${document.getElementById('diagnosticFee').value}`, 14, y);
@@ -1166,15 +1261,10 @@
                 reader.onload = function(event) {
                     try {
                         doc.addPage();
-                        // Configurar fondo oscuro en nueva página
-                        doc.setFillColor(30, 30, 30);
-                        doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
                         
                         doc.setFont('helvetica', 'bold');
-                        doc.setTextColor(138, 43, 226);
                         doc.text('FOTOGRAFÍA DEL EQUIPO', 105, 20, { align: 'center' });
                         doc.setFont('helvetica', 'normal');
-                        doc.setTextColor(255, 255, 255);
                         
                         // Ajustar la imagen al ancho de la página manteniendo la relación de aspecto
                         const img = new Image();
@@ -1194,7 +1284,6 @@
                             
                             // Pie de página
                             doc.setFontSize(10);
-                            doc.setTextColor(200, 200, 200);
                             doc.text('TecnoRepair Pro - Soluciones tecnológicas avanzadas', 105, 280, { align: 'center' });
                             
                             doc.save('recepcion_equipo_tecno.pdf');
@@ -1210,7 +1299,6 @@
             } else {
                 // Pie de página si no hay foto
                 doc.setFontSize(10);
-                doc.setTextColor(200, 200, 200);
                 doc.text('TecnoRepair Pro - Soluciones tecnológicas avanzadas', 105, 280, { align: 'center' });
                 
                 doc.save('recepcion_equipo_tecno.pdf');
@@ -1218,7 +1306,7 @@
             }
         }
         
-        // Función para generar DOCX
+        // Función para generar DOCX (formato blanco)
         function generateDocx() {
             const { Document, Paragraph, TextRun, HeadingLevel, Packer, Table, TableRow, TableCell, WidthType, AlignmentType } = docx;
             
@@ -1227,12 +1315,33 @@
             if (document.getElementById('office').checked) softwareToInstall.push('Microsoft Office');
             if (document.getElementById('libreoffice').checked) softwareToInstall.push('LibreOffice');
             if (document.getElementById('googleWorkspace').checked) softwareToInstall.push('Google Workspace');
+            if (document.getElementById('wps').checked) softwareToInstall.push('WPS Office');
+            if (document.getElementById('latex').checked) softwareToInstall.push('LaTeX');
             if (document.getElementById('antivirus').checked) softwareToInstall.push('Antivirus');
+            if (document.getElementById('malwarebytes').checked) softwareToInstall.push('Malwarebytes');
             if (document.getElementById('vpn').checked) softwareToInstall.push('VPN');
             if (document.getElementById('firewall').checked) softwareToInstall.push('Firewall');
+            if (document.getElementById('passwordManager').checked) softwareToInstall.push('Gestor de contraseñas');
             if (document.getElementById('adobe').checked) softwareToInstall.push('Adobe Creative Cloud');
+            if (document.getElementById('coreldraw').checked) softwareToInstall.push('CorelDRAW');
             if (document.getElementById('autocad').checked) softwareToInstall.push('AutoCAD');
-            if (document.getElementById('development').checked) softwareToInstall.push('Herramientas de desarrollo');
+            if (document.getElementById('blender').checked) softwareToInstall.push('Blender');
+            if (document.getElementById('davinci').checked) softwareToInstall.push('DaVinci Resolve');
+            if (document.getElementById('vscode').checked) softwareToInstall.push('VS Code');
+            if (document.getElementById('androidStudio').checked) softwareToInstall.push('Android Studio');
+            if (document.getElementById('git').checked) softwareToInstall.push('Git');
+            if (document.getElementById('docker').checked) softwareToInstall.push('Docker');
+            if (document.getElementById('nodejs').checked) softwareToInstall.push('Node.js');
+            if (document.getElementById('chrome').checked) softwareToInstall.push('Chrome');
+            if (document.getElementById('firefox').checked) softwareToInstall.push('Firefox');
+            if (document.getElementById('edge').checked) softwareToInstall.push('Edge');
+            if (document.getElementById('opera').checked) softwareToInstall.push('Opera');
+            if (document.getElementById('brave').checked) softwareToInstall.push('Brave');
+            if (document.getElementById('winrar').checked) softwareToInstall.push('WinRAR/7-Zip');
+            if (document.getElementById('ccleaner').checked) softwareToInstall.push('CCleaner');
+            if (document.getElementById('teamviewer').checked) softwareToInstall.push('TeamViewer');
+            if (document.getElementById('virtualbox').checked) softwareToInstall.push('VirtualBox');
+            if (document.getElementById('vlc').checked) softwareToInstall.push('VLC');
             if (document.getElementById('customSoftware').checked) {
                 softwareToInstall.push('Software personalizado: ' + document.getElementById('customSoftwareList').value);
             }
@@ -1244,25 +1353,10 @@
             if (document.getElementById('includesCase').checked) includes.push('Funda/carcasa');
             if (document.getElementById('includesSoftware').checked) includes.push('Software/Disco');
             if (document.getElementById('includesDocs').checked) includes.push('Documentación');
+            if (document.getElementById('includesPeripherals').checked) includes.push('Periféricos');
             
             // Crear el documento
             const doc = new Document({
-                styles: {
-                    paragraphStyles: [{
-                        id: "Normal",
-                        name: "Normal",
-                        run: {
-                            color: "FFFFFF",
-                            font: "Segoe UI"
-                        },
-                        paragraph: {
-                            spacing: { line: 276 }
-                        }
-                    }]
-                },
-                background: {
-                    color: "1E1E1E"
-                },
                 sections: [{
                     properties: {
                         page: {
@@ -1281,7 +1375,7 @@
                             heading: HeadingLevel.HEADING_1,
                             alignment: AlignmentType.CENTER,
                             spacing: { after: 200 },
-                            border: { bottom: { color: "8A2BE2", size: 8, style: "single" } }
+                            border: { bottom: { color: "000000", size: 8, style: "single" } }
                         }),
                         new Paragraph({
                             text: "DOCUMENTO DE RECEPCIÓN DE EQUIPO",
@@ -1295,8 +1389,7 @@
                             children: [
                                 new TextRun({
                                     text: `Ticket #${Math.floor(10000 + Math.random() * 90000)}`,
-                                    bold: true,
-                                    color: "8A2BE2"
+                                    bold: true
                                 }),
                                 new TextRun({
                                     text: `\tFecha: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
@@ -1358,7 +1451,9 @@
                         createInfoTable([
                             ["Backup de datos", document.getElementById('backupYes').checked ? 
                                 `Sí - ${document.getElementById('backupDetails').value || 'Sin detalles'}` : "No"],
-                            ["Recuperación de datos", document.getElementById('recoveryYes').checked ? "Sí" : "No"]
+                            ["Recuperación de datos", document.getElementById('recoveryYes').checked ? "Sí" : "No"],
+                            ["Instalación SO", document.getElementById('osInstallYes').checked ? 
+                                `Sí - ${document.getElementById('osInstallDetails').value || 'Sin detalles'}` : "No"]
                         ]),
                         
                         // Descripción del problema
@@ -1424,7 +1519,7 @@
                             text: "TecnoRepair Pro - Soluciones tecnológicas avanzadas",
                             alignment: AlignmentType.CENTER,
                             spacing: { before: 800 },
-                            border: { top: { color: "8A2BE2", size: 8, style: "single" } }
+                            border: { top: { color: "000000", size: 8, style: "single" } }
                         })
                     ].filter(Boolean) // Eliminar elementos nulos
                 }]
@@ -1444,32 +1539,29 @@
                                 children: [new Paragraph({
                                     children: [new TextRun({
                                         text: row[0],
-                                        bold: true,
-                                        color: "8A2BE2"
+                                        bold: true
                                     })],
                                     alignment: AlignmentType.LEFT
                                 })],
-                                width: { size: 30, type: WidthType.PERCENTAGE },
-                                shading: { fill: "1E1E1E" }
+                                width: { size: 30, type: WidthType.PERCENTAGE }
                             }),
                             new TableCell({
                                 children: [new Paragraph({
                                     children: [new TextRun(row[1])],
                                     alignment: AlignmentType.LEFT
                                 })],
-                                width: { size: 70, type: WidthType.PERCENTAGE },
-                                shading: { fill: "1E1E1E" }
+                                width: { size: 70, type: WidthType.PERCENTAGE }
                             })
                         ]
                     })),
                     width: { size: 100, type: WidthType.PERCENTAGE },
                     borders: {
-                        top: { style: "single", size: 6, color: "8A2BE2" },
-                        bottom: { style: "single", size: 6, color: "8A2BE2" },
-                        left: { style: "single", size: 6, color: "8A2BE2" },
-                        right: { style: "single", size: 6, color: "8A2BE2" },
-                        insideHorizontal: { style: "single", size: 2, color: "444444" },
-                        insideVertical: { style: "single", size: 2, color: "444444" }
+                        top: { style: "single", size: 6, color: "000000" },
+                        bottom: { style: "single", size: 6, color: "000000" },
+                        left: { style: "single", size: 6, color: "000000" },
+                        right: { style: "single", size: 6, color: "000000" },
+                        insideHorizontal: { style: "single", size: 2, color: "AAAAAA" },
+                        insideVertical: { style: "single", size: 2, color: "AAAAAA" }
                     }
                 });
             }
@@ -1484,11 +1576,6 @@
             link.click();
             document.body.removeChild(link);
         }
-        
-        // Toggle de tema oscuro/claro (simulado)
-        document.getElementById('themeToggle').addEventListener('change', function() {
-            alert('En una implementación real, esto cambiaría entre temas oscuro y claro. En este ejemplo, ya estamos en modo oscuro premium.');
-        });
     </script>
 </body>
 </html>
