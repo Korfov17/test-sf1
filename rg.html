@@ -362,6 +362,14 @@
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
+            position: relative;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .chest-container.unlocked {
+            pointer-events: auto;
+            user-select: auto;
         }
 
         .light-mode .chest-container {
@@ -411,6 +419,30 @@
             filter: drop-shadow(0 0 10px rgba(53, 177, 84, 0.5));
         }
 
+        .chest-lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: var(--primary-green);
+            z-index: 5;
+            opacity: 1;
+            text-shadow: 0 0 15px rgba(29, 185, 84, 0.5);
+            transition: var(--transition);
+            filter: none !important;
+            animation: glow 2s infinite alternate;
+        }
+
+        .light-mode .chest-lock-icon {
+            color: var(--primary-green-light);
+            text-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        }
+
+        .chest-container.unlocked .chest-lock-icon {
+            display: none;
+        }
+
         .timer {
             margin-top: 25px;
             font-size: 1.8rem;
@@ -422,6 +454,11 @@
             text-shadow: 0 0 10px rgba(29, 185, 84, 0.2);
             border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
+            filter: blur(3px);
+        }
+
+        .chest-container.unlocked .timer {
+            filter: none;
         }
 
         .light-mode .timer {
@@ -435,6 +472,11 @@
             color: var(--primary-green);
             letter-spacing: 0.5px;
             transition: var(--transition);
+            filter: blur(3px);
+        }
+
+        .chest-container.unlocked .chest-message {
+            filter: none;
         }
 
         .light-mode .chest-message {
@@ -797,7 +839,9 @@
             <div class="letter-date">4 de Diciembre de 2025</div>
         </div>
 
-        <div class="chest-container">
+        <div class="chest-container" id="chest-container">
+            <div class="chest-lock-icon"><i class="fas fa-lock"></i></div>
+            
             <div class="chest-message" id="chest-message">Tu sorpresa especial</div>
             
             <div class="chest" id="chest">
@@ -866,7 +910,6 @@
     <script>
         // Fechas importantes (cambiado a 4 de diciembre)
         const unlockDate = new Date('December 4, 2025 00:00:00').getTime();
-        const surpriseDate = new Date('December 10, 2025 00:00:00').getTime(); // 6 días después
         
         // Elementos del DOM
         const mainCountdown = document.getElementById('main-countdown');
@@ -874,6 +917,8 @@
         const letter = document.getElementById('letter');
         const letterLock = document.getElementById('letter-lock');
         const chest = document.getElementById('chest');
+        const chestContainer = document.getElementById('chest-container');
+        const chestLockIcon = document.querySelector('.chest-lock-icon');
         const chestMessage = document.getElementById('chest-message');
         const sorpresaLink = document.getElementById('sorpresa-link');
         const themeToggle = document.getElementById('theme-toggle');
@@ -941,59 +986,38 @@
         // Actualizar el cronómetro
         function updateCountdown() {
             const now = new Date().getTime();
-            const distanceToLetter = unlockDate - now;
-            const distanceToSurprise = surpriseDate - now;
+            const distance = unlockDate - now;
             
-            // Contador para la carta
-            if (distanceToLetter <= 0) {
-                unlockLetter();
-            } else {
-                // Cálculos de tiempo para la carta
-                const daysLetter = Math.floor(distanceToLetter / (1000 * 60 * 60 * 24));
-                const hoursLetter = Math.floor((distanceToLetter % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutesLetter = Math.floor((distanceToLetter % (1000 * 60 * 60)) / (1000 * 60));
-                const secondsLetter = Math.floor((distanceToLetter % (1000 * 60)) / 1000);
-
-                // Formatear con ceros a la izquierda
-                const format = (num) => num < 10 ? `0${num}` : num;
-
-                // Mostrar el resultado para la carta
-                mainCountdown.innerHTML = `${format(daysLetter)}d ${format(hoursLetter)}h ${format(minutesLetter)}m ${format(secondsLetter)}s`;
+            if (distance <= 0) {
+                unlockContent();
+                return;
             }
-            
-            // Contador para la sorpresa
-            if (distanceToSurprise <= 0) {
-                unlockSurprise();
-            } else {
-                // Cálculos de tiempo para la sorpresa
-                const daysSurprise = Math.floor(distanceToSurprise / (1000 * 60 * 60 * 24));
-                const hoursSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutesSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60)) / (1000 * 60));
-                const secondsSurprise = Math.floor((distanceToSurprise % (1000 * 60)) / 1000);
 
-                // Formatear con ceros a la izquierda
-                const format = (num) => num < 10 ? `0${num}` : num;
+            // Cálculos de tiempo
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                // Mostrar el resultado para la sorpresa
-                chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
-            }
+            // Formatear con ceros a la izquierda
+            const format = (num) => num < 10 ? `0${num}` : num;
+
+            // Mostrar el resultado
+            mainCountdown.innerHTML = `${format(days)}d ${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
+            chestCountdown.innerHTML = `${format(days)}d ${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
         }
 
-        // Desbloquear carta
-        function unlockLetter() {
+        // Desbloquear contenido
+        function unlockContent() {
             // Desbloquear carta
             letter.classList.add('unlocked');
             letterLock.style.display = 'none';
             
-            // Actualizar mensaje
-            mainCountdown.textContent = "¡Disponible ahora!";
-        }
-
-        // Desbloquear sorpresa
-        function unlockSurprise() {
             // Desbloquear cofre
-            chest.classList.add('unlocked');
+            chestContainer.classList.add('unlocked');
+            chestLockIcon.style.display = 'none';
             chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
+            mainCountdown.textContent = "¡Disponible ahora!";
             chestCountdown.textContent = "¡Ábrelo ahora!";
             
             // Añadir efecto de pulso
@@ -1026,9 +1050,9 @@
         // Prevenir clic en el enlace si está bloqueado
         sorpresaLink.addEventListener('click', function(e) {
             const now = new Date().getTime();
-            if (now < surpriseDate) {
+            if (now < unlockDate) {
                 e.preventDefault();
-                alert("La sorpresa aún no está disponible. Por favor espera hasta el 10 de Diciembre de 2025.");
+                alert("El contenido aún no está disponible. Por favor espera hasta el 4 de Diciembre de 2025.");
             } else {
                 e.preventDefault();
                 showModal(surpriseModal);
