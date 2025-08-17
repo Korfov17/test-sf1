@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Especial</title>
+    <!-- Google Fonts primero -->
+    <link href="https://fonts.googleapis.com/css2?family=Road+Rage&display=swap" rel="stylesheet">
+    <style>
+        /* Fuente local Road Rage */
+        @font-face {
+            font-family: 'Road Rage Local';
+            src: url('Road_Rage.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        :root {
+            /* Colores modo oscuro */
+            --primary-green: #1db954;
+            --dark-green: #15803d;
+            --light-green: #84cc16;
+            --bg-dark: #121212;
+            --bg-darker: #0a0a0a;
+            --text-light: #e5e7eb;
+            --text-lighter: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-dark: #1e1e1e;
+            --card-darker: #1a1a1a;
+            
+            /* Colores modo claro */
+            --primary-green-light: #1b5e20;
+            --light-green-light: #4caf50;
+            --bg-light: #f8fafc;
+            --bg-lighter: #ffffff;
+            --text-dark: #1e293b;
+            --text-darker: #0f172a;
+            --text-muted-light: #64748b;
+            --card-light: #ffffff;
+            --card-lighter: #f1f5f9;
+            
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body {
+            font-family: 'Road Rage', 'Road Rage Local', cursive;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-light);
+            line-height: 1.6;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        .letter h1, 
+        .unlock-countdown h3, 
+        .history-modal,
+        .top-bar,
+        .history-modal .timeline-date,
+        .chest-message {
+            font-family: 'Road Rage Local', cursive;
+        }
+
+        .timer, 
+        .letter, 
+        .letter p, 
+        .letter .letter-date,
+        .history-modal .timeline-content {
+            font-family: 'Road Rage', cursive;
+        }
+
+        body.light-mode {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* Fondo de símbolos de dólar y pistolas en 2D */
+        .money-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            opacity: 0;
+            animation: floatUp linear infinite;
+            user-select: none;
+            will-change: transform, opacity;
+        }
+
+        .dollar-sign {
+            color: rgba(29, 185, 84, 0.8);
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 40px;
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.3),
+                0 0 15px rgba(29, 185, 84, 0.5);
+        }
+
+        .gun-icon {
+            font-size: 30px;
+            color: rgba(200, 200, 200, 0.8);
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.2),
+                0 0 10px rgba(200, 200, 200, 0.4);
+        }
+
+        .light-mode .dollar-sign {
+            color: rgba(76, 175, 80, 0.7);
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.5),
+                0 0 10px rgba(76, 175, 80, 0.4);
+        }
+
+        .light-mode .gun-icon {
+            color: rgba(100, 100, 100, 0.7);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: 
+                    translateY(100vh) 
+                    translateX(calc(var(--tx) * 1vw))
+                    rotate(calc(var(--rotate) * 1deg))
+                    scale(var(--scale, 1));
+                opacity: 0;
+            }
+            20% {
+                opacity: var(--opacity);
+            }
+            80% {
+                opacity: var(--opacity);
+            }
+            100% {
+                transform: 
+                    translateY(-100px) 
+                    translateX(calc(var(--tx-end) * 1vw))
+                    rotate(calc(var(--rotate-end) * 1deg))
+                    scale(var(--scale-end, 1));
+                opacity: 0;
+            }
+        }
+
+        /* Efecto de brillo intermitente */
+        .floating-icon.glowing {
+            animation: floatUp, glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: var(--opacity); }
+            50% { 
+                opacity: calc(var(--opacity) * 1.5);
+                text-shadow: 
+                    0 0 10px rgba(255,255,255,0.5),
+                    0 0 25px currentColor;
+            }
+        }
+
+        .top-bar {
+            width: 100%;
+            height: 80px;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .top-bar {
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .top-bar h2 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+            color: var(--primary-green);
+            transition: var(--transition);
+        }
+
+        .light-mode .top-bar h2 {
+            color: var(--primary-green-light);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin-top: 120px;
+            margin-bottom: 50px;
+            transition: var(--transition);
+        }
+
+        .blur-content {
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .unlock-countdown {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(30, 30, 30, 0.7);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .unlock-countdown {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .unlock-countdown:hover {
+            box-shadow: 0 4px 25px rgba(29, 185, 84, 0.4);
+        }
+
+        .unlock-countdown h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            color: var(--primary-green);
+            transition: var(--transition);
+        }
+
+        .light-mode .unlock-countdown h3 {
+            color: var(--primary-green-light);
+        }
+
+        .letter {
+            background-color: var(--card-dark);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            pointer-events: none;
+            user-select: none;
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .light-mode .letter {
+            background-color: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .letter:hover {
+            box-shadow: 0 8px 35px rgba(29, 185, 84, 0.4);
+        }
+
+        .letter.unlocked {
+            pointer-events: auto;
+            user-select: auto;
+            animation: fadeIn 1s ease;
+        }
+
+        .letter h1 {
+            font-size: 3.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.2;
+            color: var(--primary-green);
+            letter-spacing: 2px;
+            transition: var(--transition);
+            filter: blur(5px);
+        }
+
+        .light-mode .letter h1 {
+            color: var(--primary-green-light);
+        }
+
+        .letter.unlocked h1 {
+            filter: none;
+        }
+
+        .letter p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            transition: var(--transition);
+            filter: blur(5px);
+        }
+
+        .light-mode .letter p {
+            color: var(--text-dark);
+        }
+
+        .letter.unlocked p {
+            filter: none;
+        }
+
+        .letter-date {
+            text-align: right;
+            font-style: italic;
+            color: var(--text-muted);
+            margin-top: 30px;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            filter: blur(5px);
+        }
+
+        .light-mode .letter-date {
+            color: var(--text-muted-light);
+        }
+
+        .letter.unlocked .letter-date {
+            filter: none;
+        }
+
+        .lock-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: var(--primary-green);
+            z-index: 5;
+            opacity: 1;
+            text-shadow: 0 0 15px rgba(29, 185, 84, 0.5);
+            transition: var(--transition);
+            filter: none !important;
+            animation: glow 2s infinite alternate;
+        }
+
+        .light-mode .lock-icon {
+            color: var(--primary-green-light);
+            text-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        }
+
+        .letter.unlocked .lock-icon {
+            display: none;
+        }
+
+        .chest-container {
+            text-align: center;
+            margin-top: 60px;
+            background: rgba(30, 30, 30, 0.7);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .chest-container {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .chest-container:hover {
+            box-shadow: 0 8px 35px rgba(29, 185, 84, 0.4);
+        }
+
+        .chest {
+            width: 200px;
+            height: 150px;
+            position: relative;
+            margin: 0 auto;
+            cursor: pointer;
+            pointer-events: none;
+            filter: blur(3px);
+            transition: var(--transition);
+        }
+
+        .chest.unlocked {
+            filter: none;
+            pointer-events: auto;
+        }
+
+        .chest:hover .toolbox-icon {
+            transform: translateY(-5px) scale(1.1);
+            filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.8));
+        }
+
+        .chest-body {
+            width: 180px;
+            height: 120px;
+            position: relative;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .toolbox-icon {
+            font-size: 5rem;
+            color: #35b154;
+            transition: var(--transition);
+            filter: drop-shadow(0 0 10px rgba(53, 177, 84, 0.5));
+        }
+
+        .timer {
+            margin-top: 25px;
+            font-size: 1.8rem;
+            padding: 12px 25px;
+            border-radius: 8px;
+            display: inline-block;
+            letter-spacing: 1px;
+            color: var(--primary-green);
+            text-shadow: 0 0 10px rgba(29, 185, 84, 0.2);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .timer {
+            color: var(--primary-green-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .chest-message {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: var(--primary-green);
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+        }
+
+        .light-mode .chest-message {
+            color: var(--primary-green-light);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .light-mode .theme-toggle {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .theme-toggle:hover {
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+        }
+
+        .theme-toggle i {
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .light-mode .theme-toggle i {
+            color: var(--primary-green-light);
+        }
+
+        .history-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .light-mode .history-toggle {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .history-toggle:hover {
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+        }
+
+        .history-toggle i {
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .light-mode .history-toggle i {
+            color: var(--primary-green-light);
+        }
+
+        .history-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            background: var(--card-dark);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(84, 204, 22, 0.2);
+            overflow-y: auto;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .history-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .light-mode .history-modal {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .history-modal h3 {
+            color: var(--primary-green);
+            margin-top: 0;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 25px;
+        }
+
+        .light-mode .history-modal h3 {
+            color: var(--primary-green-light);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-green);
+        }
+
+        .light-mode .timeline::before {
+            background: var(--primary-green-light);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed rgba(84, 204, 22, 0.3);
+        }
+
+        .light-mode .timeline-item {
+            border-bottom: 1px dashed rgba(76, 175, 80, 0.3);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            border: 3px solid var(--card-dark);
+            transform: translateX(2px);
+        }
+
+        .light-mode .timeline-item::before {
+            background: var(--primary-green-light);
+            border: 3px solid var(--card-light);
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary-green);
+            margin-bottom: 5px;
+            font-size: 1.2rem;
+        }
+
+        .light-mode .timeline-date {
+            color: var(--primary-green-light);
+        }
+
+        .timeline-content {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .light-mode .timeline-content {
+            color: var(--text-dark);
+        }
+
+        .close-history {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .light-mode .close-history {
+            color: var(--primary-green-light);
+        }
+
+        .close-history:hover {
+            transform: rotate(90deg);
+        }
+
+        .surprise-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 80%;
+            max-width: 500px;
+            background: var(--card-dark);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(84, 204, 22, 0.2);
+            text-align: center;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .surprise-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .light-mode .surprise-modal {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .surprise-modal h3 {
+            color: var(--primary-green);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .light-mode .surprise-modal h3 {
+            color: var(--primary-green-light);
+        }
+
+        .surprise-modal p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .light-mode .surprise-modal p {
+            color: var(--text-dark);
+        }
+
+        .surprise-modal .toolbox-icon {
+            font-size: 5rem;
+            color: #35b154;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.5));
+        }
+
+        .close-surprise {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 15px;
+        }
+
+        .light-mode .close-surprise {
+            background: linear-gradient(135deg, var(--primary-green-light) 0%, var(--light-green-light) 100%);
+        }
+
+        .close-surprise:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(29, 185, 84, 0.5); }
+            to { text-shadow: 0 0 20px rgba(29, 185, 84, 0.8), 0 0 30px rgba(29, 185, 84, 0.6); }
+        }
+
+        @keyframes modalIn {
+            from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .light-mode .lock-icon {
+            animation: glow-light 2s infinite alternate;
+        }
+
+        @keyframes glow-light {
+            from { text-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+            to { text-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 0 30px rgba(76, 175, 80, 0.6); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="money-bg" id="money-bg"></div>
+    
+    <div class="top-bar">
+        <h2>Carta Especial</h2>
+    </div>
+    
+    <div class="container" id="main-container">
+        <div class="unlock-countdown">
+            <h3>Se desbloqueará en:</h3>
+            <div class="timer" id="main-countdown">00d 00h 00m 05s</div>
+        </div>
+        
+        <div class="letter" id="letter">
+            <div class="lock-icon" id="letter-lock"><i class="fas fa-lock"></i></div>
+            
+            <h1>Un Mensaje Muy Especial</h1>
+            
+            <p>Querido/a [Nombre],</p>
+            
+            <p>Hay momentos en la vida que merecen ser detenidos, guardados como tesoros en el corazón. Este es uno de ellos.</p>
+            
+            <p>Quiero que sepas lo importante que eres para mí, lo mucho que valoro cada risa compartida, cada conversación bajo las estrellas, cada silencio cómplice.</p>
+            
+            <p>La vida es un conjunto de instantes fugaces, pero hay algunos que permanecen. Los que he vivido a tu lado son de esos que el tiempo no borra.</p>
+            
+            <p>Por eso hoy, en este día tan especial, quiero regalarte estas palabras y una pequeña sorpresa que podrás descubrir más adelante.</p>
+            
+            <p>Con todo mi cariño,</p>
+            
+            <p>[Tu Nombre]</p>
+            
+            <div class="letter-date">4 de Diciembre de 2025</div>
+        </div>
+
+        <div class="chest-container">
+            <div class="chest-message" id="chest-message">Tu sorpresa especial</div>
+            
+            <div class="chest" id="chest">
+                <div class="chest-body">
+                    <a href="#sorpresa" id="sorpresa-link">
+                        <i class="fa-solid fa-toolbox toolbox-icon"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="timer" id="chest-countdown">00d 00h 00m 05s</div>
+        </div>
+    </div>
+
+    <div class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <div class="history-toggle" id="history-toggle">
+        <i class="fas fa-history"></i>
+    </div>
+
+    <div class="history-modal" id="history-modal">
+        <button class="close-history" id="close-history"><i class="fas fa-times"></i></button>
+        <h3>Historial de Desarrollo</h3>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-date">Versión Inicial</div>
+                <div class="timeline-content">
+                    <p>Diseño básico de la carta con temporizador y cofre bloqueado.</p>
+                    <p>Implementación del modo oscuro con degradados verdes.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Primera Mejora</div>
+                <div class="timeline-content">
+                    <p>Rediseño del cofre del tesoro con animación de apertura.</p>
+                    <p>Ajuste del efecto blur para mostrar solo el candado cuando está bloqueado.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Segunda Mejora</div>
+                <div class="timeline-content">
+                    <p>Implementación del botón de historial y línea de tiempo.</p>
+                    <p>Mejora en las transiciones y efectos visuales.</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">Versión Actual</div>
+                <div class="timeline-content">
+                    <p>Optimización del diseño para ambos modos de color.</p>
+                    <p>Mejora en la experiencia de usuario con feedback visual.</p>
+                    <p>Fondo de símbolos de dólar y pistolas en 2D con efectos mejorados.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="surprise-modal" id="surprise-modal">
+        <i class="fa-solid fa-toolbox toolbox-icon"></i>
+        <h3>¡Sorpresa Especial!</h3>
+        <p>Este es un ejemplo del contenido de tu sorpresa. Podría incluir un mensaje personalizado, una foto especial, o cualquier detalle que quieras compartir con esa persona tan importante para ti.</p>
+        <button class="close-surprise" id="close-surprise">Cerrar</button>
+    </div>
+
+    <script>
+        // Fechas importantes - ahora solo 5 segundos desde que se carga la página
+        const unlockDate = new Date().getTime() + 5000; // 5 segundos desde ahora
+        
+        // Elementos del DOM
+        const mainCountdown = document.getElementById('main-countdown');
+        const chestCountdown = document.getElementById('chest-countdown');
+        const letter = document.getElementById('letter');
+        const letterLock = document.getElementById('letter-lock');
+        const chest = document.getElementById('chest');
+        const chestMessage = document.getElementById('chest-message');
+        const sorpresaLink = document.getElementById('sorpresa-link');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const historyToggle = document.getElementById('history-toggle');
+        const historyModal = document.getElementById('history-modal');
+        const closeHistory = document.getElementById('close-history');
+        const mainContainer = document.getElementById('main-container');
+        const surpriseModal = document.getElementById('surprise-modal');
+        const closeSurprise = document.getElementById('close-surprise');
+        const moneyBg = document.getElementById('money-bg');
+
+        // Crear símbolos de dólar y pistolas flotantes en 2D
+        function createFloatingIcons() {
+            const totalIcons = 30;
+            const effects = ['', 'glowing'];
+            
+            for (let i = 0; i < totalIcons; i++) {
+                const icon = document.createElement('div');
+                icon.classList.add('floating-icon');
+                
+                // Alternar entre dólar y pistola (70% dólares, 30% pistolas)
+                const isGun = Math.random() < 0.3;
+                if (isGun) {
+                    icon.classList.add('gun-icon');
+                    icon.innerHTML = '🔫'; // Emoji de pistola
+                } else {
+                    icon.classList.add('dollar-sign');
+                    icon.textContent = '$';
+                }
+                
+                // Aplicar efectos aleatorios
+                const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+                if (randomEffect) icon.classList.add(randomEffect);
+                
+                // Configuración de propiedades aleatorias
+                const posX = Math.random() * 100;
+                const posXEnd = (Math.random() - 0.5) * 20;
+                const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
+                const sizeEnd = size * (Math.random() * 0.4 + 0.8);
+                const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
+                const rotate = Math.random() * 30 - 15;
+                const rotateEnd = rotate + (Math.random() * 30 - 15);
+                
+                // Duración y delay de animación
+                const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
+                const delay = Math.random() * 15;
+                
+                // Aplicar propiedades CSS
+                icon.style.left = `${posX}%`;
+                icon.style.setProperty('--tx', posX/10 - 5);
+                icon.style.setProperty('--tx-end', posXEnd);
+                icon.style.setProperty('--rotate', rotate);
+                icon.style.setProperty('--rotate-end', rotateEnd);
+                icon.style.setProperty('--scale', size);
+                icon.style.setProperty('--scale-end', sizeEnd);
+                icon.style.setProperty('--opacity', opacity);
+                icon.style.animationDuration = `${duration}s`;
+                icon.style.animationDelay = `${delay}s`;
+                
+                moneyBg.appendChild(icon);
+            }
+        }
+
+        // Actualizar el cronómetro
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = unlockDate - now;
+            
+            if (distance <= 0) {
+                unlockContent();
+                return;
+            }
+
+            // Cálculos de tiempo
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Formatear con ceros a la izquierda
+            const format = (num) => num < 10 ? `0${num}` : num;
+
+            // Mostrar el resultado
+            mainCountdown.innerHTML = `${format(days)}d ${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
+            chestCountdown.innerHTML = `${format(days)}d ${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
+        }
+
+        // Desbloquear contenido
+        function unlockContent() {
+            // Desbloquear carta
+            letter.classList.add('unlocked');
+            letterLock.style.display = 'none';
+            
+            // Desbloquear cofre
+            chest.classList.add('unlocked');
+            chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
+            mainCountdown.textContent = "¡Disponible ahora!";
+            chestCountdown.textContent = "¡Ábrelo ahora!";
+            
+            // Añadir efecto de pulso
+            chest.classList.add('pulse');
+            
+            // Configurar evento para el cofre
+            chest.addEventListener('click', function() {
+                showModal(surpriseModal);
+            });
+        }
+
+        // Mostrar modal con animación
+        function showModal(modal) {
+            modal.style.display = 'flex';
+            mainContainer.classList.add('blur-content');
+            setTimeout(() => {
+                modal.classList.add('active');
+            }, 10);
+        }
+
+        // Ocultar modal con animación
+        function hideModal(modal) {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                mainContainer.classList.remove('blur-content');
+            }, 300);
+        }
+
+        // Prevenir clic en el enlace si está bloqueado
+        sorpresaLink.addEventListener('click', function(e) {
+            const now = new Date().getTime();
+            if (now < unlockDate) {
+                e.preventDefault();
+                alert("El contenido aún no está disponible. Por favor espera unos segundos.");
+            } else {
+                e.preventDefault();
+                showModal(surpriseModal);
+            }
+        });
+
+        // Cambiar tema
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('light-mode');
+            
+            if (document.body.classList.contains('light-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Mostrar/ocultar historial
+        historyToggle.addEventListener('click', function() {
+            showModal(historyModal);
+        });
+
+        closeHistory.addEventListener('click', function() {
+            hideModal(historyModal);
+        });
+
+        // Cerrar modal de sorpresa
+        closeSurprise.addEventListener('click', function() {
+            hideModal(surpriseModal);
+        });
+
+        // Cerrar modales al hacer clic fuera
+        window.addEventListener('click', function(e) {
+            if (e.target === historyModal) {
+                hideModal(historyModal);
+            }
+            if (e.target === surpriseModal) {
+                hideModal(surpriseModal);
+            }
+        });
+
+        // Cerrar modales con tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                if (historyModal.style.display === 'flex') {
+                    hideModal(historyModal);
+                }
+                if (surpriseModal.style.display === 'flex') {
+                    hideModal(surpriseModal);
+                }
+            }
+        });
+
+        // Actualizar el cronómetro cada segundo
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Crear símbolos flotantes al cargar
+        createFloatingIcons();
+    </script>
+</body>
+</html>
