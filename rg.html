@@ -866,6 +866,7 @@
     <script>
         // Fechas importantes (cambiado a 4 de diciembre)
         const unlockDate = new Date('December 4, 2025 00:00:00').getTime();
+        const surpriseDate = new Date('December 10, 2025 00:00:00').getTime(); // 6 días después
         
         // Elementos del DOM
         const mainCountdown = document.getElementById('main-countdown');
@@ -940,37 +941,59 @@
         // Actualizar el cronómetro
         function updateCountdown() {
             const now = new Date().getTime();
-            const distance = unlockDate - now;
+            const distanceToLetter = unlockDate - now;
+            const distanceToSurprise = surpriseDate - now;
             
-            if (distance <= 0) {
-                unlockContent();
-                return;
+            // Contador para la carta
+            if (distanceToLetter <= 0) {
+                unlockLetter();
+            } else {
+                // Cálculos de tiempo para la carta
+                const daysLetter = Math.floor(distanceToLetter / (1000 * 60 * 60 * 24));
+                const hoursLetter = Math.floor((distanceToLetter % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutesLetter = Math.floor((distanceToLetter % (1000 * 60 * 60)) / (1000 * 60));
+                const secondsLetter = Math.floor((distanceToLetter % (1000 * 60)) / 1000);
+
+                // Formatear con ceros a la izquierda
+                const format = (num) => num < 10 ? `0${num}` : num;
+
+                // Mostrar el resultado para la carta
+                mainCountdown.innerHTML = `${format(daysLetter)}d ${format(hoursLetter)}h ${format(minutesLetter)}m ${format(secondsLetter)}s`;
             }
+            
+            // Contador para la sorpresa
+            if (distanceToSurprise <= 0) {
+                unlockSurprise();
+            } else {
+                // Cálculos de tiempo para la sorpresa
+                const daysSurprise = Math.floor(distanceToSurprise / (1000 * 60 * 60 * 24));
+                const hoursSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutesSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60)) / (1000 * 60));
+                const secondsSurprise = Math.floor((distanceToSurprise % (1000 * 60)) / 1000);
 
-            // Cálculos de tiempo
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                // Formatear con ceros a la izquierda
+                const format = (num) => num < 10 ? `0${num}` : num;
 
-            // Formatear con ceros a la izquierda
-            const format = (num) => num < 10 ? `0${num}` : num;
-
-            // Mostrar el resultado
-            mainCountdown.innerHTML = `${format(days)}d ${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
-            chestCountdown.innerHTML = `${format(days)}d ${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
+                // Mostrar el resultado para la sorpresa
+                chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
+            }
         }
 
-        // Desbloquear contenido
-        function unlockContent() {
+        // Desbloquear carta
+        function unlockLetter() {
             // Desbloquear carta
             letter.classList.add('unlocked');
             letterLock.style.display = 'none';
             
+            // Actualizar mensaje
+            mainCountdown.textContent = "¡Disponible ahora!";
+        }
+
+        // Desbloquear sorpresa
+        function unlockSurprise() {
             // Desbloquear cofre
             chest.classList.add('unlocked');
             chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
-            mainCountdown.textContent = "¡Disponible ahora!";
             chestCountdown.textContent = "¡Ábrelo ahora!";
             
             // Añadir efecto de pulso
@@ -1003,9 +1026,9 @@
         // Prevenir clic en el enlace si está bloqueado
         sorpresaLink.addEventListener('click', function(e) {
             const now = new Date().getTime();
-            if (now < unlockDate) {
+            if (now < surpriseDate) {
                 e.preventDefault();
-                alert("El contenido aún no está disponible. Por favor espera hasta el 4 de Diciembre de 2025.");
+                alert("La sorpresa aún no está disponible. Por favor espera hasta el 10 de Diciembre de 2025.");
             } else {
                 e.preventDefault();
                 showModal(surpriseModal);
