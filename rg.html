@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carta Especial</title>
+    <!-- Google Fonts primero -->
+    <link href="https://fonts.googleapis.com/css2?family=Road+Rage&display=swap" rel="stylesheet">
     <style>
         /* Fuente local Road Rage */
         @font-face {
@@ -12,9 +14,6 @@
             font-weight: normal;
             font-style: normal;
         }
-        
-        /* Fuente Google Road Rage */
-        @import url('https://fonts.googleapis.com/css2?family=Road+Rage&display=swap');
         
         :root {
             /* Colores modo oscuro */
@@ -44,7 +43,7 @@
         }
         
         body {
-            font-family: 'Road Rage Local', cursive;
+            font-family: 'Road Rage', 'Road Rage Local', cursive;
             background: var(--bg-dark);
             min-height: 100vh;
             margin: 0;
@@ -58,8 +57,16 @@
             overflow-x: hidden;
         }
 
-        /* Aplicar fuente Google Road Rage a contadores, carta e historial */
-        .timer, .letter, .history-modal {
+        /* Asegurar que estos elementos usen Road Rage */
+        .timer, 
+        .letter, 
+        .letter p, 
+        .letter h1, 
+        .letter .letter-date,
+        .history-modal,
+        .history-modal .timeline-content,
+        .history-modal .timeline-date,
+        .chest-message {
             font-family: 'Road Rage', cursive;
         }
 
