@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reproductor de Música</title>
+    <title>Minijuego para Desbloquear Reproductor</title>
     <style>
         * {
             margin: 0;
@@ -18,8 +18,46 @@
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
         }
 
+        /* Estilos del juego */
+        .game-container {
+            text-align: center;
+            color: white;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-display {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .target {
+            width: 60px;
+            height: 60px;
+            background: #ff4757;
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.7);
+            transition: transform 0.1s;
+        }
+
+        .target:hover {
+            transform: scale(1.1);
+        }
+
+        .target:active {
+            transform: scale(0.9);
+        }
+
+        /* Estilos del reproductor (oculto inicialmente) */
         .player {
             width: 350px;
             background: rgba(255, 255, 255, 0.15);
@@ -29,13 +67,7 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
             text-align: center;
             color: white;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .player:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            display: none; /* Oculto al inicio */
         }
 
         .album-art {
@@ -46,38 +78,12 @@
             overflow: hidden;
             border: 5px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: rotate 20s linear infinite;
-            animation-play-state: paused;
-        }
-
-        .player.playing .album-art {
-            animation-play-state: running;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .album-art img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-
-        .song-info {
-            margin-bottom: 25px;
-        }
-
-        .song-info h2 {
-            font-size: 22px;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .song-info p {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.7);
         }
 
         .progress-container {
@@ -97,194 +103,131 @@
             transition: width 0.1s linear;
         }
 
-        .time-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 25px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
-
         .controls button {
             background: none;
             border: none;
             color: white;
             font-size: 20px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .controls button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-
-        .controls button:active {
-            transform: scale(0.95);
-        }
-
-        .controls .play-btn {
-            background: white;
-            color: #764ba2;
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
-        }
-
-        .controls .play-btn:hover {
-            background: rgba(255, 255, 255, 0.9);
+            margin: 0 10px;
         }
     </style>
 </head>
 <body>
+    <!-- Contenedor del juego -->
+    <div class="game-container">
+        <h1 class="game-title">¡Atrapa los Objetivos!</h1>
+        <p class="score-display">Puntuación: <span id="score">0</span> / 10</p>
+    </div>
+
+    <!-- Reproductor de música (oculto al inicio) -->
     <div class="player">
         <div class="album-art">
             <img src="https://i.imgur.com/7QqRj4T.jpg" alt="Album Art">
         </div>
         <div class="song-info">
-            <h2>Canción de Ejemplo</h2>
-            <p>Artista Desconocido</p>
+            <h2>Canción Desbloqueada</h2>
+            <p>Artista</p>
         </div>
         <div class="progress-container">
             <div class="progress"></div>
         </div>
-        <div class="time-info">
-            <span class="current-time">0:00</span>
-            <span class="duration">3:45</span>
-        </div>
         <div class="controls">
-            <button class="prev-btn">⏮</button>
-            <button class="play-btn">▶</button>
-            <button class="next-btn">⏭</button>
+            <button id="play-btn">▶</button>
         </div>
     </div>
 
-    <audio id="audio">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
     <script>
+        // Variables del juego
+        let score = 0;
+        const scoreDisplay = document.getElementById('score');
+        const gameContainer = document.querySelector('.game-container');
         const player = document.querySelector('.player');
         const audio = document.getElementById('audio');
-        const albumArt = document.querySelector('.album-art');
-        const progressContainer = document.querySelector('.progress-container');
-        const progress = document.querySelector('.progress');
-        const currentTimeEl = document.querySelector('.current-time');
-        const durationEl = document.querySelector('.duration');
-        const playBtn = document.querySelector('.play-btn');
-        const prevBtn = document.querySelector('.prev-btn');
-        const nextBtn = document.querySelector('.next-btn');
-        const songTitle = document.querySelector('.song-info h2');
-        const artistName = document.querySelector('.song-info p');
+        const playBtn = document.getElementById('play-btn');
+        let isPlaying = false;
 
-        // Lista de canciones (puedes agregar más)
-        const songs = [
-            {
-                title: "Canción 1",
-                artist: "Artista 1",
-                cover: "https://i.imgur.com/7QqRj4T.jpg",
-                audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-            },
-            {
-                title: "Canción 2",
-                artist: "Artista 2",
-                cover: "https://i.imgur.com/5q6vWXK.jpg",
-                audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-            }
-        ];
-
-        let currentSongIndex = 0;
-
-        // Cargar canción
-        function loadSong(song) {
-            songTitle.textContent = song.title;
-            artistName.textContent = song.artist;
-            albumArt.querySelector('img').src = song.cover;
-            audio.src = song.audio;
-        }
-
-        // Reproducir canción
-        function playSong() {
-            player.classList.add('playing');
-            playBtn.innerHTML = '⏸';
-            audio.play();
-        }
-
-        // Pausar canción
-        function pauseSong() {
-            player.classList.remove('playing');
-            playBtn.innerHTML = '▶';
-            audio.pause();
-        }
-
-        // Cambiar canción
-        function changeSong(direction) {
-            currentSongIndex = (currentSongIndex + direction + songs.length) % songs.length;
-            loadSong(songs[currentSongIndex]);
-            playSong();
-        }
-
-        // Actualizar barra de progreso
-        function updateProgress(e) {
-            const { duration, currentTime } = e.srcElement;
-            const progressPercent = (currentTime / duration) * 100;
-            progress.style.width = `${progressPercent}%`;
+        // Función para crear un objetivo
+        function createTarget() {
+            const target = document.createElement('div');
+            target.classList.add('target');
             
-            // Formatear tiempo
-            const durationMinutes = Math.floor(duration / 60);
-            let durationSeconds = Math.floor(duration % 60);
-            if (durationSeconds < 10) durationSeconds = `0${durationSeconds}`;
+            // Posición aleatoria
+            const x = Math.random() * (window.innerWidth - 60);
+            const y = Math.random() * (window.innerHeight - 60);
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
             
-            // Evitar NaN
-            if (durationSeconds) {
-                durationEl.textContent = `${durationMinutes}:${durationSeconds}`;
-            }
+            // Tiempo de vida aleatorio (1-2 segundos)
+            const lifespan = 1000 + Math.random() * 1000;
             
-            const currentMinutes = Math.floor(currentTime / 60);
-            let currentSeconds = Math.floor(currentTime % 60);
-            if (currentSeconds < 10) currentSeconds = `0${currentSeconds}`;
-            currentTimeEl.textContent = `${currentMinutes}:${currentSeconds}`;
+            target.addEventListener('click', () => {
+                // Aumentar puntuación
+                score++;
+                scoreDisplay.textContent = score;
+                
+                // Efecto visual al hacer clic
+                target.style.transform = 'scale(1.3)';
+                target.style.opacity = '0';
+                setTimeout(() => target.remove(), 200);
+                
+                // Verificar si ganó
+                if (score >= 10) {
+                    unlockPlayer();
+                }
+            });
+            
+            // Agregar al juego
+            gameContainer.appendChild(target);
+            
+            // Eliminar después de un tiempo
+            setTimeout(() => {
+                if (target.parentNode) {
+                    target.style.opacity = '0';
+                    setTimeout(() => target.remove(), 300);
+                }
+            }, lifespan);
         }
 
-        // Establecer progreso al hacer clic
-        function setProgress(e) {
-            const width = this.clientWidth;
-            const clickX = e.offsetX;
-            const duration = audio.duration;
-            audio.currentTime = (clickX / width) * duration;
+        // Función para desbloquear el reproductor
+        function unlockPlayer() {
+            gameContainer.style.display = 'none';
+            player.style.display = 'block';
+            
+            // Mostrar mensaje de felicitación
+            const songInfo = document.querySelector('.song-info h2');
+            songInfo.textContent = '¡Felicidades! Canción desbloqueada';
         }
 
-        // Event listeners
+        // Control del reproductor
         playBtn.addEventListener('click', () => {
-            const isPlaying = player.classList.contains('playing');
             if (isPlaying) {
-                pauseSong();
+                audio.pause();
+                playBtn.textContent = '▶';
             } else {
-                playSong();
+                audio.play();
+                playBtn.textContent = '⏸';
             }
+            isPlaying = !isPlaying;
         });
 
-        prevBtn.addEventListener('click', () => changeSong(-1));
-        nextBtn.addEventListener('click', () => changeSong(1));
-        audio.addEventListener('timeupdate', updateProgress);
-        audio.addEventListener('ended', () => changeSong(1));
-        progressContainer.addEventListener('click', setProgress);
+        // Barra de progreso
+        audio.addEventListener('timeupdate', () => {
+            const progress = document.querySelector('.progress');
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${percent}%`;
+        });
 
-        // Cargar primera canción
-        loadSong(songs[currentSongIndex]);
+        // Iniciar juego
+        function startGame() {
+            // Crear un objetivo cada 0.8 segundos
+            setInterval(createTarget, 800);
+        }
+
+        // Iniciar el juego cuando la página cargue
+        window.onload = startGame;
     </script>
 </body>
 </html>
