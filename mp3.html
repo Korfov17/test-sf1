@@ -93,6 +93,7 @@
             height: 200px;
             margin: 0 auto 20px;
             overflow: hidden;
+            border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
 
@@ -103,7 +104,7 @@
         }
 
         .song-info {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .song-info h2 {
@@ -116,11 +117,35 @@
             opacity: 0.8;
         }
 
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background: white;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
         .controls {
             display: flex;
             justify-content: center;
             gap: 20px;
-            margin-top: 20px;
         }
 
         .controls button {
@@ -176,6 +201,15 @@
             <p>Queen</p>
         </div>
         
+        <div class="progress-container" id="progressContainer">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="time-info">
+            <span id="currentTime">0:00</span>
+            <span id="duration">4:15</span>
+        </div>
+        
         <div class="controls">
             <button class="prev-btn">⏮</button>
             <button class="play-btn">▶</button>
@@ -194,6 +228,10 @@
         const message = document.getElementById('message');
         const audio = document.getElementById('audio');
         const playBtn = document.querySelector('.play-btn');
+        const progress = document.getElementById('progress');
+        const progressContainer = document.getElementById('progressContainer');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
         
         // Código secreto
         const SECRET_CODE = "cojeando13";
@@ -231,6 +269,33 @@
         // Control del reproductor
         let isPlaying = false;
 
+        // Formatear tiempo (segundos a MM:SS)
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Actualizar barra de progreso
+        function updateProgress() {
+            progress.style.width = (audio.currentTime / audio.duration) * 100 + '%';
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        }
+
+        // Establecer progreso al hacer clic
+        function setProgress(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audio.duration;
+            audio.currentTime = (clickX / width) * duration;
+        }
+
+        // Actualizar duración cuando el metadata esté cargado
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+
+        // Event listeners
         playBtn.addEventListener('click', () => {
             if (isPlaying) {
                 audio.pause();
@@ -241,6 +306,13 @@
             }
             isPlaying = !isPlaying;
         });
+
+        audio.addEventListener('timeupdate', updateProgress);
+        audio.addEventListener('ended', () => {
+            isPlaying = false;
+            playBtn.textContent = '▶';
+        });
+        progressContainer.addEventListener('click', setProgress);
     </script>
 </body>
 </html>
