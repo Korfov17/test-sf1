@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carta Especial</title>
-    <!-- Google Fonts primero -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Road+Rage&display=swap" rel="stylesheet">
     <style>
-        /* Fuente local Road Rage */
         @font-face {
             font-family: 'Road Rage Local';
             src: url('Road_Rage.otf') format('opentype');
@@ -16,7 +16,6 @@
         }
         
         :root {
-            /* Colores modo oscuro */
             --primary-green: #1db954;
             --dark-green: #15803d;
             --light-green: #84cc16;
@@ -27,8 +26,6 @@
             --text-muted: #94a3b8;
             --card-dark: #1e1e1e;
             --card-darker: #1a1a1a;
-            
-            /* Colores modo claro */
             --primary-green-light: #1b5e20;
             --light-green-light: #4caf50;
             --bg-light: #f8fafc;
@@ -38,8 +35,7 @@
             --text-muted-light: #64748b;
             --card-light: #ffffff;
             --card-lighter: #f1f5f9;
-            
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         body {
@@ -79,7 +75,6 @@
             color: var(--text-dark);
         }
 
-        /* Fondo de símbolos de dólar y pistolas en 2D */
         .money-bg {
             position: fixed;
             top: 0;
@@ -96,6 +91,7 @@
             animation: floatUp linear infinite;
             user-select: none;
             will-change: transform, opacity;
+            backface-visibility: hidden;
         }
 
         .dollar-sign {
@@ -152,7 +148,6 @@
             }
         }
 
-        /* Efecto de brillo intermitente */
         .floating-icon.glowing {
             animation: floatUp, glowPulse 3s ease-in-out infinite;
         }
@@ -260,6 +255,7 @@
             border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
             font-size: 1.2rem;
+            will-change: transform, opacity;
         }
 
         .light-mode .letter {
@@ -382,6 +378,7 @@
             pointer-events: none;
             filter: blur(3px);
             transition: var(--transition);
+            will-change: transform;
         }
 
         .chest.unlocked {
@@ -864,52 +861,55 @@
     </div>
 
     <script>
-        // Fechas importantes (cambiado a 4 de diciembre)
         const unlockDate = new Date('December 4, 2025 00:00:00').getTime();
-        const surpriseDate = new Date('December 10, 2025 00:00:00').getTime(); // 6 días después
+        const surpriseDate = new Date('December 10, 2025 00:00:00').getTime();
         
-        // Elementos del DOM
-        const mainCountdown = document.getElementById('main-countdown');
-        const chestCountdown = document.getElementById('chest-countdown');
-        const letter = document.getElementById('letter');
-        const letterLock = document.getElementById('letter-lock');
-        const chest = document.getElementById('chest');
-        const chestMessage = document.getElementById('chest-message');
-        const sorpresaLink = document.getElementById('sorpresa-link');
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeIcon = themeToggle.querySelector('i');
-        const historyToggle = document.getElementById('history-toggle');
-        const historyModal = document.getElementById('history-modal');
-        const closeHistory = document.getElementById('close-history');
-        const mainContainer = document.getElementById('main-container');
-        const surpriseModal = document.getElementById('surprise-modal');
-        const closeSurprise = document.getElementById('close-surprise');
-        const moneyBg = document.getElementById('money-bg');
+        const domElements = {
+            body: document.body,
+            mainCountdown: document.getElementById('main-countdown'),
+            chestCountdown: document.getElementById('chest-countdown'),
+            letter: document.getElementById('letter'),
+            letterLock: document.getElementById('letter-lock'),
+            chest: document.getElementById('chest'),
+            chestMessage: document.getElementById('chest-message'),
+            sorpresaLink: document.getElementById('sorpresa-link'),
+            themeToggle: document.getElementById('theme-toggle'),
+            themeIcon: document.querySelector('#theme-toggle i'),
+            historyToggle: document.getElementById('history-toggle'),
+            historyModal: document.getElementById('history-modal'),
+            closeHistory: document.getElementById('close-history'),
+            mainContainer: document.getElementById('main-container'),
+            surpriseModal: document.getElementById('surprise-modal'),
+            closeSurprise: document.getElementById('close-surprise'),
+            moneyBg: document.getElementById('money-bg'),
+            floatingIcons: []
+        };
 
-        // Crear símbolos de dólar y pistolas flotantes en 2D
         function createFloatingIcons() {
-            const totalIcons = 30;
+            const totalIcons = 25;
             const effects = ['', 'glowing'];
+            
+            domElements.moneyBg.innerHTML = '';
+            domElements.floatingIcons = [];
             
             for (let i = 0; i < totalIcons; i++) {
                 const icon = document.createElement('div');
                 icon.classList.add('floating-icon');
+                icon.style.backfaceVisibility = 'hidden';
+                icon.style.willChange = 'transform, opacity';
                 
-                // Alternar entre dólar y pistola (70% dólares, 30% pistolas)
                 const isGun = Math.random() < 0.3;
                 if (isGun) {
                     icon.classList.add('gun-icon');
-                    icon.innerHTML = '🔫'; // Emoji de pistola
+                    icon.innerHTML = '🔫';
                 } else {
                     icon.classList.add('dollar-sign');
                     icon.textContent = '$';
                 }
                 
-                // Aplicar efectos aleatorios
                 const randomEffect = effects[Math.floor(Math.random() * effects.length)];
                 if (randomEffect) icon.classList.add(randomEffect);
                 
-                // Configuración de propiedades aleatorias
                 const posX = Math.random() * 100;
                 const posXEnd = (Math.random() - 0.5) * 20;
                 const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
@@ -917,12 +917,9 @@
                 const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
                 const rotate = Math.random() * 30 - 15;
                 const rotateEnd = rotate + (Math.random() * 30 - 15);
-                
-                // Duración y delay de animación
                 const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
                 const delay = Math.random() * 15;
                 
-                // Aplicar propiedades CSS
                 icon.style.left = `${posX}%`;
                 icon.style.setProperty('--tx', posX/10 - 5);
                 icon.style.setProperty('--tx-end', posXEnd);
@@ -934,161 +931,144 @@
                 icon.style.animationDuration = `${duration}s`;
                 icon.style.animationDelay = `${delay}s`;
                 
-                moneyBg.appendChild(icon);
+                domElements.moneyBg.appendChild(icon);
+                domElements.floatingIcons.push(icon);
             }
         }
 
-        // Actualizar el cronómetro
         function updateCountdown() {
-            const now = new Date().getTime();
+            const now = Date.now();
             const distanceToLetter = unlockDate - now;
             const distanceToSurprise = surpriseDate - now;
             
-            // Contador para la carta
+            if (distanceToLetter < 60000) {
+                requestAnimationFrame(updateCountdown);
+            } else {
+                setTimeout(updateCountdown, 1000);
+            }
+            
             if (distanceToLetter <= 0) {
                 unlockLetter();
             } else {
-                // Cálculos de tiempo para la carta
                 const daysLetter = Math.floor(distanceToLetter / (1000 * 60 * 60 * 24));
                 const hoursLetter = Math.floor((distanceToLetter % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutesLetter = Math.floor((distanceToLetter % (1000 * 60 * 60)) / (1000 * 60));
                 const secondsLetter = Math.floor((distanceToLetter % (1000 * 60)) / 1000);
 
-                // Formatear con ceros a la izquierda
                 const format = (num) => num < 10 ? `0${num}` : num;
 
-                // Mostrar el resultado para la carta
-                mainCountdown.innerHTML = `${format(daysLetter)}d ${format(hoursLetter)}h ${format(minutesLetter)}m ${format(secondsLetter)}s`;
+                domElements.mainCountdown.innerHTML = `${format(daysLetter)}d ${format(hoursLetter)}h ${format(minutesLetter)}m ${format(secondsLetter)}s`;
             }
             
-            // Contador para la sorpresa
             if (distanceToSurprise <= 0) {
                 unlockSurprise();
             } else {
-                // Cálculos de tiempo para la sorpresa
                 const daysSurprise = Math.floor(distanceToSurprise / (1000 * 60 * 60 * 24));
                 const hoursSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutesSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60)) / (1000 * 60));
                 const secondsSurprise = Math.floor((distanceToSurprise % (1000 * 60)) / 1000);
 
-                // Formatear con ceros a la izquierda
                 const format = (num) => num < 10 ? `0${num}` : num;
 
-                // Mostrar el resultado para la sorpresa
-                chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
+                domElements.chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
             }
         }
 
-        // Desbloquear carta
         function unlockLetter() {
-            // Desbloquear carta
-            letter.classList.add('unlocked');
-            letterLock.style.display = 'none';
-            
-            // Actualizar mensaje
-            mainCountdown.textContent = "¡Disponible ahora!";
+            domElements.letter.classList.add('unlocked');
+            domElements.letterLock.style.display = 'none';
+            domElements.mainCountdown.textContent = "¡Disponible ahora!";
         }
 
-        // Desbloquear sorpresa
         function unlockSurprise() {
-            // Desbloquear cofre
-            chest.classList.add('unlocked');
-            chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
-            chestCountdown.textContent = "¡Ábrelo ahora!";
+            domElements.chest.classList.add('unlocked');
+            domElements.chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
+            domElements.chestCountdown.textContent = "¡Ábrelo ahora!";
+            domElements.chest.classList.add('pulse');
             
-            // Añadir efecto de pulso
-            chest.classList.add('pulse');
-            
-            // Configurar evento para el cofre
-            chest.addEventListener('click', function() {
-                showModal(surpriseModal);
+            domElements.chest.addEventListener('click', function() {
+                showModal(domElements.surpriseModal);
             });
         }
 
-        // Mostrar modal con animación
+        function toggleBodyScroll(enable) {
+            domElements.body.style.overflow = enable ? '' : 'hidden';
+        }
+
         function showModal(modal) {
+            toggleBodyScroll(false);
             modal.style.display = 'flex';
-            mainContainer.classList.add('blur-content');
+            domElements.mainContainer.classList.add('blur-content');
             setTimeout(() => {
                 modal.classList.add('active');
             }, 10);
         }
 
-        // Ocultar modal con animación
         function hideModal(modal) {
+            toggleBodyScroll(true);
             modal.classList.remove('active');
             setTimeout(() => {
                 modal.style.display = 'none';
-                mainContainer.classList.remove('blur-content');
+                domElements.mainContainer.classList.remove('blur-content');
             }, 300);
         }
 
-        // Prevenir clic en el enlace si está bloqueado
-        sorpresaLink.addEventListener('click', function(e) {
-            const now = new Date().getTime();
+        domElements.sorpresaLink.addEventListener('click', function(e) {
+            const now = Date.now();
             if (now < surpriseDate) {
                 e.preventDefault();
                 alert("La sorpresa aún no está disponible. Por favor espera hasta el 10 de Diciembre de 2025.");
             } else {
                 e.preventDefault();
-                showModal(surpriseModal);
+                showModal(domElements.surpriseModal);
             }
         });
 
-        // Cambiar tema
-        themeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('light-mode');
+        domElements.themeToggle.addEventListener('click', function() {
+            domElements.body.classList.toggle('light-mode');
             
-            if (document.body.classList.contains('light-mode')) {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
+            if (domElements.body.classList.contains('light-mode')) {
+                domElements.themeIcon.classList.remove('fa-moon');
+                domElements.themeIcon.classList.add('fa-sun');
             } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+                domElements.themeIcon.classList.remove('fa-sun');
+                domElements.themeIcon.classList.add('fa-moon');
             }
         });
 
-        // Mostrar/ocultar historial
-        historyToggle.addEventListener('click', function() {
-            showModal(historyModal);
+        domElements.historyToggle.addEventListener('click', function() {
+            showModal(domElements.historyModal);
         });
 
-        closeHistory.addEventListener('click', function() {
-            hideModal(historyModal);
+        domElements.closeHistory.addEventListener('click', function() {
+            hideModal(domElements.historyModal);
         });
 
-        // Cerrar modal de sorpresa
-        closeSurprise.addEventListener('click', function() {
-            hideModal(surpriseModal);
+        domElements.closeSurprise.addEventListener('click', function() {
+            hideModal(domElements.surpriseModal);
         });
 
-        // Cerrar modales al hacer clic fuera
         window.addEventListener('click', function(e) {
-            if (e.target === historyModal) {
-                hideModal(historyModal);
+            if (e.target === domElements.historyModal) {
+                hideModal(domElements.historyModal);
             }
-            if (e.target === surpriseModal) {
-                hideModal(surpriseModal);
+            if (e.target === domElements.surpriseModal) {
+                hideModal(domElements.surpriseModal);
             }
         });
 
-        // Cerrar modales con tecla ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                if (historyModal.style.display === 'flex') {
-                    hideModal(historyModal);
+                if (domElements.historyModal.style.display === 'flex') {
+                    hideModal(domElements.historyModal);
                 }
-                if (surpriseModal.style.display === 'flex') {
-                    hideModal(surpriseModal);
+                if (domElements.surpriseModal.style.display === 'flex') {
+                    hideModal(domElements.surpriseModal);
                 }
             }
         });
 
-        // Actualizar el cronómetro cada segundo
         updateCountdown();
-        setInterval(updateCountdown, 1000);
-
-        // Crear símbolos flotantes al cargar
         createFloatingIcons();
     </script>
 </body>
