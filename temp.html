@@ -88,7 +88,7 @@
         .floating-icon {
             position: absolute;
             opacity: 0;
-            animation: floatUp linear forwards;
+            animation: floatUp linear infinite;
             user-select: none;
             will-change: transform, opacity;
             backface-visibility: hidden;
@@ -132,15 +132,15 @@
                     scale(var(--scale, 1));
                 opacity: 0;
             }
-            10% {
+            20% {
                 opacity: var(--opacity);
             }
-            90% {
+            80% {
                 opacity: var(--opacity);
             }
             100% {
                 transform: 
-                    translateY(-150px) 
+                    translateY(-100px) 
                     translateX(calc(var(--tx-end) * 1vw))
                     rotate(calc(var(--rotate-end) * 1deg))
                     scale(var(--scale-end, 1));
@@ -512,129 +512,6 @@
             color: var(--primary-green-light);
         }
 
-        .audio-toggle {
-            position: fixed;
-            bottom: 30px;
-            right: 90px;
-            width: 50px;
-            height: 50px;
-            background: var(--card-dark);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(84, 204, 22, 0.1);
-            z-index: 100;
-            transition: var(--transition);
-            display: none;
-        }
-
-        .light-mode .audio-toggle {
-            background: var(--card-light);
-            border: 1px solid rgba(76, 175, 80, 0.2);
-        }
-
-        .audio-toggle:hover {
-            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
-        }
-
-        .audio-toggle i {
-            color: var(--primary-green);
-            font-size: 1.4rem;
-            transition: var(--transition);
-        }
-
-        .light-mode .audio-toggle i {
-            color: var(--primary-green-light);
-        }
-
-        .audio-player-container {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 300px;
-            background: var(--card-dark);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(84, 204, 22, 0.1);
-            z-index: 100;
-            transition: var(--transition);
-            display: none;
-        }
-
-        .light-mode .audio-player-container {
-            background: var(--card-light);
-            border: 1px solid rgba(76, 175, 80, 0.2);
-        }
-
-        .audio-player-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--primary-green);
-            text-align: center;
-        }
-
-        .audio-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-        }
-
-        .audio-controls button {
-            background: var(--primary-green);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: var(--transition);
-            gap: 5px;
-        }
-
-        .audio-controls button:hover {
-            transform: scale(1.05);
-        }
-
-        .light-mode .audio-controls button {
-            background: var(--primary-green-light);
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 6px;
-            background: rgba(84, 204, 22, 0.2);
-            border-radius: 3px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: var(--primary-green);
-            border-radius: 3px;
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        .light-mode .progress-bar {
-            background: var(--primary-green-light);
-        }
-
-        .time-display {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
         .history-modal {
             position: fixed;
             top: 50%;
@@ -892,7 +769,7 @@
     <div class="container" id="main-container">
         <div class="unlock-countdown">
             <h3>Se desbloqueará en:</h3>
-            <div class="timer" id="main-countdown">00d 00h 00m 00s</div>
+            <div class="timer" id="main-countdown">00d 00h 00m 05s</div>
         </div>
         
         <div class="letter" id="letter">
@@ -928,7 +805,7 @@
                 </div>
             </div>
             
-            <div class="timer" id="chest-countdown">00d 00h 00m 00s</div>
+            <div class="timer" id="chest-countdown">00d 00h 00m 05s</div>
         </div>
     </div>
 
@@ -938,26 +815,6 @@
 
     <div class="history-toggle" id="history-toggle">
         <i class="fas fa-history"></i>
-    </div>
-
-    <div class="audio-toggle" id="audio-toggle">
-        <i class="fas fa-microphone"></i>
-    </div>
-
-    <div class="audio-player-container" id="audio-player">
-        <div class="audio-player-title">rato.mp3</div>
-        <audio id="audio-element" src="holi/rato.mp3"></audio>
-        <div class="progress-container" id="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div class="time-display">
-            <span id="current-time">0:00</span>
-            <span id="duration">0:00</span>
-        </div>
-        <div class="audio-controls">
-            <button id="play-pause-btn"><i class="fas fa-play"></i> Reproducir</button>
-            <button id="close-player-btn"><i class="fas fa-times"></i> Cerrar</button>
-        </div>
     </div>
 
     <div class="history-modal" id="history-modal">
@@ -1004,9 +861,9 @@
     </div>
 
     <script>
-        // Cambios realizados aquí - ahora son 5 y 10 segundos respectivamente
-        const unlockDate = new Date().getTime() + 5000; // 5 segundos desde ahora
-        const surpriseDate = new Date().getTime() + 10000; // 10 segundos desde ahora
+        // Cambiado a 5 segundos desde que se carga la página
+        const unlockDate = Date.now() + 5000; // 5 segundos para la carta
+        const surpriseDate = Date.now() + 5000; // 5 segundos para la sorpresa
         
         const domElements = {
             body: document.body,
@@ -1026,83 +883,58 @@
             surpriseModal: document.getElementById('surprise-modal'),
             closeSurprise: document.getElementById('close-surprise'),
             moneyBg: document.getElementById('money-bg'),
-            floatingIcons: [],
-            audioToggle: document.getElementById('audio-toggle'),
-            audioPlayer: document.getElementById('audio-player'),
-            audioElement: document.getElementById('audio-element'),
-            playPauseBtn: document.getElementById('play-pause-btn'),
-            closePlayerBtn: document.getElementById('close-player-btn'),
-            progressBar: document.getElementById('progress-bar'),
-            progressContainer: document.getElementById('progress-container'),
-            currentTimeDisplay: document.getElementById('current-time'),
-            durationDisplay: document.getElementById('duration')
+            floatingIcons: []
         };
 
-        function createFloatingIcon() {
-            const icon = document.createElement('div');
-            icon.classList.add('floating-icon');
-            icon.style.backfaceVisibility = 'hidden';
-            icon.style.willChange = 'transform, opacity';
-            
-            const isGun = Math.random() < 0.3;
-            if (isGun) {
-                icon.classList.add('gun-icon');
-                icon.innerHTML = '🔫';
-            } else {
-                icon.classList.add('dollar-sign');
-                icon.textContent = '$';
-            }
-            
+        function createFloatingIcons() {
+            const totalIcons = 25;
             const effects = ['', 'glowing'];
-            const randomEffect = effects[Math.floor(Math.random() * effects.length)];
-            if (randomEffect) icon.classList.add(randomEffect);
             
-            const posX = Math.random() * 100;
-            const posXEnd = (Math.random() - 0.5) * 20;
-            const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
-            const sizeEnd = size * (Math.random() * 0.4 + 0.8);
-            const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
-            const rotate = Math.random() * 30 - 15;
-            const rotateEnd = rotate + (Math.random() * 30 - 15);
-            const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
-            const delay = Math.random() * 2;
+            domElements.moneyBg.innerHTML = '';
+            domElements.floatingIcons = [];
             
-            icon.style.left = `${posX}%`;
-            icon.style.setProperty('--tx', posX/10 - 5);
-            icon.style.setProperty('--tx-end', posXEnd);
-            icon.style.setProperty('--rotate', rotate);
-            icon.style.setProperty('--rotate-end', rotateEnd);
-            icon.style.setProperty('--scale', size);
-            icon.style.setProperty('--scale-end', sizeEnd);
-            icon.style.setProperty('--opacity', opacity);
-            icon.style.animationDuration = `${duration}s`;
-            icon.style.animationDelay = `${delay}s`;
-            
-            domElements.moneyBg.appendChild(icon);
-            
-            setTimeout(() => {
-                icon.remove();
-                domElements.floatingIcons = domElements.floatingIcons.filter(i => i !== icon);
-            }, duration * 1000);
-            
-            domElements.floatingIcons.push(icon);
-            return icon;
-        }
-
-        function manageFloatingIcons() {
-            if (domElements.floatingIcons.length < 15) {
-                createFloatingIcon();
+            for (let i = 0; i < totalIcons; i++) {
+                const icon = document.createElement('div');
+                icon.classList.add('floating-icon');
+                icon.style.backfaceVisibility = 'hidden';
+                icon.style.willChange = 'transform, opacity';
+                
+                const isGun = Math.random() < 0.3;
+                if (isGun) {
+                    icon.classList.add('gun-icon');
+                    icon.innerHTML = '🔫';
+                } else {
+                    icon.classList.add('dollar-sign');
+                    icon.textContent = '$';
+                }
+                
+                const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+                if (randomEffect) icon.classList.add(randomEffect);
+                
+                const posX = Math.random() * 100;
+                const posXEnd = (Math.random() - 0.5) * 20;
+                const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
+                const sizeEnd = size * (Math.random() * 0.4 + 0.8);
+                const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
+                const rotate = Math.random() * 30 - 15;
+                const rotateEnd = rotate + (Math.random() * 30 - 15);
+                const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
+                const delay = Math.random() * 15;
+                
+                icon.style.left = `${posX}%`;
+                icon.style.setProperty('--tx', posX/10 - 5);
+                icon.style.setProperty('--tx-end', posXEnd);
+                icon.style.setProperty('--rotate', rotate);
+                icon.style.setProperty('--rotate-end', rotateEnd);
+                icon.style.setProperty('--scale', size);
+                icon.style.setProperty('--scale-end', sizeEnd);
+                icon.style.setProperty('--opacity', opacity);
+                icon.style.animationDuration = `${duration}s`;
+                icon.style.animationDelay = `${delay}s`;
+                
+                domElements.moneyBg.appendChild(icon);
+                domElements.floatingIcons.push(icon);
             }
-            
-            domElements.floatingIcons = domElements.floatingIcons.filter(icon => document.body.contains(icon));
-        }
-
-        function initFloatingIcons() {
-            for (let i = 0; i < 10; i++) {
-                createFloatingIcon();
-            }
-            
-            setInterval(manageFloatingIcons, 1000);
         }
 
         function updateCountdown() {
@@ -1110,7 +942,8 @@
             const distanceToLetter = unlockDate - now;
             const distanceToSurprise = surpriseDate - now;
             
-            if (distanceToLetter < 60000) {
+            // Actualizar más frecuentemente cuando falte poco tiempo
+            if (distanceToLetter < 1000) {
                 requestAnimationFrame(updateCountdown);
             } else {
                 setTimeout(updateCountdown, 1000);
@@ -1147,9 +980,6 @@
             domElements.letter.classList.add('unlocked');
             domElements.letterLock.style.display = 'none';
             domElements.mainCountdown.textContent = "¡Disponible ahora!";
-            
-            // Mostrar el botón del reproductor cuando la carta se desbloquea
-            domElements.audioToggle.style.display = 'flex';
         }
 
         function unlockSurprise() {
@@ -1185,55 +1015,11 @@
             }, 300);
         }
 
-        function toggleAudioPlayer() {
-            domElements.audioPlayer.style.display = domElements.audioPlayer.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function updateProgressBar() {
-            const { currentTime, duration } = domElements.audioElement;
-            const progressPercent = (currentTime / duration) * 100;
-            domElements.progressBar.style.width = `${progressPercent}%`;
-            
-            domElements.currentTimeDisplay.textContent = formatTime(currentTime);
-            if (duration) {
-                domElements.durationDisplay.textContent = formatTime(duration);
-            }
-        }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        function setProgress(e) {
-            const width = this.clientWidth;
-            const clickX = e.offsetX;
-            const duration = domElements.audioElement.duration;
-            domElements.audioElement.currentTime = (clickX / width) * duration;
-        }
-
-        function togglePlay() {
-            if (domElements.audioElement.paused) {
-                domElements.audioElement.play();
-                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pausar';
-            } else {
-                domElements.audioElement.pause();
-                domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir';
-            }
-        }
-
-        function closePlayer() {
-            domElements.audioPlayer.style.display = 'none';
-            domElements.audioElement.pause();
-            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir';
-        }
-
         domElements.sorpresaLink.addEventListener('click', function(e) {
             const now = Date.now();
             if (now < surpriseDate) {
                 e.preventDefault();
-                alert("La sorpresa aún no está disponible. Por favor espera hasta el 10 de Diciembre de 2025.");
+                alert("La sorpresa estará disponible en unos segundos...");
             } else {
                 e.preventDefault();
                 showModal(domElements.surpriseModal);
@@ -1264,18 +1050,6 @@
             hideModal(domElements.surpriseModal);
         });
 
-        domElements.audioToggle.addEventListener('click', toggleAudioPlayer);
-        domElements.playPauseBtn.addEventListener('click', togglePlay);
-        domElements.closePlayerBtn.addEventListener('click', closePlayer);
-        domElements.progressContainer.addEventListener('click', setProgress);
-        domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
-        domElements.audioElement.addEventListener('ended', () => {
-            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir';
-        });
-        domElements.audioElement.addEventListener('loadedmetadata', () => {
-            domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
-        });
-
         window.addEventListener('click', function(e) {
             if (e.target === domElements.historyModal) {
                 hideModal(domElements.historyModal);
@@ -1293,21 +1067,12 @@
                 if (domElements.surpriseModal.style.display === 'flex') {
                     hideModal(domElements.surpriseModal);
                 }
-                if (domElements.audioPlayer.style.display === 'block') {
-                    closePlayer();
-                }
             }
         });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCountdown();
-            initFloatingIcons();
-            setInterval(updateCountdown, 1000);
-            
-            // Ocultar el reproductor y su botón inicialmente
-            domElements.audioPlayer.style.display = 'none';
-            domElements.audioToggle.style.display = 'none';
-        });
+        // Iniciar el contador
+        updateCountdown();
+        createFloatingIcons();
     </script>
 </body>
 </html>
