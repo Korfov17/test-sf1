@@ -550,6 +550,7 @@
             color: var(--primary-green-light);
         }
 
+        /* Estilos actualizados del reproductor de audio */
         .audio-player-container {
             position: fixed;
             bottom: 100px;
@@ -563,6 +564,7 @@
             z-index: 100;
             transition: var(--transition);
             display: none;
+            text-align: center;
         }
 
         .light-mode .audio-player-container {
@@ -571,39 +573,44 @@
         }
 
         .audio-player-title {
-            font-size: 1.2rem;
+            font-weight: bold;
             margin-bottom: 15px;
+            font-size: 1.3rem;
             color: var(--primary-green);
-            text-align: center;
+        }
+
+        .light-mode .audio-player-title {
+            color: var(--primary-green-light);
         }
 
         .audio-controls {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: center;
+            gap: 20px;
             margin-top: 15px;
         }
 
         .audio-controls button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: var(--primary-green);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             cursor: pointer;
             transition: var(--transition);
-            gap: 5px;
-        }
-
-        .audio-controls button:hover {
-            transform: scale(1.05);
         }
 
         .light-mode .audio-controls button {
             background: var(--primary-green-light);
+        }
+
+        .audio-controls button:hover {
+            transform: scale(1.1);
         }
 
         .progress-container {
@@ -611,7 +618,7 @@
             height: 6px;
             background: rgba(84, 204, 22, 0.2);
             border-radius: 3px;
-            margin-top: 10px;
+            margin: 10px auto;
             cursor: pointer;
         }
 
@@ -944,8 +951,9 @@
         <i class="fas fa-microphone"></i>
     </div>
 
+    <!-- Reproductor de audio actualizado -->
     <div class="audio-player-container" id="audio-player">
-        <div class="audio-player-title">rato.mp3</div>
+        <div class="audio-player-title"><strong>Canción Especial</strong></div>
         <audio id="audio-element" src="holi/rato.mp3"></audio>
         <div class="progress-container" id="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
@@ -955,8 +963,8 @@
             <span id="duration">0:00</span>
         </div>
         <div class="audio-controls">
-            <button id="play-pause-btn"><i class="fas fa-play"></i> Reproducir</button>
-            <button id="close-player-btn"><i class="fas fa-times"></i> Cerrar</button>
+            <button id="play-pause-btn"><i class="fas fa-play"></i></button>
+            <button id="close-player-btn"><i class="fas fa-times"></i></button>
         </div>
     </div>
 
@@ -1185,7 +1193,7 @@
         }
 
         function toggleAudioPlayer() {
-            domElements.audioPlayer.style.display = domElements.audioPlayer.style.display === 'block' ? 'none' : 'block';
+            domElements.audioPlayer.style.display = domElements.audioPlayer.style.display === 'none' ? 'block' : 'none';
         }
 
         function updateProgressBar() {
@@ -1215,17 +1223,17 @@
         function togglePlay() {
             if (domElements.audioElement.paused) {
                 domElements.audioElement.play();
-                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i> Pausar';
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             } else {
                 domElements.audioElement.pause();
-                domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir';
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             }
         }
 
         function closePlayer() {
             domElements.audioPlayer.style.display = 'none';
             domElements.audioElement.pause();
-            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir';
+            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
 
         domElements.sorpresaLink.addEventListener('click', function(e) {
@@ -1269,7 +1277,7 @@
         domElements.progressContainer.addEventListener('click', setProgress);
         domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
         domElements.audioElement.addEventListener('ended', () => {
-            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i> Reproducir';
+            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         });
         domElements.audioElement.addEventListener('loadedmetadata', () => {
             domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
