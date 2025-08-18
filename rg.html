@@ -756,6 +756,143 @@
         .pulse {
             animation: pulse 2s infinite;
         }
+
+        .audio-player-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 300px;
+            background: var(--card-dark);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+            display: none;
+        }
+
+        .light-mode .audio-player-container {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .audio-player-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary-green);
+            text-align: center;
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .audio-controls button {
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .audio-controls button:hover {
+            transform: scale(1.1);
+        }
+
+        .light-mode .audio-controls button {
+            background: var(--primary-green-light);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(84, 204, 22, 0.2);
+            border-radius: 3px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-green);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .light-mode .progress-bar {
+            background: var(--primary-green-light);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .audio-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 90px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .light-mode .audio-toggle {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .audio-toggle:hover {
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+        }
+
+        .audio-toggle i {
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .light-mode .audio-toggle i {
+            color: var(--primary-green-light);
+        }
+
+        .audio-visible .container,
+        .audio-visible .theme-toggle,
+        .audio-visible .history-toggle,
+        .audio-visible .audio-toggle {
+            filter: blur(5px);
+            pointer-events: none;
+        }
+
+        .audio-visible .top-bar,
+        .audio-visible .money-bg {
+            filter: none;
+            pointer-events: auto;
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -815,6 +952,26 @@
 
     <div class="history-toggle" id="history-toggle">
         <i class="fas fa-history"></i>
+    </div>
+
+    <div class="audio-toggle" id="audio-toggle">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <div class="audio-player-container" id="audio-player">
+        <div class="audio-player-title">rato.mp3</div>
+        <audio id="audio-element" src="holi/rato.mp3"></audio>
+        <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="time-display">
+            <span id="current-time">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+        <div class="audio-controls">
+            <button id="play-pause-btn"><i class="fas fa-play"></i></button>
+            <button id="mute-btn"><i class="fas fa-volume-up"></i></button>
+        </div>
     </div>
 
     <div class="history-modal" id="history-modal">
@@ -882,7 +1039,16 @@
             surpriseModal: document.getElementById('surprise-modal'),
             closeSurprise: document.getElementById('close-surprise'),
             moneyBg: document.getElementById('money-bg'),
-            floatingIcons: []
+            floatingIcons: [],
+            audioToggle: document.getElementById('audio-toggle'),
+            audioPlayer: document.getElementById('audio-player'),
+            audioElement: document.getElementById('audio-element'),
+            playPauseBtn: document.getElementById('play-pause-btn'),
+            muteBtn: document.getElementById('mute-btn'),
+            progressBar: document.getElementById('progress-bar'),
+            progressContainer: document.getElementById('progress-container'),
+            currentTimeDisplay: document.getElementById('current-time'),
+            durationDisplay: document.getElementById('duration')
         };
 
         function createFloatingIcon() {
@@ -1029,6 +1195,51 @@
             }, 300);
         }
 
+        function toggleAudioPlayer() {
+            domElements.body.classList.toggle('audio-visible');
+            domElements.audioPlayer.style.display = domElements.audioPlayer.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function updateProgressBar() {
+            const { currentTime, duration } = domElements.audioElement;
+            const progressPercent = (currentTime / duration) * 100;
+            domElements.progressBar.style.width = `${progressPercent}%`;
+            
+            domElements.currentTimeDisplay.textContent = formatTime(currentTime);
+            if (duration) {
+                domElements.durationDisplay.textContent = formatTime(duration);
+            }
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        function setProgress(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = domElements.audioElement.duration;
+            domElements.audioElement.currentTime = (clickX / width) * duration;
+        }
+
+        function togglePlay() {
+            if (domElements.audioElement.paused) {
+                domElements.audioElement.play();
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                domElements.audioElement.pause();
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+
+        function toggleMute() {
+            domElements.audioElement.muted = !domElements.audioElement.muted;
+            domElements.muteBtn.innerHTML = domElements.audioElement.muted ? 
+                '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+        }
+
         domElements.sorpresaLink.addEventListener('click', function(e) {
             const now = Date.now();
             if (now < surpriseDate) {
@@ -1064,6 +1275,18 @@
             hideModal(domElements.surpriseModal);
         });
 
+        domElements.audioToggle.addEventListener('click', toggleAudioPlayer);
+        domElements.playPauseBtn.addEventListener('click', togglePlay);
+        domElements.muteBtn.addEventListener('click', toggleMute);
+        domElements.progressContainer.addEventListener('click', setProgress);
+        domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
+        domElements.audioElement.addEventListener('ended', () => {
+            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+        });
+        domElements.audioElement.addEventListener('loadedmetadata', () => {
+            domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
+        });
+
         window.addEventListener('click', function(e) {
             if (e.target === domElements.historyModal) {
                 hideModal(domElements.historyModal);
@@ -1081,12 +1304,16 @@
                 if (domElements.surpriseModal.style.display === 'flex') {
                     hideModal(domElements.surpriseModal);
                 }
+                if (domElements.body.classList.contains('audio-visible')) {
+                    toggleAudioPlayer();
+                }
             }
         });
 
         document.addEventListener('DOMContentLoaded', function() {
             updateCountdown();
             initFloatingIcons();
+            setInterval(updateCountdown, 1000);
         });
     </script>
 </body>
