@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shooter de Naves</title>
+    <title>Shooter de Naves Mejorado</title>
     <style>
         * {
             margin: 0;
@@ -21,6 +21,85 @@
             height: 100vh;
         }
 
+        /* Pantalla de inicio */
+        #start-screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+        }
+
+        #start-screen h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+        }
+
+        .ship-selector {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .ship-option {
+            width: 100px;
+            height: 100px;
+            background: #222;
+            border: 2px solid #444;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ship-option:hover {
+            transform: scale(1.1);
+            border-color: #0ff;
+        }
+
+        .ship-option.selected {
+            border-color: #0ff;
+            box-shadow: 0 0 15px #0ff;
+        }
+
+        .ship-option img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .ship-stats {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        #start-btn {
+            background: #0ff;
+            color: #000;
+            border: none;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        #start-btn:hover {
+            background: #0dd;
+            transform: scale(1.05);
+        }
+
         /* Contenedor del juego */
         #game-container {
             position: relative;
@@ -29,6 +108,7 @@
             background: #111;
             border: 2px solid #444;
             overflow: hidden;
+            display: none;
         }
 
         /* Jugador (nave) */
@@ -64,9 +144,9 @@
         /* Explosión */
         .explosion {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            background: url('https://i.imgur.com/7QqRj4T.gif') center/cover;
+            width: 50px;
+            height: 50px;
+            background: url('https://i.gifer.com/7XaA.gif') center/cover;
             z-index: 20;
             animation: fadeOut 0.5s forwards;
         }
@@ -85,7 +165,37 @@
             z-index: 100;
         }
 
-        /* Reproductor (oculto inicialmente) */
+        /* Menú de mejoras */
+        #upgrade-menu {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .upgrade-btn {
+            background: rgba(0, 255, 255, 0.3);
+            color: white;
+            border: 1px solid #0ff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .upgrade-btn:hover {
+            background: rgba(0, 255, 255, 0.5);
+        }
+
+        .upgrade-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Reproductor de música */
         #music-player {
             display: none;
             width: 350px;
@@ -128,20 +238,60 @@
             cursor: pointer;
             font-weight: bold;
         }
-
-        #play-btn:hover {
-            background: #0dd;
-        }
     </style>
 </head>
 <body>
-    <!-- Contenedor del juego -->
-    <div id="game-container">
-        <div id="hud">Puntos: <span id="score">0</span> | Vida: <span id="lives">3</span></div>
-        <div id="player"></div>
+    <!-- Pantalla de inicio -->
+    <div id="start-screen">
+        <h1>SHOOTER DE NAVES</h1>
+        <p>Selecciona tu nave:</p>
+        
+        <div class="ship-selector">
+            <div class="ship-option" data-type="default" onclick="selectShip(this, 'default')">
+                <img src="https://i.imgur.com/3JQ3p8x.png" alt="Nave Básica">
+                <div class="ship-stats">
+                    <p>Velocidad: Normal</p>
+                    <p>Disparo: 1 bala</p>
+                    <p>Vida: 3</p>
+                </div>
+            </div>
+            
+            <div class="ship-option" data-type="fast" onclick="selectShip(this, 'fast')">
+                <img src="https://i.imgur.com/7QqRj4T.png" alt="Nave Rápida">
+                <div class="ship-stats">
+                    <p>Velocidad: +30%</p>
+                    <p>Disparo: 1 bala</p>
+                    <p>Vida: 2</p>
+                </div>
+            </div>
+            
+            <div class="ship-option" data-type="double" onclick="selectShip(this, 'double')">
+                <img src="https://i.imgur.com/5q6vWXK.png" alt="Nave Doble">
+                <div class="ship-stats">
+                    <p>Velocidad: Normal</p>
+                    <p>Disparo: 2 balas</p>
+                    <p>Vida: 3</p>
+                </div>
+            </div>
+        </div>
+        
+        <button id="start-btn">COMENZAR</button>
     </div>
 
-    <!-- Reproductor de música (oculto al inicio) -->
+    <!-- Contenedor del juego -->
+    <div id="game-container">
+        <div id="hud">Puntos: <span id="score">0</span> | Vida: <span id="lives">3</span> | Nivel: <span id="level">1</span></div>
+        <div id="player"></div>
+        
+        <!-- Menú de mejoras -->
+        <div id="upgrade-menu">
+            <button class="upgrade-btn" onclick="upgrade('speed')">Velocidad (+)</button>
+            <button class="upgrade-btn" onclick="upgrade('fireRate')">Disparo (+)</button>
+            <button class="upgrade-btn" onclick="upgrade('health')">Vida Extra</button>
+        </div>
+    </div>
+
+    <!-- Reproductor de música -->
     <div id="music-player">
         <h2>¡Nivel completado!</h2>
         <p>Has desbloqueado el reproductor</p>
@@ -151,38 +301,90 @@
         <button id="play-btn">▶ Reproducir</button>
     </div>
 
+    <!-- Efectos de sonido -->
+    <audio id="shoot-sound" src="https://www.soundjay.com/mechanical/sounds/laser-gun-01.mp3"></audio>
+    <audio id="explosion-sound" src="https://www.soundjay.com/explosion/sounds/explosion-01.mp3"></audio>
     <audio id="audio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
     <script>
         // Variables del juego
+        const startScreen = document.getElementById('start-screen');
         const gameContainer = document.getElementById('game-container');
         const player = document.getElementById('player');
         const hudScore = document.getElementById('score');
         const hudLives = document.getElementById('lives');
+        const hudLevel = document.getElementById('level');
         const musicPlayer = document.getElementById('music-player');
         const playBtn = document.getElementById('play-btn');
         const audio = document.getElementById('audio');
+        const shootSound = document.getElementById('shoot-sound');
+        const explosionSound = document.getElementById('explosion-sound');
         const progressBar = document.getElementById('progress-bar');
         const progress = document.getElementById('progress');
+        const upgradeButtons = document.querySelectorAll('.upgrade-btn');
 
         let score = 0;
         let lives = 3;
+        let level = 1;
         let isGameOver = false;
         let playerX = 175;
         let playerSpeed = 8;
+        let fireRate = 500; // Tiempo entre disparos (ms)
+        let lastShot = 0;
         let bullets = [];
         let enemies = [];
-        let enemySpawnRate = 1000; // 1 segundo
+        let enemySpawnRate = 1500; // Tiempo entre enemigos (ms)
         let lastEnemySpawn = 0;
         let keys = {};
+        let selectedShip = 'default';
+        let upgrades = {
+            speed: 0,
+            fireRate: 0,
+            health: 0
+        };
+        let canShoot = true;
+
+        // Seleccionar nave
+        function selectShip(element, type) {
+            document.querySelectorAll('.ship-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedShip = type;
+            
+            // Aplicar estadísticas iniciales
+            switch (type) {
+                case 'fast':
+                    playerSpeed = 10;
+                    lives = 2;
+                    break;
+                case 'double':
+                    playerSpeed = 8;
+                    lives = 3;
+                    break;
+                default: // 'default'
+                    playerSpeed = 8;
+                    lives = 3;
+            }
+            hudLives.textContent = lives;
+        }
+
+        // Iniciar juego
+        document.getElementById('start-btn').addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            gameContainer.style.display = 'block';
+            resetGame();
+        });
 
         // Controles del teclado
         document.addEventListener('keydown', (e) => {
             keys[e.key] = true;
             
             // Disparar con la barra espaciadora
-            if (e.key === ' ' && !isGameOver) {
+            if (e.key === ' ' && !isGameOver && canShoot) {
                 shoot();
+                canShoot = false;
+                setTimeout(() => canShoot = true, fireRate);
             }
         });
 
@@ -193,22 +395,40 @@
         // Mover al jugador
         function movePlayer() {
             if (keys['ArrowLeft'] && playerX > 0) {
-                playerX -= playerSpeed;
+                playerX -= playerSpeed + upgrades.speed;
             }
             if (keys['ArrowRight'] && playerX < 350) {
-                playerX += playerSpeed;
+                playerX += playerSpeed + upgrades.speed;
             }
             player.style.left = playerX + 'px';
         }
 
         // Disparar
         function shoot() {
+            shootSound.currentTime = 0;
+            shootSound.play();
+            
+            // Disparo básico (1 bala)
+            if (selectedShip !== 'double') {
+                const bullet = createBullet(playerX + 22);
+                bullets.push(bullet);
+            } 
+            // Disparo doble
+            else {
+                const bullet1 = createBullet(playerX + 10);
+                const bullet2 = createBullet(playerX + 34);
+                bullets.push(bullet1, bullet2);
+            }
+        }
+
+        // Crear bala
+        function createBullet(xPos) {
             const bullet = document.createElement('div');
             bullet.className = 'bullet';
-            bullet.style.left = (playerX + 22) + 'px';
+            bullet.style.left = xPos + 'px';
             bullet.style.bottom = '70px';
             gameContainer.appendChild(bullet);
-            bullets.push(bullet);
+            return bullet;
         }
 
         // Mover balas
@@ -239,7 +459,7 @@
         function moveEnemies() {
             enemies.forEach((enemy, index) => {
                 const enemyY = parseInt(enemy.style.top) || -40;
-                enemy.style.top = (enemyY + 3) + 'px';
+                enemy.style.top = (enemyY + 3 + level * 0.5) + 'px'; // Aumenta velocidad por nivel
 
                 // Eliminar enemigos que salen de la pantalla
                 if (enemyY > 600) {
@@ -272,6 +492,9 @@
                         explosion.style.top = enemyRect.top + 'px';
                         gameContainer.appendChild(explosion);
                         
+                        explosionSound.currentTime = 0;
+                        explosionSound.play();
+                        
                         // Eliminar elementos
                         setTimeout(() => explosion.remove(), 500);
                         bullet.remove();
@@ -283,6 +506,11 @@
                         score += 10;
                         hudScore.textContent = score;
                         
+                        // Subir de nivel cada 50 puntos
+                        if (score >= level * 50) {
+                            levelUp();
+                        }
+                        
                         // Verificar si ganó
                         if (score >= 100) {
                             unlockMusicPlayer();
@@ -290,6 +518,15 @@
                     }
                 });
             });
+        }
+
+        // Subir de nivel
+        function levelUp() {
+            level++;
+            hudLevel.textContent = level;
+            
+            // Aumentar dificultad
+            enemySpawnRate = Math.max(500, enemySpawnRate - 100);
         }
 
         // Perder vida
@@ -307,19 +544,57 @@
             isGameOver = true;
             alert(`¡Game Over! Puntuación: ${score}`);
             resetGame();
+            startScreen.style.display = 'flex';
+            gameContainer.style.display = 'none';
         }
 
         // Reiniciar juego
         function resetGame() {
             score = 0;
             lives = 3;
+            level = 1;
             hudScore.textContent = score;
             hudLives.textContent = lives;
+            hudLevel.textContent = level;
             bullets.forEach(b => b.remove());
             enemies.forEach(e => e.remove());
             bullets = [];
             enemies = [];
             isGameOver = false;
+            enemySpawnRate = 1500;
+            upgrades = { speed: 0, fireRate: 0, health: 0 };
+            updateUpgradeButtons();
+        }
+
+        // Mejorar habilidades
+        function upgrade(type) {
+            switch (type) {
+                case 'speed':
+                    upgrades.speed += 1;
+                    break;
+                case 'fireRate':
+                    upgrades.fireRate += 1;
+                    fireRate = Math.max(200, 500 - upgrades.fireRate * 50);
+                    break;
+                case 'health':
+                    upgrades.health += 1;
+                    lives += 1;
+                    hudLives.textContent = lives;
+                    break;
+            }
+            updateUpgradeButtons();
+        }
+
+        // Actualizar botones de mejoras
+        function updateUpgradeButtons() {
+            upgradeButtons[0].textContent = `Velocidad (${upgrades.speed}/5)`;
+            upgradeButtons[1].textContent = `Disparo (${upgrades.fireRate}/5)`;
+            upgradeButtons[2].textContent = `Vida (${upgrades.health}/3)`;
+            
+            // Desactivar si alcanzó el máximo
+            upgradeButtons[0].disabled = upgrades.speed >= 5;
+            upgradeButtons[1].disabled = upgrades.fireRate >= 5;
+            upgradeButtons[2].disabled = upgrades.health >= 3;
         }
 
         // Desbloquear reproductor
