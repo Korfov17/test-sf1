@@ -88,7 +88,7 @@
         .floating-icon {
             position: absolute;
             opacity: 0;
-            animation: floatUp linear infinite;
+            animation: floatUp linear forwards;
             user-select: none;
             will-change: transform, opacity;
             backface-visibility: hidden;
@@ -132,15 +132,15 @@
                     scale(var(--scale, 1));
                 opacity: 0;
             }
-            20% {
+            10% {
                 opacity: var(--opacity);
             }
-            80% {
+            90% {
                 opacity: var(--opacity);
             }
             100% {
                 transform: 
-                    translateY(-100px) 
+                    translateY(-150px) 
                     translateX(calc(var(--tx-end) * 1vw))
                     rotate(calc(var(--rotate-end) * 1deg))
                     scale(var(--scale-end, 1));
@@ -885,55 +885,71 @@
             floatingIcons: []
         };
 
-        function createFloatingIcons() {
-            const totalIcons = 25;
-            const effects = ['', 'glowing'];
+        function createFloatingIcon() {
+            const icon = document.createElement('div');
+            icon.classList.add('floating-icon');
+            icon.style.backfaceVisibility = 'hidden';
+            icon.style.willChange = 'transform, opacity';
             
-            domElements.moneyBg.innerHTML = '';
-            domElements.floatingIcons = [];
-            
-            for (let i = 0; i < totalIcons; i++) {
-                const icon = document.createElement('div');
-                icon.classList.add('floating-icon');
-                icon.style.backfaceVisibility = 'hidden';
-                icon.style.willChange = 'transform, opacity';
-                
-                const isGun = Math.random() < 0.3;
-                if (isGun) {
-                    icon.classList.add('gun-icon');
-                    icon.innerHTML = '🔫';
-                } else {
-                    icon.classList.add('dollar-sign');
-                    icon.textContent = '$';
-                }
-                
-                const randomEffect = effects[Math.floor(Math.random() * effects.length)];
-                if (randomEffect) icon.classList.add(randomEffect);
-                
-                const posX = Math.random() * 100;
-                const posXEnd = (Math.random() - 0.5) * 20;
-                const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
-                const sizeEnd = size * (Math.random() * 0.4 + 0.8);
-                const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
-                const rotate = Math.random() * 30 - 15;
-                const rotateEnd = rotate + (Math.random() * 30 - 15);
-                const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
-                const delay = Math.random() * 15;
-                
-                icon.style.left = `${posX}%`;
-                icon.style.setProperty('--tx', posX/10 - 5);
-                icon.style.setProperty('--tx-end', posXEnd);
-                icon.style.setProperty('--rotate', rotate);
-                icon.style.setProperty('--rotate-end', rotateEnd);
-                icon.style.setProperty('--scale', size);
-                icon.style.setProperty('--scale-end', sizeEnd);
-                icon.style.setProperty('--opacity', opacity);
-                icon.style.animationDuration = `${duration}s`;
-                icon.style.animationDelay = `${delay}s`;
-                
-                domElements.moneyBg.appendChild(icon);
-                domElements.floatingIcons.push(icon);
+            const isGun = Math.random() < 0.3;
+            if (isGun) {
+                icon.classList.add('gun-icon');
+                icon.innerHTML = '🔫';
+            } else {
+                icon.classList.add('dollar-sign');
+                icon.textContent = '$';
             }
+            
+            const effects = ['', 'glowing'];
+            const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+            if (randomEffect) icon.classList.add(randomEffect);
+            
+            const posX = Math.random() * 100;
+            const posXEnd = (Math.random() - 0.5) * 20;
+            const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
+            const sizeEnd = size * (Math.random() * 0.4 + 0.8);
+            const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
+            const rotate = Math.random() * 30 - 15;
+            const rotateEnd = rotate + (Math.random() * 30 - 15);
+            const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
+            const delay = Math.random() * 2;
+            
+            icon.style.left = `${posX}%`;
+            icon.style.setProperty('--tx', posX/10 - 5);
+            icon.style.setProperty('--tx-end', posXEnd);
+            icon.style.setProperty('--rotate', rotate);
+            icon.style.setProperty('--rotate-end', rotateEnd);
+            icon.style.setProperty('--scale', size);
+            icon.style.setProperty('--scale-end', sizeEnd);
+            icon.style.setProperty('--opacity', opacity);
+            icon.style.animationDuration = `${duration}s`;
+            icon.style.animationDelay = `${delay}s`;
+            
+            domElements.moneyBg.appendChild(icon);
+            
+            setTimeout(() => {
+                icon.remove();
+                domElements.floatingIcons = domElements.floatingIcons.filter(i => i !== icon);
+            }, duration * 1000);
+            
+            domElements.floatingIcons.push(icon);
+            return icon;
+        }
+
+        function manageFloatingIcons() {
+            if (domElements.floatingIcons.length < 15) {
+                createFloatingIcon();
+            }
+            
+            domElements.floatingIcons = domElements.floatingIcons.filter(icon => document.body.contains(icon));
+        }
+
+        function initFloatingIcons() {
+            for (let i = 0; i < 10; i++) {
+                createFloatingIcon();
+            }
+            
+            setInterval(manageFloatingIcons, 1000);
         }
 
         function updateCountdown() {
@@ -1068,8 +1084,10 @@
             }
         });
 
-        updateCountdown();
-        createFloatingIcons();
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCountdown();
+            initFloatingIcons();
+        });
     </script>
 </body>
 </html>
