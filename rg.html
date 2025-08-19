@@ -58,7 +58,8 @@
         .history-modal,
         .top-bar,
         .history-modal .timeline-date,
-        .chest-message {
+        .chest-message,
+        .credits-modal h3 {
             font-family: 'Road Rage Local', cursive;
         }
 
@@ -66,7 +67,8 @@
         .letter, 
         .letter p, 
         .letter .letter-date,
-        .history-modal .timeline-content {
+        .history-modal .timeline-content,
+        .credits-modal p {
             font-family: 'Road Rage', cursive;
         }
 
@@ -580,6 +582,53 @@
             color: var(--primary-green-light);
         }
 
+        /* Nuevo botón de créditos */
+        .credits-toggle {
+            position: fixed;
+            bottom: 30px;
+            left: 90px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .credits-toggle.unlocked {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .light-mode .credits-toggle {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .credits-toggle:hover {
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+        }
+
+        .credits-toggle i {
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .light-mode .credits-toggle i {
+            color: var(--primary-green-light);
+        }
+
         /* Estilos actualizados del reproductor de audio */
         .audio-player-container {
             position: fixed;
@@ -803,6 +852,135 @@
             transform: rotate(90deg);
         }
 
+        /* Modal de créditos */
+        .credits-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            background: var(--card-dark);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            border: 1px solid rgba(84, 204, 22, 0.2);
+            overflow-y: auto;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+        }
+
+        .credits-modal.active {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .light-mode .credits-modal {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .credits-modal h3 {
+            color: var(--primary-green);
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-align: center;
+        }
+
+        .light-mode .credits-modal h3 {
+            color: var(--primary-green-light);
+        }
+
+        .credits-content {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .credits-section {
+            margin-bottom: 25px;
+        }
+
+        .credits-section h4 {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary-green);
+            padding-bottom: 5px;
+        }
+
+        .light-mode .credits-section h4 {
+            color: var(--primary-green-light);
+            border-bottom: 2px solid var(--primary-green-light);
+        }
+
+        .credits-section p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .light-mode .credits-section p {
+            color: var(--text-dark);
+        }
+
+        .credits-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .credits-list li {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .light-mode .credits-list li {
+            color: var(--text-dark);
+        }
+
+        .credits-list li:before {
+            content: "•";
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+
+        .light-mode .credits-list li:before {
+            color: var(--primary-green-light);
+        }
+
+        .close-credits {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .light-mode .close-credits {
+            color: var(--primary-green-light);
+        }
+
+        .close-credits:hover {
+            transform: rotate(90deg);
+        }
+
         .surprise-modal {
             position: fixed;
             top: 50%;
@@ -989,16 +1167,21 @@
         <i class="fas fa-microphone"></i>
     </div>
 
+    <!-- Nuevo botón de créditos -->
+    <div class="credits-toggle" id="credits-toggle">
+        <i class="fas fa-heart"></i>
+    </div>
+
     <!-- Reproductor de audio actualizado -->
     <div class="audio-player-container" id="audio-player">
-        <div class="audio-player-title"><strong>Canción Especial (Prueba)</strong></div>
-        <audio id="audio-element" src="SoundHelix-Song-1.mp3"></audio>
+        <div class="audio-player-title"><strong>Canción Especial</strong></div>
+        <audio id="audio-element" src="holi/rato.mp3"></audio>
         <div class="progress-container" id="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
         <div class="time-display">
             <span id="current-time">0:00</span>
-            <span id="duration">5:00</span>
+            <span id="duration">0:00</span>
         </div>
         <div class="audio-controls">
             <button id="play-pause-btn"><i class="fas fa-play"></i></button>
@@ -1042,6 +1225,49 @@
         </div>
     </div>
 
+    <!-- Modal de créditos -->
+    <div class="credits-modal" id="credits-modal">
+        <button class="close-credits" id="close-credits"><i class="fas fa-times"></i></button>
+        <h3>Créditos y Agradecimientos</h3>
+        
+        <div class="credits-content">
+            <div class="credits-section">
+                <h4>Desarrollo y Diseño</h4>
+                <ul class="credits-list">
+                    <li><strong>Director del Proyecto:</strong> [Tu Nombre]</li>
+                    <li><strong>Diseñador Principal:</strong> [Nombre del Diseñador]</li>
+                    <li><strong>Desarrollador Frontend:</strong> [Nombre del Desarrollador]</li>
+                    <li><strong>Asesor Creativo:</strong> [Nombre del Asesor]</li>
+                </ul>
+            </div>
+
+            <div class="credits-section">
+                <h4>Agradecimientos Especiales</h4>
+                <ul class="credits-list">
+                    <li>A [Nombre de la Persona Especial] por la inspiración</li>
+                    <li>Al equipo de soporte técnico por su dedicación</li>
+                    <li>A todos los beta testers por sus valiosos comentarios</li>
+                    <li>A la comunidad de desarrolladores por su apoyo</li>
+                </ul>
+            </div>
+
+            <div class="credits-section">
+                <h4>Tecnologías Utilizadas</h4>
+                <ul class="credits-list">
+                    <li>HTML5, CSS3 y JavaScript ES6+</li>
+                    <li>Font Awesome para los iconos</li>
+                    <li>Google Fonts para la tipografía</li>
+                    <li>Diseño responsive con Flexbox y Grid</li>
+                </ul>
+            </div>
+
+            <div class="credits-section">
+                <h4>Mensaje del Equipo</h4>
+                <p>Este proyecto fue creado con mucho amor y dedicación. Esperamos que disfrutes de esta experiencia tanto como nosotros disfrutamos creándola. ¡Gracias por ser parte de esto!</p>
+            </div>
+        </div>
+    </div>
+
     <div class="surprise-modal" id="surprise-modal">
         <i class="fa-solid fa-toolbox toolbox-icon"></i>
         <h3>¡Sorpresa Especial!</h3>
@@ -1080,7 +1306,10 @@
             progressBar: document.getElementById('progress-bar'),
             progressContainer: document.getElementById('progress-container'),
             currentTimeDisplay: document.getElementById('current-time'),
-            durationDisplay: document.getElementById('duration')
+            durationDisplay: document.getElementById('duration'),
+            creditsToggle: document.getElementById('credits-toggle'),
+            creditsModal: document.getElementById('credits-modal'),
+            closeCredits: document.getElementById('close-credits')
         };
 
         function createFloatingIcon() {
@@ -1176,6 +1405,7 @@
             
             if (distanceToSurprise <= 0) {
                 unlockSurprise();
+                unlockCredits();
             } else {
                 const daysSurprise = Math.floor(distanceToSurprise / (1000 * 60 * 60 * 24));
                 const hoursSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -1206,6 +1436,10 @@
             domElements.chest.addEventListener('click', function() {
                 showModal(domElements.surpriseModal);
             });
+        }
+
+        function unlockCredits() {
+            domElements.creditsToggle.classList.add('unlocked');
         }
 
         function toggleBodyScroll(enable) {
@@ -1309,6 +1543,14 @@
             hideModal(domElements.surpriseModal);
         });
 
+        domElements.creditsToggle.addEventListener('click', function() {
+            showModal(domElements.creditsModal);
+        });
+
+        domElements.closeCredits.addEventListener('click', function() {
+            hideModal(domElements.creditsModal);
+        });
+
         domElements.audioToggle.addEventListener('click', toggleAudioPlayer);
         domElements.playPauseBtn.addEventListener('click', togglePlay);
         domElements.closePlayerBtn.addEventListener('click', closePlayer);
@@ -1328,6 +1570,9 @@
             if (e.target === domElements.surpriseModal) {
                 hideModal(domElements.surpriseModal);
             }
+            if (e.target === domElements.creditsModal) {
+                hideModal(domElements.creditsModal);
+            }
         });
 
         document.addEventListener('keydown', function(e) {
@@ -1337,6 +1582,9 @@
                 }
                 if (domElements.surpriseModal.style.display === 'flex') {
                     hideModal(domElements.surpriseModal);
+                }
+                if (domElements.creditsModal.style.display === 'flex') {
+                    hideModal(domElements.creditsModal);
                 }
                 if (domElements.audioPlayer.style.display === 'block') {
                     closePlayer();
