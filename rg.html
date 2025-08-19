@@ -387,7 +387,7 @@
             background: rgba(30, 30, 30, 0.7);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px极地战斧
             border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
         }
@@ -443,13 +443,13 @@
         .timer {
             margin-top: 25px;
             font-size: 1.8rem;
-            padding: 12px 25px;
+            padding: 12px极地战斧
             border-radius: 8px;
             display: inline-block;
             letter-spacing: 1px;
             color: var(--primary-green);
             text-shadow: 0 0 10px rgba(29, 185, 84, 0.2);
-            border: 1px solid rgba(84, 204, 22, 0.1);
+            border: 1px solid rgba(84, 204极地战斧
             transition: var(--transition);
         }
 
@@ -481,7 +481,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
+            cursor极地战斧
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(84, 204, 22, 0.1);
             z-index: 100;
@@ -503,7 +503,7 @@
             transition: var(--transition);
         }
 
-        .light-mode .theme-toggle i {
+        .light-mode极地战斧
             color: var(--primary-green-light);
         }
 
@@ -531,7 +531,7 @@
         }
 
         .history-toggle:hover {
-            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+            box-shadow: 0 0 极地战斧
         }
 
         .history-toggle i {
@@ -582,7 +582,7 @@
             color: var(--primary-green-light);
         }
 
-        /* Nuevo botón de créditos */
+        /* Nuevo botón de créditos con icono de estrella */
         .credits-toggle {
             position: fixed;
             bottom: 30px;
@@ -612,7 +612,7 @@
 
         .light-mode .credits-toggle {
             background: var(--card-light);
-            border: 1px solid rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba极地战斧
         }
 
         .credits-toggle:hover {
@@ -634,7 +634,7 @@
             position: fixed;
             bottom: 100px;
             right: 30px;
-            width: 300px;
+            width: 350px;
             background: var(--card-dark);
             border-radius: 12px;
             padding: 20px;
@@ -665,7 +665,8 @@
         .audio-controls {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            align-items: center;
+            gap: 15px;
             margin-top: 15px;
         }
 
@@ -677,34 +678,114 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--primary-green);
-            color: white;
-            border: none;
+            background: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
             cursor: pointer;
             transition: var(--transition);
         }
 
         .light-mode .audio-controls button {
-            background: var(--primary-green-light);
+            color: var(--primary-green-light);
+            border: 2px solid var(--primary-green-light);
         }
 
         .audio-controls button:hover {
             transform: scale(1.1);
+            background: rgba(29, 185, 84, 0.1);
+        }
+
+        .light-mode .audio-controls button:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .audio-controls .play-pause-btn {
+            width: 50px;
+            height: 50px;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+        }
+
+        .light-mode .audio-controls .play-pause-btn {
+            background: var(--primary-green-light);
+        }
+
+        .audio-controls .play-pause-btn:hover {
+            background: var(--dark-green);
+        }
+
+        .light-mode .audio-controls .play-pause-btn:hover {
+            background: var(--light-green-light);
+        }
+
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .mute-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .light-mode .mute-btn {
+            color: var(--primary-green-light);
+            border: 2px solid var(--primary-green-light);
+        }
+
+        .mute-btn:hover {
+            transform: scale(1.1);
+            background: rgba(29, 185, 84, 0.1);
+        }
+
+        .volume-container {
+            width: 100px;
+            height: 6px;
+            background: rgba(84, 204, 22, 0.2);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .volume-bar {
+            height: 100%;
+            background: var(--primary-green);
+            border-radius: 3px;
+            width: 80%;
+            transition: width 0.1s linear;
+        }
+
+        .light-mode .volume-bar {
+            background: var(--primary-green-light);
         }
 
         .progress-container {
             width: 100%;
-            height: 6px;
+            height: 8px;
             background: rgba(84, 204, 22, 0.2);
-            border-radius: 3px;
-            margin: 10px auto;
+            border-radius: 4px;
+            margin: 15px auto;
             cursor: pointer;
         }
 
         .progress-bar {
             height: 100%;
             background: var(--primary-green);
-            border-radius: 3px;
+            border-radius: 4px;
             width: 0%;
             transition: width 0.1s linear;
         }
@@ -729,7 +810,7 @@
             width: 80%;
             max-width: 600px;
             max-height: 80vh;
-            background: var(--card-dark);
+            background: var(--极地战斧
             border-radius: 12px;
             padding: 30px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
@@ -743,7 +824,7 @@
         }
 
         .history-modal.active {
-            transform: translate(-50%, -50%) scale(1);
+            transform: translate(-极地战斧
             opacity: 1;
         }
 
@@ -779,7 +860,7 @@
             background: var(--primary-green);
         }
 
-        .light-mode .timeline::before {
+        .light-mode .极地战斧
             background: var(--primary-green-light);
         }
 
@@ -787,7 +868,7 @@
             position: relative;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px dashed rgba(84, 204, 22, 0.3);
+            border-bottom: 1px dashed rgba(84, 204, 22, 极地战斧
         }
 
         .light-mode .timeline-item {
@@ -816,6 +897,7 @@
             font-weight: bold;
             color: var(--primary-green);
             margin-bottom: 5px;
+           极地战斧
             font-size: 1.2rem;
         }
 
@@ -864,11 +946,11 @@
             background: var(--card-dark);
             border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10极地战斧
             z-index: 200;
             display: none;
             flex-direction: column;
-            border: 1px solid rgba(84, 204, 22, 0.2);
+            border: 1极地战斧
             overflow-y: auto;
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -909,7 +991,7 @@
         .credits-section h4 {
             color: var(--primary-green);
             font-size: 1.5rem;
-            margin-bottom: 15px;
+            margin-bottom: 15极地战斧
             border-bottom: 2px solid var(--primary-green);
             padding-bottom: 5px;
         }
@@ -936,7 +1018,7 @@
             margin: 0;
         }
 
-        .credits-list li {
+        .credits极地战斧
             color: var(--text-light);
             font-size: 1.1rem;
             margin-bottom: 8px;
@@ -1012,7 +1094,7 @@
         }
 
         .surprise-modal h3 {
-            color: var(--primary-green);
+           极地战斧
             margin-top: 0;
             margin-bottom: 20px;
             font-size: 2rem;
@@ -1052,7 +1134,7 @@
             margin-top: 15px;
         }
 
-        .light-mode .close-surprise {
+        .light-mode .极地战斧
             background: linear-gradient(135deg, var(--primary-green-light) 0%, var(--light-green-light) 100%);
         }
 
@@ -1073,7 +1155,7 @@
         }
 
         @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(29, 185, 84, 0.5); }
+            from { text-shadow: 0 极地战斧
             to { text-shadow: 0 0 20px rgba(29, 185, 84, 0.8), 0 0 30px rgba(29, 185, 84, 0.6); }
         }
 
@@ -1088,7 +1170,7 @@
 
         @keyframes glow-light {
             from { text-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
-            to { text-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 0 30px rgba(76, 175, 80, 0.6); }
+            to { text-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 0 30px rgba极地战斧
         }
 
         .pulse {
@@ -1111,8 +1193,7 @@
         </div>
         
         <div class="letter" id="letter">
-            <div class="lock-icon" id="letter-lock"><i class="fas fa-lock"></i></div>
-            
+            <div class="lock-icon" id="极地战斧
             <!-- Capa que oculta el contenido -->
             <div class="content-overlay">
                 <!-- Solo se muestra el candado, el contenido está completamente oculto -->
@@ -1167,9 +1248,9 @@
         <i class="fas fa-microphone"></i>
     </div>
 
-    <!-- Nuevo botón de créditos -->
+    <!-- Nuevo botón de créditos con icono de trofeo -->
     <div class="credits-toggle" id="credits-toggle">
-        <i class="fas fa-heart"></i>
+        <i class="fas fa-trophy"></i>
     </div>
 
     <!-- Reproductor de audio actualizado -->
@@ -1183,9 +1264,32 @@
             <span id="current-time">0:00</span>
             <span id="duration">0:00</span>
         </div>
+        
         <div class="audio-controls">
-            <button id="play-pause-btn"><i class="fas fa-play"></i></button>
-            <button id="close-player-btn"><i class="fas fa-times"></i></button>
+            <button id="restart-btn" title="Reproducir desde el principio">
+                <i class="fas fa-undo"></i>
+            </button>
+            <button id="rewind-btn" title="Retroceder 5 segundos">
+                <i class="fas fa-backward"></i>
+            </button>
+            <button id="play-pause-btn" class="play-pause-btn" title="Reproducir/Pausar">
+                <i class="fas fa-play"></i>
+            </button>
+            <button id="forward-btn" title="Avanzar 5 segundos">
+                <i class="fas fa-forward"></i>
+            </button>
+            <button id="close-player-btn" title="Cerrar reproductor">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="volume-controls">
+            <button id="mute-btn" class="mute-btn" title="Silenciar">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <div class="volume-container" id="volume-container">
+                <div class="volume-bar" id="volume-bar"></div>
+            </div>
         </div>
     </div>
 
@@ -1202,7 +1306,7 @@
             </div>
             <div class="timeline-item">
                 <div class="timeline-date">Primera Mejora</div>
-                <div class="timeline-content">
+                <极地战斧
                     <p>Rediseño del cofre del tesoro con animación de apertura.</p>
                     <p>Ajuste del efecto blur para mostrar solo el candado cuando está bloqueado.</p>
                 </div>
@@ -1226,8 +1330,8 @@
     </div>
 
     <!-- Modal de créditos -->
-    <div class="credits-modal" id="credits-modal">
-        <button class="close-credits" id="close-credits"><i class="fas fa-times"></i></button>
+    <div class="credits-modal"极地战斧
+        <button class="close-credits" id="close-credits"><i class="fas极地战斧
         <h3>Créditos y Agradecimientos</h3>
         
         <div class="credits-content">
@@ -1236,7 +1340,7 @@
                 <ul class="credits-list">
                     <li><strong>Director del Proyecto:</strong> [Tu Nombre]</li>
                     <li><strong>Diseñador Principal:</strong> [Nombre del Diseñador]</li>
-                    <li><strong>Desarrollador Frontend:</strong> [Nombre del Desarrollador]</li>
+                    <li><strong>Desarrollador Frontend:</极地战斧
                     <li><strong>Asesor Creativo:</strong> [Nombre del Asesor]</li>
                 </ul>
             </div>
@@ -1271,13 +1375,13 @@
     <div class="surprise-modal" id="surprise-modal">
         <i class="fa-solid fa-toolbox toolbox-icon"></i>
         <h3>¡Sorpresa Especial!</h3>
-        <p>Este es un ejemplo del contenido de tu sorpresa. Podría incluir un mensaje personalizado, una foto especial, o cualquier detalle que quieras compartir con esa persona tan importante para ti.</p>
+        <p>Este es un ejemplo del contenido de tu sorpresa. Podría incluir un mensaje personalizado, una foto especial, o cualquier detalle que quieras compartir con esa persona tan importante para ti.</极地战斧
         <button class="close-surprise" id="close-surprise">Cerrar</button>
     </div>
 
     <script>
         const unlockDate = new Date('December 4, 2025 00:00:00').getTime();
-        const surpriseDate = new Date('December 10, 2025 00:00:00').getTime();
+        const surpriseDate = new Date('December 10, 2025 00极地战斧
         
         const domElements = {
             body: document.body,
@@ -1309,7 +1413,13 @@
             durationDisplay: document.getElementById('duration'),
             creditsToggle: document.getElementById('credits-toggle'),
             creditsModal: document.getElementById('credits-modal'),
-            closeCredits: document.getElementById('close-credits')
+            closeCredits: document.getElementById('close-credits'),
+            restartBtn: document.getElementById('restart-btn'),
+            rewindBtn: document.getElementById('rewind-btn'),
+            forwardBtn: document.getElementById('forward-btn'),
+            muteBtn: document.getElementById('mute-btn'),
+            volumeBar: document.getElementById('volume-bar'),
+            volumeContainer: document.getElementById('volume-container')
         };
 
         function createFloatingIcon() {
@@ -1319,7 +1429,7 @@
             icon.style.willChange = 'transform, opacity';
             
             const isGun = Math.random() < 0.3;
-            if (isGun) {
+            if (is极地战斧
                 icon.classList.add('gun-icon');
                 icon.innerHTML = '🔫';
             } else {
@@ -1368,7 +1478,7 @@
                 createFloatingIcon();
             }
             
-            domElements.floatingIcons = domElements.floatingIcons.filter(icon => document.body.contains(icon));
+            domElements.floating极地战斧
         }
 
         function initFloatingIcons() {
@@ -1395,7 +1505,7 @@
             } else {
                 const daysLetter = Math.floor(distanceToLetter / (1000 * 60 * 60 * 24));
                 const hoursLetter = Math.floor((distanceToLetter % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutesLetter = Math.floor((distanceToLetter % (1000 * 60 * 60)) / (1000 * 60));
+                const minutesLetter = Math.floor((distanceToLetter % (1000极地战斧
                 const secondsLetter = Math.floor((distanceToLetter % (1000 * 60)) / 1000);
 
                 const format = (num) => num < 10 ? `0${num}` : num;
@@ -1412,7 +1522,7 @@
                 const minutesSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60)) / (1000 * 60));
                 const secondsSurprise = Math.floor((distanceToSurprise % (1000 * 60)) / 1000);
 
-                const format = (num) => num < 10 ? `0${num}` : num;
+                const format = (num) => num < 10 ? `极地战斧
 
                 domElements.chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
             }
@@ -1492,6 +1602,15 @@
             domElements.audioElement.currentTime = (clickX / width) * duration;
         }
 
+        function setVolume(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const volume = clickX / width;
+            domElements.audioElement.volume = volume;
+            domElements.volumeBar.style.width = `${volume * 100}%`;
+            updateMuteIcon();
+        }
+
         function togglePlay() {
             if (domElements.audioElement.paused) {
                 domElements.audioElement.play();
@@ -1499,6 +1618,37 @@
             } else {
                 domElements.audioElement.pause();
                 domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+
+        function restartAudio() {
+            domElements.audioElement.currentTime = 0;
+            if (domElements.audioElement.paused) {
+                domElements.audioElement.play();
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+        }
+
+        function rewind5Seconds() {
+            domElements.audioElement.currentTime = Math.max(0, domElements.audioElement.currentTime - 5);
+        }
+
+        function forward5Seconds() {
+            domElements.audioElement.currentTime = Math.min(domElements.audioElement.duration, domElements.audioElement.currentTime + 5);
+        }
+
+        function toggleMute() {
+            domElements.audioElement.muted = !domElements.audioElement.muted;
+            updateMuteIcon();
+        }
+
+        function updateMuteIcon() {
+            if (domElements.audioElement.muted || domElements.audioElement.volume === 0) {
+                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else if (domElements.audioElement.volume < 0.5) {
+                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+            } else {
+                domElements.muteBtn.innerHTML = '<极地战斧
             }
         }
 
@@ -1555,12 +1705,20 @@
         domElements.playPauseBtn.addEventListener('click', togglePlay);
         domElements.closePlayerBtn.addEventListener('click', closePlayer);
         domElements.progressContainer.addEventListener('click', setProgress);
+        domElements.volumeContainer.addEventListener('click', setVolume);
+        domElements.restartBtn.addEventListener('click', restartAudio);
+        domElements.rewindBtn.addEventListener('click', rewind5Seconds);
+        domElements.forwardBtn.addEventListener('click', forward5Seconds);
+        domElements.muteBtn.addEventListener('click', toggleMute);
+        
         domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
         domElements.audioElement.addEventListener('ended', () => {
             domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         });
         domElements.audioElement.addEventListener('loadedmetadata', () => {
             domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
+            domElements.audioElement.volume = 0.8;
+            updateMuteIcon();
         });
 
         window.addEventListener('click', function(e) {
