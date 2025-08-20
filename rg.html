@@ -1,4 +1,4 @@
-o<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -1271,7 +1271,8 @@ o<!DOCTYPE html>
         
         <!-- Controles principales -->
         <div class="audio-controls">
-            <button id="mute-btn"><i class="fas fa-volume-up"></i></button>
+            <!-- Botón de reinicio en lugar de silenciar -->
+            <button id="restart-btn" title="Reiniciar desde el principio"><i class="fas fa-rotate-left"></i></button>
             <button id="rewind-btn"><i class="fas fa-backward-step"></i></button>
             <button id="play-pause-btn"><i class="fas fa-play"></i></button>
             <button id="forward-btn"><i class="fas fa-forward-step"></i></button>
@@ -1410,7 +1411,7 @@ o<!DOCTYPE html>
             creditsModal: document.getElementById('credits-modal'),
             closeCredits: document.getElementById('close-credits'),
             // Nuevos elementos para controles de audio
-            muteBtn: document.getElementById('mute-btn'),
+            restartBtn: document.getElementById('restart-btn'), // Cambiado de muteBtn a restartBtn
             rewindBtn: document.getElementById('rewind-btn'),
             forwardBtn: document.getElementById('forward-btn'),
             volumeBtn: document.getElementById('volume-btn'),
@@ -1614,15 +1615,12 @@ o<!DOCTYPE html>
             domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
 
-        // Funciones para los nuevos controles de audio
-        function toggleMute() {
-            domElements.audioElement.muted = !domElements.audioElement.muted;
-            if (domElements.audioElement.muted) {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            } else {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        // Función para reiniciar el audio desde el principio
+        function restartAudio() {
+            domElements.audioElement.currentTime = 0;
+            if (domElements.audioElement.paused) {
+                domElements.audioElement.play();
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }
         }
 
@@ -1643,13 +1641,10 @@ o<!DOCTYPE html>
             
             // Actualizar icono según el nivel de volumen
             if (volume === 0) {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
             } else if (volume < 0.5) {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
             } else {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }
         }
@@ -1709,8 +1704,8 @@ o<!DOCTYPE html>
             domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
         });
 
-        // Event listeners para los nuevos controles
-        domElements.muteBtn.addEventListener('click', toggleMute);
+        // Event listeners para los controles
+        domElements.restartBtn.addEventListener('click', restartAudio); // Cambiado de muteBtn a restartBtn
         domElements.rewindBtn.addEventListener('click', rewind);
         domElements.forwardBtn.addEventListener('click', forward);
         domElements.volumeContainer.addEventListener('click', setVolume);
