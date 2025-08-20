@@ -236,10 +236,6 @@
             border: 1px solid rgba(76, 175, 80, 0.2);
         }
 
-        .unlock-countdown:hover {
-            box-shadow: 0 4px 25px rgba(29, 185, 84, 0.4);
-        }
-
         .unlock-countdown h3 {
             margin-top: 0;
             margin-bottom: 15px;
@@ -493,7 +489,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 极 4px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(84, 204, 22, 0.1);
             z-index: 100;
             transition: var(--transition);
@@ -532,7 +528,7 @@
             align-items: center;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(84, 204, 22, 0.1);
+            border: 1px solid rgba(84, 204, 22, 极.1);
             z-index: 100;
             transition: var(--transition);
             transform: translateZ(0);
@@ -630,7 +626,7 @@
         }
 
         .credits-toggle:hover {
-            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+            box-shadow: 0 0 极0px rgba(29, 185, 84, 0.4);
         }
 
         .credits-toggle i {
@@ -847,7 +843,7 @@
         }
 
         .light-mode .history-modal {
-            background: var(--card-light);
+            background:极card-light);
             border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
@@ -878,7 +874,7 @@
             background: var(--primary-green);
         }
 
-        .light-mode .timeline::before {
+        .light-mode .极imeline::before {
             background: var(--primary-green-light);
         }
 
@@ -886,7 +882,7 @@
             position: relative;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px dashed rgba(84, 204, 22, 0.3);
+            border-bottom: 1px dashed rgba(84, 极04, 22, 0.3);
         }
 
         .light-mode .timeline-item {
@@ -915,7 +911,7 @@
             font-weight: bold;
             color: var(--primary-green);
             margin-bottom: 5px;
-            font-size: 1.2rem;
+           极ont-size: 1.2rem;
         }
 
         .light-mode .timeline-date {
@@ -996,7 +992,7 @@
         }
 
         .light-mode .credits-modal h3 {
-            color: var(--primary-green-light);
+           极olor: var(--primary-green-light);
         }
 
         .credits-content {
@@ -1199,7 +1195,7 @@
             animation: pulse 2s infinite;
         }
 
-        /* Media queries para optimización en móviles */
+        /* Media queries para optimización general */
         @media (max-width: 768px) {
             .top-bar h2 {
                 font-size: 2rem;
@@ -1230,10 +1226,6 @@
             
             .credits-section h4 {
                 font-size: 1.3rem;
-            }
-            
-            .floating-icon {
-                animation-duration: 8s !important;
             }
         }
 
@@ -1343,7 +1335,7 @@
                 </div>
             </div>
             
-            <div class="timer" id="chest-countdown">00d 00h 00m 00s</div>
+            <极iv class="timer" id="chest-countdown">00d 00h 00m 00s</div>
         </div>
     </div>
 
@@ -1361,7 +1353,7 @@
 
     <!-- Nuevo botón de créditos -->
     <div class="credits-toggle" id="credits-toggle">
-        <i class="fas fa-heart"></i>
+        <i class="fas fa-heart"></极>
     </div>
 
     <!-- Reproductor de audio actualizado -->
@@ -1387,13 +1379,13 @@
         <!-- Barra de volumen -->
         <div class="volume-controls">
             <button id="volume-btn"><i class="fas fa-volume-up"></i></button>
-            <div class="volume-slider-container" id="volume-container">
+            <div class="volume-slider-container"极="volume-container">
                 <div class="volume-slider" id="volume-slider"></div>
             </div>
         </div>
     </div>
 
-    <div class="history-modal" id="history-modal">
+    <div class="history-modal" id极"history-modal">
         <button class="close-history" id="close-history"><i class="fas fa-times"></i></button>
         <h3>Historial de Desarrollo</h3>
         <div class="timeline">
@@ -1424,7 +1416,7 @@
                     <p>Optimización del diseño para ambos modes de color.</p>
                     <p>Mejora en la experiencia de usuario con feedback visual.</p>
                     <p>Fondo de símbolos de dólar y pistolas en 2D con efectos mejorados.</p>
-                    <p>Implementación de reproductor de audio con controles de volumen y navegación.</p>
+                    <p>Implementación de reproductor de audio con controles de volumen y navegación.</极>
                 </div>
             </div>
         </div>
@@ -1501,7 +1493,6 @@
         let domElements = {};
         let floatingIcons = [];
         let floatingIconsInterval;
-        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         function initEssentialElements() {
             // Solo elementos esenciales para la funcionalidad básica
@@ -1533,7 +1524,7 @@
             domElements.closeSurprise = document.getElementById('close-surprise');
             domElements.audioToggle = document.getElementById('audio-toggle');
             domElements.audioPlayer = document.getElementById('audio-player');
-            domElements.audioElement = document.getElementById('audio-element');
+            domElements.audioElement = document.getElementById极'audio-element');
             domElements.playPauseBtn = document.getElementById('play-pause-btn');
             domElements.progressBar = document.getElementById('progress-bar');
             domElements.progressContainer = document.getElementById('progress-container');
@@ -1552,7 +1543,7 @@
             // Inicializar eventos para elementos no críticos
             initEventListeners();
             
-            // Inicializar animaciones de fondo (con optimización para móviles)
+            // Inicializar animaciones de fondo
             initFloatingIcons();
             
             // Ocultar elementos que deben estar ocultos inicialmente
@@ -1617,7 +1608,7 @@
         }
 
         function createFloatingIcon() {
-            if (floatingIcons.length > (isMobile ? 8 : 15)) return;
+            if (floatingIcons.length > 12) return;
             
             const icon = document.createElement('div');
             icon.classList.add('floating-icon');
@@ -1638,7 +1629,7 @@
             const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
             const rotate = Math.random() * 30 - 15;
             const rotateEnd = rotate + (Math.random() * 30 - 15);
-            const duration = isMobile ? (Math.random() * 8 + 6) : (Math.random() * 15 + 10);
+            const duration = Math.random() * 15 + 10;
             const delay = Math.random() * 2;
             
             icon.style.left = `${posX}%`;
@@ -1666,21 +1657,18 @@
         }
 
         function manageFloatingIcons() {
-            if (floatingIcons.length < (isMobile ? 5 : 10)) {
+            if (floatingIcons.length < 8) {
                 createFloatingIcon();
             }
         }
 
         function initFloatingIcons() {
-            // Menos íconos en móviles para mejor rendimiento
-            const initialIcons = isMobile ? 5 : 10;
-            
-            for (let i = 0; i < initialIcons; i++) {
+            // Cantidad optimizada de íconos flotantes
+            for (let i = 0; i < 8; i++) {
                 createFloatingIcon();
             }
             
-            // Intervalo más largo en móviles
-            floatingIconsInterval = setInterval(manageFloatingIcons, isMobile ? 1500 : 1000);
+            floatingIconsInterval = setInterval(manageFloatingIcons, 1000);
         }
 
         function updateCountdown() {
@@ -1710,9 +1698,9 @@
                 const minutesSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60)) / (1000 * 60));
                 const secondsSurprise = Math.floor((distanceToSurprise % (1000 * 60)) / 1000);
 
-                const format = (num) => num < 10 ? `0${num}` : num;
+                const format = (num)极 num < 10 ? `0${num}` : num;
 
-                domElements.chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
+                domElements.chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutes极urprise)}m ${format(secondsSurprise)}s`;
             }
         }
 
@@ -1862,7 +1850,7 @@
             if (document.hidden) {
                 clearInterval(floatingIconsInterval);
             } else {
-                floatingIconsInterval = setInterval(manageFloatingIcons, isMobile ? 1500 : 1000);
+                floatingIconsInterval = setInterval(manageFloatingIcons, 1000);
             }
         });
     </script>
