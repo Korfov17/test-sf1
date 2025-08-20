@@ -13,6 +13,7 @@
             src: url('Road_Rage.otf') format('opentype');
             font-weight: normal;
             font-style: normal;
+            font-display: swap;
         }
         
         :root {
@@ -51,6 +52,7 @@
             line-height: 1.6;
             transition: var(--transition);
             overflow-x: hidden;
+            will-change: transform, opacity;
         }
 
         .letter h1, 
@@ -85,6 +87,9 @@
             height: 100%;
             z-index: -1;
             overflow: hidden;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000;
         }
 
         .floating-icon {
@@ -94,6 +99,7 @@
             user-select: none;
             will-change: transform, opacity;
             backface-visibility: hidden;
+            transform: translateZ(0);
         }
 
         .dollar-sign {
@@ -179,6 +185,7 @@
             align-items: center;
             border-bottom: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
+            transform: translateZ(0);
         }
 
         .light-mode .top-bar {
@@ -214,13 +221,14 @@
 
         .unlock-countdown {
             text-align: center;
-            margin-bottom: 20px; /* Reducido el margen inferior */
+            margin-bottom: 20px;
             background: rgba(30, 30, 30, 0.7);
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
+            transform: translateZ(0);
         }
 
         .light-mode .unlock-countdown {
@@ -248,7 +256,7 @@
             background-color: var(--card-dark);
             border-radius: 12px;
             padding: 40px;
-            margin-bottom: 20px; /* Reducido el margen inferior */
+            margin-bottom: 20px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
@@ -258,6 +266,7 @@
             transition: var(--transition);
             font-size: 1.2rem;
             will-change: transform, opacity;
+            transform: translateZ(0);
         }
 
         .light-mode .letter {
@@ -383,13 +392,14 @@
 
         .chest-container {
             text-align: center;
-            margin-top: 20px; /* Reducido el margen superior */
+            margin-top: 20px;
             background: rgba(30, 30, 30, 0.7);
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
+            transform: translateZ(0);
         }
 
         .light-mode .chest-container {
@@ -411,6 +421,7 @@
             filter: blur(3px);
             transition: var(--transition);
             will-change: transform;
+            transform: translateZ(0);
         }
 
         .chest.unlocked {
@@ -486,6 +497,7 @@
             border: 1px solid rgba(84, 204, 22, 0.1);
             z-index: 100;
             transition: var(--transition);
+            transform: translateZ(0);
         }
 
         .light-mode .theme-toggle {
@@ -523,6 +535,7 @@
             border: 1px solid rgba(84, 204, 22, 0.1);
             z-index: 100;
             transition: var(--transition);
+            transform: translateZ(0);
         }
 
         .light-mode .history-toggle {
@@ -561,6 +574,7 @@
             z-index: 100;
             transition: var(--transition);
             display: none;
+            transform: translateZ(0);
         }
 
         .light-mode .audio-toggle {
@@ -601,13 +615,13 @@
             transition: var(--transition);
             display: none;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(20px) translateZ(0);
         }
 
         .credits-toggle.unlocked {
             display: flex;
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) translateZ(0);
         }
 
         .light-mode .credits-toggle {
@@ -644,6 +658,7 @@
             transition: var(--transition);
             display: none;
             text-align: center;
+            transform: translateZ(0);
         }
 
         .light-mode .audio-player-container {
@@ -823,6 +838,7 @@
             overflow-y: auto;
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateZ(0);
         }
 
         .history-modal.active {
@@ -935,7 +951,7 @@
             transform: rotate(90deg);
         }
 
-        /* Modal de créditos */
+        /* Modal de créditos - Optimizado para rendimiento */
         .credits-modal {
             position: fixed;
             top: 50%;
@@ -956,6 +972,9 @@
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             text-align: center;
+            transform: translateZ(0);
+            will-change: transform, opacity;
+            backface-visibility: hidden;
         }
 
         .credits-modal.active {
@@ -1082,6 +1101,7 @@
             text-align: center;
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateZ(0);
         }
 
         .surprise-modal.active {
@@ -1153,7 +1173,7 @@
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            to { transform: scale(1); }
         }
 
         @keyframes glow {
@@ -1178,8 +1198,96 @@
         .pulse {
             animation: pulse 2s infinite;
         }
+
+        /* Media queries para optimización en móviles */
+        @media (max-width: 768px) {
+            .top-bar h2 {
+                font-size: 2rem;
+            }
+            
+            .letter h1 {
+                font-size: 2.5rem;
+            }
+            
+            .letter {
+                padding: 25px;
+            }
+            
+            .audio-player-container {
+                width: 90%;
+                right: 5%;
+                bottom: 80px;
+            }
+            
+            .history-modal, .credits-modal, .surprise-modal {
+                width: 90%;
+                padding: 20px;
+            }
+            
+            .credits-modal h3 {
+                font-size: 2rem;
+            }
+            
+            .credits-section h4 {
+                font-size: 1.3rem;
+            }
+            
+            .floating-icon {
+                animation-duration: 8s !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin-top: 100px;
+            }
+            
+            .top-bar {
+                height: 60px;
+            }
+            
+            .top-bar h2 {
+                font-size: 1.8rem;
+            }
+            
+            .letter h1 {
+                font-size: 2rem;
+            }
+            
+            .letter p {
+                font-size: 1rem;
+            }
+            
+            .chest {
+                width: 150px;
+                height: 120px;
+            }
+            
+            .toolbox-icon {
+                font-size: 4rem;
+            }
+            
+            .timer {
+                font-size: 1.5rem;
+                padding: 10px 20px;
+            }
+            
+            .theme-toggle, .history-toggle, .audio-toggle, .credits-toggle {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+            }
+            
+            .audio-toggle {
+                right: 70px;
+            }
+            
+            .credits-toggle {
+                left: 70px;
+            }
+        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" media="print" onload="this.media='all'">
 </head>
 <body>
     <div class="money-bg" id="money-bg"></div>
@@ -1258,8 +1366,8 @@
 
     <!-- Reproductor de audio actualizado -->
     <div class="audio-player-container" id="audio-player">
-        <div class="audio-player-title"><strong>Lectura de Audio (Testing)</strong></div>
-        <audio id="audio-element" src="SoundHelix-Song-1.mp3"></audio>
+        <div class="audio-player-title"><strong>Canción Especial</strong></div>
+        <audio id="audio-element" src="holi/rato.mp3" preload="metadata"></audio>
         <div class="progress-container" id="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
@@ -1322,7 +1430,7 @@
         </div>
     </div>
 
-    <!-- Modal de créditos -->
+    <!-- Modal de créditos optimizado -->
     <div class="credits-modal" id="credits-modal">
         <button class="close-credits" id="close-credits"><i class="fas fa-times"></i></button>
         <h3>Créditos y Agradecimientos</h3>
@@ -1373,53 +1481,146 @@
     </div>
 
     <script>
+        // Optimización: Cargar elementos críticos primero
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar elementos esenciales primero
+            initEssentialElements();
+            
+            // Retrasar la inicialización de elementos no críticos
+            setTimeout(initNonCriticalElements, 500);
+            
+            // Iniciar el contador inmediatamente
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+
         const unlockDate = new Date('December 4, 2025 00:00:00').getTime();
         const surpriseDate = new Date('December 10, 2025 00:00:00').getTime();
         
-        const domElements = {
-            body: document.body,
-            mainCountdown: document.getElementById('main-countdown'),
-            chestCountdown: document.getElementById('chest-countdown'),
-            letter: document.getElementById('letter'),
-            letterLock: document.getElementById('letter-lock'),
-            chest: document.getElementById('chest'),
-            chestMessage: document.getElementById('chest-message'),
-            sorpresaLink: document.getElementById('sorpresa-link'),
-            themeToggle: document.getElementById('theme-toggle'),
-            themeIcon: document.querySelector('#theme-toggle i'),
-            historyToggle: document.getElementById('history-toggle'),
-            historyModal: document.getElementById('history-modal'),
-            closeHistory: document.getElementById('close-history'),
-            mainContainer: document.getElementById('main-container'),
-            surpriseModal: document.getElementById('surprise-modal'),
-            closeSurprise: document.getElementById('close-surprise'),
-            moneyBg: document.getElementById('money-bg'),
-            floatingIcons: [],
-            audioToggle: document.getElementById('audio-toggle'),
-            audioPlayer: document.getElementById('audio-player'),
-            audioElement: document.getElementById('audio-element'),
-            playPauseBtn: document.getElementById('play-pause-btn'),
-            progressBar: document.getElementById('progress-bar'),
-            progressContainer: document.getElementById('progress-container'),
-            currentTimeDisplay: document.getElementById('current-time'),
-            durationDisplay: document.getElementById('duration'),
-            creditsToggle: document.getElementById('credits-toggle'),
-            creditsModal: document.getElementById('credits-modal'),
-            closeCredits: document.getElementById('close-credits'),
-            // Nuevos elementos para controles de audio
-            restartBtn: document.getElementById('restart-btn'),
-            rewindBtn: document.getElementById('rewind-btn'),
-            forwardBtn: document.getElementById('forward-btn'),
-            volumeBtn: document.getElementById('volume-btn'),
-            volumeSlider: document.getElementById('volume-slider'),
-            volumeContainer: document.getElementById('volume-container')
-        };
+        // Variables globales optimizadas
+        let domElements = {};
+        let floatingIcons = [];
+        let floatingIconsInterval;
+        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        function initEssentialElements() {
+            // Solo elementos esenciales para la funcionalidad básica
+            domElements = {
+                body: document.body,
+                mainCountdown: document.getElementById('main-countdown'),
+                chestCountdown: document.getElementById('chest-countdown'),
+                letter: document.getElementById('letter'),
+                letterLock: document.getElementById('letter-lock'),
+                chest: document.getElementById('chest'),
+                chestMessage: document.getElementById('chest-message'),
+                themeToggle: document.getElementById('theme-toggle'),
+                themeIcon: document.querySelector('#theme-toggle i'),
+                mainContainer: document.getElementById('main-container'),
+                moneyBg: document.getElementById('money-bg')
+            };
+
+            // Event listeners esenciales
+            domElements.themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        function initNonCriticalElements() {
+            // Inicializar el resto de elementos
+            domElements.sorpresaLink = document.getElementById('sorpresa-link');
+            domElements.historyToggle = document.getElementById('history-toggle');
+            domElements.historyModal = document.getElementById('history-modal');
+            domElements.closeHistory = document.getElementById('close-history');
+            domElements.surpriseModal = document.getElementById('surprise-modal');
+            domElements.closeSurprise = document.getElementById('close-surprise');
+            domElements.audioToggle = document.getElementById('audio-toggle');
+            domElements.audioPlayer = document.getElementById('audio-player');
+            domElements.audioElement = document.getElementById('audio-element');
+            domElements.playPauseBtn = document.getElementById('play-pause-btn');
+            domElements.progressBar = document.getElementById('progress-bar');
+            domElements.progressContainer = document.getElementById('progress-container');
+            domElements.currentTimeDisplay = document.getElementById('current-time');
+            domElements.durationDisplay = document.getElementById('duration');
+            domElements.creditsToggle = document.getElementById('credits-toggle');
+            domElements.creditsModal = document.getElementById('credits-modal');
+            domElements.closeCredits = document.getElementById('close-credits');
+            domElements.restartBtn = document.getElementById('restart-btn');
+            domElements.rewindBtn = document.getElementById('rewind-btn');
+            domElements.forwardBtn = document.getElementById('forward-btn');
+            domElements.volumeBtn = document.getElementById('volume-btn');
+            domElements.volumeSlider = document.getElementById('volume-slider');
+            domElements.volumeContainer = document.getElementById('volume-container');
+
+            // Inicializar eventos para elementos no críticos
+            initEventListeners();
+            
+            // Inicializar animaciones de fondo (con optimización para móviles)
+            initFloatingIcons();
+            
+            // Ocultar elementos que deben estar ocultos inicialmente
+            domElements.audioPlayer.style.display = 'none';
+            domElements.audioToggle.style.display = 'none';
+            
+            // Inicializar volumen
+            domElements.audioElement.volume = 0.7;
+            domElements.volumeSlider.style.width = '70%';
+        }
+
+        function initEventListeners() {
+            // Event listeners para interactividad
+            domElements.sorpresaLink.addEventListener('click', handleSorpresaClick);
+            domElements.historyToggle.addEventListener('click', function() {
+                showModal(domElements.historyModal);
+            });
+            domElements.closeHistory.addEventListener('click', function() {
+                hideModal(domElements.historyModal);
+            });
+            domElements.closeSurprise.addEventListener('click', function() {
+                hideModal(domElements.surpriseModal);
+            });
+            domElements.creditsToggle.addEventListener('click', function() {
+                showModal(domElements.creditsModal);
+            });
+            domElements.closeCredits.addEventListener('click', function() {
+                hideModal(domElements.creditsModal);
+            });
+            domElements.audioToggle.addEventListener('click', toggleAudioPlayer);
+            domElements.playPauseBtn.addEventListener('click', togglePlay);
+            domElements.progressContainer.addEventListener('click', setProgress);
+            domElements.restartBtn.addEventListener('click', restartAudio);
+            domElements.rewindBtn.addEventListener('click', rewind);
+            domElements.forwardBtn.addEventListener('click', forward);
+            domElements.volumeContainer.addEventListener('click', setVolume);
+
+            // Event listeners para el elemento de audio
+            domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
+            domElements.audioElement.addEventListener('ended', () => {
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            });
+            domElements.audioElement.addEventListener('loadedmetadata', () => {
+                domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
+            });
+
+            // Event listeners para cierre de modales
+            window.addEventListener('click', function(e) {
+                if (e.target === domElements.historyModal) hideModal(domElements.historyModal);
+                if (e.target === domElements.surpriseModal) hideModal(domElements.surpriseModal);
+                if (e.target === domElements.creditsModal) hideModal(domElements.creditsModal);
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (domElements.historyModal.style.display === 'flex') hideModal(domElements.historyModal);
+                    if (domElements.surpriseModal.style.display === 'flex') hideModal(domElements.surpriseModal);
+                    if (domElements.creditsModal.style.display === 'flex') hideModal(domElements.creditsModal);
+                    if (domElements.audioPlayer.style.display === 'block') domElements.audioPlayer.style.display = 'none';
+                }
+            });
+        }
 
         function createFloatingIcon() {
+            if (floatingIcons.length > (isMobile ? 8 : 15)) return;
+            
             const icon = document.createElement('div');
             icon.classList.add('floating-icon');
-            icon.style.backfaceVisibility = 'hidden';
-            icon.style.willChange = 'transform, opacity';
             
             const isGun = Math.random() < 0.3;
             if (isGun) {
@@ -1430,10 +1631,6 @@
                 icon.textContent = '$';
             }
             
-            const effects = ['', 'glowing'];
-            const randomEffect = effects[Math.floor(Math.random() * effects.length)];
-            if (randomEffect) icon.classList.add(randomEffect);
-            
             const posX = Math.random() * 100;
             const posXEnd = (Math.random() - 0.5) * 20;
             const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
@@ -1441,7 +1638,7 @@
             const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
             const rotate = Math.random() * 30 - 15;
             const rotateEnd = rotate + (Math.random() * 30 - 15);
-            const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
+            const duration = isMobile ? (Math.random() * 8 + 6) : (Math.random() * 15 + 10);
             const delay = Math.random() * 2;
             
             icon.style.left = `${posX}%`;
@@ -1457,41 +1654,39 @@
             
             domElements.moneyBg.appendChild(icon);
             
-            setTimeout(() => {
-                icon.remove();
-                domElements.floatingIcons = domElements.floatingIcons.filter(i => i !== icon);
-            }, duration * 1000);
+            floatingIcons.push(icon);
             
-            domElements.floatingIcons.push(icon);
-            return icon;
+            // Eliminar después de la animación
+            setTimeout(() => {
+                if (icon.parentNode) {
+                    icon.parentNode.removeChild(icon);
+                    floatingIcons = floatingIcons.filter(i => i !== icon);
+                }
+            }, duration * 1000);
         }
 
         function manageFloatingIcons() {
-            if (domElements.floatingIcons.length < 15) {
+            if (floatingIcons.length < (isMobile ? 5 : 10)) {
                 createFloatingIcon();
             }
-            
-            domElements.floatingIcons = domElements.floatingIcons.filter(icon => document.body.contains(icon));
         }
 
         function initFloatingIcons() {
-            for (let i = 0; i < 10; i++) {
+            // Menos íconos en móviles para mejor rendimiento
+            const initialIcons = isMobile ? 5 : 10;
+            
+            for (let i = 0; i < initialIcons; i++) {
                 createFloatingIcon();
             }
             
-            setInterval(manageFloatingIcons, 1000);
+            // Intervalo más largo en móviles
+            floatingIconsInterval = setInterval(manageFloatingIcons, isMobile ? 1500 : 1000);
         }
 
         function updateCountdown() {
             const now = Date.now();
             const distanceToLetter = unlockDate - now;
             const distanceToSurprise = surpriseDate - now;
-            
-            if (distanceToLetter < 60000) {
-                requestAnimationFrame(updateCountdown);
-            } else {
-                setTimeout(updateCountdown, 1000);
-            }
             
             if (distanceToLetter <= 0) {
                 unlockLetter();
@@ -1639,7 +1834,7 @@
             }
         }
 
-        domElements.sorpresaLink.addEventListener('click', function(e) {
+        function handleSorpresaClick(e) {
             const now = Date.now();
             if (now < surpriseDate) {
                 e.preventDefault();
@@ -1648,9 +1843,9 @@
                 e.preventDefault();
                 showModal(domElements.surpriseModal);
             }
-        });
+        }
 
-        domElements.themeToggle.addEventListener('click', function() {
+        function toggleTheme() {
             domElements.body.classList.toggle('light-mode');
             
             if (domElements.body.classList.contains('light-mode')) {
@@ -1660,86 +1855,15 @@
                 domElements.themeIcon.classList.remove('fa-sun');
                 domElements.themeIcon.classList.add('fa-moon');
             }
-        });
+        }
 
-        domElements.historyToggle.addEventListener('click', function() {
-            showModal(domElements.historyModal);
-        });
-
-        domElements.closeHistory.addEventListener('click', function() {
-            hideModal(domElements.historyModal);
-        });
-
-        domElements.closeSurprise.addEventListener('click', function() {
-            hideModal(domElements.surpriseModal);
-        });
-
-        domElements.creditsToggle.addEventListener('click', function() {
-            showModal(domElements.creditsModal);
-        });
-
-        domElements.closeCredits.addEventListener('click', function() {
-            hideModal(domElements.creditsModal);
-        });
-
-        domElements.audioToggle.addEventListener('click', toggleAudioPlayer);
-        domElements.playPauseBtn.addEventListener('click', togglePlay);
-        domElements.progressContainer.addEventListener('click', setProgress);
-        domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
-        domElements.audioElement.addEventListener('ended', () => {
-            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        });
-        domElements.audioElement.addEventListener('loadedmetadata', () => {
-            domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
-        });
-
-        // Event listeners para los nuevos controles
-        domElements.restartBtn.addEventListener('click', restartAudio);
-        domElements.rewindBtn.addEventListener('click', rewind);
-        domElements.forwardBtn.addEventListener('click', forward);
-        domElements.volumeContainer.addEventListener('click', setVolume);
-
-        window.addEventListener('click', function(e) {
-            if (e.target === domElements.historyModal) {
-                hideModal(domElements.historyModal);
+        // Limpiar intervalos cuando la página no es visible (mejora de rendimiento)
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                clearInterval(floatingIconsInterval);
+            } else {
+                floatingIconsInterval = setInterval(manageFloatingIcons, isMobile ? 1500 : 1000);
             }
-            if (e.target === domElements.surpriseModal) {
-                hideModal(domElements.surpriseModal);
-            }
-            if (e.target === domElements.creditsModal) {
-                hideModal(domElements.creditsModal);
-            }
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                if (domElements.historyModal.style.display === 'flex') {
-                    hideModal(domElements.historyModal);
-                }
-                if (domElements.surpriseModal.style.display === 'flex') {
-                    hideModal(domElements.surpriseModal);
-                }
-                if (domElements.creditsModal.style.display === 'flex') {
-                    hideModal(domElements.creditsModal);
-                }
-                if (domElements.audioPlayer.style.display === 'block') {
-                    domElements.audioPlayer.style.display = 'none';
-                }
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCountdown();
-            initFloatingIcons();
-            setInterval(updateCountdown, 1000);
-            
-            // Ocultar el reproductor y su botón inicialmente
-            domElements.audioPlayer.style.display = 'none';
-            domElements.audioToggle.style.display = 'none';
-            
-            // Inicializar volumen
-            domElements.audioElement.volume = 0.7;
-            domElements.volumeSlider.style.width = '70%';
         });
     </script>
 </body>
