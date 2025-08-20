@@ -214,7 +214,7 @@
 
         .unlock-countdown {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px; /* Reducido el margen inferior */
             background: rgba(30, 30, 30, 0.7);
             padding: 20px;
             border-radius: 12px;
@@ -248,7 +248,7 @@
             background-color: var(--card-dark);
             border-radius: 12px;
             padding: 40px;
-            margin-bottom: 40px;
+            margin-bottom: 20px; /* Reducido el margen inferior */
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
@@ -383,7 +383,7 @@
 
         .chest-container {
             text-align: center;
-            margin-top: 60px;
+            margin-top: 20px; /* Reducido el margen superior */
             background: rgba(30, 30, 30, 0.7);
             padding: 30px;
             border-radius: 12px;
@@ -983,7 +983,6 @@
         .credits-content {
             text-align: left;
             margin-bottom: 30px;
-            display: none;
         }
 
         .credits-section {
@@ -1259,9 +1258,8 @@
 
     <!-- Reproductor de audio actualizado -->
     <div class="audio-player-container" id="audio-player">
-        <div class="audio-player-title"><strong>Modo Audio (Testing)</strong></div>
-        <audio id="audio-element" src="
-SoundHelix-Song-1.mp3"></audio>
+        <div class="audio-player-title"><strong>Lectura de Audio (Testing)</strong></div>
+        <audio id="audio-element" src="SoundHelix-Song-1.mp3"></audio>
         <div class="progress-container" id="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
@@ -1272,11 +1270,10 @@ SoundHelix-Song-1.mp3"></audio>
         
         <!-- Controles principales -->
         <div class="audio-controls">
-            <button id="mute-btn"><i class="fas fa-volume-up"></i></button>
+            <button id="restart-btn"><i class="fas fa-undo"></i></button>
             <button id="rewind-btn"><i class="fas fa-backward-step"></i></button>
             <button id="play-pause-btn"><i class="fas fa-play"></i></button>
             <button id="forward-btn"><i class="fas fa-forward-step"></i></button>
-            <button id="close-player-btn"><i class="fas fa-times"></i></button>
         </div>
         
         <!-- Barra de volumen -->
@@ -1316,7 +1313,7 @@ SoundHelix-Song-1.mp3"></audio>
             <div class="timeline-item">
                 <div class="timeline-date">Versión Actual</div>
                 <div class="timeline-content">
-                    <p>Optimización del diseño para ambos modos de color.</p>
+                    <p>Optimización del diseño para ambos modes de color.</p>
                     <p>Mejora en la experiencia de usuario con feedback visual.</p>
                     <p>Fondo de símbolos de dólar y pistolas en 2D con efectos mejorados.</p>
                     <p>Implementación de reproductor de audio con controles de volumen y navegación.</p>
@@ -1402,7 +1399,6 @@ SoundHelix-Song-1.mp3"></audio>
             audioPlayer: document.getElementById('audio-player'),
             audioElement: document.getElementById('audio-element'),
             playPauseBtn: document.getElementById('play-pause-btn'),
-            closePlayerBtn: document.getElementById('close-player-btn'),
             progressBar: document.getElementById('progress-bar'),
             progressContainer: document.getElementById('progress-container'),
             currentTimeDisplay: document.getElementById('current-time'),
@@ -1411,7 +1407,7 @@ SoundHelix-Song-1.mp3"></audio>
             creditsModal: document.getElementById('credits-modal'),
             closeCredits: document.getElementById('close-credits'),
             // Nuevos elementos para controles de audio
-            muteBtn: document.getElementById('mute-btn'),
+            restartBtn: document.getElementById('restart-btn'),
             rewindBtn: document.getElementById('rewind-btn'),
             forwardBtn: document.getElementById('forward-btn'),
             volumeBtn: document.getElementById('volume-btn'),
@@ -1609,21 +1605,12 @@ SoundHelix-Song-1.mp3"></audio>
             }
         }
 
-        function closePlayer() {
-            domElements.audioPlayer.style.display = 'none';
-            domElements.audioElement.pause();
-            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
-        }
-
         // Funciones para los nuevos controles de audio
-        function toggleMute() {
-            domElements.audioElement.muted = !domElements.audioElement.muted;
-            if (domElements.audioElement.muted) {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            } else {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+        function restartAudio() {
+            domElements.audioElement.currentTime = 0;
+            if (domElements.audioElement.paused) {
+                domElements.audioElement.play();
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }
         }
 
@@ -1644,13 +1631,10 @@ SoundHelix-Song-1.mp3"></audio>
             
             // Actualizar icono según el nivel de volumen
             if (volume === 0) {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
             } else if (volume < 0.5) {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
             } else {
-                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }
         }
@@ -1700,7 +1684,6 @@ SoundHelix-Song-1.mp3"></audio>
 
         domElements.audioToggle.addEventListener('click', toggleAudioPlayer);
         domElements.playPauseBtn.addEventListener('click', togglePlay);
-        domElements.closePlayerBtn.addEventListener('click', closePlayer);
         domElements.progressContainer.addEventListener('click', setProgress);
         domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
         domElements.audioElement.addEventListener('ended', () => {
@@ -1711,7 +1694,7 @@ SoundHelix-Song-1.mp3"></audio>
         });
 
         // Event listeners para los nuevos controles
-        domElements.muteBtn.addEventListener('click', toggleMute);
+        domElements.restartBtn.addEventListener('click', restartAudio);
         domElements.rewindBtn.addEventListener('click', rewind);
         domElements.forwardBtn.addEventListener('click', forward);
         domElements.volumeContainer.addEventListener('click', setVolume);
@@ -1740,7 +1723,7 @@ SoundHelix-Song-1.mp3"></audio>
                     hideModal(domElements.creditsModal);
                 }
                 if (domElements.audioPlayer.style.display === 'block') {
-                    closePlayer();
+                    domElements.audioPlayer.style.display = 'none';
                 }
             }
         });
