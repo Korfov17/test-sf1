@@ -665,7 +665,7 @@
         .audio-controls {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-top: 15px;
         }
 
@@ -719,6 +719,89 @@
             margin-top: 5px;
             font-size: 0.8rem;
             color: var(--text-muted);
+        }
+
+        /* Nuevos estilos para controles de volumen y navegación */
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .volume-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            color: var(--primary-green);
+            border: none;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: var(--transition);
+        }
+
+        .light-mode .volume-btn {
+            color: var(--primary-green-light);
+        }
+
+        .volume-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .volume-slider-container {
+            flex: 1;
+            height: 6px;
+            background: rgba(84, 204, 22, 0.2);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .volume-slider {
+            height: 100%;
+            background: var(--primary-green);
+            border-radius: 3px;
+            width: 100%;
+            transition: width 0.1s linear;
+        }
+
+        .light-mode .volume-slider {
+            background: var(--primary-green-light);
+        }
+
+        .navigation-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .navigation-controls button {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .light-mode .navigation-controls button {
+            background: var(--primary-green-light);
+        }
+
+        .navigation-controls button:hover {
+            transform: scale(1.1);
         }
 
         .history-modal {
@@ -900,6 +983,7 @@
         .credits-content {
             text-align: left;
             margin-bottom: 30px;
+            display: none;
         }
 
         .credits-section {
@@ -1016,6 +1100,7 @@
             margin-top: 0;
             margin-bottom: 20px;
             font-size: 2rem;
+            text-align: center;
         }
 
         .light-mode .surprise-modal h3 {
@@ -1183,9 +1268,22 @@
             <span id="current-time">0:00</span>
             <span id="duration">0:00</span>
         </div>
+        
+        <!-- Controles principales -->
         <div class="audio-controls">
+            <button id="mute-btn"><i class="fas fa-volume-up"></i></button>
+            <button id="rewind-btn"><i class="fas fa-backward-step"></i></button>
             <button id="play-pause-btn"><i class="fas fa-play"></i></button>
+            <button id="forward-btn"><i class="fas fa-forward-step"></i></button>
             <button id="close-player-btn"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Barra de volumen -->
+        <div class="volume-controls">
+            <button id="volume-btn"><i class="fas fa-volume-up"></i></button>
+            <div class="volume-slider-container" id="volume-container">
+                <div class="volume-slider" id="volume-slider"></div>
+            </div>
         </div>
     </div>
 
@@ -1220,6 +1318,7 @@
                     <p>Optimización del diseño para ambos modos de color.</p>
                     <p>Mejora en la experiencia de usuario con feedback visual.</p>
                     <p>Fondo de símbolos de dólar y pistolas en 2D con efectos mejorados.</p>
+                    <p>Implementación de reproductor de audio con controles de volumen y navegación.</p>
                 </div>
             </div>
         </div>
@@ -1309,7 +1408,14 @@
             durationDisplay: document.getElementById('duration'),
             creditsToggle: document.getElementById('credits-toggle'),
             creditsModal: document.getElementById('credits-modal'),
-            closeCredits: document.getElementById('close-credits')
+            closeCredits: document.getElementById('close-credits'),
+            // Nuevos elementos para controles de audio
+            muteBtn: document.getElementById('mute-btn'),
+            rewindBtn: document.getElementById('rewind-btn'),
+            forwardBtn: document.getElementById('forward-btn'),
+            volumeBtn: document.getElementById('volume-btn'),
+            volumeSlider: document.getElementById('volume-slider'),
+            volumeContainer: document.getElementById('volume-container')
         };
 
         function createFloatingIcon() {
@@ -1508,6 +1614,46 @@
             domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
 
+        // Funciones para los nuevos controles de audio
+        function toggleMute() {
+            domElements.audioElement.muted = !domElements.audioElement.muted;
+            if (domElements.audioElement.muted) {
+                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        }
+
+        function rewind() {
+            domElements.audioElement.currentTime = Math.max(0, domElements.audioElement.currentTime - 5);
+        }
+
+        function forward() {
+            domElements.audioElement.currentTime = Math.min(domElements.audioElement.duration, domElements.audioElement.currentTime + 5);
+        }
+
+        function setVolume(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const volume = clickX / width;
+            domElements.audioElement.volume = volume;
+            domElements.volumeSlider.style.width = `${volume * 100}%`;
+            
+            // Actualizar icono según el nivel de volumen
+            if (volume === 0) {
+                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else if (volume < 0.5) {
+                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+            } else {
+                domElements.muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        }
+
         domElements.sorpresaLink.addEventListener('click', function(e) {
             const now = Date.now();
             if (now < surpriseDate) {
@@ -1563,6 +1709,12 @@
             domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
         });
 
+        // Event listeners para los nuevos controles
+        domElements.muteBtn.addEventListener('click', toggleMute);
+        domElements.rewindBtn.addEventListener('click', rewind);
+        domElements.forwardBtn.addEventListener('click', forward);
+        domElements.volumeContainer.addEventListener('click', setVolume);
+
         window.addEventListener('click', function(e) {
             if (e.target === domElements.historyModal) {
                 hideModal(domElements.historyModal);
@@ -1600,6 +1752,10 @@
             // Ocultar el reproductor y su botón inicialmente
             domElements.audioPlayer.style.display = 'none';
             domElements.audioToggle.style.display = 'none';
+            
+            // Inicializar volumen
+            domElements.audioElement.volume = 0.7;
+            domElements.volumeSlider.style.width = '70%';
         });
     </script>
 </body>
