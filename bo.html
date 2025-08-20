@@ -162,6 +162,7 @@
             justify-content: center;
             gap: 15px;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
         
         button {
@@ -193,6 +194,14 @@
         
         .reset-btn {
             background: linear-gradient(to right, #f44336, #c62828);
+        }
+        
+        .daily-btn {
+            background: linear-gradient(to right, #ff9800, #ef6c00);
+        }
+        
+        .challenge-btn {
+            background: linear-gradient(to right, #9c27b0, #6a1b9a);
         }
         
         .modal {
@@ -338,6 +347,80 @@
             transform: translateX(0);
         }
         
+        .challenges-container {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .challenges-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .challenge {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .challenge-info {
+            flex: 1;
+        }
+        
+        .challenge-title {
+            font-weight: bold;
+            color: #bb86fc;
+        }
+        
+        .challenge-desc {
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+        
+        .challenge-reward {
+            font-weight: bold;
+            color: #ffd700;
+            margin-left: 15px;
+        }
+        
+        .mini-game {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .mini-game-title {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .clicker-game {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .clicker-game:active {
+            transform: scale(0.95);
+        }
+        
+        .clicker-icon {
+            font-size: 4rem;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+        
         @media (max-width: 768px) {
             .bottles-grid {
                 grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -349,6 +432,16 @@
             
             h1 {
                 font-size: 2rem;
+            }
+            
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -371,11 +464,51 @@
         
         <div class="actions">
             <button class="progress-btn" id="add-xp">
-                <i class="fas fa-plus"></i> Ganar 100 XP
+                <i class="fas fa-plus"></i> Ganar 50 XP
+            </button>
+            <button class="daily-btn" id="daily-reward">
+                <i class="fas fa-calendar-day"></i> Recompensa Diaria
+            </button>
+            <button class="challenge-btn" id="complete-challenge">
+                <i class="fas fa-tasks"></i> Completar Desafío
             </button>
             <button class="reset-btn" id="reset-progress">
-                <i class="fas fa-redo"></i> Reiniciar Progreso
+                <i class="fas fa-redo"></i> Reiniciar
             </button>
+        </div>
+        
+        <div class="mini-game">
+            <h3 class="mini-game-title">Juego Rápido - Click para ganar XP</h3>
+            <div class="clicker-game" id="clicker-game">
+                <div class="clicker-icon">🎯</div>
+                <p>Haz clic aquí para ganar XP</p>
+                <p><small>Cada clic vale 5 XP</small></p>
+            </div>
+        </div>
+        
+        <div class="challenges-container">
+            <h3 class="challenges-title">Desafíos Disponibles</h3>
+            <div class="challenge">
+                <div class="challenge-info">
+                    <div class="challenge-title">Ver todas las botellas</div>
+                    <div class="challenge-desc">Haz clic en cada botella para ver su descripción</div>
+                </div>
+                <div class="challenge-reward">+30 XP</div>
+            </div>
+            <div class="challenge">
+                <div class="challenge-info">
+                    <div class="challenge-title">Jugar el minijuego</div>
+                    <div class="challenge-desc">Haz 10 clics en el juego rápido</div>
+                </div>
+                <div class="challenge-reward">+40 XP</div>
+            </div>
+            <div class="challenge">
+                <div class="challenge-info">
+                    <div class="challenge-title">Romper una botella</div>
+                    <div class="challenge-desc">Consigue suficiente XP para romper tu primera botella</div>
+                </div>
+                <div class="challenge-reward">+50 XP</div>
+            </div>
         </div>
     </div>
     
@@ -441,7 +574,10 @@
         // Estado de la aplicación
         let state = {
             xp: 0,
-            unlockedBottles: []
+            unlockedBottles: [],
+            lastDailyReward: null,
+            challengesCompleted: {},
+            clickCount: 0
         };
 
         // Elementos DOM
@@ -449,7 +585,10 @@
         const xpCounter = document.getElementById('xp-counter');
         const progressFill = document.getElementById('progress-fill');
         const addXpBtn = document.getElementById('add-xp');
+        const dailyBtn = document.getElementById('daily-reward');
+        const challengeBtn = document.getElementById('complete-challenge');
         const resetBtn = document.getElementById('reset-progress');
+        const clickerGame = document.getElementById('clicker-game');
         const modal = document.getElementById('bottle-modal');
         const closeModal = document.getElementById('close-modal');
         const modalTitle = document.getElementById('modal-title');
@@ -462,13 +601,20 @@
             loadProgress();
             renderBottles();
             updateUI();
+            updateDailyButton();
             
             // Event listeners
-            addXpBtn.addEventListener('click', addXp);
+            addXpBtn.addEventListener('click', () => addXp(50));
+            dailyBtn.addEventListener('click', claimDailyReward);
+            challengeBtn.addEventListener('click', completeRandomChallenge);
             resetBtn.addEventListener('click', resetProgress);
+            clickerGame.addEventListener('click', () => addXp(5));
             closeModal.addEventListener('click', () => {
                 modal.classList.remove('active');
             });
+            
+            // Comprobar desafíos
+            checkChallenges();
         }
 
         // Cargar progreso desde localStorage
@@ -506,6 +652,10 @@
                     bottleElement.addEventListener('click', () => {
                         showBottleModal(bottle);
                     });
+                } else {
+                    bottleElement.addEventListener('click', () => {
+                        showBottleInfo(bottle);
+                    });
                 }
                 
                 bottlesContainer.appendChild(bottleElement);
@@ -525,17 +675,100 @@
             });
         }
 
+        // Actualizar estado del botón de recompensa diaria
+        function updateDailyButton() {
+            const today = new Date().toDateString();
+            if (state.lastDailyReward === today) {
+                dailyBtn.disabled = true;
+                dailyBtn.innerHTML = '<i class="fas fa-calendar-day"></i> Reclamado Hoy';
+                dailyBtn.style.opacity = '0.7';
+            } else {
+                dailyBtn.disabled = false;
+                dailyBtn.innerHTML = '<i class="fas fa-calendar-day"></i> Recompensa Diaria';
+                dailyBtn.style.opacity = '1';
+            }
+        }
+
         // Añadir puntos de experiencia
-        function addXp() {
-            const xpGained = 100;
-            state.xp += xpGained;
+        function addXp(amount) {
+            state.xp += amount;
+            
+            // Aumentar contador de clics para el desafío
+            if (amount === 5) {
+                state.clickCount++;
+                checkClickChallenge();
+            }
             
             // Mostrar indicador de XP
-            showXpIndicator(xpGained);
+            showXpIndicator(amount);
             
             updateUI();
             renderBottles();
             saveProgress();
+        }
+
+        // Reclamar recompensa diaria
+        function claimDailyReward() {
+            const today = new Date().toDateString();
+            if (state.lastDailyReward !== today) {
+                state.lastDailyReward = today;
+                addXp(100);
+                showAchievementToast('¡Recompensa diaria de 100 XP obtenida!');
+                updateDailyButton();
+                saveProgress();
+            }
+        }
+
+        // Completar desafío aleatorio
+        function completeRandomChallenge() {
+            const challenges = [
+                { name: "viewedAllBottles", reward: 30 },
+                { name: "playedMiniGame", reward: 40 },
+                { name: "brokenFirstBottle", reward: 50 }
+            ];
+            
+            const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+            
+            if (!state.challengesCompleted[randomChallenge.name]) {
+                state.challengesCompleted[randomChallenge.name] = true;
+                addXp(randomChallenge.reward);
+                showAchievementToast(`¡Desafío completado! +${randomChallenge.reward} XP`);
+                saveProgress();
+            } else {
+                showAchievementToast('Ya has completado este desafío hoy');
+            }
+        }
+
+        // Comprobar desafíos
+        function checkChallenges() {
+            // Verificar si el usuario ha visto todas las botellas
+            let viewedAll = true;
+            bottlesData.forEach(bottle => {
+                // Simular que el usuario ha visto todas las botellas después de un tiempo
+                if (!state.challengesCompleted.viewedAllBottles) {
+                    viewedAll = false;
+                }
+            });
+            
+            if (viewedAll && !state.challengesCompleted.viewedAllBottles) {
+                state.challengesCompleted.viewedAllBottles = true;
+                addXp(30);
+            }
+            
+            // Verificar si el usuario ha roto su primera botella
+            if (state.unlockedBottles.length > 0 && !state.challengesCompleted.brokenFirstBottle) {
+                state.challengesCompleted.brokenFirstBottle = true;
+                addXp(50);
+            }
+        }
+
+        // Comprobar desafío de clics
+        function checkClickChallenge() {
+            if (state.clickCount >= 10 && !state.challengesCompleted.playedMiniGame) {
+                state.challengesCompleted.playedMiniGame = true;
+                addXp(40);
+                showAchievementToast('¡Has completado el desafío de 10 clics! +40 XP');
+            }
         }
 
         // Reiniciar progreso
@@ -543,11 +776,14 @@
             if (confirm('¿Estás seguro de que quieres reiniciar todo tu progreso?')) {
                 state.xp = 0;
                 state.unlockedBottles = [];
+                state.lastDailyReward = null;
+                state.challengesCompleted = {};
+                state.clickCount = 0;
                 updateUI();
                 renderBottles();
+                updateDailyButton();
                 saveProgress();
                 
-                // Mostrar notificación
                 showAchievementToast('Progreso reiniciado');
             }
         }
@@ -588,10 +824,23 @@
                     
                     // Mostrar notificación
                     showAchievementToast(`¡Botella ${bottle.title} desbloqueada!`);
+                    
+                    // Comprobar desafíos
+                    checkChallenges();
                 }, 1000);
                 
                 saveProgress();
             }
+        }
+
+        // Mostrar información de botella (bloqueada)
+        function showBottleInfo(bottle) {
+            modalTitle.textContent = bottle.title + " (Bloqueada)";
+            modalDesc.textContent = `Necesitas ${bottle.xpRequired} XP para desbloquear esta botella. 
+                                    Te faltan ${bottle.xpRequired - state.xp} XP.`;
+            modalImage.innerHTML = `<span style="font-size: 5rem;">🔒</span>`;
+            modalImage.style.background = `linear-gradient(135deg, #333, #212121)`;
+            modal.classList.add('active');
         }
 
         // Mostrar modal de botella
@@ -632,8 +881,8 @@
             const indicator = document.createElement('div');
             indicator.className = 'xp-indicator';
             indicator.textContent = `+${amount} XP`;
-            indicator.style.left = `${addXpBtn.offsetLeft + addXpBtn.offsetWidth/2}px`;
-            indicator.style.top = `${addXpBtn.offsetTop}px`;
+            indicator.style.left = `${50}%`;
+            indicator.style.top = `${50}%`;
             indicator.style.animation = 'xpFloat 1s forwards';
             
             document.body.appendChild(indicator);
