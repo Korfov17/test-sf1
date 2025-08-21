@@ -1065,13 +1065,221 @@
             transform: rotate(90deg);
         }
 
+        /* Estilos para las tarjetas de sorpresa */
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 220px;
+            height: 280px;
+            background: var(--card-darker);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .light-mode .card {
+            background: var(--card-lighter);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(29, 185, 84, 0.4);
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .light-mode .card-icon {
+            color: var(--primary-green-light);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .light-mode .card-title {
+            color: var(--primary-green-light);
+        }
+
+        .card-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .light-mode .card-description {
+            color: var(--text-muted-light);
+        }
+
+        .card-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        .card.open .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card.open .card-icon,
+        .card.open .card-title,
+        .card.open .card-description {
+            display: none;
+        }
+
+        .gift-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 2px solid var(--primary-green);
+        }
+
+        .light-mode .gift-image {
+            border: 2px solid var(--primary-green-light);
+        }
+
+        .gift-message {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .light-mode .gift-message {
+            color: var(--text-dark);
+        }
+
+        .album-art {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 2px solid var(--primary-green);
+        }
+
+        .light-mode .album-art {
+            border: 2px solid var(--primary-green-light);
+        }
+
+        .song-title {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .light-mode .song-title {
+            color: var(--text-dark);
+        }
+
+        .mini-player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .mini-player-controls button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-green);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .light-mode .mini-player-controls button {
+            background: var(--primary-green-light);
+        }
+
+        .mini-player-controls button:hover {
+            transform: scale(1.1);
+        }
+
+        .mini-progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(84, 204, 22, 0.2);
+            border-radius: 2px;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+
+        .mini-progress-bar {
+            height: 100%;
+            background: var(--primary-green);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .light-mode .mini-progress-bar {
+            background: var(--primary-green-light);
+        }
+
+        .close-card {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: var(--primary-green);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .light-mode .close-card {
+            color: var(--primary-green-light);
+        }
+
+        .close-card:hover {
+            transform: rotate(90deg);
+        }
+
         .surprise-modal {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.8);
             width: 80%;
-            max-width: 500px;
+            max-width: 600px;
             background: var(--card-dark);
             border-radius: 12px;
             padding: 30px;
@@ -1105,24 +1313,6 @@
 
         .light-mode .surprise-modal h3 {
             color: var(--primary-green-light);
-        }
-
-        .surprise-modal p {
-            color: var(--text-light);
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-bottom: 25px;
-        }
-
-        .light-mode .surprise-modal p {
-            color: var(--text-dark);
-        }
-
-        .surprise-modal .toolbox-icon {
-            font-size: 5rem;
-            color: #35b154;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.5));
         }
 
         .close-surprise {
@@ -1260,7 +1450,7 @@
     <!-- Reproductor de audio actualizado -->
     <div class="audio-player-container" id="audio-player">
         <div class="audio-player-title"><strong>Canción Especial</strong></div>
-        <audio id="audio-element" src="holi/rato.mp3"></audio>
+        <audio id="audio-element" src="pfiw/wifj.mp3"></audio>
         <div class="progress-container" id="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
@@ -1332,7 +1522,7 @@
         
         <div class="credits-content">
             <div class="credits-section">
-                <h4>Desarrollo y Diseño</h4>
+                <h4>Desarrollo and Diseño</h4>
                 <ul class="credits-list">
                     <li><strong>Director del Proyecto:</strong> [Tu Nombre]</li>
                     <li><strong>Diseñador Principal:</strong> [Nombre del Diseñador]</li>
@@ -1368,10 +1558,50 @@
         </div>
     </div>
 
+    <!-- Modal de sorpresa con tarjetas -->
     <div class="surprise-modal" id="surprise-modal">
-        <i class="fa-solid fa-toolbox toolbox-icon"></i>
         <h3>¡Sorpresa Especial!</h3>
-        <p>Este es un ejemplo del contenido de tu sorpresa. Podría incluir un mensaje personalizado, una foto especial, o cualquier detalle que quieras compartir con esa persona tan importante para ti.</p>
+        <p>Selecciona una tarjeta para descubrir tu regalo:</p>
+        
+        <div class="cards-container">
+            <!-- Tarjeta 1: Mensaje de regalo con imagen -->
+            <div class="card" id="card1">
+                <i class="fas fa-gift card-icon"></i>
+                <div class="card-title">Regalo Especial</div>
+                <div class="card-description">Haz clic para descubrir tu regalo</div>
+                
+                <div class="card-content">
+                    <button class="close-card"><i class="fas fa-times"></i></button>
+                    <img src="https://placehold.co/300x200/1db954/white?text=Tu+Regalo" alt="Imagen de regalo" class="gift-image">
+                    <div class="gift-message">¡Felicitaciones! Este es tu regalo especial.</div>
+                </div>
+            </div>
+            
+            <!-- Tarjeta 2: Reproductor de música -->
+            <div class="card" id="card2">
+                <i class="fas fa-music card-icon"></i>
+                <div class="card-title">Canción Especial</div>
+                <div class="card-description">Haz clic para escuchar una canción especial</div>
+                
+                <div class="card-content">
+                    <button class="close-card"><i class="fas fa-times"></i></button>
+                    <img src="https://placehold.co/300x300/15803d/white?text=Álbum" alt="Portada del álbum" class="album-art">
+                    <div class="song-title">Canción Especial</div>
+                    
+                    <div class="mini-progress-container">
+                        <div class="mini-progress-bar" id="mini-progress-bar"></div>
+                    </div>
+                    
+                    <div class="mini-player-controls">
+                        <button id="mini-restart-btn" title="Reiniciar"><i class="fas fa-rotate-left"></i></button>
+                        <button id="mini-rewind-btn"><i class="fas fa-backward-step"></i></button>
+                        <button id="mini-play-pause-btn"><i class="fas fa-play"></i></button>
+                        <button id="mini-forward-btn"><i class="fas fa-forward-step"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <button class="close-surprise" id="close-surprise">Cerrar</button>
     </div>
 
@@ -1411,12 +1641,20 @@
             creditsModal: document.getElementById('credits-modal'),
             closeCredits: document.getElementById('close-credits'),
             // Nuevos elementos para controles de audio
-            restartBtn: document.getElementById('restart-btn'), // Cambiado de muteBtn a restartBtn
+            restartBtn: document.getElementById('restart-btn'),
             rewindBtn: document.getElementById('rewind-btn'),
             forwardBtn: document.getElementById('forward-btn'),
             volumeBtn: document.getElementById('volume-btn'),
             volumeSlider: document.getElementById('volume-slider'),
-            volumeContainer: document.getElementById('volume-container')
+            volumeContainer: document.getElementById('volume-container'),
+            // Elementos para las tarjetas de sorpresa
+            card1: document.getElementById('card1'),
+            card2: document.getElementById('card2'),
+            miniProgressBar: document.getElementById('mini-progress-bar'),
+            miniRestartBtn: document.getElementById('mini-restart-btn'),
+            miniRewindBtn: document.getElementById('mini-rewind-btn'),
+            miniPlayPauseBtn: document.getElementById('mini-play-pause-btn'),
+            miniForwardBtn: document.getElementById('mini-forward-btn')
         };
 
         function createFloatingIcon() {
@@ -1579,6 +1817,7 @@
             const { currentTime, duration } = domElements.audioElement;
             const progressPercent = (currentTime / duration) * 100;
             domElements.progressBar.style.width = `${progressPercent}%`;
+            domElements.miniProgressBar.style.width = `${progressPercent}%`;
             
             domElements.currentTimeDisplay.textContent = formatTime(currentTime);
             if (duration) {
@@ -1603,9 +1842,11 @@
             if (domElements.audioElement.paused) {
                 domElements.audioElement.play();
                 domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                domElements.miniPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             } else {
                 domElements.audioElement.pause();
                 domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                domElements.miniPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             }
         }
 
@@ -1613,6 +1854,7 @@
             domElements.audioPlayer.style.display = 'none';
             domElements.audioElement.pause();
             domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            domElements.miniPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         }
 
         // Función para reiniciar el audio desde el principio
@@ -1621,6 +1863,7 @@
             if (domElements.audioElement.paused) {
                 domElements.audioElement.play();
                 domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                domElements.miniPlayPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             }
         }
 
@@ -1647,6 +1890,16 @@
             } else {
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }
+        }
+
+        // Función para abrir una tarjeta
+        function openCard(card) {
+            card.classList.add('open');
+        }
+
+        // Función para cerrar una tarjeta
+        function closeCard(card) {
+            card.classList.remove('open');
         }
 
         domElements.sorpresaLink.addEventListener('click', function(e) {
@@ -1699,16 +1952,45 @@
         domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
         domElements.audioElement.addEventListener('ended', () => {
             domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            domElements.miniPlayPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         });
         domElements.audioElement.addEventListener('loadedmetadata', () => {
             domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
         });
 
         // Event listeners para los controles
-        domElements.restartBtn.addEventListener('click', restartAudio); // Cambiado de muteBtn a restartBtn
+        domElements.restartBtn.addEventListener('click', restartAudio);
         domElements.rewindBtn.addEventListener('click', rewind);
         domElements.forwardBtn.addEventListener('click', forward);
         domElements.volumeContainer.addEventListener('click', setVolume);
+
+        // Event listeners para las tarjetas
+        domElements.card1.addEventListener('click', function(e) {
+            if (!e.target.closest('.close-card') && !this.classList.contains('open')) {
+                openCard(this);
+            }
+        });
+
+        domElements.card2.addEventListener('click', function(e) {
+            if (!e.target.closest('.close-card') && !this.classList.contains('open')) {
+                openCard(this);
+            }
+        });
+
+        // Event listeners para cerrar las tarjetas
+        const closeCardButtons = document.querySelectorAll('.close-card');
+        closeCardButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeCard(this.closest('.card'));
+            });
+        });
+
+        // Event listeners para los controles del mini reproductor
+        domElements.miniRestartBtn.addEventListener('click', restartAudio);
+        domElements.miniRewindBtn.addEventListener('click', rewind);
+        domElements.miniPlayPauseBtn.addEventListener('click', togglePlay);
+        domElements.miniForwardBtn.addEventListener('click', forward);
 
         window.addEventListener('click', function(e) {
             if (e.target === domElements.historyModal) {
@@ -1736,6 +2018,12 @@
                 if (domElements.audioPlayer.style.display === 'block') {
                     closePlayer();
                 }
+                
+                // Cerrar tarjetas abiertas
+                const openCards = document.querySelectorAll('.card.open');
+                openCards.forEach(card => {
+                    closeCard(card);
+                });
             }
         });
 
