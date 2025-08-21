@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Botellas Nivelables</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Menú de Iconos Interactivo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -14,909 +14,283 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 20px;
-            color: white;
         }
         
         .container {
-            max-width: 1000px;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            margin-top: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
         }
         
         h1 {
-            text-align: center;
-            margin-bottom: 30px;
             font-size: 2.5rem;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-            color: #ffcc00;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
-        .progress-container {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            text-align: center;
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
         }
         
-        .progress-bar {
-            height: 20px;
-            background: #333;
-            border-radius: 10px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, #4caf50, #8bc34a);
-            width: 0%;
-            border-radius: 10px;
-            transition: width 1s ease-in-out;
-        }
-        
-        .bottles-grid {
+        .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
         
-        .bottle {
-            background: rgba(255, 255, 255, 0.1);
+        .menu-item {
+            background: white;
             border-radius: 15px;
-            padding: 15px;
+            padding: 25px 20px;
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s, box-shadow 0.3s;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
         
-        .bottle:hover {
+        .menu-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
         }
         
-        .bottle.locked {
-            opacity: 0.6;
-            cursor: not-allowed;
+        .menu-item i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #4361ee;
         }
         
-        .bottle.unlocked {
-            opacity: 1;
-            cursor: pointer;
-            background: rgba(255, 215, 0, 0.2);
-        }
-        
-        .bottle-icon {
-            font-size: 3rem;
+        .menu-item h3 {
+            font-size: 1.4rem;
             margin-bottom: 10px;
-            color: #1e88e5;
-            transition: all 0.5s;
-        }
-        
-        .bottle.unlocked .bottle-icon {
-            color: #ffd700;
-        }
-        
-        .bottle-title {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #bb86fc;
-        }
-        
-        .bottle-desc {
-            font-size: 0.9rem;
-            color: #e0e0e0;
-        }
-        
-        .bottle-level {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #333;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        .bottle.unlocked .bottle-level {
-            background: #ffd700;
             color: #333;
         }
         
-        .bottle-progress {
-            height: 5px;
-            background: #333;
-            border-radius: 3px;
-            margin-top: 10px;
-            overflow: hidden;
+        .menu-item p {
+            color: #666;
+            font-size: 0.95rem;
         }
         
-        .bottle-progress-fill {
-            height: 100%;
-            background: #4caf50;
-            width: 0%;
-            border-radius: 3px;
-            transition: width 0.5s;
-        }
-        
-        .actions {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        
-        button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 50px;
-            background: linear-gradient(to right, #1e88e5, #1565c0);
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        .progress-btn {
-            background: linear-gradient(to right, #4caf50, #2e7d32);
-        }
-        
-        .reset-btn {
-            background: linear-gradient(to right, #f44336, #c62828);
-        }
-        
-        .daily-btn {
-            background: linear-gradient(to right, #ff9800, #ef6c00);
-        }
-        
-        .challenge-btn {
-            background: linear-gradient(to right, #9c27b0, #6a1b9a);
-        }
-        
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-        }
-        
-        .modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #1a237e, #311b92);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            position: relative;
-            transform: scale(0.9);
-            transition: transform 0.3s;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        .modal-title {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: #ffd700;
-        }
-        
-        .modal-desc {
-            margin-bottom: 20px;
-            color: #e0e0e0;
-        }
-        
-        .modal-image {
-            width: 100%;
-            height: 200px;
-            background: #333;
-            border-radius: 10px;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            color: #ffd700;
-        }
-        
-        .celebration {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #ffd700;
-            opacity: 0;
-        }
-        
-        @keyframes breakBottle {
-            0% { transform: translateY(0) rotate(0); opacity: 1; }
-            50% { transform: translateY(50px) rotate(180deg); opacity: 0.7; }
-            100% { transform: translateY(100px) rotate(360deg); opacity: 0; }
-        }
-        
-        .bottle-break {
-            animation: breakBottle 1s forwards;
-        }
-        
-        @keyframes confettiFall {
-            0% { transform: translateY(-100px) rotate(0); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-        
-        .xp-indicator {
-            position: absolute;
-            color: #4caf50;
-            font-weight: bold;
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        @keyframes xpFloat {
-            0% { transform: translateY(0); opacity: 1; }
-            100% { transform: translateY(-50px); opacity: 0; }
-        }
-        
-        .achievement-toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(to right, #4caf50, #2e7d32);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transform: translateX(100%);
-            transition: transform 0.5s;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .achievement-toast.show {
-            transform: translateX(0);
-        }
-        
-        .challenges-container {
-            margin-top: 30px;
-            background: rgba(255, 255, 255, 0.1);
+        .illustration-container {
+            background: white;
             border-radius: 15px;
-            padding: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: none;
         }
         
-        .challenges-title {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #ffd700;
-        }
-        
-        .challenge {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
+        .illustration-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
         }
         
-        .challenge-info {
-            flex: 1;
+        .illustration-header h2 {
+            color: #333;
+            font-size: 1.8rem;
         }
         
-        .challenge-title {
-            font-weight: bold;
-            color: #bb86fc;
-        }
-        
-        .challenge-desc {
-            font-size: 0.9rem;
-            color: #e0e0e0;
-        }
-        
-        .challenge-reward {
-            font-weight: bold;
-            color: #ffd700;
-            margin-left: 15px;
-        }
-        
-        .mini-game {
-            margin-top: 30px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .mini-game-title {
-            margin-bottom: 15px;
-            color: #ffd700;
-        }
-        
-        .clicker-game {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 20px;
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: background 0.3s;
         }
         
-        .clicker-game:active {
-            transform: scale(0.95);
+        .close-btn:hover {
+            background: #ff4c4c;
         }
         
-        .clicker-icon {
-            font-size: 4rem;
-            margin-bottom: 10px;
-            color: #ffd700;
+        .illustration-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .illustration {
+            width: 100%;
+            max-width: 400px;
+            height: 250px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 5rem;
+            color: #4361ee;
+        }
+        
+        .illustration-text {
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        .illustration-text h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .illustration-text p {
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         @media (max-width: 768px) {
-            .bottles-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            .menu-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
             }
             
-            .bottle-icon {
-                font-size: 2.5rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .actions {
+            .illustration-content {
                 flex-direction: column;
-                align-items: center;
             }
             
-            button {
-                width: 100%;
-                justify-content: center;
+            .illustration {
+                height: 200px;
+                margin-bottom: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <h1>Sistema de Botellas Nivelables</h1>
-    
     <div class="container">
-        <div class="progress-container">
-            <h2>Progreso General</h2>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
+        <header>
+            <h1>Menú de Servicios</h1>
+            <p class="subtitle">Haz clic en cualquier icono para ver más detalles</p>
+        </header>
+        
+        <div class="menu-grid">
+            <div class="menu-item" data-target="design">
+                <i class="fas fa-palette"></i>
+                <h3>Diseño Creativo</h3>
+                <p>Soluciones visuales innovadoras</p>
             </div>
-            <p>Puntos de Experiencia: <span id="xp-counter">0</span> / 1000</p>
-        </div>
-        
-        <div class="bottles-grid" id="bottles-container">
-            <!-- Las botellas se generarán con JavaScript -->
-        </div>
-        
-        <div class="actions">
-            <button class="progress-btn" id="add-xp">
-                <i class="fas fa-plus"></i> Ganar 50 XP
-            </button>
-            <button class="daily-btn" id="daily-reward">
-                <i class="fas fa-calendar-day"></i> Recompensa Diaria
-            </button>
-            <button class="challenge-btn" id="complete-challenge">
-                <i class="fas fa-tasks"></i> Completar Desafío
-            </button>
-            <button class="reset-btn" id="reset-progress">
-                <i class="fas fa-redo"></i> Reiniciar
-            </button>
-        </div>
-        
-        <div class="mini-game">
-            <h3 class="mini-game-title">Juego Rápido - Click para ganar XP</h3>
-            <div class="clicker-game" id="clicker-game">
-                <div class="clicker-icon">🎯</div>
-                <p>Haz clic aquí para ganar XP</p>
-                <p><small>Cada clic vale 5 XP</small></p>
+            
+            <div class="menu-item" data-target="development">
+                <i class="fas fa-code"></i>
+                <h3>Desarrollo Web</h3>
+                <p>Sitios modernos y funcionales</p>
+            </div>
+            
+            <div class="menu-item" data-target="marketing">
+                <i class="fas fa-chart-line"></i>
+                <h3>Marketing Digital</h3>
+                <p>Aumenta tu presencia online</p>
+            </div>
+            
+            <div class="menu-item" data-target="support">
+                <i class="fas fa-headset"></i>
+                <h3>Soporte 24/7</h3>
+                <p>Asistencia técnica permanente</p>
             </div>
         </div>
         
-        <div class="challenges-container">
-            <h3 class="challenges-title">Desafíos Disponibles</h3>
-            <div class="challenge">
-                <div class="challenge-info">
-                    <div class="challenge-title">Ver todas las botellas</div>
-                    <div class="challenge-desc">Haz clic en cada botella para ver su descripción</div>
+        <div id="illustration-container" class="illustration-container">
+            <div class="illustration-header">
+                <h2 id="ill-title">Título de la Ilustración</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            
+            <div class="illustration-content">
+                <div id="illustration" class="illustration">
+                    <i id="ill-icon" class="fas fa-palette"></i>
                 </div>
-                <div class="challenge-reward">+30 XP</div>
-            </div>
-            <div class="challenge">
-                <div class="challenge-info">
-                    <div class="challenge-title">Jugar el minijuego</div>
-                    <div class="challenge-desc">Haz 10 clics en el juego rápido</div>
+                
+                <div class="illustration-text">
+                    <h3>Descripción Detallada</h3>
+                    <p id="ill-description">Selecciona un servicio para ver una descripción detallada aquí.</p>
                 </div>
-                <div class="challenge-reward">+40 XP</div>
-            </div>
-            <div class="challenge">
-                <div class="challenge-info">
-                    <div class="challenge-title">Romper una botella</div>
-                    <div class="challenge-desc">Consigue suficiente XP para romper tu primera botella</div>
-                </div>
-                <div class="challenge-reward">+50 XP</div>
             </div>
         </div>
     </div>
-    
-    <div class="modal" id="bottle-modal">
-        <div class="modal-content">
-            <button class="close-modal" id="close-modal">&times;</button>
-            <h2 class="modal-title" id="modal-title">Título</h2>
-            <p class="modal-desc" id="modal-desc">Descripción</p>
-            <div class="modal-image" id="modal-image">
-                <i class="fas fa-image"></i>
-            </div>
-            <p>¡Felicidades por desbloquear esta ilustración!</p>
-        </div>
-    </div>
-    
-    <div class="celebration" id="celebration"></div>
 
     <script>
-        // Datos de las botellas/niveles
-        const bottlesData = [
-            {
-                level: 1,
-                title: "Botella de Inicio",
-                description: "Comienza tu aventura rompiendo esta primera botella",
-                xpRequired: 100,
-                illustration: "🌱",
-                color: "#1e88e5"
-            },
-            {
-                level: 2,
-                title: "Botella de Coraje",
-                description: "Supera tus miedos y rompe esta botella",
-                xpRequired: 200,
-                illustration: "🔥",
-                color: "#d32f2f"
-            },
-            {
-                level: 3,
-                title: "Botella de Sabiduría",
-                description: "El conocimiento te permitirá romper esta botella",
-                xpRequired: 300,
-                illustration: "📚",
-                color: "#fbc02d"
-            },
-            {
-                level: 4,
-                title: "Botella de Perseverancia",
-                description: "La persistencia es la clave para romper esta botella",
-                xpRequired: 400,
-                illustration: "💪",
-                color: "#388e3c"
-            },
-            {
-                level: 5,
-                title: "Botella Maestra",
-                description: "Solo los verdaderos maestros pueden romper esta botella",
-                xpRequired: 500,
-                illustration: "🏆",
-                color: "#ffd700"
-            }
-        ];
-
-        // Estado de la aplicación
-        let state = {
-            xp: 0,
-            unlockedBottles: [],
-            lastDailyReward: null,
-            challengesCompleted: {},
-            clickCount: 0
-        };
-
-        // Elementos DOM
-        const bottlesContainer = document.getElementById('bottles-container');
-        const xpCounter = document.getElementById('xp-counter');
-        const progressFill = document.getElementById('progress-fill');
-        const addXpBtn = document.getElementById('add-xp');
-        const dailyBtn = document.getElementById('daily-reward');
-        const challengeBtn = document.getElementById('complete-challenge');
-        const resetBtn = document.getElementById('reset-progress');
-        const clickerGame = document.getElementById('clicker-game');
-        const modal = document.getElementById('bottle-modal');
-        const closeModal = document.getElementById('close-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalDesc = document.getElementById('modal-desc');
-        const modalImage = document.getElementById('modal-image');
-        const celebration = document.getElementById('celebration');
-
-        // Inicializar la aplicación
-        function init() {
-            loadProgress();
-            renderBottles();
-            updateUI();
-            updateDailyButton();
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.menu-item');
+            const illustrationContainer = document.getElementById('illustration-container');
+            const illTitle = document.getElementById('ill-title');
+            const illIcon = document.getElementById('ill-icon');
+            const illDescription = document.getElementById('ill-description');
+            const closeBtn = document.querySelector('.close-btn');
             
-            // Event listeners
-            addXpBtn.addEventListener('click', () => addXp(50));
-            dailyBtn.addEventListener('click', claimDailyReward);
-            challengeBtn.addEventListener('click', completeRandomChallenge);
-            resetBtn.addEventListener('click', resetProgress);
-            clickerGame.addEventListener('click', () => addXp(5));
-            closeModal.addEventListener('click', () => {
-                modal.classList.remove('active');
-            });
-            
-            // Comprobar desafíos
-            checkChallenges();
-        }
-
-        // Cargar progreso desde localStorage
-        function loadProgress() {
-            const savedProgress = localStorage.getItem('bottleProgress');
-            if (savedProgress) {
-                state = JSON.parse(savedProgress);
-            }
-        }
-
-        // Guardar progreso en localStorage
-        function saveProgress() {
-            localStorage.setItem('bottleProgress', JSON.stringify(state));
-        }
-
-        // Renderizar botellas
-        function renderBottles() {
-            bottlesContainer.innerHTML = '';
-            
-            bottlesData.forEach(bottle => {
-                const isUnlocked = state.unlockedBottles.includes(bottle.level);
-                const bottleElement = document.createElement('div');
-                bottleElement.className = `bottle ${isUnlocked ? 'unlocked' : 'locked'}`;
-                bottleElement.innerHTML = `
-                    <div class="bottle-level">${bottle.level}</div>
-                    <div class="bottle-icon">${isUnlocked ? '🧩' : '🧴'}</div>
-                    <div class="bottle-title">${bottle.title}</div>
-                    <div class="bottle-desc">${bottle.description}</div>
-                    <div class="bottle-progress">
-                        <div class="bottle-progress-fill" style="width: ${Math.min(100, (state.xp / bottle.xpRequired) * 100)}%"></div>
-                    </div>
-                `;
-                
-                if (isUnlocked) {
-                    bottleElement.addEventListener('click', () => {
-                        showBottleModal(bottle);
-                    });
-                } else {
-                    bottleElement.addEventListener('click', () => {
-                        showBottleInfo(bottle);
-                    });
+            // Datos para cada ilustración
+            const illustrations = {
+                design: {
+                    title: 'Diseño Creativo',
+                    icon: 'fas fa-palette',
+                    description: 'Nuestro servicio de diseño creativo ofrece soluciones visuales innovadoras que capturan la esencia de tu marca. Desarrollamos identidades visuales, material gráfico y experiencias de usuario que destacan en el mercado y conectan con tu audiencia.'
+                },
+                development: {
+                    title: 'Desarrollo Web',
+                    icon: 'fas fa-code',
+                    description: 'Creamos sitios web modernos, responsivos y altamente funcionales utilizando las últimas tecnologías. Desde páginas corporativas hasta aplicaciones web complejas, nuestro enfoque garantiza rendimiento, seguridad y una experiencia de usuario excepcional.'
+                },
+                marketing: {
+                    title: 'Marketing Digital',
+                    icon: 'fas fa-chart-line',
+                    description: 'Potencia tu presencia online con nuestras estrategias de marketing digital. Desarrollamos campañas efectivas en redes sociales, SEO, email marketing y publicidad online que aumentan tu visibilidad, engagement y conversiones.'
+                },
+                support: {
+                    title: 'Soporte Técnico 24/7',
+                    icon: 'fas fa-headset',
+                    description: 'Nuestro equipo de soporte técnico está disponible las 24 horas del día, los 7 días de la semana para resolver cualquier incidencia o consulta. Ofrecemos respuestas rápidas y soluciones efectivas para garantizar la continuidad de tu negocio.'
                 }
-                
-                bottlesContainer.appendChild(bottleElement);
-            });
-        }
-
-        // Actualizar la interfaz de usuario
-        function updateUI() {
-            xpCounter.textContent = state.xp;
-            progressFill.style.width = `${Math.min(100, (state.xp / 1000) * 100)}%`;
+            };
             
-            // Comprobar si se han desbloqueado nuevas botellas
-            bottlesData.forEach(bottle => {
-                if (!state.unlockedBottles.includes(bottle.level) && state.xp >= bottle.xpRequired) {
-                    unlockBottle(bottle.level);
+            // Mostrar ilustración al hacer clic en un ítem del menú
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    const illData = illustrations[target];
+                    
+                    illTitle.textContent = illData.title;
+                    illIcon.className = illData.icon;
+                    illDescription.textContent = illData.description;
+                    
+                    illustrationContainer.classList.add('active');
+                });
+            });
+            
+            // Ocultar ilustración al hacer clic en el botón de cerrar
+            closeBtn.addEventListener('click', function() {
+                illustrationContainer.classList.remove('active');
+            });
+            
+            // Ocultar ilustración al hacer clic fuera de ella
+            illustrationContainer.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
                 }
             });
-        }
-
-        // Actualizar estado del botón de recompensa diaria
-        function updateDailyButton() {
-            const today = new Date().toDateString();
-            if (state.lastDailyReward === today) {
-                dailyBtn.disabled = true;
-                dailyBtn.innerHTML = '<i class="fas fa-calendar-day"></i> Reclamado Hoy';
-                dailyBtn.style.opacity = '0.7';
-            } else {
-                dailyBtn.disabled = false;
-                dailyBtn.innerHTML = '<i class="fas fa-calendar-day"></i> Recompensa Diaria';
-                dailyBtn.style.opacity = '1';
-            }
-        }
-
-        // Añadir puntos de experiencia
-        function addXp(amount) {
-            state.xp += amount;
-            
-            // Aumentar contador de clics para el desafío
-            if (amount === 5) {
-                state.clickCount++;
-                checkClickChallenge();
-            }
-            
-            // Mostrar indicador de XP
-            showXpIndicator(amount);
-            
-            updateUI();
-            renderBottles();
-            saveProgress();
-        }
-
-        // Reclamar recompensa diaria
-        function claimDailyReward() {
-            const today = new Date().toDateString();
-            if (state.lastDailyReward !== today) {
-                state.lastDailyReward = today;
-                addXp(100);
-                showAchievementToast('¡Recompensa diaria de 100 XP obtenida!');
-                updateDailyButton();
-                saveProgress();
-            }
-        }
-
-        // Completar desafío aleatorio
-        function completeRandomChallenge() {
-            const challenges = [
-                { name: "viewedAllBottles", reward: 30 },
-                { name: "playedMiniGame", reward: 40 },
-                { name: "brokenFirstBottle", reward: 50 }
-            ];
-            
-            const randomChallenge = challenges[Math.floor(Math.random() * challenges.length)];
-            
-            if (!state.challengesCompleted[randomChallenge.name]) {
-                state.challengesCompleted[randomChallenge.name] = true;
-                addXp(randomChallenge.reward);
-                showAchievementToast(`¡Desafío completado! +${randomChallenge.reward} XP`);
-                saveProgress();
-            } else {
-                showAchievementToast('Ya has completado este desafío hoy');
-            }
-        }
-
-        // Comprobar desafíos
-        function checkChallenges() {
-            // Verificar si el usuario ha visto todas las botellas
-            let viewedAll = true;
-            bottlesData.forEach(bottle => {
-                // Simular que el usuario ha visto todas las botellas después de un tiempo
-                if (!state.challengesCompleted.viewedAllBottles) {
-                    viewedAll = false;
-                }
-            });
-            
-            if (viewedAll && !state.challengesCompleted.viewedAllBottles) {
-                state.challengesCompleted.viewedAllBottles = true;
-                addXp(30);
-            }
-            
-            // Verificar si el usuario ha roto su primera botella
-            if (state.unlockedBottles.length > 0 && !state.challengesCompleted.brokenFirstBottle) {
-                state.challengesCompleted.brokenFirstBottle = true;
-                addXp(50);
-            }
-        }
-
-        // Comprobar desafío de clics
-        function checkClickChallenge() {
-            if (state.clickCount >= 10 && !state.challengesCompleted.playedMiniGame) {
-                state.challengesCompleted.playedMiniGame = true;
-                addXp(40);
-                showAchievementToast('¡Has completado el desafío de 10 clics! +40 XP');
-            }
-        }
-
-        // Reiniciar progreso
-        function resetProgress() {
-            if (confirm('¿Estás seguro de que quieres reiniciar todo tu progreso?')) {
-                state.xp = 0;
-                state.unlockedBottles = [];
-                state.lastDailyReward = null;
-                state.challengesCompleted = {};
-                state.clickCount = 0;
-                updateUI();
-                renderBottles();
-                updateDailyButton();
-                saveProgress();
-                
-                showAchievementToast('Progreso reiniciado');
-            }
-        }
-
-        // Desbloquear botella
-        function unlockBottle(level) {
-            if (!state.unlockedBottles.includes(level)) {
-                state.unlockedBottles.push(level);
-                
-                // Encontrar la botella desbloqueada
-                const bottle = bottlesData.find(b => b.level === level);
-                
-                // Animación de romper botella
-                const bottleElements = document.querySelectorAll('.bottle');
-                const bottleElement = bottleElements[level - 1];
-                
-                bottleElement.classList.add('bottle-break');
-                
-                // Mostrar celebración después de la animación
-                setTimeout(() => {
-                    bottleElement.classList.remove('bottle-break');
-                    bottleElement.classList.add('unlocked');
-                    
-                    // Cambiar el icono a roto
-                    const bottleIcon = bottleElement.querySelector('.bottle-icon');
-                    bottleIcon.textContent = '🧩';
-                    
-                    // Hacerla clickeable
-                    bottleElement.addEventListener('click', () => {
-                        showBottleModal(bottle);
-                    });
-                    
-                    // Mostrar modal
-                    showBottleModal(bottle);
-                    
-                    // Mostrar confeti
-                    createConfetti();
-                    
-                    // Mostrar notificación
-                    showAchievementToast(`¡Botella ${bottle.title} desbloqueada!`);
-                    
-                    // Comprobar desafíos
-                    checkChallenges();
-                }, 1000);
-                
-                saveProgress();
-            }
-        }
-
-        // Mostrar información de botella (bloqueada)
-        function showBottleInfo(bottle) {
-            modalTitle.textContent = bottle.title + " (Bloqueada)";
-            modalDesc.textContent = `Necesitas ${bottle.xpRequired} XP para desbloquear esta botella. 
-                                    Te faltan ${bottle.xpRequired - state.xp} XP.`;
-            modalImage.innerHTML = `<span style="font-size: 5rem;">🔒</span>`;
-            modalImage.style.background = `linear-gradient(135deg, #333, #212121)`;
-            modal.classList.add('active');
-        }
-
-        // Mostrar modal de botella
-        function showBottleModal(bottle) {
-            modalTitle.textContent = bottle.title;
-            modalDesc.textContent = bottle.description;
-            modalImage.innerHTML = `<span style="font-size: 5rem;">${bottle.illustration}</span>`;
-            modalImage.style.background = `linear-gradient(135deg, ${bottle.color}, #212121)`;
-            modal.classList.add('active');
-        }
-
-        // Crear efecto de confeti
-        function createConfetti() {
-            celebration.innerHTML = '';
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.animationDelay = `${Math.random() * 2}s`;
-                confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
-                confetti.style.background = `hsl(${Math.random() * 360}, 70%, 50%)`;
-                confetti.style.width = `${10 + Math.random() * 10}px`;
-                confetti.style.height = `${10 + Math.random() * 10}px`;
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                
-                confetti.style.animation = `confettiFall ${2 + Math.random() * 2}s linear forwards`;
-                celebration.appendChild(confetti);
-            }
-            
-            setTimeout(() => {
-                celebration.innerHTML = '';
-            }, 4000);
-        }
-
-        // Mostrar indicador de XP
-        function showXpIndicator(amount) {
-            const indicator = document.createElement('div');
-            indicator.className = 'xp-indicator';
-            indicator.textContent = `+${amount} XP`;
-            indicator.style.left = `${50}%`;
-            indicator.style.top = `${50}%`;
-            indicator.style.animation = 'xpFloat 1s forwards';
-            
-            document.body.appendChild(indicator);
-            
-            setTimeout(() => {
-                indicator.remove();
-            }, 1000);
-        }
-
-        // Mostrar notificación de logro
-        function showAchievementToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'achievement-toast';
-            toast.innerHTML = `
-                <i class="fas fa-trophy"></i>
-                <span>${message}</span>
-            `;
-            
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 500);
-            }, 3000);
-        }
-
-        // Iniciar la aplicación cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', init);
+        });
     </script>
 </body>
 </html>
