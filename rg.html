@@ -311,6 +311,7 @@
             justify-content: center;
             transition: all 0.5s ease-in-out;
             z-index: 10;
+            pointer-events: none;
         }
 
         .light-mode .content-overlay {
@@ -381,7 +382,7 @@
             display: none;
         }
 
-        .chest-container {
+        .surprises-container {
             text-align: center;
             margin-top: 60px;
             background: rgba(30, 30, 30, 0.7);
@@ -389,55 +390,66 @@
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(84, 204, 22, 0.1);
-            position: relative;
-            overflow: hidden;
             transition: var(--transition);
         }
 
-        .light-mode .chest-container {
+        .light-mode .surprises-container {
             background: rgba(255, 255, 255, 0.7);
             border: 1px solid rgba(76, 175, 80, 0.2);
         }
 
-        .chest-container:hover {
+        .surprises-container:hover {
             box-shadow: 0 8px 35px rgba(29, 185, 84, 0.4);
         }
 
-        .chest {
-            width: 200px;
-            height: 150px;
-            position: relative;
-            margin: 0 auto;
+        .surprises-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .surprise-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 150px;
             cursor: pointer;
             pointer-events: none;
+            filter: blur(3px);
             transition: var(--transition);
             will-change: transform;
         }
 
-        .chest.unlocked {
+        .surprise-item.unlocked {
+            filter: none;
             pointer-events: auto;
         }
 
-        .chest:hover .toolbox-icon {
+        .surprise-item:hover .gift-icon {
             transform: translateY(-5px) scale(1.1);
             filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.8));
         }
 
-        .chest-body {
-            width: 180px;
-            height: 120px;
-            position: relative;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .toolbox-icon {
-            font-size: 5rem;
+        .gift-icon {
+            font-size: 4rem;
             color: #35b154;
             transition: var(--transition);
             filter: drop-shadow(0 0 10px rgba(53, 177, 84, 0.5));
+            margin-bottom: 10px;
+        }
+
+        .surprise-label {
+            font-size: 1rem;
+            color: var(--primary-green);
+            text-align: center;
+            margin-top: 10px;
+            transition: var(--transition);
+        }
+
+        .light-mode .surprise-label {
+            color: var(--primary-green-light);
         }
 
         .timer {
@@ -468,60 +480,6 @@
 
         .light-mode .chest-message {
             color: var(--primary-green-light);
-        }
-
-        /* Nuevos estilos para el overlay de la sorpresa */
-        .chest-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, 
-                rgba(30, 30, 30, 0.95) 0%, 
-                rgba(30, 30, 30, 0.98) 50%, 
-                rgba(30, 30, 30, 0.95) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.5s ease-in-out;
-            z-index: 10;
-        }
-
-        .light-mode .chest-overlay {
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.95) 0%, 
-                rgba(255, 255, 255, 0.98) 50%, 
-                rgba(255, 255, 255, 0.95) 100%);
-        }
-
-        .chest-container.unlocked .chest-overlay {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .chest-lock-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 4rem;
-            color: var(--primary-green);
-            z-index: 15;
-            opacity: 1;
-            text-shadow: 0 0 15px rgba(29, 185, 84, 0.5);
-            transition: var(--transition);
-            filter: none !important;
-            animation: glow 2s infinite alternate;
-        }
-
-        .light-mode .chest-lock-icon {
-            color: var(--primary-green-light);
-            text-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
-        }
-
-        .chest-container.unlocked .chest-lock-icon {
-            display: none;
         }
 
         .theme-toggle {
@@ -636,7 +594,6 @@
             color: var(--primary-green-light);
         }
 
-        /* Nuevo botón de créditos */
         .credits-toggle {
             position: fixed;
             bottom: 30px;
@@ -683,7 +640,6 @@
             color: var(--primary-green-light);
         }
 
-        /* Estilos actualizados del reproductor de audio */
         .audio-player-container {
             position: fixed;
             bottom: 100px;
@@ -775,7 +731,6 @@
             color: var(--text-muted);
         }
 
-        /* Nuevos estilos para controles de volumen y navegación */
         .volume-controls {
             display: flex;
             align-items: center;
@@ -954,7 +909,6 @@
             color: var(--primary-green);
             margin-bottom: 5px;
             font-size: 1.2rem;
-            text-align: left;
         }
 
         .light-mode .timeline-date {
@@ -964,7 +918,6 @@
         .timeline-content {
             color: var(--text-light);
             font-size: 1.1rem;
-            text-align: left;
         }
 
         .light-mode .timeline-content {
@@ -991,7 +944,6 @@
             transform: rotate(90deg);
         }
 
-        /* Modal de créditos */
         .credits-modal {
             position: fixed;
             top: 50%;
@@ -1174,7 +1126,7 @@
             color: var(--text-dark);
         }
 
-        .surprise-modal .toolbox-icon {
+        .surprise-modal .gift-icon {
             font-size: 5rem;
             color: #35b154;
             margin-bottom: 20px;
@@ -1281,19 +1233,26 @@
             </div>
         </div>
 
-        <div class="chest-container" id="chest-container">
-            <!-- Overlay para ocultar el contenido de la sorpresa -->
-            <div class="chest-overlay">
-                <div class="chest-lock-icon"><i class="fas fa-lock"></i></div>
-            </div>
+        <div class="surprises-container">
+            <div class="chest-message" id="chest-message">Tus sorpresas especiales</div>
             
-            <div class="chest-message" id="chest-message">Sorpresa especial</div>
-            
-            <div class="chest" id="chest">
-                <div class="chest-body">
-                    <a href="#sorpresa" id="sorpresa-link">
-                        <i class="fa-solid fa-toolbox toolbox-icon"></i>
-                    </a>
+            <div class="surprises-grid">
+                <!-- Primer icono de regalo -->
+                <div class="surprise-item" id="surprise-1">
+                    <i class="fas fa-gift gift-icon"></i>
+                    <div class="surprise-label">Mensaje Especial</div>
+                </div>
+                
+                <!-- Segundo icono de regalo -->
+                <div class="surprise-item" id="surprise-2">
+                    <i class="fas fa-gift gift-icon"></i>
+                    <div class="surprise-label">Galería de Fotos</div>
+                </div>
+                
+                <!-- Tercer icono de regalo -->
+                <div class="surprise-item" id="surprise-3">
+                    <i class="fas fa-gift gift-icon"></i>
+                    <div class="surprise-label">Recuerdo Musical</div>
                 </div>
             </div>
             
@@ -1381,6 +1340,7 @@
                     <p>Mejora en la experiencia de usuario con feedback visual.</p>
                     <p>Fondo de símbolos de dólar y pistolas en 2D con efectos mejorados.</p>
                     <p>Implementación de reproductor de audio con controles de volumen y navegación.</p>
+                    <p>Tres iconos de regalo con diferentes menús en lugar de uno solo.</p>
                 </div>
             </div>
         </div>
@@ -1429,11 +1389,36 @@
         </div>
     </div>
 
-    <div class="surprise-modal" id="surprise-modal">
-        <i class="fa-solid fa-toolbox toolbox-icon"></i>
-        <h3>¡Sorpresa Especial!</h3>
-        <p>Este es un ejemplo del contenido de tu sorpresa. Podría incluir un mensaje personalizado, una foto especial, o cualquier detalle que quieras compartir con esa persona tan importante para ti.</p>
-        <button class="close-surprise" id="close-surprise">Cerrar</button>
+    <!-- Modales para cada sorpresa -->
+    <div class="surprise-modal" id="surprise-modal-1">
+        <i class="fas fa-gift gift-icon"></i>
+        <h3>Mensaje Especial</h3>
+        <p>Este es un mensaje personalizado para ti. Quiero que sepas lo especial que eres y lo mucho que significas para mí. Cada momento a tu lado es un regalo que atesoro en mi corazón.</p>
+        <button class="close-surprise" data-modal="surprise-modal-1">Cerrar</button>
+    </div>
+
+    <div class="surprise-modal" id="surprise-modal-2">
+        <i class="fas fa-gift gift-icon"></i>
+        <h3>Galería de Fotos</h3>
+        <p>Aquí encontrarás nuestros mejores momentos juntos. Cada fotografía cuenta una historia y guarda un recuerdo que atesoraré para siempre.</p>
+        <div style="margin: 20px 0; padding: 10px; background: rgba(84, 204, 22, 0.1); border-radius: 8px;">
+            <p>📸 Nuestro primer día juntos</p>
+            <p>📸 Aquella tarde inolvidable</p>
+            <p>📸 Celebrando momentos especiales</p>
+        </div>
+        <button class="close-surprise" data-modal="surprise-modal-2">Cerrar</button>
+    </div>
+
+    <div class="surprise-modal" id="surprise-modal-3">
+        <i class="fas fa-gift gift-icon"></i>
+        <h3>Recuerdo Musical</h3>
+        <p>Esta canción siempre me recuerda a ti. Cada vez que la escucho, pienso en todos los momentos maravillosos que hemos compartido juntos.</p>
+        <div style="margin: 20px 0;">
+            <button id="play-special-song" style="background: linear-gradient(135deg, var(--primary-green) 0%, var(--light-green) 100%); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                <i class="fas fa-play-circle"></i> Reproducir nuestra canción
+            </button>
+        </div>
+        <button class="close-surprise" data-modal="surprise-modal-3">Cerrar</button>
     </div>
 
     <script>
@@ -1446,18 +1431,13 @@
             chestCountdown: document.getElementById('chest-countdown'),
             letter: document.getElementById('letter'),
             letterLock: document.getElementById('letter-lock'),
-            chest: document.getElementById('chest'),
-            chestContainer: document.getElementById('chest-container'),
             chestMessage: document.getElementById('chest-message'),
-            sorpresaLink: document.getElementById('sorpresa-link'),
             themeToggle: document.getElementById('theme-toggle'),
             themeIcon: document.querySelector('#theme-toggle i'),
             historyToggle: document.getElementById('history-toggle'),
             historyModal: document.getElementById('history-modal'),
             closeHistory: document.getElementById('close-history'),
             mainContainer: document.getElementById('main-container'),
-            surpriseModal: document.getElementById('surprise-modal'),
-            closeSurprise: document.getElementById('close-surprise'),
             moneyBg: document.getElementById('money-bg'),
             floatingIcons: [],
             audioToggle: document.getElementById('audio-toggle'),
@@ -1473,12 +1453,17 @@
             creditsModal: document.getElementById('credits-modal'),
             closeCredits: document.getElementById('close-credits'),
             // Nuevos elementos para controles de audio
-            restartBtn: document.getElementById('restart-btn'), // Cambiado de muteBtn a restartBtn
+            restartBtn: document.getElementById('restart-btn'),
             rewindBtn: document.getElementById('rewind-btn'),
             forwardBtn: document.getElementById('forward-btn'),
             volumeBtn: document.getElementById('volume-btn'),
             volumeSlider: document.getElementById('volume-slider'),
-            volumeContainer: document.getElementById('volume-container')
+            volumeContainer: document.getElementById('volume-container'),
+            // Elementos de sorpresas
+            surprise1: document.getElementById('surprise-1'),
+            surprise2: document.getElementById('surprise-2'),
+            surprise3: document.getElementById('surprise-3'),
+            playSpecialSongBtn: document.getElementById('play-special-song')
         };
 
         function createFloatingIcon() {
@@ -1597,13 +1582,25 @@
         }
 
         function unlockSurprise() {
-            domElements.chestContainer.classList.add('unlocked');
-            domElements.chestMessage.textContent = "¡Haz clic para abrir tu sorpresa!";
-            domElements.chestCountdown.textContent = "¡Ábrelo ahora!";
-            domElements.chest.classList.add('pulse');
+            // Desbloquear los tres iconos de sorpresa
+            domElements.surprise1.classList.add('unlocked');
+            domElements.surprise2.classList.add('unlocked');
+            domElements.surprise3.classList.add('unlocked');
             
-            domElements.chest.addEventListener('click', function() {
-                showModal(domElements.surpriseModal);
+            domElements.chestMessage.textContent = "¡Tus sorpresas están disponibles!";
+            domElements.chestCountdown.textContent = "¡Descúbrelas ahora!";
+            
+            // Agregar eventos a cada sorpresa
+            domElements.surprise1.addEventListener('click', function() {
+                showModal(document.getElementById('surprise-modal-1'));
+            });
+            
+            domElements.surprise2.addEventListener('click', function() {
+                showModal(document.getElementById('surprise-modal-2'));
+            });
+            
+            domElements.surprise3.addEventListener('click', function() {
+                showModal(document.getElementById('surprise-modal-3'));
             });
         }
 
@@ -1711,17 +1708,6 @@
             }
         }
 
-        domElements.sorpresaLink.addEventListener('click', function(e) {
-            const now = Date.now();
-            if (now < surpriseDate) {
-                e.preventDefault();
-                alert("La sorpresa aún no está disponible. Por favor espera hasta el 10 de Diciembre de 2025.");
-            } else {
-                e.preventDefault();
-                showModal(domElements.surpriseModal);
-            }
-        });
-
         domElements.themeToggle.addEventListener('click', function() {
             domElements.body.classList.toggle('light-mode');
             
@@ -1742,8 +1728,12 @@
             hideModal(domElements.historyModal);
         });
 
-        domElements.closeSurprise.addEventListener('click', function() {
-            hideModal(domElements.surpriseModal);
+        // Eventos para cerrar los modales de sorpresas
+        document.querySelectorAll('.close-surprise').forEach(button => {
+            button.addEventListener('click', function() {
+                const modalId = this.getAttribute('data-modal');
+                hideModal(document.getElementById(modalId));
+            });
         });
 
         domElements.creditsToggle.addEventListener('click', function() {
@@ -1767,21 +1757,33 @@
         });
 
         // Event listeners para los controles
-        domElements.restartBtn.addEventListener('click', restartAudio); // Cambiado de muteBtn a restartBtn
+        domElements.restartBtn.addEventListener('click', restartAudio);
         domElements.rewindBtn.addEventListener('click', rewind);
         domElements.forwardBtn.addEventListener('click', forward);
         domElements.volumeContainer.addEventListener('click', setVolume);
+
+        // Evento para el botón de reproducir canción especial
+        if (domElements.playSpecialSongBtn) {
+            domElements.playSpecialSongBtn.addEventListener('click', function() {
+                domElements.audioPlayer.style.display = 'block';
+                domElements.audioElement.play();
+                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            });
+        }
 
         window.addEventListener('click', function(e) {
             if (e.target === domElements.historyModal) {
                 hideModal(domElements.historyModal);
             }
-            if (e.target === domElements.surpriseModal) {
-                hideModal(domElements.surpriseModal);
-            }
             if (e.target === domElements.creditsModal) {
                 hideModal(domElements.creditsModal);
             }
+            // Cerrar modales de sorpresas al hacer clic fuera
+            document.querySelectorAll('.surprise-modal').forEach(modal => {
+                if (e.target === modal) {
+                    hideModal(modal);
+                }
+            });
         });
 
         document.addEventListener('keydown', function(e) {
@@ -1789,12 +1791,15 @@
                 if (domElements.historyModal.style.display === 'flex') {
                     hideModal(domElements.historyModal);
                 }
-                if (domElements.surpriseModal.style.display === 'flex') {
-                    hideModal(domElements.surpriseModal);
-                }
                 if (domElements.creditsModal.style.display === 'flex') {
                     hideModal(domElements.creditsModal);
                 }
+                // Cerrar modales de sorpresas con Escape
+                document.querySelectorAll('.surprise-modal').forEach(modal => {
+                    if (modal.style.display === 'flex') {
+                        hideModal(modal);
+                    }
+                });
                 if (domElements.audioPlayer.style.display === 'block') {
                     closePlayer();
                 }
