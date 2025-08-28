@@ -405,7 +405,7 @@
         .surprises-grid {
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: 30px;
             flex-wrap: wrap;
             margin: 20px 0;
         }
@@ -414,7 +414,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 120px;
+            width: 150px;
             cursor: pointer;
             pointer-events: none;
             filter: blur(3px);
@@ -430,6 +430,7 @@
         .surprise-item:hover .gift-icon {
             transform: translateY(-5px) scale(1.1);
             filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.8));
+            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
         .gift-icon {
@@ -437,6 +438,19 @@
             color: #35b154;
             transition: var(--transition);
             filter: drop-shadow(0 0 10px rgba(53, 177, 84, 0.5));
+            margin-bottom: 10px;
+        }
+
+        .surprise-label {
+            font-size: 1rem;
+            color: var(--primary-green);
+            text-align: center;
+            margin-top: 10px;
+            transition: var(--transition);
+        }
+
+        .light-mode .surprise-label {
+            color: var(--primary-green-light);
         }
 
         .timer {
@@ -593,7 +607,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            box-shadow: 极速4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(84, 204, 22, 0.1);
             z-index: 100;
             transition: var(--transition);
@@ -610,7 +624,7 @@
 
         .light-mode .credits-toggle {
             background: var(--card-light);
-            border: 1px solid rgba(76, 175, 80, 极速.2);
+            border: 1px solid rgba(76, 175, 80, 0.2);
         }
 
         .credits-toggle:hover {
@@ -664,13 +678,14 @@
             justify-content: center;
             gap: 15px;
             margin-top: 15px;
+            flex-wrap: wrap;
         }
 
         .audio-controls button {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            padding: 极速;
+            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -721,7 +736,7 @@
         .volume-controls {
             display: flex;
             align-items: center;
-            margin-top极速 15px;
+            margin-top: 15px;
             justify-content: center;
         }
 
@@ -738,7 +753,7 @@
             border: none;
             cursor: pointer;
             margin-right: 10px;
-            transition: var极速(--transition);
+            transition: var(--transition);
         }
 
         .light-mode .volume-btn {
@@ -766,7 +781,7 @@
             transition: width 0.1s linear;
         }
 
-        .light-mode .极速slider {
+        .light-mode .volume-slider {
             background: var(--primary-green-light);
         }
 
@@ -810,9 +825,9 @@
             max-height: 80vh;
             background: var(--card-dark);
             border-radius: 12px;
-            padding: 30极速;
-            box-shadow: 0 10px 40px rgba(0, 0, 极速, 0.5);
-            z极速: 200;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 200;
             display: none;
             flex-direction: column;
             border: 1px solid rgba(84, 204, 22, 0.2);
@@ -828,7 +843,7 @@
 
         .light-mode .history-modal {
             background: var(--card-light);
-            border: 1极速 solid rgba(76, 175, 80, 0.3);
+            border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
         .history-modal h3 {
@@ -886,7 +901,7 @@
             transform: translateX(2px);
         }
 
-        .light-mode .timeline极速::before {
+        .light-mode .timeline-item::before {
             background: var(--primary-green-light);
             border: 3px solid var(--card-light);
         }
@@ -896,6 +911,11 @@
             color: var(--primary-green);
             margin-bottom: 5px;
             font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-date:hover {
+            transform: translateX(5px);
         }
 
         .light-mode .timeline-date {
@@ -938,11 +958,11 @@
             transform: translate(-50%, -50%) scale(0.8);
             width: 80%;
             max-width: 600px;
-           极速max-height: 80vh;
+            max-height: 80vh;
             background: var(--card-dark);
             border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 10极速 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             z-index: 200;
             display: none;
             flex-direction: column;
@@ -971,8 +991,8 @@
             text-align: center;
         }
 
-        .light-mode .credits-modal极速 h3 {
-            color: var(--极速-green-light);
+        .light-mode .credits-modal h3 {
+            color: var(--primary-green-light);
         }
 
         .credits-content {
@@ -1017,10 +1037,15 @@
 
         .credits-list li {
             color: var(--text-light);
-            font-size: 1.1极速;
+            font-size: 1.1rem;
             margin-bottom: 8px;
             padding-left: 20px;
             position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .credits-list li:hover {
+            transform: translateX(5px);
         }
 
         .light-mode .credits-list li {
@@ -1052,7 +1077,7 @@
             transition: var(--transition);
         }
 
-极速        .light-mode .close-credits {
+        .light-mode .close-credits {
             color: var(--primary-green-light);
         }
 
@@ -1077,7 +1102,7 @@
             border: 1px solid rgba(84, 204, 22, 0.2);
             text-align: center;
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.68, -极速.55, 0.265, 1.55);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .surprise-modal.active {
@@ -1118,6 +1143,11 @@
             color: #35b154;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.5));
+            transition: transform 0.3s ease;
+        }
+
+        .surprise-modal .gift-icon:hover {
+            transform: scale(1.1);
         }
 
         .close-surprise {
@@ -1141,27 +1171,6 @@
             box-shadow: 0 5px 15px rgba(29, 185, 84, 0.4);
         }
 
-        /* Estilos para la imagen en el segundo modal */
-        .surprise-image {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin: 15px 0;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .image-caption {
-            font-style: italic;
-            color: var(--text-muted);
-            margin-top: 10px;
-            font-size: 1rem;
-        }
-
-        .light-mode .image-caption {
-            color: var(--text-muted-light);
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1174,7 +1183,7 @@
         }
 
         @keyframes glow {
-            from { text-shadow: 0 0 10极速 rgba(29, 185, 84, 0.5); }
+            from { text-shadow: 0 0 10px rgba(29, 185, 84, 0.5); }
             to { text-shadow: 0 0 20px rgba(29, 185, 84, 0.8), 0 0 30px rgba(29, 185, 84, 0.6); }
         }
 
@@ -1189,17 +1198,29 @@
 
         @keyframes glow-light {
             from { text-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
-            to { text-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 极速 30px rgba(76, 175, 80, 0.6); }
+            to { text-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 0 30px rgba(76, 175, 80, 0.6); }
         }
 
         .pulse {
             animation: pulse 2s infinite;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 199;
+            display: none;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="money-bg" id="money-bg"></div>
+    <div class="modal-backdrop" id="modal-backdrop"></div>
     
     <div class="top-bar">
         <h2>Carta Especial</h2>
@@ -1208,11 +1229,11 @@
     <div class="container" id="main-container">
         <div class="unlock-countdown">
             <h3>Se desbloqueará en:</h3>
-            <div class极速="timer" id="main-countdown">00d 00h 00m 00s</div>
+            <div class="timer" id="main-countdown">00d 00h 00m 00s</div>
         </div>
         
         <div class="letter" id="letter">
-            <div class="lock-icon" id="letter-lock"><i class="fas fa-lock"></极速></div>
+            <div class="lock-icon" id="letter-lock"><i class="fas fa-lock"></i></div>
             
             <!-- Capa que oculta el contenido -->
             <div class="content-overlay">
@@ -1248,16 +1269,19 @@
                 <!-- Primer icono de regalo -->
                 <div class="surprise-item" id="surprise-1">
                     <i class="fas fa-gift gift-icon"></i>
+                    <div class="surprise-label">Mensaje Especial</div>
                 </div>
                 
                 <!-- Segundo icono de regalo -->
                 <div class="surprise-item" id="surprise-2">
                     <i class="fas fa-gift gift-icon"></i>
+                    <div class="surprise-label">Galería de Fotos</div>
                 </div>
                 
                 <!-- Tercer icono de regalo -->
                 <div class="surprise-item" id="surprise-3">
                     <i class="fas fa-gift gift-icon"></i>
+                    <div class="surprise-label">Recuerdo Musical</div>
                 </div>
             </div>
             
@@ -1273,7 +1297,7 @@
         <i class="fas fa-history"></i>
     </div>
 
-    <div class="audio-toggle" id极速="audio-toggle">
+    <div class="audio-toggle" id="audio-toggle">
         <i class="fas fa-microphone"></i>
     </div>
 
@@ -1326,9 +1350,9 @@
             </div>
             <div class="timeline-item">
                 <div class="timeline-date">Primera Mejora</div>
-                <div class="极速-content">
+                <div class="timeline-content">
                     <p>Rediseño del cofre del tesoro con animación de apertura.</p>
-                    <p>Ajuste del efecto blur para mostrar solo el candado cuando está bloqueado.</极速>
+                    <p>Ajuste del efecto blur para mostrar solo el candado cuando está bloqueado.</p>
                 </div>
             </div>
             <div class="timeline-item">
@@ -1337,7 +1361,7 @@
                     <p>Implementación del botón de historial y línea de tiempo.</p>
                     <p>Mejora en las transiciones y efectos visuales.</p>
                 </div>
-极速           </div>
+            </div>
             <div class="timeline-item">
                 <div class="timeline-date">Versión Actual</div>
                 <div class="timeline-content">
@@ -1370,7 +1394,7 @@
             <div class="credits-section">
                 <h4>Agradecimientos Especiales</h4>
                 <ul class="credits-list">
-                    <li>A [Nombre de la Persona Especial] por la inspiración</极速>
+                    <li>A [Nombre de la Persona Especial] por la inspiración</li>
                     <li>Al equipo de soporte técnico por su dedicación</li>
                     <li>A todos los beta testers por sus valiosos comentarios</li>
                     <li>A la comunidad de desarrolladores por su apoyo</li>
@@ -1399,7 +1423,6 @@
         <i class="fas fa-gift gift-icon"></i>
         <h3>Mensaje Especial</h3>
         <p>Este es un mensaje personalizado para ti. Quiero que sepas lo especial que eres y lo mucho que significas para mí. Cada momento a tu lado es un regalo que atesoro en mi corazón.</p>
-        <p>Recuerdo aquel día cuando nos conocimos, cómo tu sonrisa iluminó la habitación y supe que quería pasar más tiempo contigo. Desde entonces, cada día a tu lado ha sido una aventura maravillosa.</p>
         <button class="close-surprise" data-modal="surprise-modal-1">Cerrar</button>
     </div>
 
@@ -1407,13 +1430,11 @@
         <i class="fas fa-gift gift-icon"></i>
         <h3>Galería de Fotos</h3>
         <p>Aquí encontrarás nuestros mejores momentos juntos. Cada fotografía cuenta una historia y guarda un recuerdo que atesoraré para siempre.</p>
-        
-        <!-- Imagen grande -->
-        <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Nuestro momento especial" class="surprise-image">
-        
-        <!-- Texto debajo de la imagen -->
-        <p class="image-caption">Este día fue especial porque compartimos risas, conversaciones profundas y creamos recuerdos que durarán para siempre. Tu sonrisa en esta foto ilumina mi mundo.</p>
-        
+        <div style="margin: 20px 0; padding: 10px; background: rgba(84, 204, 22, 0.1); border-radius: 8px;">
+            <p>📸 Nuestro primer día juntos</p>
+            <p>📸 Aquella tarde inolvidable</p>
+            <p>📸 Celebrando momentos especiales</p>
+        </div>
         <button class="close-surprise" data-modal="surprise-modal-2">Cerrar</button>
     </div>
 
@@ -1426,7 +1447,6 @@
                 <i class="fas fa-play-circle"></i> Reproducir nuestra canción
             </button>
         </div>
-        <p>"La música expresa lo que no puede decirse con palabras pero no puede permanecer en silencio." - Victor Hugo</p>
         <button class="close-surprise" data-modal="surprise-modal-3">Cerrar</button>
     </div>
 
@@ -1434,12 +1454,15 @@
         const unlockDate = new Date('December 4, 2025 00:00:00').getTime();
         const surpriseDate = new Date('December 10, 2025 00:00:00').getTime();
         
+        // Variable para controlar si las animaciones están activas
+        let animationsActive = true;
+        
         const domElements = {
             body: document.body,
             mainCountdown: document.getElementById('main-countdown'),
             chestCountdown: document.getElementById('chest-countdown'),
             letter: document.getElementById('letter'),
-            letterLock: document.getElementById('letter极速'),
+            letterLock: document.getElementById('letter-lock'),
             chestMessage: document.getElementById('chest-message'),
             themeToggle: document.getElementById('theme-toggle'),
             themeIcon: document.querySelector('#theme-toggle i'),
@@ -1472,13 +1495,22 @@
             surprise1: document.getElementById('surprise-1'),
             surprise2: document.getElementById('surprise-2'),
             surprise3: document.getElementById('surprise-3'),
-            playSpecialSongBtn: document.getElementById('play-special-song')
+            playSpecialSongBtn: document.getElementById('play-special-song'),
+            modalBackdrop: document.getElementById('modal-backdrop')
         };
 
         function createFloatingIcon() {
+            if (!animationsActive) return null;
+            
+            // Limitar la cantidad máxima de iconos a 15
+            if (domElements.floatingIcons.length >= 15) {
+                return null;
+            }
+            
             const icon = document.createElement('div');
             icon.classList.add('floating-icon');
-            icon.style.backfaceVisibility = 'hidden';
+            
+            // Optimización: usar transform y opacity para mejor rendimiento
             icon.style.willChange = 'transform, opacity';
             
             const isGun = Math.random() < 0.3;
@@ -1496,7 +1528,7 @@
             
             const posX = Math.random() * 100;
             const posXEnd = (Math.random() - 0.5) * 20;
-            const size = is极速 ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
+            const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
             const sizeEnd = size * (Math.random() * 0.4 + 0.8);
             const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
             const rotate = Math.random() * 30 - 15;
@@ -1517,29 +1549,59 @@
             
             domElements.moneyBg.appendChild(icon);
             
+            // Limpiar iconos correctamente para evitar fugas de memoria
+            const removeTime = duration * 1000;
             setTimeout(() => {
-                icon.remove();
+                if (icon.parentNode) {
+                    icon.remove();
+                }
                 domElements.floatingIcons = domElements.floatingIcons.filter(i => i !== icon);
-            }, duration * 1000);
+            }, removeTime);
             
             domElements.floatingIcons.push(icon);
             return icon;
         }
 
         function manageFloatingIcons() {
+            if (!animationsActive) return;
+            
             if (domElements.floatingIcons.length < 15) {
                 createFloatingIcon();
             }
             
-            domElements.floating极速 = domElements.floatingIcons.filter(icon => document.body.contains(icon));
+            // Limpiar array de iconos eliminados
+            domElements.floatingIcons = domElements.floatingIcons.filter(icon => 
+                document.body.contains(icon)
+            );
         }
 
         function initFloatingIcons() {
+            if (!animationsActive) return;
+            
             for (let i = 0; i < 10; i++) {
                 createFloatingIcon();
             }
             
-            setInterval(manageFloatingIcons, 1000);
+            // Guardar referencia al intervalo para poder limpiarlo luego
+            window.floatingIconsInterval = setInterval(manageFloatingIcons, 1000);
+        }
+        
+        function stopFloatingIcons() {
+            animationsActive = false;
+            clearInterval(window.floatingIconsInterval);
+            
+            // Eliminar todos los iconos existentes
+            domElements.floatingIcons.forEach(icon => {
+                if (icon.parentNode) {
+                    icon.remove();
+                }
+            });
+            domElements.floatingIcons = [];
+        }
+        
+        function resumeFloatingIcons() {
+            animationsActive = true;
+            initFloatingIcons();
         }
 
         function updateCountdown() {
@@ -1570,12 +1632,12 @@
                 unlockSurprise();
                 unlockCredits();
             } else {
-                const daysSurprise = Math.floor(distanceToSurprise / (1000 * 60极速 60 * 24));
+                const daysSurprise = Math.floor(distanceToSurprise / (1000 * 60 * 60 * 24));
                 const hoursSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutesSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60)) / (1000 * 60));
                 const secondsSurprise = Math.floor((distanceToSurprise % (1000 * 60)) / 1000);
 
-                const format = (num) => num < 10 ? `0${极速}` : num;
+                const format = (num) => num < 10 ? `0${num}` : num;
 
                 domElements.chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
             }
@@ -1624,7 +1686,12 @@
         function showModal(modal) {
             toggleBodyScroll(false);
             modal.style.display = 'flex';
+            domElements.modalBackdrop.style.display = 'block';
             domElements.mainContainer.classList.add('blur-content');
+            
+            // Pausar animaciones de fondo para mejorar rendimiento
+            stopFloatingIcons();
+            
             setTimeout(() => {
                 modal.classList.add('active');
             }, 10);
@@ -1633,9 +1700,13 @@
         function hideModal(modal) {
             toggleBodyScroll(true);
             modal.classList.remove('active');
+            domElements.modalBackdrop.style.display = 'none';
             setTimeout(() => {
                 modal.style.display = 'none';
                 domElements.mainContainer.classList.remove('blur-content');
+                
+                // Reanudar animaciones de fondo
+                resumeFloatingIcons();
             }, 300);
         }
 
@@ -1669,7 +1740,7 @@
 
         function togglePlay() {
             if (domElements.audioElement.paused) {
-                domElements.audio极速.play();
+                domElements.audioElement.play();
                 domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             } else {
                 domElements.audioElement.pause();
@@ -1711,7 +1782,7 @@
             if (volume === 0) {
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
             } else if (volume < 0.5) {
-                domElements.volumeBtn.innerHTML = '<i class极速"fas fa-volume-down"></i>';
+                domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
             } else {
                 domElements.volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
             }
@@ -1759,7 +1830,7 @@
         domElements.progressContainer.addEventListener('click', setProgress);
         domElements.audioElement.addEventListener('timeupdate', updateProgressBar);
         domElements.audioElement.addEventListener('ended', () => {
-            domElements.playPauseBtn.innerHTML = '<极速 class="fas fa-play"></i>';
+            domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
         });
         domElements.audioElement.addEventListener('loadedmetadata', () => {
             domElements.durationDisplay.textContent = formatTime(domElements.audioElement.duration);
@@ -1781,15 +1852,15 @@
         }
 
         window.addEventListener('click', function(e) {
-            if (e.target === domElements.historyModal) {
+            if (e.target === domElements.historyModal || e.target === domElements.modalBackdrop) {
                 hideModal(domElements.historyModal);
             }
-            if (e.target === domElements.creditsModal) {
+            if (e.target === domElements.creditsModal || e.target === domElements.modalBackdrop) {
                 hideModal(domElements.creditsModal);
             }
             // Cerrar modales de sorpresas al hacer clic fuera
             document.querySelectorAll('.surprise-modal').forEach(modal => {
-                if (e.target === modal) {
+                if (e.target === modal || e.target === domElements.modalBackdrop) {
                     hideModal(modal);
                 }
             });
@@ -1809,7 +1880,7 @@
                         hideModal(modal);
                     }
                 });
-                if (domElements.audioPlayer.style.display ===极速 'block') {
+                if (domElements.audioPlayer.style.display === 'block') {
                     closePlayer();
                 }
             }
@@ -1818,7 +1889,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateCountdown();
             initFloatingIcons();
-            setInterval(update极速, 1000);
+            setInterval(updateCountdown, 1000);
             
             // Ocultar el reproductor y su botón inicialmente
             domElements.audioPlayer.style.display = 'none';
