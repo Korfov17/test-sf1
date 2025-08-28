@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carta en Tarjeta (3000 caracteres)</title>
+  <style>
+    :root {
+      --bg: #0f172a;          /* slate-900 */
+      --card: #0b1220;        /* slightly lighter than bg */
+      --ink: #e2e8f0;         /* slate-200 */
+      --muted: #94a3b8;       /* slate-400 */
+      --ring: #22d3ee33;      /* cyan ring w/ alpha */
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius: 20px;
+      --max: 760px;           /* max width of card */
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 70% -10%, #1e293b, var(--bg));
+      color: var(--ink);
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: var(--max);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))
+                  , var(--card);
+      border: 1px solid rgba(148,163,184,.15);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 2.5vw + 8px, 36px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      background: conic-gradient(from 180deg at 50% 0%, #22d3ee22, transparent 60%);
+      filter: blur(14px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: clamp(20px, 2.4vw + 8px, 30px);
+      margin: 0 0 8px 0;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 12px;
+    }
+
+    .content { position: relative; z-index: 1; }
+
+    p {
+      margin: 0 0 14px 0;
+      text-wrap: pretty;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      margin-top: 18px;
+      font-size: 0.9rem;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px dashed rgba(148,163,184,.35);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body>
+  <article class="card" aria-label="Carta en una tarjeta">
+    <header>
+      <h1>Carta</h1>
+      <div class="meta">Texto original en español, dividido en párrafos.</div>
+    </header>
+
+    <section class="content">
+      <p>Querida lectora, hoy me siento a escribirte con la calma que traen las tardes lentas. He repasado recuerdos, dudas y pequeños logros. Entre líneas intento ordenar pensamientos que a veces se amontonan. No pretendo conclusiones grandilocuentes; solo dejar constancia de lo vivido y de lo que aún late. Si llegas hasta aquí, ojalá encuentres algún reflejo que te acompañe.</p>
+
+      <p>Durante meses aprendí a escuchar el ritmo discreto de las cosas: el hervor del café, las bisagras que avisan, el crujir del suelo al paso de quien madruga. En ese inventario de sonidos se me aclararon intenciones. Supe que avanzar no siempre luce; a veces es apenas sostener el paso. También comprendí que hay pausas necesarias, silencios que curan, y que el afecto no se mide con prisa.</p>
+
+      <p>Volví a mis cuadernos antiguos. En sus márgenes vi promesas torcidas y flechas hacia ninguna parte. Me enternece esa torpeza ambiciosa. Hoy corrijo rumbos con lápiz blando, dispuesto a borrar cuando sea preciso. He dejado de confundir obstinación con firmeza. Aun así, conservo la costumbre de celebrar cada ruta que se abre, por mínima que parezca.</p>
+
+      <p>En las conversaciones más sinceras surgieron preguntas difíciles. ¿Qué deseo realmente? ¿A quién le debo mis esfuerzos, y qué parte me pertenece sin excusas? No tengo respuestas definitivas. Me basta con afinar la brújula y ser honesto cuando me equivoco. Si fracasar es inevitable, que al menos sea por intentar con cuidado y valentía.</p>
+
+      <p>He cultivado el gesto de agradecer. Agradezco el pan sencillo, las miradas que sostienen, la luz que entra oblicua por la ventana y dibuja geometrías en la mesa. Agradezco también los tropiezos; enseñan a mirar el borde. En la amistad he hallado abrigo: no ese calor que sofoca, sino el que deja respirar y, al mismo tiempo, resguarda.</p>
+
+      <p>Por las noches escribo listas modestas: leer más despacio, regar las plantas, preguntar sin miedo, aprender a decir que no. Parecen tareas menores, pero edifican una casa dentro. Allí pongo en orden los días y me permito extrañar sin dramatismo. En la pared cuelga un mapa; no marca tesoros, solo caminos probables. Me consuela saber que puedo trazar de nuevo.</p>
+
+      <p>Si alguna inquietud persiste, es la de estar a la altura de los afectos. Quisiera ser paciente, preciso y amable; no siempre lo consigo. Me equivoco, corrijo, vuelvo a intentar. Lo escribo para recordarlo cuando el orgullo me distrae. Y porque admitir la fragilidad, lejos de reducirnos, nos devuelve una forma más nítida de fuerza.</p>
+
+      <p>Antes de despedirme, dejo un deseo: que cada quien encuentre un lugar donde su voz no tenga que gritar para ser oída. Que el trabajo no devore la curiosidad, y que el descanso no sea culpa sino derecho. Si este texto llega a tus manos en un día difícil, toma lo que sirva y suelta lo demás. Seguimos en camino; allí nos veremos.</p>
+
+      <p>Posdata: guardo esta carta como quien guarda una semilla. No sé cuándo germinará, pero confío en la estación que llega. Mientras tanto, cuidemos lo pequeño: de ahí nace lo inmenso. Abrazo</p>
+    </section>
+
+    <div class="footer">
+      <span class="badge" aria-label="Longitud del texto">≈ 3000 caracteres</span>
+      <span>Diseño: tarjeta centrada, tipografía del sistema, alto contraste.</span>
+    </div>
+  </article>
+</body>
+</html>
