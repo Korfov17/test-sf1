@@ -58,10 +58,6 @@
             gap: 10px;
         }
 
-        .logo img {
-            height: 40px;
-        }
-
         .logo h1 {
             font-size: 1.5rem;
             font-weight: 700;
@@ -82,6 +78,23 @@
 
         nav a:hover {
             opacity: 0.8;
+        }
+
+        /* Version Selector */
+        .version-selector {
+            background-color: var(--secondary);
+            padding: 10px 0;
+            color: white;
+            text-align: center;
+        }
+
+        .version-selector select {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            margin-left: 10px;
+            background-color: white;
+            color: var(--dark);
         }
 
         /* Main Content */
@@ -198,6 +211,14 @@
             background-color: #F57C00;
         }
 
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: #6a1b9a;
+        }
+
         /* Villager Preview */
         .villager-preview {
             text-align: center;
@@ -208,26 +229,56 @@
             width: 150px;
             height: 150px;
             margin: 0 auto 20px;
-            background-color: #9E9E9E;
+            background: linear-gradient(45deg, #8BC34A, #4CAF50);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
             color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .villager-info {
             margin-bottom: 20px;
+            text-align: left;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
         }
 
         .villager-info h3 {
             margin-bottom: 10px;
             color: var(--primary-dark);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
         }
 
         .villager-info p {
             color: var(--gray);
+            margin-bottom: 5px;
+        }
+
+        /* Trade Editor */
+        .trade-editor {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .trade-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .trade-form {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Trades Section */
@@ -253,17 +304,24 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            transition: transform 0.2s;
+        }
+
+        .trade-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .trade-item-icon {
             width: 50px;
             height: 50px;
-            background-color: #E0E0E0;
+            background: linear-gradient(45deg, #FF9800, #F57C00);
             border-radius: 5px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
+            color: white;
         }
 
         .trade-item-details {
@@ -278,6 +336,23 @@
         .trade-item-details p {
             color: var(--gray);
             font-size: 0.9rem;
+        }
+
+        .trade-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .trade-item-actions button {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .trade-item-actions button:hover {
+            color: var(--primary);
         }
 
         /* Output Section */
@@ -297,6 +372,8 @@
             font-family: 'Courier New', monospace;
             margin-top: 20px;
             overflow-x: auto;
+            white-space: pre-wrap;
+            line-height: 1.5;
         }
 
         .copy-btn {
@@ -329,6 +406,15 @@
             color: #BDBDBD;
         }
 
+        .footer-section a {
+            color: #BDBDBD;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
         .footer-bottom {
             text-align: center;
             padding-top: 30px;
@@ -354,6 +440,26 @@
                 font-size: 1.8rem;
             }
         }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .badge-success {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: var(--accent);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -376,6 +482,23 @@
             </div>
         </div>
     </header>
+
+    <div class="version-selector">
+        <div class="container">
+            <span>Versión de Minecraft:</span>
+            <select id="minecraft-version">
+                <option value="1.20">1.20 (Latest)</option>
+                <option value="1.19">1.19</option>
+                <option value="1.18">1.18</option>
+                <option value="1.17">1.17</option>
+                <option value="1.16">1.16</option>
+                <option value="1.15">1.15</option>
+                <option value="1.14">1.14</option>
+                <option value="1.13">1.13</option>
+            </select>
+            <span class="badge badge-success" id="version-status">Seleccionada</span>
+        </div>
+    </div>
 
     <main class="container main-content">
         <div class="page-title">
@@ -406,6 +529,7 @@
                         <option value="tool">Herrero de herramientas</option>
                         <option value="butcher">Carnicero</option>
                         <option value="leather">Curtero</option>
+                        <option value="nitwit">Indefinido</option>
                     </select>
                 </div>
                 
@@ -438,7 +562,13 @@
                     </select>
                 </div>
                 
-                <button class="btn btn-block">Aplicar Configuración</button>
+                <div class="form-group">
+                    <label for="villager-experience">Experiencia del Comerciante</label>
+                    <input type="range" class="form-control" id="villager-experience" min="0" max="100" value="0">
+                    <output for="villager-experience" id="exp-output">0</output>
+                </div>
+                
+                <button class="btn btn-block" id="apply-settings">Aplicar Configuración</button>
             </div>
             
             <div class="preview-panel">
@@ -452,14 +582,81 @@
                         <i class="fas fa-user"></i>
                     </div>
                     <div class="villager-info">
-                        <h3>Aldeano</h3>
-                        <p>Tipo: No seleccionado</p>
-                        <p>Nivel: Novato</p>
-                        <p>Bioma: Llanuras</p>
+                        <h3>Aldeano <span class="badge badge-warning" id="preview-version">1.20</span></h3>
+                        <p><strong>Tipo:</strong> <span id="preview-type">No seleccionado</span></p>
+                        <p><strong>Nivel:</strong> <span id="preview-level">Novato</span></p>
+                        <p><strong>Bioma:</strong> <span id="preview-biome">Llanuras</span></p>
+                        <p><strong>Experiencia:</strong> <span id="preview-exp">0</span></p>
+                        <p><strong>Nombre:</strong> <span id="preview-name">Ninguno</span></p>
                     </div>
-                    <button class="btn btn-accent">Generar Comando</button>
+                    <button class="btn btn-accent" id="generate-command">Generar Comando</button>
                 </div>
             </div>
+        </div>
+
+        <div class="trade-editor">
+            <div class="panel-title">
+                <i class="fas fa-edit"></i>
+                <h3>Editor de Intercambios</h3>
+            </div>
+            
+            <div class="trade-form">
+                <div class="form-group">
+                    <label for="buy-item1">Objeto a Comprar 1</label>
+                    <select class="form-control" id="buy-item1">
+                        <option value="wheat">Trigo</option>
+                        <option value="emerald">Esmeralda</option>
+                        <option value="diamond">Diamante</option>
+                        <option value="stick">Palo</option>
+                        <option value="string">Cuerda</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="buy-amount1">Cantidad</label>
+                    <input type="number" class="form-control" id="buy-amount1" min="1" max="64" value="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="sell-item">Objeto a Vender</label>
+                    <select class="form-control" id="sell-item">
+                        <option value="emerald">Esmeralda</option>
+                        <option value="wheat">Trigo</option>
+                        <option value="bread">Pan</option>
+                        <option value="apple">Manzana</option>
+                        <option value="arrow">Flecha</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="trade-form">
+                <div class="form-group">
+                    <label for="buy-item2">Objeto a Comprar 2 (opcional)</label>
+                    <select class="form-control" id="buy-item2">
+                        <option value="none">Ninguno</option>
+                        <option value="emerald">Esmeralda</option>
+                        <option value="wheat">Trigo</option>
+                        <option value="stick">Palo</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="buy-amount2">Cantidad</label>
+                    <input type="number" class="form-control" id="buy-amount2" min="1" max="64" value="1" disabled>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sell-amount">Cantidad a Vender</label>
+                    <input type="number" class="form-control" id="sell-amount" min="1" max="64" value="1">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="max-uses">Usos máximos del intercambio</label>
+                <input type="number" class="form-control" id="max-uses" min="1" max="100" value="12">
+            </div>
+            
+            <button class="btn btn-secondary" id="add-trade">Añadir Intercambio</button>
         </div>
 
         <div class="trades-container">
@@ -468,36 +665,17 @@
                 <h3>Intercambios Personalizados</h3>
             </div>
             
-            <button class="btn">Añadir Intercambio</button>
+            <p>Intercambios configurados: <span id="trades-count">0</span></p>
             
-            <div class="trades-list">
-                <div class="trade-item">
+            <div class="trades-list" id="trades-list">
+                <!-- Los intercambios se añadirán aquí dinámicamente -->
+                <div class="trade-item" style="display: none;">
                     <div class="trade-item-icon">
-                        <i class="fas fa-wheat"></i>
+                        <i class="fas fa-question"></i>
                     </div>
                     <div class="trade-item-details">
-                        <h4>Intercambio #1</h4>
-                        <p>20x Trigo → 1 Esmeralda</p>
-                    </div>
-                </div>
-                
-                <div class="trade-item">
-                    <div class="trade-item-icon">
-                        <i class="fas fa-bread"></i>
-                    </div>
-                    <div class="trade-item-details">
-                        <h4>Intercambio #2</h4>
-                        <p>1 Esmeralda → 6x Pan</p>
-                    </div>
-                </div>
-                
-                <div class="trade-item">
-                    <div class="trade-item-icon">
-                        <i class="fas fa-cookie"></i>
-                    </div>
-                    <div class="trade-item-details">
-                        <h4>Intercambio #3</h4>
-                        <p>1 Esmeralda → 8x Galleta</p>
+                        <h4>No hay intercambios</h4>
+                        <p>Añade al menos un intercambio para generar un comando</p>
                     </div>
                 </div>
             </div>
@@ -511,12 +689,12 @@
             
             <p>Copia y pega este comando en Minecraft para crear tu comerciante personalizado:</p>
             
-            <div class="code-output">
-                /summon villager ~ ~ ~ {VillagerData:{profession:farmer,level:2,type:plains},Offers:{Recipes:[{buy:{id:wheat,Count:20},sell:{id:emerald,Count:1}},{buy:{id:emerald,Count:1},sell:{id:bread,Count:6}},{buy:{id:emerald,Count:1},sell:{id:cookie,Count:8}}]}}
+            <div class="code-output" id="command-output">
+                // El comando aparecerá aquí después de generar
             </div>
             
             <div class="copy-btn">
-                <button class="btn"><i class="fas fa-copy"></i> Copiar Comando</button>
+                <button class="btn" id="copy-command"><i class="fas fa-copy"></i> Copiar Comando</button>
             </div>
         </div>
     </main>
@@ -532,17 +710,17 @@
                 
                 <div class="footer-section">
                     <h3>Enlaces Útiles</h3>
-                    <p><a href="#" style="color: #BDBDBD;">Generadores</a></p>
-                    <p><a href="#" style="color: #BDBDBD;">Tutoriales</a></p>
-                    <p><a href="#" style="color: #BDBDBD;">Texturas</a></p>
-                    <p><a href="#" style="color: #BDBDBD;">Semillas</a></p>
+                    <p><a href="#">Generadores</a></p>
+                    <p><a href="#">Tutoriales</a></p>
+                    <p><a href="#">Texturas</a></p>
+                    <p><a href="#">Semillas</a></p>
                 </div>
                 
                 <div class="footer-section">
                     <h3>Comunidad</h3>
-                    <p><i class="fab fa-discord"></i> Discord</p>
-                    <p><i class="fab fa-reddit"></i> Reddit</p>
-                    <p><i class="fab fa-twitter"></i> Twitter</p>
+                    <p><a href="#"><i class="fab fa-discord"></i> Discord</a></p>
+                    <p><a href="#"><i class="fab fa-reddit"></i> Reddit</a></p>
+                    <p><a href="#"><i class="fab fa-twitter"></i> Twitter</a></p>
                 </div>
             </div>
             
@@ -553,27 +731,285 @@
     </footer>
 
     <script>
-        // Funcionalidad básica para demostrar la interacción
+        // Datos de ejemplo para los intercambios
+        const minecraftItems = {
+            'emerald': { name: 'Esmeralda', icon: '💎' },
+            'wheat': { name: 'Trigo', icon: '🌾' },
+            'bread': { name: 'Pan', icon: '🍞' },
+            'diamond': { name: 'Diamante', icon: '♦️' },
+            'stick': { name: 'Palo', icon: '棍' },
+            'string': { name: 'Cuerda', icon: '🕸️' },
+            'apple': { name: 'Manzana', icon: '🍎' },
+            'arrow': { name: 'Flecha', icon: '➡️' }
+        };
+
+        // Estado de la aplicación
+        let currentTrades = [];
+        let currentVersion = '1.20';
+        let villagerData = {
+            type: 'none',
+            level: '1',
+            biome: 'plains',
+            name: '',
+            experience: 0
+        };
+
+        // Elementos DOM
+        const versionSelector = document.getElementById('minecraft-version');
+        const villagerType = document.getElementById('villager-type');
+        const villagerLevel = document.getElementById('villager-level');
+        const villagerName = document.getElementById('villager-name');
+        const villagerBiome = document.getElementById('villager-biome');
+        const villagerExperience = document.getElementById('villager-experience');
+        const expOutput = document.getElementById('exp-output');
+        const applySettings = document.getElementById('apply-settings');
+        const generateCommand = document.getElementById('generate-command');
+        const addTrade = document.getElementById('add-trade');
+        const copyCommand = document.getElementById('copy-command');
+        const tradesList = document.getElementById('trades-list');
+        const tradesCount = document.getElementById('trades-count');
+        const commandOutput = document.getElementById('command-output');
+        const buyItem2 = document.getElementById('buy-item2');
+        const buyAmount2 = document.getElementById('buy-amount2');
+
+        // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
-            // Actualizar vista previa cuando cambia la selección
-            const villagerType = document.getElementById('villager-type');
-            const villagerLevel = document.getElementById('villager-level');
-            const villagerBiome = document.getElementById('villager-biome');
-            const villagerName = document.getElementById('villager-name');
+            // Configurar el selector de versión
+            versionSelector.value = currentVersion;
+            updateVersionStatus();
             
-            const updateButtons = document.querySelectorAll('.btn');
-            updateButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    alert('Funcionalidad de demostración: En una implementación completa, esto actualizaría la vista previa y generaría el comando.');
-                });
+            // Configurar el control de experiencia
+            villagerExperience.addEventListener('input', function() {
+                expOutput.textContent = this.value;
             });
             
-            // Simular funcionalidad de copiar
-            const copyButton = document.querySelector('.copy-btn .btn');
-            copyButton.addEventListener('click', function() {
-                alert('Comando copiado al portapapeles!');
+            // Configurar el segundo objeto de compra
+            buyItem2.addEventListener('change', function() {
+                buyAmount2.disabled = this.value === 'none';
             });
+            
+            // Aplicar configuración del aldeano
+            applySettings.addEventListener('click', applyVillagerSettings);
+            
+            // Añadir intercambio
+            addTrade.addEventListener('click', addNewTrade);
+            
+            // Generar comando
+            generateCommand.addEventListener('click', generateMinecraftCommand);
+            
+            // Copiar comando
+            copyCommand.addEventListener('click', copyToClipboard);
+            
+            // Cambiar versión
+            versionSelector.addEventListener('change', function() {
+                currentVersion = this.value;
+                updateVersionStatus();
+                updatePreview();
+            });
+            
+            // Actualizar vista previa inicial
+            updatePreview();
         });
+
+        // Funciones de la aplicación
+        function updateVersionStatus() {
+            const status = document.getElementById('version-status');
+            status.textContent = `Seleccionada: ${currentVersion}`;
+            document.getElementById('preview-version').textContent = currentVersion;
+        }
+
+        function applyVillagerSettings() {
+            villagerData = {
+                type: villagerType.value,
+                level: villagerLevel.value,
+                biome: villagerBiome.value,
+                name: villagerName.value,
+                experience: villagerExperience.value
+            };
+            
+            updatePreview();
+            
+            // Mostrar mensaje de confirmación
+            alert('Configuración del aldeano aplicada correctamente.');
+        }
+
+        function addNewTrade() {
+            const buyItem1 = document.getElementById('buy-item1').value;
+            const buyAmount1 = document.getElementById('buy-amount1').value;
+            const sellItem = document.getElementById('sell-item').value;
+            const sellAmount = document.getElementById('sell-amount').value;
+            const buyItem2 = document.getElementById('buy-item2').value;
+            const buyAmount2 = document.getElementById('buy-amount2').value;
+            const maxUses = document.getElementById('max-uses').value;
+            
+            // Validación básica
+            if (buyItem1 === 'none') {
+                alert('Por favor, selecciona al menos un objeto para comprar.');
+                return;
+            }
+            
+            // Crear objeto de intercambio
+            const trade = {
+                buy: [
+                    { id: buyItem1, count: parseInt(buyAmount1) }
+                ],
+                sell: { id: sellItem, count: parseInt(sellAmount) },
+                maxUses: parseInt(maxUses)
+            };
+            
+            // Añadir segundo objeto de compra si está configurado
+            if (buyItem2 !== 'none') {
+                trade.buy.push({ id: buyItem2, count: parseInt(buyAmount2) });
+            }
+            
+            // Añadir a la lista
+            currentTrades.push(trade);
+            
+            // Actualizar la UI
+            renderTrades();
+            
+            // Limpiar el formulario
+            document.getElementById('buy-amount1').value = '1';
+            document.getElementById('sell-amount').value = '1';
+            document.getElementById('buy-item2').value = 'none';
+            document.getElementById('buy-amount2').value = '1';
+            document.getElementById('buy-amount2').disabled = true;
+            document.getElementById('max-uses').value = '12';
+        }
+
+        function renderTrades() {
+            tradesList.innerHTML = '';
+            tradesCount.textContent = currentTrades.length;
+            
+            if (currentTrades.length === 0) {
+                tradesList.innerHTML = `
+                    <div class="trade-item">
+                        <div class="trade-item-icon">
+                            <i class="fas fa-question"></i>
+                        </div>
+                        <div class="trade-item-details">
+                            <h4>No hay intercambios</h4>
+                            <p>Añade al menos un intercambio para generar un comando</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            currentTrades.forEach((trade, index) => {
+                const tradeElement = document.createElement('div');
+                tradeElement.className = 'trade-item';
+                
+                // Crear descripción del intercambio
+                let buyDescription = '';
+                if (trade.buy.length === 1) {
+                    buyDescription = `${trade.buy[0].count}x ${minecraftItems[trade.buy[0].id].name}`;
+                } else {
+                    buyDescription = `${trade.buy[0].count}x ${minecraftItems[trade.buy[0].id].name} + ${trade.buy[1].count}x ${minecraftItems[trade.buy[1].id].name}`;
+                }
+                
+                const sellDescription = `${trade.sell.count}x ${minecraftItems[trade.sell.id].name}`;
+                
+                tradeElement.innerHTML = `
+                    <div class="trade-item-icon">
+                        ${minecraftItems[trade.sell.id].icon}
+                    </div>
+                    <div class="trade-item-details">
+                        <h4>Intercambio #${index + 1}</h4>
+                        <p>${buyDescription} → ${sellDescription}</p>
+                        <p>Usos: ${trade.maxUses}</p>
+                    </div>
+                    <div class="trade-item-actions">
+                        <button onclick="removeTrade(${index})"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                
+                tradesList.appendChild(tradeElement);
+            });
+        }
+
+        function removeTrade(index) {
+            currentTrades.splice(index, 1);
+            renderTrades();
+        }
+
+        function generateMinecraftCommand() {
+            if (currentTrades.length === 0) {
+                alert('Debes añadir al menos un intercambio antes de generar el comando.');
+                return;
+            }
+            
+            if (villagerData.type === 'none') {
+                alert('Debes seleccionar un tipo de aldeano antes de generar el comando.');
+                return;
+            }
+            
+            // Generar comando básico (simulado)
+            let command = `/summon villager ~ ~ ~ {VillagerData:{profession:${villagerData.type},level:${villagerData.level},type:${villagerData.biome}}`;
+            
+            // Añadir nombre si está configurado
+            if (villagerData.name) {
+                command += `,CustomName:'{"text":"${villagerData.name}"}'`;
+            }
+            
+            // Añadir experiencia
+            command += `,Xp:${villagerData.experience}`;
+            
+            // Añadir intercambios
+            command += ',Offers:{Recipes:[';
+            
+            currentTrades.forEach((trade, index) => {
+                if (index > 0) command += ',';
+                
+                command += '{buy:[';
+                
+                trade.buy.forEach((buyItem, buyIndex) => {
+                    if (buyIndex > 0) command += ',';
+                    command += `{id:${buyItem.id},Count:${buyItem.count}}`;
+                });
+                
+                command += `],sell:{id:${trade.sell.id},Count:${trade.sell.count}},maxUses:${trade.maxUses}}`;
+            });
+            
+            command += ']}}';
+            
+            // Mostrar comando
+            commandOutput.textContent = command;
+        }
+
+        function copyToClipboard() {
+            if (commandOutput.textContent === '// El comando aparecerá aquí después de generar') {
+                alert('No hay ningún comando para copiar. Genera uno primero.');
+                return;
+            }
+            
+            // Crear un área de texto temporal para copiar
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = commandOutput.textContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            
+            // Mostrar confirmación
+            alert('Comando copiado al portapapeles!');
+        }
+
+        function updatePreview() {
+            document.getElementById('preview-type').textContent = 
+                villagerType.options[villagerType.selectedIndex].text;
+            document.getElementById('preview-level').textContent = 
+                villagerLevel.options[villagerLevel.selectedIndex].text;
+            document.getElementById('preview-biome').textContent = 
+                villagerBiome.options[villagerBiome.selectedIndex].text;
+            document.getElementById('preview-exp').textContent = villagerExperience.value;
+            document.getElementById('preview-name').textContent = 
+                villagerName.value || 'Ninguno';
+            document.getElementById('preview-version').textContent = currentVersion;
+        }
+
+        // Hacer la función removeTrade global para que funcione en los botones
+        window.removeTrade = removeTrade;
     </script>
 </body>
 </html>
