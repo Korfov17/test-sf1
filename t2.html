@@ -3,192 +3,74 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fondo fluido: $ y 🔫</title>
+  <title>Iconos flotantes $ y 🔫</title>
   <style>
-    /* ===== Reset mínimo ===== */
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
     body {
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-                   "Apple Color Emoji","Segoe UI Emoji", sans-serif;
-      color: #fff;
-      overflow-x: hidden; /* evita scroll horizontal por animaciones */
-      background: radial-gradient(1200px 600px at 10% 120%, #0b1222 0%, #0a0f1b 40%, #070b14 100%);
+      margin: 0;
+      height: 100vh;
+      background: #0b1222;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-family: sans-serif;
     }
 
-    /* ===== Fondo animado ===== */
     .fx-bg {
       position: fixed;
       inset: 0;
-      z-index: -1;         /* detrás del contenido */
-      overflow: hidden;    /* recorta símbolos fuera del viewport */
+      z-index: -1;
+      overflow: hidden;
       pointer-events: none;
-      contain: layout paint; /* hints para el navegador */
-      isolation: isolate;
     }
 
     .fx-item {
       position: absolute;
-      top: 0;
-      left: 0;
-      /* Cada item define sus variables: */
-      /* --x: posición horizontal (vw) */
-      /* --scale: tamaño relativo */
-      /* --delay: retraso inicial */
-      /* --dur: duración de subida */
-      /* --rot: rotación inicial */
-      /* --hue: tinte opcional para $ (via text-shadow) */
-      transform: translate3d(var(--x), 110vh, 0) scale(var(--scale)) rotate(var(--rot));
-      will-change: transform, opacity;
-      animation: floatUp var(--dur) linear var(--delay) infinite;
-      opacity: 0;
-      filter: drop-shadow(0 4px 2px rgba(0,0,0,.25));
-      user-select: none;
+      font-size: 2rem;
+      animation: floatUp linear infinite;
+      opacity: 0.8;
     }
 
-    /* Estética de los símbolos */
-    .fx-item span {
-      display: inline-block;
-      font-weight: 800;
-      line-height: 1;
-      /* Tamaño base, se multiplica con --scale */
-      font-size: clamp(18px, 3.6vw, 44px);
-      text-shadow:
-        0 0 10px rgba(255,255,255,0.1),
-        0 0 20px rgba(0, 255, 180, 0.12);
-      opacity: 0.9;
-    }
-
-    /* Suavidad del movimiento */
     @keyframes floatUp {
-      0%   { transform: translate3d(var(--x), 110vh, 0) scale(var(--scale)) rotate(var(--rot)); opacity: 0; }
-      8%   { opacity: 0.85; }
-      50%  { opacity: 0.95; }
-      100% { transform: translate3d(var(--x), -120vh, 0) scale(var(--scale)) rotate(calc(var(--rot) + 25deg)); opacity: 0; }
-    }
-
-    /* Accesibilidad: respeta preferencias de movimiento reducido */
-    @media (prefers-reduced-motion: reduce) {
-      .fx-item { animation: none; opacity: 0.25; transform: translate3d(var(--x), 0, 0) scale(var(--scale)); }
-    }
-
-    /* ===== Contenido de muestra (tu landing) ===== */
-    .page {
-      position: relative;
-      min-height: 100%;
-      display: grid;
-      place-items: center;
-      padding: 6rem 1rem;
-    }
-    .card {
-      max-width: 840px;
-      width: min(92vw, 840px);
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(8px) saturate(110%);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 22px;
-      padding: 28px 26px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-    .title { font-size: clamp(28px, 5vw, 46px); margin: 0 0 10px; }
-    .subtitle { font-size: clamp(15px, 2.6vw, 18px); margin: 0 0 14px; opacity: .9; }
-    .cta {
-      margin-top: 14px;
-      display: inline-block;
-      padding: 12px 18px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #27e1b9, #59a3ff);
-      color: #08111e;
-      font-weight: 800;
-      text-decoration: none;
-      box-shadow: 0 8px 22px rgba(0, 195, 255, 0.25);
+      0%   { transform: translateY(110vh); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(-120vh); opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <!-- Fondo animado -->
-  <div class="fx-bg" aria-hidden="true" id="fx-bg"></div>
+  <div class="fx-bg" id="fx-bg"></div>
 
-  <!-- Tu contenido -->
-  <main class="page">
-    <section class="card">
-      <h1 class="title">Evento de Cumple 🎉</h1>
-      <p class="subtitle">Sábado 21:00 — Calle Falsa 123 — ¡Trae ganas de celebrar!</p>
-      <a class="cta" href="#confirmar">Confirmar asistencia</a>
-    </section>
-  </main>
+  <h1>🎉 Evento de Cumple 🎉</h1>
 
   <script>
-    /**
-     * Generador de símbolos fluidos ($ y 🔫) con alto rendimiento.
-     * - Usa transform + opacity (acelerado por GPU).
-     * - Variables CSS por elemento para distribuir posiciones, tamaños, demoras y duraciones.
-     * - Anima con keyframes lineales para evitar jank; delays escalonados crean flujo continuo.
-     */
+    const container = document.getElementById('fx-bg');
+    const symbols = ["$", "🔫"];
+    const total = 20; // cantidad de iconos
 
-    (function () {
-      const container = document.getElementById('fx-bg');
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
+    }
 
-      // Ajusta la densidad aquí:
-      const TOTAL = 28;        // cantidad total simultánea
-      const SYMBOLS = ["$", "🔫"]; // símbolos a usar
-      const MIN_DUR = 14;      // segundos
-      const MAX_DUR = 26;      // segundos
-      const MIN_SCALE = 0.7;
-      const MAX_SCALE = 1.4;
-      const MIN_DELAY = 0;     // segundos
-      const MAX_DELAY = 18;    // segundos
+    for (let i = 0; i < total; i++) {
+      const el = document.createElement("div");
+      el.className = "fx-item";
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      
+      // posición horizontal
+      el.style.left = rand(0, 100) + "vw";
+      // tamaño aleatorio
+      el.style.fontSize = rand(20, 50) + "px";
+      // duración y retraso
+      const dur = rand(8, 14);
+      const delay = rand(0, 10);
+      el.style.animationDuration = dur + "s";
+      el.style.animationDelay = delay + "s";
 
-      // Distribución ponderada (más $ que 🔫 si quieres):
-      const WEIGHTS = { "$": 0.65, "🔫": 0.35 };
-
-      function pickWeightedSymbol() {
-        const r = Math.random();
-        return r < WEIGHTS["$"] ? "$" : "🔫";
-      }
-
-      function rand(min, max) {
-        return Math.random() * (max - min) + min;
-      }
-
-      function createItem(i) {
-        const el = document.createElement('div');
-        el.className = 'fx-item';
-        // Posición horizontal aleatoria en vw (negativos/ >100vw para bordes suaves)
-        const x = rand(-5, 100); // en vw
-
-        // Variables por elemento
-        el.style.setProperty('--x', x + 'vw');
-        el.style.setProperty('--scale', rand(MIN_SCALE, MAX_SCALE).toFixed(2));
-        el.style.setProperty('--delay', rand(MIN_DELAY, MAX_DELAY).toFixed(2) + 's');
-        el.style.setProperty('--dur', rand(MIN_DUR, MAX_DUR).toFixed(2) + 's');
-        el.style.setProperty('--rot', rand(-18, 18).toFixed(2) + 'deg');
-
-        const span = document.createElement('span');
-        span.textContent = pickWeightedSymbol();
-
-        // Leve variación cromática al $ vía shadow (no toca el emoji)
-        if (span.textContent === "$") {
-          span.style.textShadow =
-            `0 0 10px rgba(180,255,225,0.12),
-             0 0 26px rgba(0,255,190,0.10)`;
-        }
-
-        el.appendChild(span);
-        container.appendChild(el);
-
-        // Re-seed al terminar cada ciclo para que el flujo no se repita igual.
-        el.addEventListener('animationiteration', () => {
-          el.style.setProperty('--x', rand(-5, 100) + 'vw');
-          el.style.setProperty('--scale', rand(MIN_SCALE, MAX_SCALE).toFixed(2));
-          el.style.setProperty('--dur', rand(MIN_DUR, MAX_DUR).toFixed(2) + 's');
-          el.style.setProperty('--rot', rand(-18, 18).toFixed(2) + 'deg');
-        }, { passive: true });
-
-        return el;
-      }
-
-      // Crear todos los elementos
-      for (let i = 0; i < TOTAL; i++) createItem(i);
-
-      // Pausar si el usuario prefi
+      container.appendChild(el);
+    }
+  </script>
+</body>
+</html>
