@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
-      background-color: #000000;
+      background-color: #2c2c2c; /* Fondo gris oscuro */
       height: 80%;
       background-position: center;
       text-align: center;
@@ -55,18 +55,22 @@
       cursor: pointer;
       box-shadow: 2px 2px 5px black;
     }
+
+    h1, h2, #allset {
+      color: white; /* Cambié las letras amarillas a blanco */
+    }
   </style>
 </head>
 
 <body>
-  <h1 id="progress" style="font-size:25px;text-align:center;text-shadow: 4px 4px 4px black;color:yellow;">
+  <h1 id="progress" style="font-size:25px;text-align:center;text-shadow: 4px 4px 4px black;">
     Interfaz de prueba (sin funciones)
   </h1><br>
 
   <div id="loader" class="loader"></div>
 
   <div id="hen-panel" style="text-align:center; margin-top:20px;">
-    <h2 style="color:yellow; text-shadow: 2px 2px 4px black;">Selecciona un HEN</h2>
+    <h2 style="text-shadow: 2px 2px 4px black;">Selecciona un HEN</h2>
 
     <button style="background-color:#d40606; color:white;">
       GoldHEN
@@ -81,7 +85,7 @@
     </button>
   </div>
 
-  <div id="allset" class="info" style="font-size:30px;text-align:center;text-shadow: 4px 4px 4px black;color:yellow;">
+  <div id="allset" class="info" style="font-size:30px;text-align:center;text-shadow: 4px 4px 4px black;">
     Liberación completada. ¡Cierra el navegador!
   </div>
 </body>
