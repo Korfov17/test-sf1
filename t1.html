@@ -70,6 +70,29 @@
       box-shadow: 0 6px 25px rgba(255, 215, 0, 0.9);
     }
 
+    /* Botones azules metálicos */
+    .blue-button {
+      padding: 12px 28px;
+      font-size: 18px;
+      margin: 12px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+      background: linear-gradient(45deg, #1e3c72, #2a5298, #1e90ff);
+      background-size: 300% 300%;
+      animation: shine 3s infinite linear;
+      box-shadow: 0 4px 15px rgba(30, 144, 255, 0.6);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .blue-button:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 25px rgba(30, 144, 255, 0.9);
+    }
+
     @keyframes shine {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -90,12 +113,23 @@
 
   <div id="loader" class="loader"></div>
 
+  <!-- Bloque 1: GoldHEN -->
   <div id="hen-panel" style="text-align:center; margin-top:20px;">
     <h2>Selecciona un HEN</h2>
 
     <button class="gold-button">GoldHEN</button>
     <button class="gold-button">GoldHEN 2.2.5b</button>
     <button class="gold-button">Custom HEN</button>
+  </div>
+
+  <!-- Bloque 2: Payloads -->
+  <div id="payload-panel" style="text-align:center; margin-top:40px;">
+    <h2>Selecciona un Payload</h2>
+
+    <button class="blue-button">Payload 1</button>
+    <button class="blue-button">Payload 2</button>
+    <button class="blue-button">Payload 3</button>
+    <button class="blue-button">Payload 4</button>
   </div>
 
   <div id="allset" class="info" style="font-size:30px;text-align:center;">
