@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PPPwn-Luckfox Dashboard (Test)</title>
+  <style>
+    /* index */
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: black;
+        min-height: 100vh;
+    }
+
+    .container {
+        min-height: 100vh;
+        padding: 40px;
+        background-color: #fff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    header {
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .button-group form, .link-group {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .button {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 18px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background-color 0.3s, transform 0.2s;
+        cursor: pointer;
+    }
+
+    .button:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+
+    .button:active {
+        transform: translateY(1px);
+    }
+
+    .output {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        text-align: left;
+    }
+
+    footer {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #666;
+        text-align: center;
+    }
+
+    .flag {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        width: 50px;
+        height: auto;
+        z-index: 1000;
+    }
+
+    /* config */
+    .message {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        color: #155724;
+        border-radius: 8px;
+        font-size: 16px;
+    }
+
+    label {
+        font-size: 18px;
+        font-weight: bold;
+        color: #555;
+        text-align: left;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+        padding: 15px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 18px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+    }
+
+    input[type="checkbox"] {
+        transform: scale(1.5);
+        margin-right: 10px;
+    }
+
+    .settings-container {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        margin-top: 20px;
+    }
+
+    .settings-group {
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background: #f9f9f9;
+    }
+
+    .toggle-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .toggle-check {
+        display: none;
+    }
+
+    .toggle-label {
+        cursor: pointer;
+        background-color: #eee;
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        user-select: none;
+    }
+
+    .advanced-options {
+        display: none;
+        margin-top: 10px;
+    }
+
+    .toggle-check:checked + .toggle-label + .advanced-options {
+        display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>PPPwn-Luckfox Web Dashboard (Demo)</h1>
+      <h2>★ v1.2.7 ★</h2>
+    </header>
+
+    <!-- Dashboard Buttons -->
+    <div class="button-group">
+      <button class="button" onclick="alert('Ejecutando PPPwn')">Run PPPwn</button>
+      <button class="button" onclick="alert('Apagando Luckfox')">Shutdown Luckfox</button>
+      <button class="button" onclick="alert('Deshabilitando Eth0')">Disable Eth0</button>
+    </div>
+
+    <!-- Links -->
+    <div class="link-group">
+      <a href="#" class="button" onclick="alert('Abriendo configuración')">Config</a>
+      <a href="#" class="button" onclick="alert('Abriendo payloads 9.00')">9.00 Payloads</a>
+      <a href="#" class="button" onclick="alert('Abriendo payloads 11.00')">11.00 Payloads</a>
+    </div>
+
+    <!-- Fake Config Form -->
+    <div class="settings-container">
+      <div class="settings-group">
+        <h4>Basic Options</h4>
+        <label for="FW_VERSION">PS4 Firmware:</label>
+        <select id="FW_VERSION">
+          <option>9.00 - GoldHEN</option>
+          <option>11.00 - GoldHEN</option>
+        </select>
+
+        <label for="PPPWN_EXEC">PPPwn Executable:</label>
+        <select id="PPPWN_EXEC">
+          <option>pppwn1</option>
+          <option>pppwn2</option>
+        </select>
+
+        <label><input type="checkbox"> PPPwn IPV6</label>
+        <label><input type="checkbox"> GoldHEN Detection</label>
+        <label><input type="checkbox"> Auto-Run PPPwn</label>
+        <label><input type="checkbox"> Shutdown After Jailbreak</label>
+      </div>
+
+      <!-- Advanced -->
+      <div class="toggle-container">
+        <input type="checkbox" id="showAdvanced" class="toggle-check">
+        <label for="showAdvanced" class="toggle-label">Show Advanced Options</label>
+        <div class="settings-group advanced-options">
+          <h4>Advanced Options</h4>
+          <label>Timeout in seconds: <input type="number" value="30"></label>
+          <label>Wait After Pin: <input type="number" value="5"></label>
+          <label>Groom Delay: <input type="number" value="10"></label>
+          <label>Buffer Size: <input type="number" value="1024"></label>
+          <label><input type="checkbox"> Auto Retry</label>
+          <label><input type="checkbox"> No Wait PADI</label>
+          <label><input type="checkbox"> Real Sleep</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Demo credits: Adapted from original PPPwn-Luckfox dashboard.</p>
+    </footer>
+  </div>
+  <img src="flag.png" alt="your flag" class="flag">
+</body>
+</html>
