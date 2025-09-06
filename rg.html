@@ -312,6 +312,7 @@
             transition: all 0.5s ease-in-out;
             z-index: 10;
             pointer-events: none;
+            backdrop-filter: blur(3px);
         }
 
         .light-mode .content-overlay {
@@ -430,7 +431,6 @@
         .surprise-item:hover .gift-icon {
             transform: translateY(-5px) scale(1.1);
             filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.8));
-            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
         .gift-icon {
@@ -678,7 +678,6 @@
             justify-content: center;
             gap: 15px;
             margin-top: 15px;
-            flex-wrap: wrap;
         }
 
         .audio-controls button {
@@ -911,11 +910,6 @@
             color: var(--primary-green);
             margin-bottom: 5px;
             font-size: 1.2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .timeline-date:hover {
-            transform: translateX(5px);
         }
 
         .light-mode .timeline-date {
@@ -960,7 +954,7 @@
             max-width: 600px;
             max-height: 80vh;
             background: var(--card-dark);
-            border-radius: 12px;
+            border-radius: 12html
             padding: 40px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             z-index: 200;
@@ -1041,11 +1035,6 @@
             margin-bottom: 8px;
             padding-left: 20px;
             position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .credits-list li:hover {
-            transform: translateX(5px);
         }
 
         .light-mode .credits-list li {
@@ -1143,11 +1132,6 @@
             color: #35b154;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.5));
-            transition: transform 0.3s ease;
-        }
-
-        .surprise-modal .gift-icon:hover {
-            transform: scale(1.1);
         }
 
         .close-surprise {
@@ -1204,23 +1188,11 @@
         .pulse {
             animation: pulse 2s infinite;
         }
-
-        .modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 199;
-            display: none;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="money-bg" id="money-bg"></div>
-    <div class="modal-backdrop" id="modal-backdrop"></div>
     
     <div class="top-bar">
         <h2>Carta Especial</h2>
@@ -1404,7 +1376,7 @@
             <div class="credits-section">
                 <h4>Tecnologías Utilizadas</h4>
                 <ul class="credits-list">
-                    <li>HTML5, CSS3 y JavaScript ES6+</li>
+                    <li>HTML5, CSS3 и JavaScript ES6+</li>
                     <li>Font Awesome para los iconos</li>
                     <li>Google Fonts para la tipografía</li>
                     <li>Diseño responsive con Flexbox y Grid</li>
@@ -1454,9 +1426,6 @@
         const unlockDate = new Date('December 4, 2025 00:00:00').getTime();
         const surpriseDate = new Date('December 10, 2025 00:00:00').getTime();
         
-        // Variable para controlar si las animaciones están activas
-        let animationsActive = true;
-        
         const domElements = {
             body: document.body,
             mainCountdown: document.getElementById('main-countdown'),
@@ -1495,22 +1464,18 @@
             surprise1: document.getElementById('surprise-1'),
             surprise2: document.getElementById('surprise-2'),
             surprise3: document.getElementById('surprise-3'),
-            playSpecialSongBtn: document.getElementById('play-special-song'),
-            modalBackdrop: document.getElementById('modal-backdrop')
+            playSpecialSongBtn: document.getElementById('play-special-song')
         };
 
+        // Variables para controlar el estado de las animaciones
+        let animationInterval;
+        let isAnimationsRunning = true;
+        let animationIcons = [];
+
         function createFloatingIcon() {
-            if (!animationsActive) return null;
-            
-            // Limitar la cantidad máxima de iconos a 15
-            if (domElements.floatingIcons.length >= 15) {
-                return null;
-            }
-            
             const icon = document.createElement('div');
             icon.classList.add('floating-icon');
-            
-            // Optimización: usar transform y opacity para mejor rendimiento
+            icon.style.backfaceVisibility = 'hidden';
             icon.style.willChange = 'transform, opacity';
             
             const isGun = Math.random() < 0.3;
@@ -1549,59 +1514,57 @@
             
             domElements.moneyBg.appendChild(icon);
             
-            // Limpiar iconos correctamente para evitar fugas de memoria
-            const removeTime = duration * 1000;
             setTimeout(() => {
-                if (icon.parentNode) {
+                if (document.body.contains(icon)) {
                     icon.remove();
                 }
-                domElements.floatingIcons = domElements.floatingIcons.filter(i => i !== icon);
-            }, removeTime);
+                animationIcons = animationIcons.filter(i => i !== icon);
+            }, duration * 1000);
             
-            domElements.floatingIcons.push(icon);
+            animationIcons.push(icon);
             return icon;
         }
 
         function manageFloatingIcons() {
-            if (!animationsActive) return;
-            
-            if (domElements.floatingIcons.length < 15) {
+            if (isAnimationsRunning && animationIcons.length < 15) {
                 createFloatingIcon();
             }
             
-            // Limpiar array de iconos eliminados
-            domElements.floatingIcons = domElements.floatingIcons.filter(icon => 
-                document.body.contains(icon)
-            );
+            animationIcons = animationIcons.filter(icon => document.body.contains(icon));
         }
 
         function initFloatingIcons() {
-            if (!animationsActive) return;
-            
             for (let i = 0; i < 10; i++) {
                 createFloatingIcon();
             }
             
-            // Guardar referencia al intervalo para poder limpiarlo luego
-            window.floatingIconsInterval = setInterval(manageFloatingIcons, 1000);
+            animationInterval = setInterval(manageFloatingIcons, 1000);
         }
-        
-        function stopFloatingIcons() {
-            animationsActive = false;
-            clearInterval(window.floatingIconsInterval);
+
+        function pauseAnimations() {
+            isAnimationsRunning = false;
+            clearInterval(animationInterval);
             
-            // Eliminar todos los iconos existentes
-            domElements.floatingIcons.forEach(icon => {
-                if (icon.parentNode) {
-                    icon.remove();
+            // Pausar todas las animaciones CSS
+            animationIcons.forEach(icon => {
+                const style = window.getComputedStyle(icon);
+                const animationName = style.animationName;
+                if (animationName && animationName !== 'none') {
+                    icon.style.animationPlayState = 'paused';
                 }
             });
-            domElements.floatingIcons = [];
         }
-        
-        function resumeFloatingIcons() {
-            animationsActive = true;
-            initFloatingIcons();
+
+        function resumeAnimations() {
+            isAnimationsRunning = true;
+            
+            // Reanudar todas las animaciones CSS
+            animationIcons.forEach(icon => {
+                icon.style.animationPlayState = 'running';
+            });
+            
+            // Reiniciar el intervalo de creación de iconos
+            animationInterval = setInterval(manageFloatingIcons, 1000);
         }
 
         function updateCountdown() {
@@ -1684,34 +1647,39 @@
         }
 
         function showModal(modal) {
+            // Pausar animaciones de fondo
+            pauseAnimations();
+            
             toggleBodyScroll(false);
             modal.style.display = 'flex';
-            domElements.modalBackdrop.style.display = 'block';
             domElements.mainContainer.classList.add('blur-content');
-            
-            // Pausar animaciones de fondo para mejorar rendimiento
-            stopFloatingIcons();
-            
             setTimeout(() => {
                 modal.classList.add('active');
             }, 10);
         }
 
         function hideModal(modal) {
+            // Reanudar animaciones de fondo
+            resumeAnimations();
+            
             toggleBodyScroll(true);
             modal.classList.remove('active');
-            domElements.modalBackdrop.style.display = 'none';
             setTimeout(() => {
                 modal.style.display = 'none';
                 domElements.mainContainer.classList.remove('blur-content');
-                
-                // Reanudar animaciones de fondo
-                resumeFloatingIcons();
             }, 300);
         }
 
         function toggleAudioPlayer() {
-            domElements.audioPlayer.style.display = domElements.audioPlayer.style.display === 'none' ? 'block' : 'none';
+            if (domElements.audioPlayer.style.display === 'block') {
+                domElements.audioPlayer.style.display = 'none';
+                // Reanudar animaciones si se cierra el reproductor
+                resumeAnimations();
+            } else {
+                domElements.audioPlayer.style.display = 'block';
+                // Pausar animaciones si se abre el reproductor
+                pauseAnimations();
+            }
         }
 
         function updateProgressBar() {
@@ -1752,6 +1720,8 @@
             domElements.audioPlayer.style.display = 'none';
             domElements.audioElement.pause();
             domElements.playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+            // Reanudar animaciones al cerrar el reproductor
+            resumeAnimations();
         }
 
         // Función para reiniciar el audio desde el principio
@@ -1848,19 +1818,21 @@
                 domElements.audioPlayer.style.display = 'block';
                 domElements.audioElement.play();
                 domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                // Pausar animaciones al abrir el reproductor
+                pauseAnimations();
             });
         }
 
         window.addEventListener('click', function(e) {
-            if (e.target === domElements.historyModal || e.target === domElements.modalBackdrop) {
+            if (e.target === domElements.historyModal) {
                 hideModal(domElements.historyModal);
             }
-            if (e.target === domElements.creditsModal || e.target === domElements.modalBackdrop) {
+            if (e.target === domElements.creditsModal) {
                 hideModal(domElements.creditsModal);
             }
             // Cerrar modales de sorpresas al hacer clic fuera
             document.querySelectorAll('.surprise-modal').forEach(modal => {
-                if (e.target === modal || e.target === domElements.modalBackdrop) {
+                if (e.target === modal) {
                     hideModal(modal);
                 }
             });
