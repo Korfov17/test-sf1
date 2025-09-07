@@ -233,7 +233,7 @@
         }
 
         .unlock-countdown h3 {
-            margin-top: 极;
+            margin-top: 0;
             margin-bottom: 15px;
             font-size: 1.8rem;
             color: var(--primary-green);
@@ -249,7 +249,7 @@
             border-radius: 12px;
             padding: 40px;
             margin-bottom: 40px;
-            box-shadow: 极 8px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
             pointer-events: none;
@@ -305,7 +305,7 @@
             background: linear-gradient(135deg, 
                 rgba(30, 30, 30, 0.95) 0%, 
                 rgba(30, 30, 30, 0.98) 50%, 
-                rgba(30, 30, 30, 极.95) 100%);
+                rgba(30, 30, 30, 0.95) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -331,7 +331,7 @@
             transition: var(--transition);
         }
 
-        .light-mode .极etter h1 {
+        .light-mode .letter h1 {
             color: var(--primary-green-light);
         }
 
@@ -461,7 +461,7 @@
             letter-spacing: 1px;
             color: var(--primary-green);
             text-shadow: 0 0 10px rgba(29, 185, 84, 0.2);
-            border: 1极 solid rgba(84, 204, 22, 0.1);
+            border: 1px solid rgba(84, 204, 22, 0.1);
             transition: var(--transition);
         }
 
@@ -497,7 +497,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(84, 204, 22, 0.1);
             z-index: 100;
-            transition: var(--极ransition);
+            transition: var(--transition);
         }
 
         .light-mode .theme-toggle {
@@ -558,7 +558,7 @@
 
         .audio-toggle {
             position: fixed;
-            bottom: 30极;
+            bottom: 30px;
             right: 90px;
             width: 50px;
             height: 50px;
@@ -706,7 +706,7 @@
             width: 100%;
             height: 6px;
             background: rgba(84, 204, 22, 0.2);
-            border-radius: 3极;
+            border-radius: 3px;
             margin: 10px auto;
             cursor: pointer;
         }
@@ -777,7 +777,7 @@
             border-radius: 3px;
             width: 100%;
             transition: width 0.1s linear;
-极       }
+        }
 
         .light-mode .volume-slider {
             background: var(--primary-green-light);
@@ -786,7 +786,7 @@
         .navigation-controls {
             display: flex;
             justify-content: center;
-            gap: 10极;
+            gap: 10px;
             margin-top: 15px;
         }
 
@@ -859,6 +859,7 @@
         .timeline {
             position: relative;
             padding-left: 30px;
+            margin-top: 20px;
         }
 
         .timeline::before {
@@ -955,13 +956,13 @@
             background: var(--card-dark);
             border-radius: 12px;
             padding: 40px;
-            box-shadow: 0 10px 40极 rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             z-index: 200;
             display: none;
             flex-direction: column;
             border: 1px solid rgba(84, 204, 22, 0.2);
             overflow-y: auto;
-极           opacity: 0;
+            opacity: 0;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             text-align: center;
         }
@@ -1047,9 +1048,10 @@
             position: absolute;
             left: 0;
             top: -5px;
+            line-height: 1;
         }
 
-        .light-mode .credits极ist li:before {
+        .light-mode .credits-list li:before {
             color: var(--primary-green-light);
         }
 
@@ -1073,7 +1075,6 @@
             transform: rotate(90deg);
         }
 
-        /* Estilos para los nuevos modales de sorpresas */
         .surprise-modal {
             position: fixed;
             top: 50%;
@@ -1127,12 +1128,11 @@
             color: var(--text-dark);
         }
 
-        .surprise-image {
-            width: 100%;
-            max-width: 300px;
-            margin: 0 auto 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        .surprise-modal .gift-icon {
+            font-size: 5rem;
+            color: #35b154;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(53, 177, 84, 0.5));
         }
 
         .close-surprise {
@@ -1202,7 +1202,7 @@
     <div class="container" id="main-container">
         <div class="unlock-countdown">
             <h3>Se desbloqueará en:</h3>
-            <div class="timer极" id="main-countdown">00d 00h 00m 00s</div>
+            <div class="timer" id="main-countdown">00d 00h 00m 00s</div>
         </div>
         
         <div class="letter" id="letter">
@@ -1235,7 +1235,7 @@
             </div>
         </div>
 
-        <div class极="surprises-container">
+        <div class="surprises-container">
             <div class="chest-message" id="chest-message">Tus sorpresas especiales</div>
             
             <div class="surprises-grid">
@@ -1249,12 +1249,6 @@
                 <div class="surprise-item" id="surprise-2">
                     <i class="fas fa-gift gift-icon"></i>
                     <div class="surprise-label">Galería de Fotos</div>
-                </div>
-                
-                <!-- Tercer icono de regalo -->
-                <div class="surprise-item" id="surprise-3">
-                    <i class="fas fa-gift gift-icon"></i>
-                    <div class="surprise-label">Recuerdo Musical</div>
                 </div>
             </div>
             
@@ -1298,7 +1292,7 @@
             <button id="rewind-btn"><i class="fas fa-backward-step"></i></button>
             <button id="play-pause-btn"><i class="fas fa-play"></i></button>
             <button id="forward-btn"><i class="fas fa-forward-step"></i></button>
-            <button id="close-player-btn"><极 class="fas fa-times"></i></button>
+            <button id="close-player-btn"><i class="fas fa-times"></i></button>
         </div>
         
         <!-- Barra de volumen -->
@@ -1337,12 +1331,12 @@
             </div>
             <div class="timeline-item">
                 <div class="timeline-date">Versión Actual</div>
-                <极 class="timeline-content">
+                <div class="timeline-content">
                     <p>Optimización del diseño para ambos modos de color.</p>
                     <p>Mejora en la experiencia de usuario con feedback visual.</p>
                     <p>Fondo de símbolos de dólar y pistolas en 2D con efectos mejorados.</p>
                     <p>Implementación de reproductor de audio con controles de volumen y navegación.</p>
-                    <p>Tres iconos de regalo con diferentes menús en lugar de uno solo.</p>
+                    <p>Dos iconos de regalo con diferentes menús en lugar de tres.</p>
                 </div>
             </div>
         </div>
@@ -1377,10 +1371,10 @@
             <div class="credits-section">
                 <h4>Tecnologías Utilizadas</h4>
                 <ul class="credits-list">
-                    <li>HTML5, CSS3 y JavaScript ES6+</li>
+                    <li>HTML5, CSS3 and JavaScript ES6+</li>
                     <li>Font Awesome para los iconos</li>
                     <li>Google Fonts para la tipografía</li>
-                    <li>Diseño responsive con Flexbox y Grid</极>
+                    <li>Diseño responsive con Flexbox y Grid</li>
                 </ul>
             </div>
 
@@ -1391,26 +1385,24 @@
         </div>
     </div>
 
-    <!-- Modales para cada sorpresa - NUEVO DISEÑO -->
+    <!-- Modales para cada sorpresa -->
     <div class="surprise-modal" id="surprise-modal-1">
-        <button class="close-surprise" data-modal="surprise-modal-1"><i class="fas fa-times"></i></button>
+        <i class="fas fa-gift gift-icon"></i>
         <h3>Mensaje Especial</h3>
-        <img src="rato.png" alt="Imagen especial" class="surprise-image">
         <p>Este es un mensaje personalizado para ti. Quiero que sepas lo especial que eres y lo mucho que significas para mí. Cada momento a tu lado es un regalo que atesoro en mi corazón.</p>
+        <button class="close-surprise" data-modal="surprise-modal-1">Cerrar</button>
     </div>
 
     <div class="surprise-modal" id="surprise-modal-2">
-        <button class="close-surprise" data-modal="surprise-modal-2"><i class="fas fa-times"></i></button>
+        <i class="fas fa-gift gift-icon"></i>
         <h3>Galería de Fotos</h3>
-        <img src="rato.png" alt="Galería de fotos" class="surprise-image">
         <p>Aquí encontrarás nuestros mejores momentos juntos. Cada fotografía cuenta una historia y guarda un recuerdo que atesoraré para siempre.</p>
-    </div>
-
-    <div class="surprise-modal" id="surprise-modal-3">
-        <button class="close-surprise" data-modal="surprise-modal-3"><i class="fas fa-times"></i></button>
-        <h3>Recuerdo Musical</h3>
-        <img src="rato.png" alt="Recuerdo musical" class="surprise-image">
-        <p>Esta canción siempre me recuerda a ti. Cada vez que la escucho, pienso en todos los momentos maravillosos que hemos compartido juntos.</p>
+        <div style="margin: 20px 0; padding: 10px; background: rgba(84, 204, 22, 0.1); border-radius: 8px;">
+            <p>📸 Nuestro primer día juntos</p>
+            <p>📸 Aquella tarde inolvidable</p>
+            <p>📸 Celebrando momentos especiales</p>
+        </div>
+        <button class="close-surprise" data-modal="surprise-modal-2">Cerrar</button>
     </div>
 
     <script>
@@ -1453,9 +1445,7 @@
             volumeContainer: document.getElementById('volume-container'),
             // Elementos de sorpresas
             surprise1: document.getElementById('surprise-1'),
-            surprise2: document.getElementById('surprise-2'),
-            surprise3: document.getElementById('surprise-3'),
-            playSpecialSongBtn: document.getElementById('play-special-song')
+            surprise2: document.getElementById('surprise-2')
         };
 
         function createFloatingIcon() {
@@ -1555,12 +1545,12 @@
             } else {
                 const daysSurprise = Math.floor(distanceToSurprise / (1000 * 60 * 60 * 24));
                 const hoursSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutesSurprise = Math.floor((distanceToSurprise % (1000 * 极 * 60)) / (1000 * 60));
+                const minutesSurprise = Math.floor((distanceToSurprise % (1000 * 60 * 60)) / (1000 * 60));
                 const secondsSurprise = Math.floor((distanceToSurprise % (1000 * 60)) / 1000);
 
                 const format = (num) => num < 10 ? `0${num}` : num;
 
-                domElements.chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hours极urprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
+                domElements.chestCountdown.innerHTML = `${format(daysSurprise)}d ${format(hoursSurprise)}h ${format(minutesSurprise)}m ${format(secondsSurprise)}s`;
             }
         }
 
@@ -1574,10 +1564,9 @@
         }
 
         function unlockSurprise() {
-            // Desbloquear los tres iconos de sorpresa
+            // Desbloquear los dos iconos de sorpresa
             domElements.surprise1.classList.add('unlocked');
             domElements.surprise2.classList.add('unlocked');
-            domElements.surprise3.classList.add('unlocked');
             
             domElements.chestMessage.textContent = "¡Tus sorpresas están disponibles!";
             domElements.chestCountdown.textContent = "¡Descúbrelas ahora!";
@@ -1589,10 +1578,6 @@
             
             domElements.surprise2.addEventListener('click', function() {
                 showModal(document.getElementById('surprise-modal-2'));
-            });
-            
-            domElements.surprise3.addEventListener('click', function() {
-                showModal(document.getElementById('surprise-modal-3'));
             });
         }
 
@@ -1749,19 +1734,10 @@
         });
 
         // Event listeners para los controles
-        domElements.restartBtn.addEventListener('click极', restartAudio);
+        domElements.restartBtn.addEventListener('click', restartAudio);
         domElements.rewindBtn.addEventListener('click', rewind);
         domElements.forwardBtn.addEventListener('click', forward);
         domElements.volumeContainer.addEventListener('click', setVolume);
-
-        // Evento para el botón de reproducir canción especial
-        if (domElements.playSpecialSongBtn) {
-            domElements.playSpecialSongBtn.addEventListener('click', function() {
-                domElements.audioPlayer.style.display = 'block';
-                domElements.audioElement.play();
-                domElements.playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            });
-        }
 
         window.addEventListener('click', function(e) {
             if (e.target === domElements.historyModal) {
