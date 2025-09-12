@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fondo animado: ⚡ y ⭐</title>
+  <style>
+    /* Reset simple */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      overflow:hidden; /* importante: que no salgan scrolls por los símbolos */
+      background: radial-gradient(ellipse at 10% 10%, #0b1020 0%, #071025 40%, #02030a 100%);
+      color: #fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Contenedor del efecto (cubre toda la pantalla) */
+    .bg-layer{
+      position:fixed;
+      inset:0; /* top:0;right:0;bottom:0;left:0 */
+      pointer-events:none; /* que no interfiera con clics */
+      overflow:hidden;
+      z-index:0;
+    }
+
+    /* Capa sutil de estrellas estáticas en el fondo para dar profundidad */
+    .stars {
+      position:absolute;
+      inset:0;
+      background-image: radial-gradient(white 1px, transparent 1px);
+      background-size: 2px 2px;
+      opacity:0.03;
+      transform:translateZ(0);
+    }
+
+    /* Los símbolos flotantes */
+    .symbol{
+      position:absolute;
+      bottom:-4rem; /* empiezan fuera de la pantalla */
+      font-size: 1.6rem; /* tamaño base, se escala desde JS */
+      user-select:none;
+      will-change: transform, opacity;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+      transform-origin:center bottom;
+      opacity:0;
+    }
+
+    /* Animación vertical: sube y desvanece */
+    @keyframes riseUp {
+      0%{ transform: translateY(0) scale(0.9); opacity:0 }
+      6%{ opacity:1 }
+      100%{ transform: translateY(-130vh) scale(1.05); opacity:0 }
+    }
+
+    /* Variantes de color */
+    .white{ color: #ffffff }
+    .red{ color: #ff284b }
+
+    /* Controles visuales (solo demo, en primer plano) */
+    .controls{
+      position:fixed; right:16px; top:16px; z-index:10; pointer-events:auto;
+      background: rgba(255,255,255,0.04); color:#fff; padding:8px 12px; border-radius:10px; backdrop-filter: blur(6px);
+      font-size:13px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
+
+    .controls label{ font-weight:600; font-size:12px; margin-right:6px }
+    .controls input[type=range]{ width:120px }
+
+    /* si el usuario prefiere reducir animaciones */
+    @media (prefers-reduced-motion: reduce){
+      .symbol{ animation:none !important; transition:none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-layer" id="bgLayer">
+    <div class="stars" aria-hidden="true"></div>
+  </div>
+
+  <!-- Controles opcionales para ajustar intensidad (puedes quitar si no quieres UI) -->
+  <div class="controls" aria-hidden="false">
+    <label for="rate">Intensidad</label>
+    <input id="rate" type="range" min="1" max="60" value="18" />
+    <span id="rateVal">18</span>
+  </div>
+
+  <script>
+    /*
+      Código JS responsable de generar los símbolos aleatoriamente desde abajo hacia arriba.
+      - Símbolos: ⚡ y ⭐
+      - Colores: blanco y rojo
+      - El script crea elementos <span class="symbol ..."> y les aplica estilos aleatorios
+      - Se remueven cuando termina la animación para no ensuciar el DOM
+    */
+
+    (function(){
+      const BG = document.getElementById('bgLayer');
+      const rateInput = document.getElementById('rate');
+      const rateVal = document.getElementById('rateVal');
+
+      // Parámetros ajustables
+      let spawnPerMinute = parseInt(rateInput.value,10); // cuántos símbolos por minuto
+      const symbols = ['⚡','⭐'];
+      const colors = ['white','red'];
+      const maxOnScreen = 45; // límite para no saturar
+
+      // Actualizar valor del slider
+      rateInput.addEventListener('input', ()=>{
+        spawnPerMinute = parseInt(rateInput.value,10);
+        rateVal.textContent = spawnPerMinute;
+      });
+
+      // Calcula un intervalo medio entre spawns (en ms)
+      function getSpawnInterval(){
+        const perSec = spawnPerMinute/60;
+        if(perSec <= 0) return 60000;
+        // generamos un intervalo exponencial aleatorio alrededor de la media
+        return Math.max(200, Math.round(1000 / perSec));
+      }
+
+      // Crea un símbolo con propiedades aleatorias
+      function createSymbol(){
+        const s = document.createElement('span');
+        s.className = 'symbol';
+        // contenido
+        s.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+        // color
+        s.classList.add(colors[Math.floor(Math.random()*colors.length)]);
+
+        // tamaño aleatorio
+        const size = (Math.random()*1.8 + 0.8).toFixed(2); // 0.8rem -> 2.6rem
+        s.style.fontSize = (parseFloat(size) * 1.6) + 'rem';
+
+        // posición horizontal aleatoria (evita tocar los bordes estrictamente)
+        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        const left = Math.random() * (vw - 40) + 20; // px
+        s.style.left = left + 'px';
+
+        // rotación leve aleatoria
+        const rot = (Math.random()*40 - 20).toFixed(2);
+        s.style.transform = `translateY(0) rotate(${rot}deg)`;
+
+        // duración de la animación aleatoria (más lento si grande)
+        const duration = (Math.random()*8 + 6).toFixed(2); // entre 6s y 14s
+        s.style.animation = `riseUp ${duration}s linear forwards`;
+
+        // ligeros delay para escalonar
+        const delay = (Math.random()*2).toFixed(2);
+        s.style.animationDelay = delay + 's';
+
+        // opacidad inicial según tamaño
+        s.style.opacity = 0;
+
+        // añadir y limpiar al terminar
+        s.addEventListener('animationend', ()=> s.remove());
+
+        BG.appendChild(s);
+      }
+
+      // Controlamos cuántos hay en pantalla
+      function currentCount(){
+        return BG.querySelectorAll('.symbol').length;
+      }
+
+      // Loop de spawn - usa setTimeout recursivo para variar intervalos
+      function spawnLoop(){
+        const max = maxOnScreen;
+        if(currentCount() < max){
+          createSymbol();
+        }
+        // calculamos el siguiente intervalo alrededor de la media
+        const base = getSpawnInterval();
+        const jitter = Math.random()*base*1.5; // para que sea menos regular
+        const next = Math.max(150, Math.round(base + (Math.random()*2-1)*jitter));
+        setTimeout(spawnLoop, next);
+      }
+
+      // Comienza el loop después de una pequeña espera
+      setTimeout(spawnLoop, 500);
+
+      // Asegurar que al redimensionar la posición sigue siendo razonable
+      window.addEventListener('resize', ()=>{
+        // nada crítico — los símbolos existentes mantienen su left en px
+      });
+
+      // Reducir carga si pestaña en segundo plano
+      document.addEventListener('visibilitychange', ()=>{
+        if(document.hidden){
+          // pausamos creando menos símbolos (baja intensidad)
+          rateInput.dataset.prev = rateInput.value;
+          rateInput.value = Math.max(1, Math.round(rateInput.value/6));
+          rateInput.dispatchEvent(new Event('input'));
+        } else {
+          if(rateInput.dataset.prev) rateInput.value = rateInput.dataset.prev;
+          rateInput.dispatchEvent(new Event('input'));
+        }
+      });
+
+      // Inicialmente pre-cargar algunos símbolos dispersos para que no empiece vacío
+      for(let i=0;i<6;i++){
+        setTimeout(createSymbol, Math.random()*2000);
+      }
+
+    })();
+  </script>
+</body>
+</html>
