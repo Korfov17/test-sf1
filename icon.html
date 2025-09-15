@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iconos Flotantes Optimizados</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0a0a1a;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        #moneyBg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .floating-icon {
+            position: absolute;
+            will-change: transform, opacity;
+            animation-name: float;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: 1;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+            user-select: none;
+        }
+        
+        .dollar-sign {
+            font-size: 24px;
+            color: #00ff00;
+        }
+        
+        .gun-icon {
+            font-size: 20px;
+            color: #ff0000;
+        }
+        
+        .glowing {
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translate(0, 100vh) rotate(var(--rotate)) scale(var(--scale));
+                opacity: 0;
+            }
+            10% {
+                opacity: var(--opacity);
+            }
+            90% {
+                opacity: var(--opacity);
+            }
+            100% {
+                transform: translate(
+                    calc(var(--tx-end) * 1vw), 
+                    -20vh
+                ) rotate(var(--rotate-end)) scale(var(--scale-end));
+                opacity: 0;
+            }
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            z-index: 1000;
+        }
+        
+        .controls h3 {
+            margin-top: 0;
+        }
+        
+        .controls label {
+            display: block;
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="moneyBg"></div>
+    
+    <div class="controls">
+        <h3>Controles de Animación</h3>
+        <label>
+            Máximo de iconos: 
+            <input type="range" id="maxIcons" min="5" max="30" value="15">
+            <span id="maxIconsValue">15</span>
+        </label>
+        <label>
+            Frecuencia (ms): 
+            <input type="range" id="frequency" min="500" max="3000" value="1000">
+            <span id="frequencyValue">1000</span>
+        </label>
+        <button id="toggleAnimation">Pausar Animación</button>
+    </div>
+
+    <script>
+        // Objeto para almacenar elementos DOM
+        const domElements = {
+            moneyBg: document.getElementById('moneyBg'),
+            floatingIcons: [],
+            maxIcons: 15,
+            animationEnabled: true,
+            checkInterval: null
+        };
+
+        // Pool de iconos para reutilización
+        const iconPool = {
+            pool: [],
+            getIcon: function() {
+                if (this.pool.length > 0) {
+                    return this.pool.pop();
+                }
+                return document.createElement('div');
+            },
+            returnIcon: function(icon) {
+                icon.style.display = 'none';
+                this.pool.push(icon);
+            }
+        };
+
+        // Configurar controles
+        document.getElementById('maxIcons').addEventListener('input', function(e) {
+            domElements.maxIcons = parseInt(e.target.value);
+            document.getElementById('maxIconsValue').textContent = e.target.value;
+        });
+
+        document.getElementById('frequency').addEventListener('input', function(e) {
+            const frequency = parseInt(e.target.value);
+            document.getElementById('frequencyValue').textContent = frequency;
+            
+            // Reiniciar el intervalo con la nueva frecuencia
+            clearInterval(domElements.checkInterval);
+            domElements.checkInterval = setInterval(manageFloatingIcons, frequency);
+        });
+
+        document.getElementById('toggleAnimation').addEventListener('click', function() {
+            domElements.animationEnabled = !domElements.animationEnabled;
+            this.textContent = domElements.animationEnabled ? 'Pausar Animación' : 'Reanudar Animación';
+            
+            if (!domElements.animationEnabled) {
+                // Pausar todas las animaciones
+                domElements.floatingIcons.forEach(icon => {
+                    icon.style.animationPlayState = 'paused';
+                });
+            } else {
+                // Reanudar todas las animaciones
+                domElements.floatingIcons.forEach(icon => {
+                    icon.style.animationPlayState = 'running';
+                });
+            }
+        });
+
+        function createFloatingIcon() {
+            // Obtener icono de la pool o crear uno nuevo
+            const icon = iconPool.getIcon();
+            icon.classList.add('floating-icon');
+            
+            // Limpiar clases previas
+            icon.className = 'floating-icon';
+            
+            const isGun = Math.random() < 0.3;
+            if (isGun) {
+                icon.classList.add('gun-icon');
+                icon.innerHTML = '­čöź';
+            } else {
+                icon.classList.add('dollar-sign');
+                icon.textContent = '$';
+            }
+            
+            const effects = ['', 'glowing'];
+            const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+            if (randomEffect) icon.classList.add(randomEffect);
+            
+            const posX = Math.random() * 100;
+            const posXEnd = (Math.random() - 0.5) * 20;
+            const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
+            const sizeEnd = size * (Math.random() * 0.4 + 0.8);
+            const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
+            const rotate = Math.random() * 30 - 15;
+            const rotateEnd = rotate + (Math.random() * 30 - 15);
+            const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
+            const delay = Math.random() * 2;
+            
+            // Aplicar estilos directamente para mejor rendimiento
+            icon.style.left = `${posX}%`;
+            icon.style.setProperty('--tx', posX/10 - 5);
+            icon.style.setProperty('--tx-end', posXEnd);
+            icon.style.setProperty('--rotate', `${rotate}deg`);
+            icon.style.setProperty('--rotate-end', `${rotateEnd}deg`);
+            icon.style.setProperty('--scale', size);
+            icon.style.setProperty('--scale-end', sizeEnd);
+            icon.style.setProperty('--opacity', opacity);
+            icon.style.animationDuration = `${duration}s`;
+            icon.style.animationDelay = `${delay}s`;
+            icon.style.display = 'block';
+            
+            // Añadir al DOM solo si no está ya presente
+            if (!icon.parentNode) {
+                domElements.moneyBg.appendChild(icon);
+            }
+            
+            // Configurar eliminación después de la animación
+            icon._removeTimeout = setTimeout(() => {
+                if (icon.parentNode) {
+                    iconPool.returnIcon(icon);
+                    domElements.floatingIcons = domElements.floatingIcons.filter(i => i !== icon);
+                }
+            }, (duration + delay) * 1000);
+            
+            domElements.floatingIcons.push(icon);
+            return icon;
+        }
+
+        function manageFloatingIcons() {
+            if (!domElements.animationEnabled) return;
+            
+            // Filtrar iconos que ya no están en el DOM
+            domElements.floatingIcons = domElements.floatingIcons.filter(icon => {
+                if (!document.body.contains(icon)) {
+                    if (icon._removeTimeout) clearTimeout(icon._removeTimeout);
+                    return false;
+                }
+                return true;
+            });
+            
+            if (domElements.floatingIcons.length < domElements.maxIcons) {
+                createFloatingIcon();
+            }
+        }
+
+        function initFloatingIcons() {
+            // Crear iconos iniciales
+            for (let i = 0; i < 10; i++) {
+                createFloatingIcon();
+            }
+            
+            // Iniciar el intervalo de comprobación
+            domElements.checkInterval = setInterval(manageFloatingIcons, 1000);
+        }
+
+        // Iniciar cuando el documento esté listo
+        document.addEventListener('DOMContentLoaded', initFloatingIcons);
+    </script>
+</body>
+</html>
