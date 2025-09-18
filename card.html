@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gestor de Tarjetas — Glass UI</title>
+  <style>
+    /* Reset ligero */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html,body { height: 100%; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(135deg,#0f172a 0%, #0b1220 40%, #071426 100%); color: #e6eef8; }
+
+    /* Contenedor principal centrado */
+    .wrap {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      gap: 24px;
+    }
+
+    /* Panel glass */
+    .panel {
+      width: 1100px;
+      max-width: calc(100% - 48px);
+      background: rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 20px;
+      backdrop-filter: blur(12px) saturate(120%);
+      -webkit-backdrop-filter: blur(12px) saturate(120%);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 30px rgba(2,6,23,0.7);
+    }
+
+    header.row {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    h1 { font-size:20px; letter-spacing:0.2px; color:#f1f7ff; }
+    p.lead { font-size:13px; color: #cbd7ea; opacity:0.9; margin-top:6px; }
+
+    /* Controles */
+    .controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    button, .file-label {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 10px 14px;
+      border-radius: 12px;
+      color: #eaf3ff;
+      cursor: pointer;
+      font-weight:600;
+      font-size:13px;
+      transition: transform .08s ease, box-shadow .08s ease;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.45); }
+    button.secondary { background: transparent; border: 1px dashed rgba(255,255,255,0.06); font-weight:500; }
+    button.danger { background: linear-gradient(180deg, rgba(255,80,80,0.12), rgba(255,80,80,0.06)); border-color: rgba(255,80,80,0.18); color:#ffdede; }
+
+    /* Grid tarjetas */
+    .grid {
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 120px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(4,10,20,0.6); }
+
+    .card .top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+    .card h3 { font-size:16px; margin-bottom:6px; color:#ffffff; }
+    .meta { font-size:12px; color:#bcd0ea; opacity:0.95; }
+    .desc { font-size:13px; color:#dce9ff; margin-top:8px; line-height:1.3; opacity:0.95; }
+
+    .card .actions { display:flex; gap:8px; margin-top:12px; align-self:flex-end; }
+    .card small.badge {
+      padding:6px 8px; border-radius:999px; font-size:12px; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04);
+    }
+
+    /* Footer area with JSON preview */
+    .bottom {
+      margin-top:16px;
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .jsonbox {
+      flex:1 1 360px;
+      background: rgba(12,18,28,0.5);
+      border-radius: 12px;
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+      font-size:12px;
+      color:#cfe8ff;
+      max-height:260px;
+      overflow:auto;
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .small { font-size:12px; color:#b9d1f0; opacity:0.95; }
+
+    /* Responsive tweaks */
+    @media (max-width:640px){
+      .panel { padding:14px; border-radius:12px; }
+      .controls { gap:6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel" role="main" aria-labelledby="title">
+      <header class="row">
+        <div>
+          <h1 id="title">Gestor de Tarjetas — Glass UI</h1>
+          <p class="lead">Crea tarjetas con datos desde prompt, guarda en JSON, exporta/importa o edítalas localmente.</p>
+        </div>
+
+        <div class="controls" aria-hidden="false">
+          <button id="btnNew">➕ Crear tarjeta</button>
+          <button id="btnExport">⬇ Exportar JSON</button>
+          <label class="file-label" title="Importar JSON">
+            ⬆ Importar JSON
+            <input id="fileImport" type="file" accept=".json" style="display:none" />
+          </label>
+          <button id="btnClear" class="danger" title="Borra todo">🗑 Vaciar todo</button>
+        </div>
+      </header>
+
+      <section>
+        <div id="grid" class="grid" aria-live="polite"></div>
+
+        <div class="bottom">
+          <div class="jsonbox" id="jsonBox" aria-label="Vista previa JSON">
+            <!-- JSON mostrado aquí -->
+          </div>
+          <div style="min-width:180px;">
+            <p class="small"><strong>Instrucciones rápidas</strong></p>
+            <ul class="small" style="margin-top:8px; line-height:1.5;">
+              <li>Crear: usa el botón <strong>Crear tarjeta</strong> — se preguntará Título, Descripción y Etiqueta.</li>
+              <li>Editar/Borrar en cada tarjeta. Las acciones solo modifican la tarjeta seleccionada (no tocan otras).</li>
+              <li>Exportar: guarda un archivo .json con todas las tarjetas.</li>
+              <li>Importar: carga un .json válido (reemplaza el conjunto actual, revisa el formato antes).</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    /* ===========================
+       Gestor de tarjetas (single-file)
+       - Usa localStorage para persistencia.
+       - Clave: 'tarjetasData' (JSON array).
+       - Funciones: cargar, guardar, renderizar, crear, editar, borrar, exportar, importar.
+       =========================== */
+
+    // ---------- Config y utilidades ----------
+    const STORAGE_KEY = 'tarjetasData';
+
+    function loadData() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      try {
+        const data = JSON.parse(raw);
+        if (!Array.isArray(data)) throw new Error('Formato inválido: se esperaba array');
+        return data;
+      } catch (err) {
+        console.error('Error al parsear JSON desde localStorage:', err);
+        // Si hay un JSON corrupto, lo informamos y limpiamos para evitar fallos repetidos.
+        alert('Aviso: el JSON guardado está corrupto. Se limpiará para evitar errores. Puedes intentar importar un JSON válido.');
+        localStorage.removeItem(STORAGE_KEY);
+        return [];
+      }
+    }
+
+    function saveData(arr) {
+      // Guardamos copia para evitar referencias inesperadas
+      const copy = JSON.parse(JSON.stringify(arr));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(copy, null, 2));
+      updateJSONPreview(copy);
+    }
+
+    function uid() {
+      // ID simple y seguro para este uso local
+      return 'id-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,9);
+    }
+
+    // ---------- DOM references ----------
+    const gridEl = document.getElementById('grid');
+    const btnNew = document.getElementById('btnNew');
+    const btnExport = document.getElementById('btnExport');
+    const fileImport = document.getElementById('fileImport');
+    const btnClear = document.getElementById('btnClear');
+    const jsonBox = document.getElementById('jsonBox');
+
+    // ---------- Render ----------
+    function renderCards() {
+      const data = loadData();
+      gridEl.innerHTML = '';
+      if (data.length === 0) {
+        gridEl.innerHTML = `<div style="grid-column:1/-1; text-align:center; color:#a9c3eb; padding:24px;">No hay tarjetas. Crea la primera con "Crear tarjeta".</div>`;
+        updateJSONPreview([]);
+        return;
+      }
+
+      for (const item of data) {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.dataset.id = item.id;
+
+        const top = document.createElement('div');
+        top.className = 'top';
+
+        const left = document.createElement('div');
+        const h3 = document.createElement('h3');
+        h3.textContent = item.title || '(Sin título)';
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.textContent = item.tag ? `Etiqueta: ${item.tag}` : 'Sin etiqueta';
+
+        left.appendChild(h3);
+        left.appendChild(meta);
+
+        const right = document.createElement('div');
+        right.innerHTML = `<small class="badge">${new Date(item.createdAt).toLocaleString()}</small>`;
+
+        top.appendChild(left);
+        top.appendChild(right);
+
+        const desc = document.createElement('p');
+        desc.className = 'desc';
+        desc.textContent = item.description || '';
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+
+        const btnEdit = document.createElement('button');
+        btnEdit.textContent = '✏️ Editar';
+        btnEdit.onclick = () => editCard(item.id);
+
+        const btnDelete = document.createElement('button');
+        btnDelete.className = 'secondary';
+        btnDelete.textContent = '🗑 Borrar';
+        btnDelete.onclick = () => deleteCard(item.id);
+
+        actions.appendChild(btnEdit);
+        actions.appendChild(btnDelete);
+
+        card.appendChild(top);
+        card.appendChild(desc);
+        card.appendChild(actions);
+
+        gridEl.appendChild(card);
+      }
+
+      updateJSONPreview(data);
+    }
+
+    // ---------- Operaciones sobre datos ----------
+    function createCardInteractive() {
+      // Pedimos datos mediante prompt (lo pediste explícitamente)
+      // Validaciones mínimas: si se cancela Title, abortamos.
+      const title = prompt('Título de la tarjeta (obligatorio):', '');
+      if (title === null) return; // usuario canceló
+      if (title.trim() === '') { alert('El título no puede estar vacío. Operación cancelada.'); return; }
+
+      const description = prompt('Descripción (opcional):', '') ?? '';
+      if (description === null) return; // user cancelled (rare porque usamos ??)
+      const tag = prompt('Etiqueta / categoría (opcional):', '') ?? '';
+
+      const data = loadData();
+      const now = new Date().toISOString();
+      const newItem = {
+        id: uid(),
+        title: title.trim(),
+        description: description.trim(),
+        tag: tag.trim(),
+        createdAt: now,
+        updatedAt: now
+      };
+      data.push(newItem);
+      saveData(data);
+      renderCards();
+    }
+
+    function editCard(id) {
+      // Edita exclusivamente la tarjeta con id dado
+      const data = loadData();
+      const idx = data.findIndex(x => x.id === id);
+      if (idx === -1) {
+        alert('Tarjeta no encontrada (ya fue borrada o ID inválido).');
+        renderCards();
+        return;
+      }
+
+      const item = data[idx];
+      // Pedimos nuevo título/descripción/etiqueta. Si el usuario pulsa cancelar en título -> abortar.
+      const newTitle = prompt('Editar título (obligatorio):', item.title);
+      if (newTitle === null) return;
+      if (newTitle.trim() === '') { alert('El título no puede quedar vacío. Edición cancelada.'); return; }
+
+      const newDesc = prompt('Editar descripción (opcional):', item.description) ?? '';
+      if (newDesc === null) return;
+      const newTag = prompt('Editar etiqueta (opcional):', item.tag) ?? '';
+      if (newTag === null) return;
+
+      // Solo modificamos los campos de esta tarjeta
+      item.title = newTitle.trim();
+      item.description = newDesc.trim();
+      item.tag = newTag.trim();
+      item.updatedAt = new Date().toISOString();
+
+      data[idx] = item;
+      saveData(data);
+      renderCards();
+    }
+
+    function deleteCard(id) {
+      if (!confirm('¿Seguro que quieres borrar esta tarjeta? Esta acción no puede deshacerse (puedes exportar antes si hace falta).')) return;
+      const data = loadData();
+      const filtered = data.filter(x => x.id !== id);
+      saveData(filtered);
+      renderCards();
+    }
+
+    function clearAll() {
+      if (!confirm('Borrar todo eliminará todas las tarjetas guardadas en localStorage. ¿Continuar?')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      renderCards();
+    }
+
+    // ---------- Export / Import ----------
+    function exportJSON() {
+      const data = loadData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      const ts = new Date().toISOString().replace(/[:.]/g, '-');
+      a.download = `tarjetas-${ts}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function handleImportFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          if (!Array.isArray(parsed)) throw new Error('El JSON importado debe ser un array de objetos.');
+          // Validación ligera de objetos: cada uno debe tener id y title (sino generamos)
+          const repaired = parsed.map(item => {
+            if (typeof item !== 'object' || item === null) return null;
+            const o = {...item};
+            if (!o.id) o.id = uid();
+            if (!o.title) o.title = '(Sin título)';
+            if (!o.createdAt) o.createdAt = new Date().toISOString();
+            if (!o.updatedAt) o.updatedAt = o.createdAt;
+            return o;
+          }).filter(Boolean);
+          // Reemplazamos el dataset actual con el importado
+          saveData(repaired);
+          renderCards();
+          alert('Importación completa. Revisa que el formato del JSON sea el esperado.');
+        } catch (err) {
+          console.error('Error importando JSON:', err);
+          alert('Archivo inválido o JSON con formato incorrecto. Revisa la consola para detalles.');
+        }
+      };
+      reader.onerror = () => {
+        alert('Error leyendo el archivo seleccionado.');
+      };
+      reader.readAsText(file, 'utf8');
+    }
+
+    // ---------- UI ayuda ----------
+    function updateJSONPreview(data) {
+      try {
+        jsonBox.textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        jsonBox.textContent = 'Error mostrando JSON.';
+      }
+    }
+
+    // ---------- Listeners ----------
+    btnNew.addEventListener('click', createCardInteractive);
+    btnExport.addEventListener('click', exportJSON);
+    btnClear.addEventListener('click', clearAll);
+    fileImport.addEventListener('change', (ev) => {
+      const file = ev.target.files && ev.target.files[0];
+      if (!file) return;
+      handleImportFile(file);
+      // Limpiar input para permitir re-subir mismo archivo si se desea
+      ev.target.value = '';
+    });
+
+    // Inicializar al cargar la página
+    (function init() {
+      // Si no hay datos, crea ejemplo ligero? No — respetamos tu petición de que se vaya añadiendo conforme creas.
+      renderCards();
+    })();
+  </script>
+</body>
+</html>
