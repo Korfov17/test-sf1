@@ -3,15 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fondo animado - Dólares subiendo</title>
+  <title>Fondo animado - Emojis brillando</title>
   <style>
-    /* -----------------------------
-       Configuración general
-       -----------------------------*/
     :root{
-      --bg-color: #0f1724;        /* color de fondo */
-      --dollar-color: #27c93f;    /* color del signo $ */
-      --count: 12;                /* número de elementos .bill en el HTML */
+      --bg-color: #0f1724;
+      --count: 12;
     }
 
     html,body{height:100%;margin:0}
@@ -24,12 +20,6 @@
       overflow-x:hidden;
     }
 
-    /* -----------------------------
-       Contenedor del fondo animado
-       - position:fixed para que actúe como fondo
-       - pointer-events:none para no bloquear interacción
-       - z-index por debajo del contenido (contenido puede tener z-index>0)
-       -----------------------------*/
     .money-bg{
       position:fixed;
       inset:0;
@@ -38,83 +28,76 @@
       z-index:0;
     }
 
-    /* Cada "billete" es un span con el signo `$` vía pseudo-elemento */
     .bill{
-      --size: 28px; /* valor base (se sobrescribe por nth-child) */
+      --size: 28px;
       position:absolute;
-      bottom:-8vh; /* parte inicial por debajo del viewport */
+      bottom:-8vh;
       left:0;
       width:var(--size);
       height:var(--size);
       transform-origin:center center;
       will-change:transform,opacity;
+      animation: rise 20s linear infinite, glow 2s ease-in-out infinite alternate;
     }
 
     .bill::before{
-      content: "$";
+      content: attr(data-emoji);
       display:block;
       font-weight:700;
       font-size:var(--size);
       line-height:1;
-      color:var(--dollar-color);
-      text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+      text-shadow: 0 0 6px rgba(255,255,255,0.6), 0 0 12px rgba(255,255,255,0.4);
       opacity:0.95;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
     }
 
-    /* animación principal: subida + ligera oscilación horizontal + rotación y desaparición */
     @keyframes rise {
       0%{
-        transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+        transform: translateY(0) scale(1);
         opacity:0;
       }
       5%{
         opacity:1;
       }
-      50%{
-        opacity:0.9;
+      95%{
+        opacity:1;
       }
       100%{
-        transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)) scale(var(--scale));
+        transform: translateY(-120vh) scale(1);
         opacity:0;
       }
     }
 
-    /* Para darle vida, asignamos variaciones por índice (izquierda, tamaño, tiempo, retraso, deriva, rotación) */
-    /* Ajusta o añade más rules si aumentas --count */
-    .bill{
-      animation-name: rise;
-      animation-timing-function: cubic-bezier(.18,.8,.25,1);
-      animation-iteration-count: infinite;
+    @keyframes glow {
+      0%   { filter: drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
+      100% { filter: drop-shadow(0 0 12px rgba(255,255,255,1)); }
     }
 
-    /* Ejemplos de variaciones. Si cambias --count, añade reglas para nth-child superiores */
-    .bill:nth-child(1)  { left:4%;  --size:24px; --scale:1.05; --drift: -18vw; --rot: -12deg; animation-duration:10s; animation-delay:0s }
-    .bill:nth-child(2)  { left:18%; --size:34px; --scale:1.1;  --drift: 12vw;  --rot: 18deg;  animation-duration:12s; animation-delay:2s }
-    .bill:nth-child(3)  { left:30%; --size:20px; --scale:0.95; --drift: -6vw;  --rot: -8deg;  animation-duration:9s;  animation-delay:1s }
-    .bill:nth-child(4)  { left:42%; --size:30px; --scale:1;   --drift: 20vw;  --rot: 6deg;   animation-duration:14s; animation-delay:4s }
-    .bill:nth-child(5)  { left:55%; --size:26px; --scale:1.02; --drift: -8vw;  --rot: -10deg; animation-duration:11s; animation-delay:0.5s }
-    .bill:nth-child(6)  { left:68%; --size:22px; --scale:0.98; --drift: 10vw;  --rot: 12deg;  animation-duration:10.5s; animation-delay:3s }
-    .bill:nth-child(7)  { left:80%; --size:36px; --scale:1.12; --drift: -22vw; --rot: -18deg; animation-duration:16s; animation-delay:6s }
-    .bill:nth-child(8)  { left:6%;  --size:18px; --scale:0.9;  --drift: 8vw;   --rot: 10deg;  animation-duration:9.5s; animation-delay:2.5s }
-    .bill:nth-child(9)  { left:24%; --size:28px; --scale:1.04; --drift: -14vw; --rot: -6deg;  animation-duration:13s; animation-delay:5s }
-    .bill:nth-child(10) { left:38%; --size:20px; --scale:0.96; --drift: 6vw;   --rot: 8deg;   animation-duration:9.2s; animation-delay:1.2s }
-    .bill:nth-child(11) { left:60%; --size:32px; --scale:1.08; --drift: -10vw; --rot: -14deg; animation-duration:15s; animation-delay:7s }
-    .bill:nth-child(12) { left:88%; --size:26px; --scale:1.0;  --drift: 18vw;  --rot: 20deg;  animation-duration:14.5s; animation-delay:4.8s }
+    /* Todos los emojis con misma duración y velocidad */
+    .bill{
+      animation-duration:20s;
+    }
 
-    /* Pequeño truco: cada ciclo se reinicia con delay negativo para que el fondo no esté sincronizado al cargar */
-    .bill{ animation-fill-mode:both; }
+    /* Solo cambia posición horizontal y tamaño */
+    .bill:nth-child(1)  { left:5%;  --size:24px; }
+    .bill:nth-child(2)  { left:15%; --size:34px; }
+    .bill:nth-child(3)  { left:25%; --size:28px; }
+    .bill:nth-child(4)  { left:35%; --size:30px; }
+    .bill:nth-child(5)  { left:45%; --size:22px; }
+    .bill:nth-child(6)  { left:55%; --size:26px; }
+    .bill:nth-child(7)  { left:65%; --size:32px; }
+    .bill:nth-child(8)  { left:75%; --size:20px; }
+    .bill:nth-child(9)  { left:85%; --size:28px; }
+    .bill:nth-child(10) { left:50%; --size:24px; }
+    .bill:nth-child(11) { left:30%; --size:22px; }
+    .bill:nth-child(12) { left:70%; --size:26px; }
 
-    /* Ajustes responsivos: reducir tamaños en pantallas pequeñas */
     @media (max-width:600px){
-      .bill:nth-child(2),.bill:nth-child(7),.bill:nth-child(11){ --size:24px }
       .bill{ --size:22px }
     }
 
-    /* Contenido principal para demostrar que la animación está de fondo */
     .app{
       position:relative;
-      z-index:1; /* por encima del fondo */
+      z-index:1;
       min-height:100vh;
       display:flex;
       align-items:center;
@@ -140,27 +123,25 @@
 </head>
 <body>
 
-  <!-- Fondo animado: añade o quita <span class="bill"></span> según quieras más/menos signos -->
   <div class="money-bg" aria-hidden="true">
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
-    <span class="bill"></span>
+    <span class="bill" data-emoji="❔"></span>
+    <span class="bill" data-emoji="⭐"></span>
+    <span class="bill" data-emoji="❔"></span>
+    <span class="bill" data-emoji="⭐"></span>
+    <span class="bill" data-emoji="❔"></span>
+    <span class="bill" data-emoji="⭐"></span>
+    <span class="bill" data-emoji="❔"></span>
+    <span class="bill" data-emoji="⭐"></span>
+    <span class="bill" data-emoji="❔"></span>
+    <span class="bill" data-emoji="⭐"></span>
+    <span class="bill" data-emoji="❔"></span>
+    <span class="bill" data-emoji="⭐"></span>
   </div>
 
-  <!-- Contenido de demostración -->
   <main class="app">
     <section class="card">
-      <h1>Fondo animado: signos de dólar subiendo</h1>
-      <p>Este ejemplo usa <strong>solo CSS</strong> para animar elementos con el signo <code>$</code> que suben desde abajo. Para ajustar densidad, velocidad o color, edita las variables en el <code>:root</code> o modifica/duplica los elementos <code>.bill</code> en el HTML.</p>
+      <h1>Fondo animado: Emojis brillando</h1>
+      <p>Los emojis <code>❔</code> y <code>⭐</code> suben lentamente y con un efecto de brillo.</p>
     </section>
   </main>
 
