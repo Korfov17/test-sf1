@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fondo animado - Emojis brillando</title>
+  <title>Fondo animado - Emojis subiendo</title>
   <style>
     :root{
       --bg-color: #0f1724;
@@ -37,7 +37,6 @@
       height:var(--size);
       transform-origin:center center;
       will-change:transform,opacity;
-      animation: rise 20s linear infinite, glow 2s ease-in-out infinite alternate;
     }
 
     .bill::before{
@@ -46,52 +45,51 @@
       font-weight:700;
       font-size:var(--size);
       line-height:1;
-      text-shadow: 0 0 6px rgba(255,255,255,0.6), 0 0 12px rgba(255,255,255,0.4);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.45);
       opacity:0.95;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
     }
 
     @keyframes rise {
       0%{
-        transform: translateY(0) scale(1);
+        transform: translateY(0) translateX(0) rotate(0deg) scale(1);
         opacity:0;
       }
       5%{
         opacity:1;
       }
-      95%{
-        opacity:1;
+      50%{
+        opacity:0.9;
       }
       100%{
-        transform: translateY(-120vh) scale(1);
+        transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)) scale(var(--scale));
         opacity:0;
       }
     }
 
-    @keyframes glow {
-      0%   { filter: drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
-      100% { filter: drop-shadow(0 0 12px rgba(255,255,255,1)); }
-    }
-
-    /* Todos los emojis con misma duración y velocidad */
     .bill{
-      animation-duration:20s;
+      animation-name: rise;
+      animation-timing-function: cubic-bezier(.18,.8,.25,1);
+      animation-iteration-count: infinite;
     }
 
-    /* Solo cambia posición horizontal y tamaño */
-    .bill:nth-child(1)  { left:5%;  --size:24px; }
-    .bill:nth-child(2)  { left:15%; --size:34px; }
-    .bill:nth-child(3)  { left:25%; --size:28px; }
-    .bill:nth-child(4)  { left:35%; --size:30px; }
-    .bill:nth-child(5)  { left:45%; --size:22px; }
-    .bill:nth-child(6)  { left:55%; --size:26px; }
-    .bill:nth-child(7)  { left:65%; --size:32px; }
-    .bill:nth-child(8)  { left:75%; --size:20px; }
-    .bill:nth-child(9)  { left:85%; --size:28px; }
-    .bill:nth-child(10) { left:50%; --size:24px; }
-    .bill:nth-child(11) { left:30%; --size:22px; }
-    .bill:nth-child(12) { left:70%; --size:26px; }
+    .bill:nth-child(1)  { left:4%;  --size:24px; --scale:1.05; --drift: -18vw; --rot: -12deg; animation-duration:10s; animation-delay:0s }
+    .bill:nth-child(2)  { left:18%; --size:34px; --scale:1.1;  --drift: 12vw;  --rot: 18deg;  animation-duration:12s; animation-delay:2s }
+    .bill:nth-child(3)  { left:30%; --size:20px; --scale:0.95; --drift: -6vw;  --rot: -8deg;  animation-duration:9s;  animation-delay:1s }
+    .bill:nth-child(4)  { left:42%; --size:30px; --scale:1;   --drift: 20vw;  --rot: 6deg;   animation-duration:14s; animation-delay:4s }
+    .bill:nth-child(5)  { left:55%; --size:26px; --scale:1.02; --drift: -8vw;  --rot: -10deg; animation-duration:11s; animation-delay:0.5s }
+    .bill:nth-child(6)  { left:68%; --size:22px; --scale:0.98; --drift: 10vw;  --rot: 12deg;  animation-duration:10.5s; animation-delay:3s }
+    .bill:nth-child(7)  { left:80%; --size:36px; --scale:1.12; --drift: -22vw; --rot: -18deg; animation-duration:16s; animation-delay:6s }
+    .bill:nth-child(8)  { left:6%;  --size:18px; --scale:0.9;  --drift: 8vw;   --rot: 10deg;  animation-duration:9.5s; animation-delay:2.5s }
+    .bill:nth-child(9)  { left:24%; --size:28px; --scale:1.04; --drift: -14vw; --rot: -6deg;  animation-duration:13s; animation-delay:5s }
+    .bill:nth-child(10) { left:38%; --size:20px; --scale:0.96; --drift: 6vw;   --rot: 8deg;   animation-duration:9.2s; animation-delay:1.2s }
+    .bill:nth-child(11) { left:60%; --size:32px; --scale:1.08; --drift: -10vw; --rot: -14deg; animation-duration:15s; animation-delay:7s }
+    .bill:nth-child(12) { left:88%; --size:26px; --scale:1.0;  --drift: 18vw;  --rot: 20deg;  animation-duration:14.5s; animation-delay:4.8s }
+
+    .bill{ animation-fill-mode:both; }
 
     @media (max-width:600px){
+      .bill:nth-child(2),.bill:nth-child(7),.bill:nth-child(11){ --size:24px }
       .bill{ --size:22px }
     }
 
@@ -140,8 +138,8 @@
 
   <main class="app">
     <section class="card">
-      <h1>Fondo animado: Emojis brillando</h1>
-      <p>Los emojis <code>❔</code> y <code>⭐</code> suben lentamente y con un efecto de brillo.</p>
+      <h1>Fondo animado: Emojis subiendo</h1>
+      <p>Ahora los elementos que suben son los emojis <code>❔</code> y <code>⭐</code>.</p>
     </section>
   </main>
 
