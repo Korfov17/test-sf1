@@ -36,7 +36,7 @@
       height:var(--size);
       transform-origin:center center;
       will-change:transform,opacity;
-      animation: rise 20s linear infinite, glow 2s ease-in-out infinite alternate;
+      animation: rise linear infinite, glow 2s ease-in-out infinite alternate;
     }
 
     .bill::before{
@@ -45,55 +45,60 @@
       font-weight:700;
       font-size:var(--size);
       line-height:1;
-      text-shadow: 0 0 6px rgba(255,255,255,0.6), 0 0 12px rgba(255,255,255,0.4);
       opacity:0.95;
+    }
+
+    /* Colores y brillos diferentes según el emoji */
+    .bill[data-emoji="⭐"]::before{
+      color:#ffd700;
+      text-shadow:0 0 6px #ffd700,0 0 14px rgba(255,215,0,0.8);
+    }
+    .bill[data-emoji="❔"]::before{
+      color:#ccc;
+      text-shadow:0 0 6px #ccc,0 0 14px rgba(200,200,200,0.7);
     }
 
     @keyframes rise {
       0%{
-        transform: translateY(0) scale(1);
+        transform: translateY(0) translateX(0) rotate(0deg) scale(1);
         opacity:0;
       }
       5%{
         opacity:1;
       }
-      95%{
-        opacity:1;
+      50%{
+        opacity:0.9;
       }
       100%{
-        transform: translateY(-120vh) scale(1);
+        transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)) scale(var(--scale));
         opacity:0;
       }
     }
 
     @keyframes glow {
-      0%   { filter: drop-shadow(0 0 4px rgba(255,255,255,0.5)); }
-      100% { filter: drop-shadow(0 0 16px rgba(255,255,255,1)); }
+      0%   { filter: drop-shadow(0 0 4px rgba(255,255,255,0.4)); }
+      100% { filter: drop-shadow(0 0 14px rgba(255,255,255,1)); }
     }
 
-    /* Variaciones de posición y delays escalonados */
-    .bill:nth-child(1)  { left:5%;  --size:24px; animation-delay:0s; }
-    .bill:nth-child(2)  { left:12%; --size:30px; animation-delay:3s; }
-    .bill:nth-child(3)  { left:20%; --size:22px; animation-delay:6s; }
-    .bill:nth-child(4)  { left:28%; --size:28px; animation-delay:9s; }
-    .bill:nth-child(5)  { left:36%; --size:26px; animation-delay:12s; }
-    .bill:nth-child(6)  { left:44%; --size:24px; animation-delay:15s; }
-    .bill:nth-child(7)  { left:52%; --size:32px; animation-delay:18s; }
-    .bill:nth-child(8)  { left:60%; --size:20px; animation-delay:21s; }
-    .bill:nth-child(9)  { left:68%; --size:28px; animation-delay:24s; }
-    .bill:nth-child(10) { left:76%; --size:22px; animation-delay:27s; }
-    .bill:nth-child(11) { left:84%; --size:26px; animation-delay:30s; }
-    .bill:nth-child(12) { left:92%; --size:24px; animation-delay:33s; }
-    .bill:nth-child(13) { left:10%; --size:22px; animation-delay:36s; }
-    .bill:nth-child(14) { left:25%; --size:28px; animation-delay:39s; }
-    .bill:nth-child(15) { left:40%; --size:30px; animation-delay:42s; }
-    .bill:nth-child(16) { left:55%; --size:26px; animation-delay:45s; }
-    .bill:nth-child(17) { left:70%; --size:22px; animation-delay:48s; }
-    .bill:nth-child(18) { left:85%; --size:28px; animation-delay:51s; }
-    .bill:nth-child(19) { left:15%; --size:24px; animation-delay:54s; }
-    .bill:nth-child(20) { left:65%; --size:30px; animation-delay:57s; }
+    /* Variaciones aleatorias */
+    .bill:nth-child(1)  { left:4%;  --size:24px; --scale:1.05; --drift:-18vw; --rot:-12deg; animation-duration:10s; animation-delay:0s }
+    .bill:nth-child(2)  { left:18%; --size:34px; --scale:1.1;  --drift:12vw;  --rot:18deg;  animation-duration:12s; animation-delay:2s }
+    .bill:nth-child(3)  { left:30%; --size:20px; --scale:0.95; --drift:-6vw;  --rot:-8deg;  animation-duration:9s;  animation-delay:1s }
+    .bill:nth-child(4)  { left:42%; --size:30px; --scale:1;   --drift:20vw;  --rot:6deg;   animation-duration:14s; animation-delay:4s }
+    .bill:nth-child(5)  { left:55%; --size:26px; --scale:1.02; --drift:-8vw;  --rot:-10deg; animation-duration:11s; animation-delay:0.5s }
+    .bill:nth-child(6)  { left:68%; --size:22px; --scale:0.98; --drift:10vw;  --rot:12deg;  animation-duration:10.5s; animation-delay:3s }
+    .bill:nth-child(7)  { left:80%; --size:36px; --scale:1.12; --drift:-22vw; --rot:-18deg; animation-duration:16s; animation-delay:6s }
+    .bill:nth-child(8)  { left:6%;  --size:18px; --scale:0.9;  --drift:8vw;   --rot:10deg;  animation-duration:9.5s; animation-delay:2.5s }
+    .bill:nth-child(9)  { left:24%; --size:28px; --scale:1.04; --drift:-14vw; --rot:-6deg;  animation-duration:13s; animation-delay:5s }
+    .bill:nth-child(10) { left:38%; --size:20px; --scale:0.96; --drift:6vw;   --rot:8deg;   animation-duration:9.2s; animation-delay:1.2s }
+    .bill:nth-child(11) { left:60%; --size:32px; --scale:1.08; --drift:-10vw; --rot:-14deg; animation-duration:15s; animation-delay:7s }
+    .bill:nth-child(12) { left:88%; --size:26px; --scale:1.0;  --drift:18vw;  --rot:20deg;  animation-duration:14.5s; animation-delay:4.8s }
+    .bill:nth-child(13) { left:12%; --size:22px; --scale:1;    --drift:15vw;  --rot:-8deg;  animation-duration:13s; animation-delay:3.5s }
+    .bill:nth-child(14) { left:72%; --size:28px; --scale:1.1;  --drift:-16vw; --rot:10deg;  animation-duration:12.5s; animation-delay:5.5s }
+    .bill:nth-child(15) { left:50%; --size:24px; --scale:0.95; --drift:10vw;  --rot:-12deg; animation-duration:11.5s; animation-delay:6.5s }
 
     @media (max-width:600px){
+      .bill:nth-child(2),.bill:nth-child(7),.bill:nth-child(11){ --size:24px }
       .bill{ --size:20px }
     }
 
@@ -141,17 +146,12 @@
     <span class="bill" data-emoji="❔"></span>
     <span class="bill" data-emoji="⭐"></span>
     <span class="bill" data-emoji="❔"></span>
-    <span class="bill" data-emoji="⭐"></span>
-    <span class="bill" data-emoji="❔"></span>
-    <span class="bill" data-emoji="⭐"></span>
-    <span class="bill" data-emoji="❔"></span>
-    <span class="bill" data-emoji="⭐"></span>
   </div>
 
   <main class="app">
     <section class="card">
       <h1>Fondo animado: Emojis brillando</h1>
-      <p>Los emojis <code>❔</code> y <code>⭐</code> suben lentamente, en mayor cantidad y con un efecto de brillo.</p>
+      <p>Los emojis <code>❔</code> suben con brillo gris y los <code>⭐</code> con brillo dorado, flotando en direcciones aleatorias.</p>
     </section>
   </main>
 
