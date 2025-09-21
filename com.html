@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compartir y Enviar Correo</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: #fff;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+    a button, form button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    a button:hover, form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .whatsapp { background: #25d366; color: #fff; }
+    .telegram { background: #0088cc; color: #fff; }
+    .instagram { background: #e1306c; color: #fff; }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    input {
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 15px;
+    }
+    form button {
+      background: #ff9800;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Compartir</h2>
+    <div class="btn-group">
+      <!-- WhatsApp -->
+      <a href="https://api.whatsapp.com/send?text=Este%20es%20el%20mensaje%20predefinido"
+         target="_blank">
+        <button class="whatsapp">Compartir en WhatsApp</button>
+      </a>
+      <!-- Telegram -->
+      <a href="https://t.me/share/url?url=https://tuweb.com&text=Este%20es%20el%20mensaje%20predefinido"
+         target="_blank">
+        <button class="telegram">Compartir en Telegram</button>
+      </a>
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/" target="_blank">
+        <button class="instagram">Compartir en Instagram</button>
+      </a>
+    </div>
+
+    <h2>Enviar Correo</h2>
+    <form onsubmit="enviarCorreo(event)">
+      <input type="email" id="correo" placeholder="Escribe un correo" required>
+      <button type="submit">Enviar</button>
+    </form>
+  </div>
+
+  <script>
+    function enviarCorreo(e) {
+      e.preventDefault();
+      const correo = document.getElementById("correo").value;
+      const asunto = encodeURIComponent("Prueba 1 Web");
+      const mensaje = encodeURIComponent("Probando esto");
+      
+      window.location.href = `mailto:${correo}?subject=${asunto}&body=${mensaje}`;
+    }
+  </script>
+</body>
+</html>
