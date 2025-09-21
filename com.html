@@ -75,8 +75,8 @@
     <div class="row">
       <!-- SHARE -->
       <div class="col share-box" aria-labelledby="shareTitle">
-        <h2 id="shareTitle" style="margin:0 0 10px 0;font-size:16px">Compartir (mensaje fijo)</h2>
-        <p class="meta">El botón abrirá la app correspondiente con el mensaje predefinido.</p>
+        <h2 id="shareTitle" style="margin:0 0 10px 0;font-size:16px">Compartir (mensaje largo)</h2>
+        <p class="meta">El botón abrirá la app correspondiente con el asunto y mensaje predefinidos.</p>
 
         <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
           <a id="waLink" href="#" target="_blank" rel="noopener noreferrer">
@@ -88,7 +88,8 @@
           </a>
         </div>
 
-        <p class="note">Mensaje: <strong>"Probando esto"</strong></p>
+        <p class="note">Asunto: <strong>"Prueba extendida de la Web con título más largo"</strong></p>
+        <p class="note">Mensaje: <strong>"Este es un mensaje de prueba extendido, con más detalles, saltos de línea y texto adicional para verificar cómo se ve en distintas plataformas.%0A%0AIncluye varios párrafos y está diseñado para WhatsApp, Telegram y correo electrónico."</strong></p>
       </div>
 
       <!-- MAIL FORM -->
@@ -106,30 +107,22 @@
 
           <div id="status" class="status" role="status" aria-live="polite"></div>
         </form>
-
-        <p class="note" style="margin-top:8px"><strong>Reglas:</strong>
-          <ul style="margin:6px 0 0 18px; padding:0; font-size:13px; color:rgba(255,255,255,0.8)">
-            <li>Si introduces <strong>1</strong> destinatario => se coloca en <em>To</em> (visible).</li>
-            <li>Si introduces <strong>2 o más</strong> destinatarios => se envía como <em>BCC</em> (copia oculta).</li>
-            <li>Si una entrada no contiene "@", se añadirá <code>@gmail.com</code> automáticamente.</li>
-          </ul>
-        </p>
       </div>
     </div>
   </div>
 
   <script>
-    // Mensaje fijo para compartir y para mail
-    const FIXED_SUBJECT = "Prueba 1 Web";
-    const FIXED_BODY = "Probando esto";
-    const FIXED_BODY_ENC = encodeURIComponent(FIXED_BODY);
+    // Asunto y cuerpo extendidos
+    const FIXED_SUBJECT = "Prueba extendida de la Web con título más largo";
+    const FIXED_BODY = "Este es un mensaje de prueba extendido, con más detalles, saltos de línea y texto adicional para verificar cómo se ve en distintas plataformas.\n\nIncluye varios párrafos y está diseñado para WhatsApp, Telegram y correo electrónico.";
     const FIXED_SUBJ_ENC = encodeURIComponent(FIXED_SUBJECT);
+    const FIXED_BODY_ENC = encodeURIComponent(FIXED_BODY);
 
-    // Inicializa enlaces de compartir
+    // Enlaces de compartir
     document.getElementById('waLink').href = `https://api.whatsapp.com/send?text=${FIXED_BODY_ENC}`;
-    document.getElementById('tgLink').href = "https://t.me/share/url?url=https://tuweb.com&text=Este%20es%20el%20mensaje%20predefini";
+    document.getElementById('tgLink').href = `https://t.me/share/url?url=https://tuweb.com&text=${FIXED_SUBJECT}%0A%0A${FIXED_BODY_ENC}`;
 
-    // Utilidades
+    // --- EMAIL ---
     function splitRaw(raw) {
       if (!raw) return [];
       return raw
