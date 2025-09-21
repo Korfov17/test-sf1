@@ -3,110 +3,190 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Compartir y Enviar Correo</title>
+  <title>Compartir y Enviar (Gmail shortcut)</title>
   <style>
+    :root{
+      --bg1:#6a11cb; --bg2:#2575fc; --card: rgba(255,255,255,0.08);
+      --accent:#ff9800; --ok:#bff0c6; --err:#ffb4b4;
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      background: linear-gradient(135deg,#6a11cb,#2575fc);
-      color:#fff;
-      display:flex;
-      justify-content:center;
-      align-items:center;
       min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg,var(--bg1) 0%,var(--bg2) 100%);
+      color:#fff;
+      padding:20px;
     }
     .card{
-      background:rgba(255,255,255,0.1);
-      backdrop-filter:blur(10px);
-      padding:24px;
-      border-radius:16px;
-      box-shadow:0 8px 20px rgba(0,0,0,.3);
-      width:90%;
-      max-width:600px;
+      width:100%;
+      max-width:760px;
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
     }
-    h2{text-align:center;margin-bottom:16px}
-    .btn-group{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-    a button, form button{
-      width:100%;padding:12px;border:none;border-radius:8px;
-      font-size:16px;font-weight:bold;cursor:pointer;
-      transition:transform .2s,box-shadow .2s;
+    h1{margin:0 0 10px 0; font-size:20px; text-align:center}
+    .row{display:flex; gap:18px; align-items:flex-start; flex-wrap:wrap}
+    .col{flex:1 1 320px}
+    .share-box, .form-box{
+      background: rgba(255,255,255,0.03);
+      padding:14px; border-radius:10px;
     }
-    a button:hover, form button:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
-    .whatsapp{background:#25d366;color:#fff}
-    .telegram{background:#0088cc;color:#fff}
-    .instagram{background:#e1306c;color:#fff}
-    form{display:flex;flex-direction:column;gap:12px}
-    textarea{
-      padding:12px;border-radius:8px;border:none;
-      resize:vertical;font-size:14px;
+
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      border:0; padding:12px 14px; border-radius:10px; font-weight:700;
+      cursor:pointer; transition: transform .14s ease, box-shadow .14s ease;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+      width:100%;
     }
-    .radio-group{display:flex;gap:10px}
-    label{font-size:14px}
-    .send-btn{background:#ff9800;color:#fff}
-    .error{color:#ffb4b4;font-size:13px}
+    .btn:hover{transform:translateY(-4px)}
+    .whatsapp{background:#25d366; color:#fff}
+    .telegram{background:#0088cc; color:#fff}
+    .send{background:var(--accent); color:#111}
+
+    label{display:block; font-size:13px; margin-bottom:6px; color:rgba(255,255,255,0.9)}
+    textarea, input[type="text"]{
+      width:100%; padding:10px 12px; border-radius:8px; border:0; outline:none;
+      background: rgba(255,255,255,0.04); color:#fff; font-size:14px; resize:vertical;
+    }
+
+    .meta{font-size:13px; color:rgba(255,255,255,0.8)}
+    .note{font-size:13px; color:rgba(255,255,255,0.7); margin-top:8px}
+    .status { margin-top:10px; font-size:13px; }
+    .status.ok { color: var(--ok) }
+    .status.err { color: var(--err) }
+
+    @media (max-width:700px){
+      .row{flex-direction:column}
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Compartir</h2>
-    <div class="btn-group">
-      <!-- WhatsApp -->
-      <a href="https://api.whatsapp.com/send?text=Probando%20esto"
-         target="_blank">
-        <button class="whatsapp">Compartir en WhatsApp</button>
-      </a>
-      <!-- Telegram -->
-      <a href="https://t.me/share/url?url=&text=Probando%20esto"
-         target="_blank">
-        <button class="telegram">Compartir en Telegram</button>
-      </a>
-      <!-- Instagram -->
-      <a href="https://www.instagram.com/" target="_blank">
-        <button class="instagram">Abrir Instagram</button>
-      </a>
-    </div>
+  <div class="card" role="main" aria-labelledby="title">
+    <h1 id="title">Compartir y Enviar (atajo Gmail)</h1>
 
-    <h2>Enviar Correo</h2>
-    <form onsubmit="enviarCorreo(event)">
-      <label for="emails">Correos (separados por comas, punto y coma o saltos de línea):</label>
-      <textarea id="emails" rows="4" required></textarea>
+    <div class="row">
+      <!-- SHARE -->
+      <div class="col share-box" aria-labelledby="shareTitle">
+        <h2 id="shareTitle" style="margin:0 0 10px 0;font-size:16px">Compartir (mensaje fijo)</h2>
+        <p class="meta">El botón abrirá la app correspondiente con el mensaje predefinido.</p>
 
-      <div class="radio-group">
-        <label><input type="radio" name="mode" value="to" checked> Visible (To)</label>
-        <label><input type="radio" name="mode" value="bcc"> Ocultar entre ellos (BCC)</label>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+          <a id="waLink" href="#" target="_blank" rel="noopener noreferrer">
+            <button class="btn whatsapp" type="button">Compartir en WhatsApp</button>
+          </a>
+
+          <a id="tgLink" href="#" target="_blank" rel="noopener noreferrer">
+            <button class="btn telegram" type="button">Compartir en Telegram</button>
+          </a>
+        </div>
+
+        <p class="note">Mensaje: <strong>"Probando esto"</strong></p>
       </div>
 
-      <button type="submit" class="send-btn">Enviar</button>
-      <div id="status" class="error"></div>
-    </form>
+      <!-- MAIL FORM -->
+      <div class="col form-box" aria-labelledby="mailTitle">
+        <h2 id="mailTitle" style="margin:0 0 10px 0;font-size:16px">Enviar correo</h2>
+        <p class="meta">Escribe uno o varios destinatarios. <strong>Atajo Gmail:</strong> si escribes solo la parte antes de la @ (por ejemplo <code>tal</code>), se convertirá en <code>tal@gmail.com</code>. Esta función está diseñada específicamente para direcciones Gmail.</p>
+
+        <form id="mailForm" onsubmit="handleSubmit(event)" novalidate>
+          <label for="recipients">Destinatarios (separados por comas, punto y coma o saltos de línea)</label>
+          <textarea id="recipients" rows="4" placeholder="ej: pepe, ana; juan@gmail.com" required></textarea>
+
+          <div style="display:flex;gap:8px;align-items:center;margin-top:10px">
+            <button class="btn send" type="submit">Abrir cliente para enviar</button>
+          </div>
+
+          <div id="status" class="status" role="status" aria-live="polite"></div>
+        </form>
+
+        <p class="note" style="margin-top:8px"><strong>Reglas:</strong>
+          <ul style="margin:6px 0 0 18px; padding:0; font-size:13px; color:rgba(255,255,255,0.8)">
+            <li>Si introduces <strong>1</strong> destinatario => se coloca en <em>To</em> (visible).</li>
+            <li>Si introduces <strong>2 o más</strong> destinatarios => se envía como <em>BCC</em> (copia oculta).</li>
+            <li>Si una entrada no contiene "@", se añadirá <code>@gmail.com</code> automáticamente.</li>
+          </ul>
+        </p>
+      </div>
+    </div>
   </div>
 
   <script>
-    const subject = encodeURIComponent("Prueba 1 Web");
-    const body = encodeURIComponent("Probando esto");
+    // Mensaje fijo para compartir y para mail
+    const FIXED_SUBJECT = "Prueba 1 Web";
+    const FIXED_BODY = "Probando esto";
+    const FIXED_BODY_ENC = encodeURIComponent(FIXED_BODY);
+    const FIXED_SUBJ_ENC = encodeURIComponent(FIXED_SUBJECT);
 
-    function splitEmails(raw) {
-      return raw.split(/[\s,;]+/).map(e => e.trim()).filter(Boolean);
+    // Inicializa enlaces de compartir
+    document.getElementById('waLink').href = `https://api.whatsapp.com/send?text=${FIXED_BODY_ENC}`;
+    document.getElementById('tgLink').href = "https://t.me/share/url?url=https://tuweb.com&text=Este%20es%20el%20mensaje%20predefini";
+
+    // Utilidades
+    function splitRaw(raw) {
+      if (!raw) return [];
+      return raw
+        .split(/[\r\n,;]+/)
+        .map(s => s.trim())
+        .filter(Boolean);
     }
 
-    function enviarCorreo(e) {
-      e.preventDefault();
-      const raw = document.getElementById("emails").value;
-      const mode = document.querySelector('input[name="mode"]:checked').value;
-      const emails = splitEmails(raw);
-      const status = document.getElementById("status");
+    function normalizeEntry(entry) {
+      const e = entry.trim();
+      if (e === '') return '';
+      if (e.includes('@')) return e.toLowerCase();
+      const local = e.replace(/\s+/g, '');
+      return `${local}@gmail.com`.toLowerCase();
+    }
 
-      if(emails.length === 0){
-        status.textContent = "Introduce al menos un correo.";
+    function isValidBasicEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      return re.test(email);
+    }
+
+    const statusEl = document.getElementById('status');
+    function handleSubmit(e) {
+      e.preventDefault();
+      statusEl.textContent = '';
+      statusEl.className = 'status';
+
+      const raw = document.getElementById('recipients').value;
+      const parts = splitRaw(raw);
+
+      if (parts.length === 0) {
+        statusEl.textContent = 'Introduce al menos un destinatario.';
+        statusEl.classList.add('err');
         return;
       }
 
-      const mailto = mode === "to"
-        ? `mailto:${emails.join(",")}?subject=${subject}&body=${body}`
-        : `mailto:?bcc=${emails.join(",")}&subject=${subject}&body=${body}`;
+      const normalized = parts.map(normalizeEntry);
+      const invalid = normalized.filter(x => !isValidBasicEmail(x));
+      if (invalid.length) {
+        statusEl.innerHTML = `Dirección(es) inválida(s): <strong>${invalid.join(', ')}</strong>`;
+        statusEl.classList.add('err');
+        return;
+      }
 
-      status.textContent = "";
-      window.location.href = mailto;
+      if (normalized.length === 1) {
+        const to = normalized[0];
+        const mailto = `mailto:${encodeURIComponent(to)}?subject=${FIXED_SUBJ_ENC}&body=${FIXED_BODY_ENC}`;
+        statusEl.innerHTML = `Se abrirá el cliente con <strong>To:</strong> ${to}`;
+        statusEl.classList.add('ok');
+        window.location.href = mailto;
+      } else {
+        const bccList = normalized.join(',');
+        const mailto = `mailto:?bcc=${encodeURIComponent(bccList)}&subject=${FIXED_SUBJ_ENC}&body=${FIXED_BODY_ENC}`;
+        statusEl.innerHTML = `Se abrirá el cliente con <strong>BCC</strong> (${normalized.length} destinatarios).`;
+        statusEl.classList.add('ok');
+        window.location.href = mailto;
+      }
     }
   </script>
 </body>
