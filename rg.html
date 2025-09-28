@@ -329,6 +329,65 @@
             color: var(--primary-green-light);
         }
 
+        /* Botón con fondo naranja degradado */
+        .orange-gradient-btn {
+            background: linear-gradient(135deg, #ff8c00, #ff4500);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Road Rage', cursive;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .orange-gradient-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .orange-gradient-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6);
+        }
+
+        .orange-gradient-btn:hover::before {
+            opacity: 1;
+        }
+
+        .orange-gradient-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(255, 140, 0, 0.4);
+        }
+
+        /* Estilo glass para el contenedor del mensaje */
+        .text-box.glass {
+            background: rgba(30, 30, 30, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-mode .text-box.glass {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -363,13 +422,18 @@
     </div>
     
     <div class="container">
-        <div class="text-box">
+        <div class="text-box glass">
             <h2>Un Mensaje Para Ti</h2>
             <p>La vida es un viaje lleno de sorpresas</p>
             <p>Cada día es una nueva oportunidad</p>
             <p>Para crecer, aprender y amar</p>
             <p>Recuerda siempre lo especial que eres</p>
             <p>Y lo mucho que importas en este mundo</p>
+            
+            <!-- Botón con fondo naranja degradado -->
+            <button class="orange-gradient-btn" id="special-button">
+                <i class="fas fa-star"></i> Haz clic para una sorpresa
+            </button>
         </div>
     </div>
 
@@ -391,6 +455,7 @@
             themeToggle: document.getElementById('theme-toggle'),
             themeIcon: document.querySelector('#theme-toggle i'),
             moneyBg: document.getElementById('money-bg'),
+            specialButton: document.getElementById('special-button'),
             floatingIcons: []
         };
 
@@ -470,6 +535,22 @@
             } else {
                 domElements.themeIcon.classList.remove('fa-sun');
                 domElements.themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Función para el botón especial
+        domElements.specialButton.addEventListener('click', function() {
+            alert('¡Eres una persona increíble! Sigue brillando como lo haces.');
+            
+            // Efecto visual adicional
+            this.classList.add('pulse');
+            setTimeout(() => {
+                this.classList.remove('pulse');
+            }, 2000);
+            
+            // Crear algunos íconos flotantes adicionales
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createFloatingIcon(), i * 200);
             }
         });
 
