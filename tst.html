@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensaje Especial</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Road+Rage&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Road Rage Local';
+            src: url('Road_Rage.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        :root {
+            --primary-green: #1db954;
+            --dark-green: #15803d;
+            --light-green: #84cc16;
+            --bg-dark: #121212;
+            --bg-darker: #0a0a0a;
+            --text-light: #e5e7eb;
+            --text-lighter: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-dark: #1e1e1e;
+            --card-darker: #1a1a1a;
+            --primary-green-light: #1b5e20;
+            --light-green-light: #4caf50;
+            --bg-light: #f8fafc;
+            --bg-lighter: #ffffff;
+            --text-dark: #1e293b;
+            --text-darker: #0f172a;
+            --text-muted-light: #64748b;
+            --card-light: #ffffff;
+            --card-lighter: #f1f5f9;
+            --transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body {
+            font-family: 'Road Rage', 'Road Rage Local', cursive;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-light);
+            line-height: 1.6;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        .top-bar h2,
+        .text-box h2,
+        .footer-content h3 {
+            font-family: 'Road Rage Local', cursive;
+        }
+
+        .text-box p,
+        .footer-content p {
+            font-family: 'Road Rage', cursive;
+        }
+
+        body.light-mode {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* Nuevo CSS para el fondo animado */
+        .money-bg{
+            position:fixed;
+            inset:0;
+            overflow:hidden;
+            pointer-events:none;
+            z-index:0;
+        }
+
+        .bill{
+            --size: 28px;
+            position:absolute;
+            bottom:-8vh;
+            left:0;
+            width:var(--size);
+            height:var(--size);
+            transform-origin:center center;
+            will-change:transform,opacity;
+            animation: rise linear infinite, glow 2s ease-in-out infinite alternate;
+        }
+
+        .bill::before{
+            content: attr(data-emoji);
+            display:block;
+            font-weight:700;
+            font-size:var(--size);
+            line-height:1;
+            opacity:0.95;
+        }
+
+        /* Colores y brillos diferentes según el emoji */
+        .bill[data-emoji="💵"]::before{
+            color:#1db954;
+            text-shadow:0 0 6px #1db954,0 0 14px rgba(29, 185, 84, 0.8);
+        }
+        .bill[data-emoji="🔫"]::before{
+            color:#ffffff;
+            text-shadow:0 0 6px #ffffff,0 0 14px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes rise {
+            0%{
+                transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+                opacity:0;
+            }
+            5%{
+                opacity:1;
+            }
+            50%{
+                opacity:0.9;
+            }
+            100%{
+                transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)) scale(var(--scale));
+                opacity:0;
+            }
+        }
+
+        @keyframes glow {
+            0%   { filter: drop-shadow(0 0 4px rgba(255,255,255,0.4)); }
+            100% { filter: drop-shadow(0 0 14px rgba(255,255,255,1)); }
+        }
+
+        /* Variaciones aleatorias con velocidad ligeramente mayor */
+        .bill:nth-child(1)  { left:4%;  --size:24px; --scale:1.05; --drift:-18vw; --rot:-12deg; animation-duration:9s; animation-delay:0s }
+        .bill:nth-child(2)  { left:18%; --size:34px; --scale:1.1;  --drift:12vw;  --rot:18deg;  animation-duration:11s; animation-delay:1.8s }
+        .bill:nth-child(3)  { left:30%; --size:20px; --scale:0.95; --drift:-6vw;  --rot:-8deg;  animation-duration:8.5s;  animation-delay:0.9s }
+        .bill:nth-child(4)  { left:42%; --size:30px; --scale:1;   --drift:20vw;  --rot:6deg;   animation-duration:13s; animation-delay:3.5s }
+        .bill:nth-child(5)  { left:55%; --size:26px; --scale:1.02; --drift:-8vw;  --rot:-10deg; animation-duration:10.5s; animation-delay:0.4s }
+        .bill:nth-child(6)  { left:68%; --size:22px; --scale:0.98; --drift:10vw;  --rot:12deg;  animation-duration:10s;  animation-delay:2.7s }
+        .bill:nth-child(7)  { left:80%; --size:36px; --scale:1.12; --drift:-22vw; --rot:-18deg; animation-duration:15s; animation-delay:5.5s }
+        .bill:nth-child(8)  { left:6%;  --size:18px; --scale:0.9;  --drift:8vw;   --rot:10deg;  animation-duration:9s; animation-delay:2.2s }
+        .bill:nth-child(9)  { left:24%; --size:28px; --scale:1.04; --drift:-14vw; --rot:-6deg;  animation-duration:12s; animation-delay:4.5s }
+        .bill:nth-child(10) { left:38%; --size:20px; --scale:0.96; --drift:6vw;   --rot:8deg;   animation-duration:8.8s; animation-delay:1s }
+        .bill:nth-child(11) { left:60%; --size:32px; --scale:1.08; --drift:-10vw; --rot:-14deg; animation-duration:14s; animation-delay:6.5s }
+        .bill:nth-child(12) { left:88%; --size:26px; --scale:1.0;  --drift:18vw;  --rot:20deg;  animation-duration:13.5s; animation-delay:4.2s }
+        .bill:nth-child(13) { left:12%; --size:22px; --scale:1;    --drift:15vw;  --rot:-8deg;  animation-duration:12s; animation-delay:3s }
+        .bill:nth-child(14) { left:72%; --size:28px; --scale:1.1;  --drift:-16vw; --rot:10deg;  animation-duration:11.5s; animation-delay:5s }
+        .bill:nth-child(15) { left:50%; --size:24px; --scale:0.95; --drift:10vw;  --rot:-12deg; animation-duration:10.5s; animation-delay:6s }
+
+        @media (max-width:600px){
+            .bill:nth-child(2),.bill:nth-child(7),.bill:nth-child(11){ --size:24px }
+            .bill{ --size:20px }
+        }
+
+        /* Eliminé las animaciones anteriores de floating-icons ya que ahora usamos el nuevo sistema */
+
+        .top-bar {
+            width: 100%;
+            height: 80px;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .top-bar {
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .top-bar h2 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+            color: var(--primary-green);
+            transition: var(--transition);
+        }
+
+        .light-mode .top-bar h2 {
+            color: var(--primary-green-light);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin-top: 120px;
+            margin-bottom: 50px;
+            transition: var(--transition);
+        }
+
+        .text-box {
+            background-color: var(--card-dark);
+            border-radius: 12px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+            font-size: 1.2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .light-mode .text-box {
+            background-color: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .text-box:hover {
+            box-shadow: 0 8px 35px rgba(29, 185, 84, 0.4);
+        }
+
+        .text-box h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            color: var(--primary-green);
+            letter-spacing: 2px;
+            transition: var(--transition);
+        }
+
+        .light-mode .text-box h2 {
+            color: var(--primary-green-light);
+        }
+
+        .text-box p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            transition: var(--transition);
+            font-size: 1.4rem;
+        }
+
+        .light-mode .text-box p {
+            color: var(--text-dark);
+        }
+
+        .footer {
+            width: 100%;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .footer {
+            background: rgba(255, 255, 255, 0.8);
+            border-top: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            width: 90%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content h3 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .light-mode .footer-content h3 {
+            color: var(--primary-green-light);
+        }
+
+        .footer-content p {
+            color: var(--text-light);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .light-mode .footer-content p {
+            color: var(--text-dark);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .light-mode .theme-toggle {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .theme-toggle:hover {
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+        }
+
+        .theme-toggle i {
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .light-mode .theme-toggle i {
+            color: var(--primary-green-light);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .light-mode .lock-icon {
+            animation: glow-light 2s infinite alternate;
+        }
+
+        @keyframes glow-light {
+            from { text-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+            to { text-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 0 30px rgba(76, 175, 80, 0.6); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Nuevo fondo animado -->
+    <div class="money-bg" aria-hidden="true">
+        <span class="bill" data-emoji="💵"></span>
+        <span class="bill" data-emoji="🔫"></span>
+        <span class="bill" data-emoji="💵"></span>
+        <span class="bill" data-emoji="🔫"></span>
+        <span class="bill" data-emoji="💵"></span>
+        <span class="bill" data-emoji="🔫"></span>
+        <span class="bill" data-emoji="💵"></span>
+        <span class="bill" data-emoji="🔫"></span>
+        <span class="bill" data-emoji="💵"></span>
+        <span class="bill" data-emoji="🔫"></span>
+        <span class="bill" data-emoji="💵"></span>
+        <span class="bill" data-emoji="🔫"></span>
+        <span class="bill" data-emoji="💵"></span>
+        <span class="bill" data-emoji="🔫"></span>
+        <span class="bill" data-emoji="💵"></span>
+    </div>
+    
+    <div class="top-bar">
+        <h2>Mensaje Especial</h2>
+    </div>
+    
+    <div class="container">
+        <div class="text-box">
+            <h2>Un Mensaje Para Ti</h2>
+            <p>La vida es un viaje lleno de sorpresas</p>
+            <p>Cada día es una nueva oportunidad</p>
+            <p>Para crecer, aprender y amar</p>
+            <p>Recuerda siempre lo especial que eres</p>
+            <p>Y lo mucho que importas en este mundo</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>Con Cariño</h3>
+            <p>Este mensaje fue creado especialmente para ti</p>
+            <p>© 2025 - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <div class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        const domElements = {
+            body: document.body,
+            themeToggle: document.getElementById('theme-toggle'),
+            themeIcon: document.querySelector('#theme-toggle i')
+        };
+
+        // Eliminé las funciones de floating-icons anteriores ya que ahora usamos el nuevo sistema CSS
+
+        domElements.themeToggle.addEventListener('click', function() {
+            domElements.body.classList.toggle('light-mode');
+            
+            if (domElements.body.classList.contains('light-mode')) {
+                domElements.themeIcon.classList.remove('fa-moon');
+                domElements.themeIcon.classList.add('fa-sun');
+            } else {
+                domElements.themeIcon.classList.remove('fa-sun');
+                domElements.themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // El nuevo fondo animado funciona puramente con CSS
+        });
+    </script>
+</body>
+</html>
