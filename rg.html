@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba 1</title>
+    <title>Mensaje Especial</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Road+Rage&display=swap" rel="stylesheet">
@@ -51,6 +51,11 @@
             line-height: 1.6;
             transition: var(--transition);
             overflow-x: hidden;
+        }
+
+        body.orange-theme {
+            background: linear-gradient(135deg, #ff8c00, #ff4500);
+            color: #fff;
         }
 
         .top-bar h2,
@@ -117,6 +122,20 @@
             color: rgba(100, 100, 100, 0.7);
         }
 
+        .orange-theme .dollar-sign {
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.5),
+                0 0 15px rgba(255, 255, 255, 0.7);
+        }
+
+        .orange-theme .gun-icon {
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.3),
+                0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
         @keyframes floatUp {
             0% {
                 transform: 
@@ -173,6 +192,13 @@
             transition: var(--transition);
         }
 
+        .orange-theme .top-bar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         .light-mode .top-bar {
             background: rgba(255, 255, 255, 0.8);
             border-bottom: 1px solid rgba(76, 175, 80, 0.2);
@@ -184,6 +210,11 @@
             letter-spacing: 1px;
             color: var(--primary-green);
             transition: var(--transition);
+        }
+
+        .orange-theme .top-bar h2 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .light-mode .top-bar h2 {
@@ -217,6 +248,15 @@
             min-height: 300px;
         }
 
+        .orange-theme .text-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 30px rgba(255, 140, 0, 0.3);
+            color: #fff;
+        }
+
         .light-mode .text-box {
             background-color: var(--card-light);
             border: 1px solid rgba(76, 175, 80, 0.2);
@@ -226,12 +266,21 @@
             box-shadow: 0 8px 35px rgba(29, 185, 84, 0.4);
         }
 
+        .orange-theme .text-box:hover {
+            box-shadow: 0 8px 35px rgba(255, 255, 255, 0.4);
+        }
+
         .text-box h2 {
             font-size: 2.5rem;
             margin-bottom: 25px;
             color: var(--primary-green);
             letter-spacing: 2px;
             transition: var(--transition);
+        }
+
+        .orange-theme .text-box h2 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         .light-mode .text-box h2 {
@@ -260,6 +309,13 @@
             transition: var(--transition);
         }
 
+        .orange-theme .footer {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
         .light-mode .footer {
             background: rgba(255, 255, 255, 0.8);
             border-top: 1px solid rgba(76, 175, 80, 0.2);
@@ -278,6 +334,11 @@
             font-size: 1.8rem;
         }
 
+        .orange-theme .footer-content h3 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
         .light-mode .footer-content h3 {
             color: var(--primary-green-light);
         }
@@ -286,6 +347,10 @@
             color: var(--text-light);
             margin-bottom: 10px;
             font-size: 1.1rem;
+        }
+
+        .orange-theme .footer-content p {
+            color: #fff;
         }
 
         .light-mode .footer-content p {
@@ -310,6 +375,11 @@
             transition: var(--transition);
         }
 
+        .orange-theme .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
         .light-mode .theme-toggle {
             background: var(--card-light);
             border: 1px solid rgba(76, 175, 80, 0.2);
@@ -319,10 +389,18 @@
             box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
         }
 
+        .orange-theme .theme-toggle:hover {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
         .theme-toggle i {
             color: var(--primary-green);
             font-size: 1.4rem;
             transition: var(--transition);
+        }
+
+        .orange-theme .theme-toggle i {
+            color: #fff;
         }
 
         .light-mode .theme-toggle i {
@@ -348,6 +426,12 @@
             z-index: 1;
         }
 
+        .orange-theme .orange-gradient-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+            color: #ff4500;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.4);
+        }
+
         .orange-gradient-btn::before {
             content: '';
             position: absolute;
@@ -361,9 +445,17 @@
             z-index: -1;
         }
 
+        .orange-theme .orange-gradient-btn::before {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.9));
+        }
+
         .orange-gradient-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6);
+        }
+
+        .orange-theme .orange-gradient-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.6);
         }
 
         .orange-gradient-btn:hover::before {
@@ -373,19 +465,6 @@
         .orange-gradient-btn:active {
             transform: translateY(-1px);
             box-shadow: 0 3px 10px rgba(255, 140, 0, 0.4);
-        }
-
-        /* Estilo glass para el contenedor del mensaje */
-        .text-box.glass {
-            background: rgba(30, 30, 30, 0.3);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .light-mode .text-box.glass {
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         @keyframes fadeIn {
@@ -422,7 +501,7 @@
     </div>
     
     <div class="container">
-        <div class="text-box glass">
+        <div class="text-box">
             <h2>Un Mensaje Para Ti</h2>
             <p>La vida es un viaje lleno de sorpresas</p>
             <p>Cada día es una nueva oportunidad</p>
@@ -431,8 +510,8 @@
             <p>Y lo mucho que importas en este mundo</p>
             
             <!-- Botón con fondo naranja degradado -->
-            <button class="orange-gradient-btn" id="special-button">
-                <i class="fas fa-star"></i> Haz clic para una sorpresa
+            <button class="orange-gradient-btn" id="theme-changer">
+                <i class="fas fa-palette"></i> Cambiar Tema
             </button>
         </div>
     </div>
@@ -455,7 +534,7 @@
             themeToggle: document.getElementById('theme-toggle'),
             themeIcon: document.querySelector('#theme-toggle i'),
             moneyBg: document.getElementById('money-bg'),
-            specialButton: document.getElementById('special-button'),
+            themeChanger: document.getElementById('theme-changer'),
             floatingIcons: []
         };
 
@@ -526,6 +605,24 @@
             setInterval(manageFloatingIcons, 1000);
         }
 
+        // Función para cambiar entre tema normal y tema naranja
+        domElements.themeChanger.addEventListener('click', function() {
+            domElements.body.classList.toggle('orange-theme');
+            
+            // Cambiar el texto del botón según el tema
+            if (domElements.body.classList.contains('orange-theme')) {
+                this.innerHTML = '<i class="fas fa-undo"></i> Volver al Tema Original';
+            } else {
+                this.innerHTML = '<i class="fas fa-palette"></i> Cambiar Tema';
+            }
+            
+            // Efecto visual adicional
+            this.classList.add('pulse');
+            setTimeout(() => {
+                this.classList.remove('pulse');
+            }, 2000);
+        });
+
         domElements.themeToggle.addEventListener('click', function() {
             domElements.body.classList.toggle('light-mode');
             
@@ -535,22 +632,6 @@
             } else {
                 domElements.themeIcon.classList.remove('fa-sun');
                 domElements.themeIcon.classList.add('fa-moon');
-            }
-        });
-
-        // Función para el botón especial
-        domElements.specialButton.addEventListener('click', function() {
-            alert('¡Eres una persona increíble! Sigue brillando como lo haces.');
-            
-            // Efecto visual adicional
-            this.classList.add('pulse');
-            setTimeout(() => {
-                this.classList.remove('pulse');
-            }, 2000);
-            
-            // Crear algunos íconos flotantes adicionales
-            for (let i = 0; i < 5; i++) {
-                setTimeout(() => createFloatingIcon(), i * 200);
             }
         });
 
