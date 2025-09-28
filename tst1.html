@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Road+Rage&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Road Rage Local';
+            src: url('Road_Rage.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        :root {
+            --primary-green: #1db954;
+            --dark-green: #15803d;
+            --light-green: #84cc16;
+            --bg-dark: #121212;
+            --bg-darker: #0a0a0a;
+            --text-light: #e5e7eb;
+            --text-lighter: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-dark: #1e1e1e;
+            --card-darker: #1a1a1a;
+            --primary-green-light: #1b5e20;
+            --light-green-light: #4caf50;
+            --bg-light: #f8fafc;
+            --bg-lighter: #ffffff;
+            --text-dark: #1e293b;
+            --text-darker: #0f172a;
+            --text-muted-light: #64748b;
+            --card-light: #ffffff;
+            --card-lighter: #f1f5f9;
+            --transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        body {
+            font-family: 'Road Rage', 'Road Rage Local', cursive;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-light);
+            line-height: 1.6;
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        .top-bar h2,
+        .text-box h2,
+        .footer-content h3 {
+            font-family: 'Road Rage Local', cursive;
+        }
+
+        .text-box p,
+        .footer-content p {
+            font-family: 'Road Rage', cursive;
+        }
+
+        body.light-mode {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        .money-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            opacity: 0;
+            animation: floatUp linear forwards;
+            user-select: none;
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        .dollar-sign {
+            color: rgba(29, 185, 84, 0.8);
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 40px;
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.3),
+                0 0 15px rgba(29, 185, 84, 0.5);
+        }
+
+        .gun-icon {
+            font-size: 30px;
+            color: rgba(200, 200, 200, 0.8);
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.2),
+                0 0 10px rgba(200, 200, 200, 0.4);
+        }
+
+        .light-mode .dollar-sign {
+            color: rgba(76, 175, 80, 0.7);
+            text-shadow: 
+                0 0 5px rgba(255,255,255,0.5),
+                0 0 10px rgba(76, 175, 80, 0.4);
+        }
+
+        .light-mode .gun-icon {
+            color: rgba(100, 100, 100, 0.7);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: 
+                    translateY(100vh) 
+                    translateX(calc(var(--tx) * 1vw))
+                    rotate(calc(var(--rotate) * 1deg))
+                    scale(var(--scale, 1));
+                opacity: 0;
+            }
+            10% {
+                opacity: var(--opacity);
+            }
+            90% {
+                opacity: var(--opacity);
+            }
+            100% {
+                transform: 
+                    translateY(-150px) 
+                    translateX(calc(var(--tx-end) * 1vw))
+                    rotate(calc(var(--rotate-end) * 1deg))
+                    scale(var(--scale-end, 1));
+                opacity: 0;
+            }
+        }
+
+        .floating-icon.glowing {
+            animation: floatUp, glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: var(--opacity); }
+            50% { 
+                opacity: calc(var(--opacity) * 1.5);
+                text-shadow: 
+                    0 0 10px rgba(255,255,255,0.5),
+                    0 0 25px currentColor;
+            }
+        }
+
+        .top-bar {
+            width: 100%;
+            height: 80px;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .top-bar {
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .top-bar h2 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+            color: var(--primary-green);
+            transition: var(--transition);
+        }
+
+        .light-mode .top-bar h2 {
+            color: var(--primary-green-light);
+        }
+
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin-top: 120px;
+            margin-bottom: 50px;
+            transition: var(--transition);
+        }
+
+        .text-box {
+            background-color: var(--card-dark);
+            border-radius: 12px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+            font-size: 1.2rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .light-mode .text-box {
+            background-color: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .text-box:hover {
+            box-shadow: 0 8px 35px rgba(29, 185, 84, 0.4);
+        }
+
+        .text-box h2 {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            color: var(--primary-green);
+            letter-spacing: 2px;
+            transition: var(--transition);
+        }
+
+        .light-mode .text-box h2 {
+            color: var(--primary-green-light);
+        }
+
+        .text-box p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            transition: var(--transition);
+            font-size: 1.4rem;
+        }
+
+        .light-mode .text-box p {
+            color: var(--text-dark);
+        }
+
+        .footer {
+            width: 100%;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 30px 0;
+            margin-top: auto;
+            border-top: 1px solid rgba(84, 204, 22, 0.1);
+            transition: var(--transition);
+        }
+
+        .light-mode .footer {
+            background: rgba(255, 255, 255, 0.8);
+            border-top: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            width: 90%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content h3 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .light-mode .footer-content h3 {
+            color: var(--primary-green-light);
+        }
+
+        .footer-content p {
+            color: var(--text-light);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .light-mode .footer-content p {
+            color: var(--text-dark);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--card-dark);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(84, 204, 22, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .light-mode .theme-toggle {
+            background: var(--card-light);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .theme-toggle:hover {
+            box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+        }
+
+        .theme-toggle i {
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            transition: var(--transition);
+        }
+
+        .light-mode .theme-toggle i {
+            color: var(--primary-green-light);
+        }
+
+        /* Botón con fondo naranja degradado */
+        .orange-gradient-btn {
+            background: linear-gradient(135deg, #ff8c00, #ff4500);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Road Rage', cursive;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .orange-gradient-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff4500, #ff8c00);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .orange-gradient-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6);
+        }
+
+        .orange-gradient-btn:hover::before {
+            opacity: 1;
+        }
+
+        .orange-gradient-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(255, 140, 0, 0.4);
+        }
+
+        /* Estilo glass para el contenedor del mensaje */
+        .text-box.glass {
+            background: rgba(30, 30, 30, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .light-mode .text-box.glass {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .light-mode .lock-icon {
+            animation: glow-light 2s infinite alternate;
+        }
+
+        @keyframes glow-light {
+            from { text-shadow: 0 0 10px rgba(76, 175, 80, 0.5); }
+            to { text-shadow: 0 0 20px rgba(76, 175, 80, 0.8), 0 0 30px rgba(76, 175, 80, 0.6); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="money-bg" id="money-bg"></div>
+    
+    <div class="top-bar">
+        <h2>Mensaje Especial</h2>
+    </div>
+    
+    <div class="container">
+        <div class="text-box glass">
+            <h2>Un Mensaje Para Ti</h2>
+            <p>La vida es un viaje lleno de sorpresas</p>
+            <p>Cada día es una nueva oportunidad</p>
+            <p>Para crecer, aprender y amar</p>
+            <p>Recuerda siempre lo especial que eres</p>
+            <p>Y lo mucho que importas en este mundo</p>
+            
+            <!-- Botón con fondo naranja degradado -->
+            <button class="orange-gradient-btn" id="special-button">
+                <i class="fas fa-star"></i> Haz clic para una sorpresa
+            </button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <h3>Con Cariño</h3>
+            <p>Este mensaje fue creado especialmente para ti</p>
+            <p>© 2025 - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <div class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+        const domElements = {
+            body: document.body,
+            themeToggle: document.getElementById('theme-toggle'),
+            themeIcon: document.querySelector('#theme-toggle i'),
+            moneyBg: document.getElementById('money-bg'),
+            specialButton: document.getElementById('special-button'),
+            floatingIcons: []
+        };
+
+        function createFloatingIcon() {
+            const icon = document.createElement('div');
+            icon.classList.add('floating-icon');
+            icon.style.backfaceVisibility = 'hidden';
+            icon.style.willChange = 'transform, opacity';
+            
+            const isGun = Math.random() < 0.3;
+            if (isGun) {
+                icon.classList.add('gun-icon');
+                icon.innerHTML = '🔫';
+            } else {
+                icon.classList.add('dollar-sign');
+                icon.textContent = '$';
+            }
+            
+            const effects = ['', 'glowing'];
+            const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+            if (randomEffect) icon.classList.add(randomEffect);
+            
+            const posX = Math.random() * 100;
+            const posXEnd = (Math.random() - 0.5) * 20;
+            const size = isGun ? (Math.random() * 0.7 + 0.5) : (Math.random() * 0.8 + 0.5);
+            const sizeEnd = size * (Math.random() * 0.4 + 0.8);
+            const opacity = isGun ? (Math.random() * 0.4 + 0.3) : (Math.random() * 0.5 + 0.3);
+            const rotate = Math.random() * 30 - 15;
+            const rotateEnd = rotate + (Math.random() * 30 - 15);
+            const duration = isGun ? (Math.random() * 12 + 8) : (Math.random() * 15 + 10);
+            const delay = Math.random() * 2;
+            
+            icon.style.left = `${posX}%`;
+            icon.style.setProperty('--tx', posX/10 - 5);
+            icon.style.setProperty('--tx-end', posXEnd);
+            icon.style.setProperty('--rotate', rotate);
+            icon.style.setProperty('--rotate-end', rotateEnd);
+            icon.style.setProperty('--scale', size);
+            icon.style.setProperty('--scale-end', sizeEnd);
+            icon.style.setProperty('--opacity', opacity);
+            icon.style.animationDuration = `${duration}s`;
+            icon.style.animationDelay = `${delay}s`;
+            
+            domElements.moneyBg.appendChild(icon);
+            
+            setTimeout(() => {
+                icon.remove();
+                domElements.floatingIcons = domElements.floatingIcons.filter(i => i !== icon);
+            }, duration * 1000);
+            
+            domElements.floatingIcons.push(icon);
+            return icon;
+        }
+
+        function manageFloatingIcons() {
+            if (domElements.floatingIcons.length < 15) {
+                createFloatingIcon();
+            }
+            
+            domElements.floatingIcons = domElements.floatingIcons.filter(icon => document.body.contains(icon));
+        }
+
+        function initFloatingIcons() {
+            for (let i = 0; i < 10; i++) {
+                createFloatingIcon();
+            }
+            
+            setInterval(manageFloatingIcons, 1000);
+        }
+
+        domElements.themeToggle.addEventListener('click', function() {
+            domElements.body.classList.toggle('light-mode');
+            
+            if (domElements.body.classList.contains('light-mode')) {
+                domElements.themeIcon.classList.remove('fa-moon');
+                domElements.themeIcon.classList.add('fa-sun');
+            } else {
+                domElements.themeIcon.classList.remove('fa-sun');
+                domElements.themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Función para el botón especial
+        domElements.specialButton.addEventListener('click', function() {
+            alert('¡Eres una persona increíble! Sigue brillando como lo haces.');
+            
+            // Efecto visual adicional
+            this.classList.add('pulse');
+            setTimeout(() => {
+                this.classList.remove('pulse');
+            }, 2000);
+            
+            // Crear algunos íconos flotantes adicionales
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => createFloatingIcon(), i * 200);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initFloatingIcons();
+        });
+    </script>
+</body>
+</html>
