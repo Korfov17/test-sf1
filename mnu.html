@@ -1,243 +1,660 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Menú de videojuego (JSON-driven)</title>
-  <style>
-    :root{
-      --bg:#0b0f14;
-      --panel:#0f1720;
-      --accent:#50c878;
-      --muted:#9aa6b2;
-      --button:#12202b;
-      --radius:8px;
-      --gap:10px;
-      --anim-time:350ms;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter, system-ui, Arial; background:linear-gradient(180deg,#071018 0%, #071826 100%); color:#e6eef3; height:100vh; display:flex; align-items:center; justify-content:flex-start;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Videojuego</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    /* contenedor del menú a la izquierda */
-    .menu-shell{width:340px; padding:20px; background:radial-gradient(circle at 0 0, rgba(80,200,120,0.04), transparent 40%), var(--panel); height:80vh; margin:20px; border-radius:12px; box-shadow:0 10px 30px rgba(2,6,12,0.6); overflow:hidden; position:relative}
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    .menu-header{font-size:20px; font-weight:700; color:var(--accent); margin-bottom:12px}
+        .game-container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* área donde aparecen los "panels" (menu y submenus). stacked */
-    .panels{position:relative; width:100%; height:calc(100% - 44px); overflow:hidden}
+        .game-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 195, 255, 0.7);
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #00c3ff, #ffff1c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
 
-    .panel{position:absolute; inset:0; padding:8px; display:flex; flex-direction:column; gap:var(--gap); transition:transform var(--anim-time) ease, opacity var(--anim-time) ease;}
+        .menu-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            overflow: hidden;
+            border: 2px solid rgba(0, 195, 255, 0.5);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 195, 255, 0.3);
+            background: rgba(10, 15, 30, 0.8);
+        }
 
-    /* estados */
-    .panel.current{transform:none; opacity:1; z-index:2}
-    .panel.out-left{transform:translateX(-120%); opacity:0; z-index:1}
-    .panel.hidden{opacity:0; transform:none; z-index:0}
+        .menu-level {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+        }
 
-    /* lista de opciones */
-    .menu-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px}
+        .menu-level.hidden {
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
 
-    .menu-item{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.03); padding:12px 14px; border-radius:var(--radius); display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; transition:transform 220ms ease, box-shadow 220ms ease, background 220ms ease;}
-    .menu-item .label{font-weight:600; color:#dff3e6}
-    .menu-item .meta{font-size:12px; color:var(--muted)}
+        .menu-level.active {
+            transform: translateX(0);
+            opacity: 1;
+        }
 
-    /* Hover: avanza ligeramente hacia la derecha y resalta */
-    .menu-item:hover{transform:translateX(8px) scale(1.01); box-shadow:0 8px 18px rgba(2,6,12,0.6); background:linear-gradient(180deg, rgba(80,200,120,0.06), rgba(255,255,255,0.01));}
+        .menu-level.previous {
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
 
-    /* botón de volver */
-    .back-row{margin-top:auto; display:flex; gap:8px}
-    .btn{padding:10px 12px; background:var(--button); border-radius:6px; border:1px solid rgba(255,255,255,0.04); font-weight:600; cursor:pointer; transition:opacity var(--anim-time) ease, transform var(--anim-time) ease;}
-    .btn:hover{transform:translateX(6px)}
+        .menu-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #00c3ff;
+            text-shadow: 0 0 5px rgba(0, 195, 255, 0.7);
+        }
 
-    /* animación de desaparición progresiva para el botón "volver" al hacer click (usada con clase) */
-    .fade-away{animation:fadeAway var(--anim-time) forwards}
-    @keyframes fadeAway{from{opacity:1; transform:translateY(0)} to{opacity:0; transform:translateY(8px)}}
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
 
-    /* pequeños iconos */
-    .chev{opacity:0.9}
+        .menu-option {
+            background: rgba(30, 40, 70, 0.8);
+            border: 2px solid #00c3ff;
+            border-radius: 5px;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            transform: translateX(0);
+        }
 
-    /* responsive - mantén ancho en pantallas pequeñas */
-    @media (max-width:520px){ .menu-shell{width:92vw; margin:10px} }
-  </style>
+        .menu-option:hover {
+            background: rgba(40, 60, 120, 0.9);
+            transform: translateX(10px);
+            box-shadow: 0 0 15px rgba(0, 195, 255, 0.5);
+        }
+
+        .menu-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .menu-option:hover::before {
+            left: 100%;
+        }
+
+        .back-button {
+            background: rgba(70, 30, 30, 0.8);
+            border: 2px solid #ff4d4d;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background: rgba(100, 40, 40, 0.9);
+            transform: translateX(10px);
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.5);
+        }
+
+        .alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .alert-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .alert-box {
+            background: rgba(20, 25, 50, 0.95);
+            border: 2px solid #00c3ff;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 195, 255, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .alert-overlay.active .alert-box {
+            transform: scale(1);
+        }
+
+        .alert-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #00c3ff;
+        }
+
+        .alert-message {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .alert-button {
+            background: rgba(30, 40, 70, 0.8);
+            border: 2px solid #00c3ff;
+            border-radius: 5px;
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .alert-button:hover {
+            background: rgba(40, 60, 120, 0.9);
+            box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .menu-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transition: background 0.3s ease;
+        }
+
+        .indicator-dot.active {
+            background: #00c3ff;
+            box-shadow: 0 0 5px rgba(0, 195, 255, 0.7);
+        }
+    </style>
 </head>
 <body>
-  <div class="menu-shell" role="navigation" aria-label="Menú lateral del videojuego">
-    <div class="menu-header">Menú principal</div>
-    <div class="panels" id="panels"></div>
-  </div>
+    <div class="game-container">
+        <h1 class="game-title">MENÚ DEL JUEGO</h1>
+        <div class="menu-container" id="menuContainer">
+            <!-- Los menús se generarán dinámicamente con JavaScript -->
+        </div>
+        <div class="menu-indicator" id="menuIndicator">
+            <!-- Los indicadores se generarán dinámicamente con JavaScript -->
+        </div>
+    </div>
 
-  <script>
-    // JSON que define el menú. Puedes añadir/quitar entradas o cambiar "action".
-    // Si "action.type" === 'link' -> redirige a "action.target"
-    // Si "action.type" === 'alert' -> muestra alert con action.message
-    // Si el objeto tiene "children" -> es un item con submenú
+    <div class="alert-overlay" id="alertOverlay">
+        <div class="alert-box">
+            <h2 class="alert-title" id="alertTitle">Alerta</h2>
+            <p class="alert-message" id="alertMessage">Este es un mensaje de alerta.</p>
+            <button class="alert-button" id="alertButton">Aceptar</button>
+        </div>
+    </div>
 
-    const menuJson = {
-      "title":"root",
-      "items":[
-        {"id":"play","label":"Jugar","children":[
-          {"id":"new","label":"Nueva Partida","action":{"type":"alert","message":"Empezando nueva partida..."}},
-          {"id":"load","label":"Cargar Partida","action":{"type":"link","target":"/cargar.html"}},
-          {"id":"coop","label":"Multijugador","children":[
-            {"id":"lan","label":"Jugar LAN","action":{"type":"alert","message":"Buscando partida LAN..."}},
-            {"id":"online","label":"Jugar Online","action":{"type":"link","target":"https://example.com/online"}}
-          ]}
-        ]},
-        {"id":"settings","label":"Ajustes","children":[
-          {"id":"audio","label":"Audio","children":[
-            {"id":"vol","label":"Volumen","action":{"type":"alert","message":"Abriendo control de volumen..."}},
-            {"id":"mixer","label":"Mezclador","action":{"type":"alert","message":"Abriendo mezclador..."}}
-          ]},
-          {"id":"video","label":"Gráficos","action":{"type":"link","target":"/grafics.html"}},
-          {"id":"controls","label":"Controles","action":{"type":"alert","message":"Configuración de controles"}}
-        ]},
-        {"id":"extras","label":"Extras","children":[
-          {"id":"credits","label":"Créditos","action":{"type":"alert","message":"Equipo: Studio X"}},
-          {"id":"store","label":"Tienda","action":{"type":"link","target":"https://store.example.com"}}
-        ]},
-        {"id":"exit","label":"Salir","action":{"type":"alert","message":"¿Seguro que quieres salir?"}}
-      ]
-    }
+    <script>
+        // Datos del menú en formato JSON
+        const menuData = {
+            "main": {
+                "title": "Menú Principal",
+                "options": [
+                    {
+                        "name": "Nueva Partida",
+                        "action": {
+                            "type": "submenu",
+                            "target": "newGame"
+                        }
+                    },
+                    {
+                        "name": "Cargar Partida",
+                        "action": {
+                            "type": "submenu",
+                            "target": "loadGame"
+                        }
+                    },
+                    {
+                        "name": "Opciones",
+                        "action": {
+                            "type": "submenu",
+                            "target": "options"
+                        }
+                    },
+                    {
+                        "name": "Créditos",
+                        "action": {
+                            "type": "alert",
+                            "title": "Créditos",
+                            "message": "Desarrollado por: Equipo de Desarrollo<br>Diseño: Estudio Creativo<br>Música: Compositor Talentoso"
+                        }
+                    },
+                    {
+                        "name": "Salir",
+                        "action": {
+                            "type": "alert",
+                            "title": "Salir del Juego",
+                            "message": "¿Estás seguro de que quieres salir del juego?"
+                        }
+                    }
+                ]
+            },
+            "newGame": {
+                "title": "Nueva Partida",
+                "options": [
+                    {
+                        "name": "Modo Historia",
+                        "action": {
+                            "type": "alert",
+                            "title": "Modo Historia",
+                            "message": "Iniciando una nueva partida en modo historia..."
+                        }
+                    },
+                    {
+                        "name": "Modo Arcade",
+                        "action": {
+                            "type": "alert",
+                            "title": "Modo Arcade",
+                            "message": "Iniciando una nueva partida en modo arcade..."
+                        }
+                    },
+                    {
+                        "name": "Modo Multijugador",
+                        "action": {
+                            "type": "submenu",
+                            "target": "multiplayer"
+                        }
+                    },
+                    {
+                        "name": "Volver",
+                        "action": {
+                            "type": "back"
+                        }
+                    }
+                ]
+            },
+            "loadGame": {
+                "title": "Cargar Partida",
+                "options": [
+                    {
+                        "name": "Partida Guardada 1",
+                        "action": {
+                            "type": "alert",
+                            "title": "Cargando Partida",
+                            "message": "Cargando partida guardada 1..."
+                        }
+                    },
+                    {
+                        "name": "Partida Guardada 2",
+                        "action": {
+                            "type": "alert",
+                            "title": "Cargando Partida",
+                            "message": "Cargando partida guardada 2..."
+                        }
+                    },
+                    {
+                        "name": "Partida Guardada 3",
+                        "action": {
+                            "type": "alert",
+                            "title": "Cargando Partida",
+                            "message": "Cargando partida guardada 3..."
+                        }
+                    },
+                    {
+                        "name": "Volver",
+                        "action": {
+                            "type": "back"
+                        }
+                    }
+                ]
+            },
+            "options": {
+                "title": "Opciones",
+                "options": [
+                    {
+                        "name": "Gráficos",
+                        "action": {
+                            "type": "submenu",
+                            "target": "graphics"
+                        }
+                    },
+                    {
+                        "name": "Sonido",
+                        "action": {
+                            "type": "submenu",
+                            "target": "audio"
+                        }
+                    },
+                    {
+                        "name": "Controles",
+                        "action": {
+                            "type": "alert",
+                            "title": "Controles",
+                            "message": "Configuración de controles no disponible en esta versión."
+                        }
+                    },
+                    {
+                        "name": "Volver",
+                        "action": {
+                            "type": "back"
+                        }
+                    }
+                ]
+            },
+            "graphics": {
+                "title": "Configuración de Gráficos",
+                "options": [
+                    {
+                        "name": "Resolución: 1920x1080",
+                        "action": {
+                            "type": "alert",
+                            "title": "Resolución Cambiada",
+                            "message": "Resolución cambiada a 1920x1080."
+                        }
+                    },
+                    {
+                        "name": "Calidad: Alta",
+                        "action": {
+                            "type": "alert",
+                            "title": "Calidad Gráfica",
+                            "message": "Calidad gráfica establecida en Alta."
+                        }
+                    },
+                    {
+                        "name": "Modo Pantalla: Completa",
+                        "action": {
+                            "type": "alert",
+                            "title": "Modo Pantalla",
+                            "message": "Modo de pantalla cambiado a Completa."
+                        }
+                    },
+                    {
+                        "name": "Volver",
+                        "action": {
+                            "type": "back"
+                        }
+                    }
+                ]
+            },
+            "audio": {
+                "title": "Configuración de Audio",
+                "options": [
+                    {
+                        "name": "Volumen Música: 80%",
+                        "action": {
+                            "type": "alert",
+                            "title": "Volumen Música",
+                            "message": "Volumen de música ajustado al 80%."
+                        }
+                    },
+                    {
+                        "name": "Volumen Efectos: 70%",
+                        "action": {
+                            "type": "alert",
+                            "title": "Volumen Efectos",
+                            "message": "Volumen de efectos ajustado al 70%."
+                        }
+                    },
+                    {
+                        "name": "Volumen General: 90%",
+                        "action": {
+                            "type": "alert",
+                            "title": "Volumen General",
+                            "message": "Volumen general ajustado al 90%."
+                        }
+                    },
+                    {
+                        "name": "Volver",
+                        "action": {
+                            "type": "back"
+                        }
+                    }
+                ]
+            },
+            "multiplayer": {
+                "title": "Modo Multijugador",
+                "options": [
+                    {
+                        "name": "Partida Local",
+                        "action": {
+                            "type": "alert",
+                            "title": "Partida Local",
+                            "message": "Iniciando partida multijugador local..."
+                        }
+                    },
+                    {
+                        "name": "Partida Online",
+                        "action": {
+                            "type": "alert",
+                            "title": "Partida Online",
+                            "message": "Conectando a servidor para partida online..."
+                        }
+                    },
+                    {
+                        "name": "Crear Sala",
+                        "action": {
+                            "type": "alert",
+                            "title": "Crear Sala",
+                            "message": "Creando nueva sala de juego..."
+                        }
+                    },
+                    {
+                        "name": "Unirse a Sala",
+                        "action": {
+                            "type": "alert",
+                            "title": "Unirse a Sala",
+                            "message": "Buscando salas disponibles..."
+                        }
+                    },
+                    {
+                        "name": "Volver",
+                        "action": {
+                            "type": "back"
+                        }
+                    }
+                ]
+            }
+        };
 
-    // Construcción dinámica de paneles desde JSON
-    const panelsRoot = document.getElementById('panels');
+        // Variables globales
+        let currentMenu = 'main';
+        const menuHistory = ['main'];
+        const menuContainer = document.getElementById('menuContainer');
+        const menuIndicator = document.getElementById('menuIndicator');
+        const alertOverlay = document.getElementById('alertOverlay');
+        const alertTitle = document.getElementById('alertTitle');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertButton = document.getElementById('alertButton');
 
-    // Mantiene la pila de rutas (panel objects)
-    const panelStack = [];
-
-    function createPanel(node){
-      const panel = document.createElement('div');
-      panel.className = 'panel hidden';
-      panel.dataset.id = node.id || node.title || 'panel-' + Math.random().toString(36).slice(2,8);
-
-      // título arriba
-      const title = document.createElement('div');
-      title.className = 'menu-header';
-      title.textContent = node.label || node.title || 'Menú';
-      panel.appendChild(title);
-
-      const ul = document.createElement('ul');
-      ul.className = 'menu-list';
-
-      const items = node.items || node.children || [];
-      items.forEach(item => {
-        const li = document.createElement('li');
-        li.className = 'menu-item';
-        li.tabIndex = 0;
-
-        const span = document.createElement('div');
-        span.className = 'label';
-        span.textContent = item.label || 'Sin nombre';
-
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        meta.innerHTML = item.children ? '▸' : (item.action && item.action.type === 'link' ? '↗' : '●');
-
-        li.appendChild(span);
-        li.appendChild(meta);
-
-        // hover and keyboard
-        li.addEventListener('click', ()=> onItemClick(item));
-        li.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onItemClick(item);} });
-
-        ul.appendChild(li);
-      });
-
-      panel.appendChild(ul);
-
-      // Back button (no aparece en root)
-      const backRow = document.createElement('div');
-      backRow.className = 'back-row';
-
-      const backBtn = document.createElement('button');
-      backBtn.className = 'btn';
-      backBtn.textContent = '← Volver';
-      backBtn.addEventListener('click', ()=> goBack());
-
-      backRow.appendChild(backBtn);
-      panel.appendChild(backRow);
-
-      return panel;
-    }
-
-    // Renders a panel and animates transitions
-    function openPanel(node){
-      const newPanel = createPanel(node);
-      panelsRoot.appendChild(newPanel);
-
-      // set initial state: hidden (opacity 0)
-      requestAnimationFrame(()=>{
-        // current panel (if any) slides left
-        const current = panelsRoot.querySelector('.panel.current');
-        if(current){
-          current.classList.remove('current');
-          current.classList.add('out-left');
+        // Inicializar el menú
+        function initMenu() {
+            renderMenu(currentMenu);
+            updateMenuIndicator();
+            
+            // Configurar el botón de alerta
+            alertButton.addEventListener('click', () => {
+                alertOverlay.classList.remove('active');
+            });
         }
 
-        // reveal new panel exactly where the old was (no slide-in) -> "aparezca de la nada"
-        newPanel.classList.remove('hidden');
-        newPanel.classList.add('current');
-
-        // push on stack
-        panelStack.push({node, el:newPanel});
-      });
-    }
-
-    function goBack(){
-      if(panelStack.length <= 1) return; // si estamos en root no hacemos nada
-
-      // animación: el panel actual desaparece poco a poco (fade) y se elimina
-      const current = panelStack.pop();
-      current.el.classList.add('fade-away');
-
-      // el anterior vuelve desde la izquierda (tenía sido desplazado out-left)
-      const prev = panelStack[panelStack.length-1];
-      if(prev){
-        prev.el.classList.remove('out-left','hidden');
-        // fuerza reflow para que la transición ocurra
-        void prev.el.offsetWidth;
-        prev.el.classList.add('current');
-      }
-
-      // eliminar componente después de la animación
-      setTimeout(()=>{
-        current.el.remove();
-      }, 400);
-    }
-
-    function onItemClick(item){
-      if(item.children){
-        openPanel({title:item.label, items:item.children, id:item.id});
-        return;
-      }
-      if(item.action){
-        if(item.action.type === 'link' && item.action.target){
-          // redirigir
-          window.location.href = item.action.target;
-          return;
+        // Renderizar un menú específico
+        function renderMenu(menuId) {
+            // Limpiar el contenedor
+            menuContainer.innerHTML = '';
+            
+            const menu = menuData[menuId];
+            if (!menu) return;
+            
+            // Crear el elemento del menú
+            const menuElement = document.createElement('div');
+            menuElement.className = 'menu-level active';
+            menuElement.id = `menu-${menuId}`;
+            
+            // Añadir título
+            const titleElement = document.createElement('h2');
+            titleElement.className = 'menu-title';
+            titleElement.textContent = menu.title;
+            menuElement.appendChild(titleElement);
+            
+            // Añadir opciones
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'menu-options';
+            
+            menu.options.forEach(option => {
+                const optionElement = document.createElement('button');
+                optionElement.className = 'menu-option';
+                if (option.action.type === 'back') {
+                    optionElement.classList.add('back-button');
+                }
+                optionElement.textContent = option.name;
+                optionElement.addEventListener('click', () => handleMenuAction(option.action));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            menuElement.appendChild(optionsContainer);
+            menuContainer.appendChild(menuElement);
         }
-        if(item.action.type === 'alert'){
-          alert(item.action.message || 'Acción');
-          return;
+
+        // Manejar las acciones del menú
+        function handleMenuAction(action) {
+            switch (action.type) {
+                case 'submenu':
+                    navigateToMenu(action.target);
+                    break;
+                case 'back':
+                    navigateBack();
+                    break;
+                case 'alert':
+                    showAlert(action.title, action.message);
+                    break;
+                case 'redirect':
+                    // En un caso real, aquí redirigiríamos a otra página
+                    console.log(`Redirigiendo a: ${action.url}`);
+                    break;
+            }
         }
-      }
-      // si no hay acción ni children -> default
-      alert('No hay acción configurada para: '+(item.label||item.id||'item'));
-    }
 
-    // Inicializar root
-    openPanel({title: 'Menú principal', items: menuJson.items, id: 'root'});
+        // Navegar a un submenú
+        function navigateToMenu(menuId) {
+            const currentMenuElement = document.getElementById(`menu-${currentMenu}`);
+            currentMenuElement.classList.remove('active');
+            currentMenuElement.classList.add('hidden');
+            
+            // Actualizar historial
+            menuHistory.push(menuId);
+            currentMenu = menuId;
+            
+            // Renderizar nuevo menú
+            renderMenu(menuId);
+            
+            // Actualizar indicador
+            updateMenuIndicator();
+        }
 
-    // UTIL: permite actualizar el menuJson en runtime (ejemplo)
-    window.updateMenuJson = function(newJson){
-      // limpiamos panels
-      panelsRoot.innerHTML = '';
-      panelStack.length = 0;
-      // abrimos nuevo root
-      openPanel({title: 'Menú principal', items: newJson.items, id: 'root'});
-    }
+        // Navegar hacia atrás
+        function navigateBack() {
+            if (menuHistory.length <= 1) return;
+            
+            const currentMenuElement = document.getElementById(`menu-${currentMenu}`);
+            currentMenuElement.classList.remove('active');
+            currentMenuElement.classList.add('previous');
+            
+            // Remover el menú actual del historial
+            menuHistory.pop();
+            currentMenu = menuHistory[menuHistory.length - 1];
+            
+            // Mostrar el menú anterior
+            const previousMenuElement = document.getElementById(`menu-${currentMenu}`);
+            previousMenuElement.classList.remove('hidden');
+            previousMenuElement.classList.add('active');
+            
+            // Actualizar indicador
+            updateMenuIndicator();
+        }
 
-    // Exponer menuJson para que el desarrollador lo modifique desde consola
-    window.menuJson = menuJson;
-  </script>
+        // Mostrar alerta personalizada
+        function showAlert(title, message) {
+            alertTitle.textContent = title;
+            alertMessage.innerHTML = message;
+            alertOverlay.classList.add('active');
+        }
+
+        // Actualizar el indicador de menú
+        function updateMenuIndicator() {
+            menuIndicator.innerHTML = '';
+            
+            // Crear puntos para cada nivel de menú en el historial
+            menuHistory.forEach((menuId, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'indicator-dot';
+                if (index === menuHistory.length - 1) {
+                    dot.classList.add('active');
+                }
+                menuIndicator.appendChild(dot);
+            });
+        }
+
+        // Inicializar el menú cuando se carga la página
+        window.addEventListener('DOMContentLoaded', initMenu);
+    </script>
 </body>
 </html>
