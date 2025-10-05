@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Menú de videojuego (JSON-driven)</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f1720;
+      --accent:#50c878;
+      --muted:#9aa6b2;
+      --button:#12202b;
+      --radius:8px;
+      --gap:10px;
+      --anim-time:350ms;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, Arial; background:linear-gradient(180deg,#071018 0%, #071826 100%); color:#e6eef3; height:100vh; display:flex; align-items:center; justify-content:flex-start;}
+
+    /* contenedor del menú a la izquierda */
+    .menu-shell{width:340px; padding:20px; background:radial-gradient(circle at 0 0, rgba(80,200,120,0.04), transparent 40%), var(--panel); height:80vh; margin:20px; border-radius:12px; box-shadow:0 10px 30px rgba(2,6,12,0.6); overflow:hidden; position:relative}
+
+    .menu-header{font-size:20px; font-weight:700; color:var(--accent); margin-bottom:12px}
+
+    /* área donde aparecen los "panels" (menu y submenus). stacked */
+    .panels{position:relative; width:100%; height:calc(100% - 44px); overflow:hidden}
+
+    .panel{position:absolute; inset:0; padding:8px; display:flex; flex-direction:column; gap:var(--gap); transition:transform var(--anim-time) ease, opacity var(--anim-time) ease;}
+
+    /* estados */
+    .panel.current{transform:none; opacity:1; z-index:2}
+    .panel.out-left{transform:translateX(-120%); opacity:0; z-index:1}
+    .panel.hidden{opacity:0; transform:none; z-index:0}
+
+    /* lista de opciones */
+    .menu-list{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px}
+
+    .menu-item{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.03); padding:12px 14px; border-radius:var(--radius); display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; transition:transform 220ms ease, box-shadow 220ms ease, background 220ms ease;}
+    .menu-item .label{font-weight:600; color:#dff3e6}
+    .menu-item .meta{font-size:12px; color:var(--muted)}
+
+    /* Hover: avanza ligeramente hacia la derecha y resalta */
+    .menu-item:hover{transform:translateX(8px) scale(1.01); box-shadow:0 8px 18px rgba(2,6,12,0.6); background:linear-gradient(180deg, rgba(80,200,120,0.06), rgba(255,255,255,0.01));}
+
+    /* botón de volver */
+    .back-row{margin-top:auto; display:flex; gap:8px}
+    .btn{padding:10px 12px; background:var(--button); border-radius:6px; border:1px solid rgba(255,255,255,0.04); font-weight:600; cursor:pointer; transition:opacity var(--anim-time) ease, transform var(--anim-time) ease;}
+    .btn:hover{transform:translateX(6px)}
+
+    /* animación de desaparición progresiva para el botón "volver" al hacer click (usada con clase) */
+    .fade-away{animation:fadeAway var(--anim-time) forwards}
+    @keyframes fadeAway{from{opacity:1; transform:translateY(0)} to{opacity:0; transform:translateY(8px)}}
+
+    /* pequeños iconos */
+    .chev{opacity:0.9}
+
+    /* responsive - mantén ancho en pantallas pequeñas */
+    @media (max-width:520px){ .menu-shell{width:92vw; margin:10px} }
+  </style>
+</head>
+<body>
+  <div class="menu-shell" role="navigation" aria-label="Menú lateral del videojuego">
+    <div class="menu-header">Menú principal</div>
+    <div class="panels" id="panels"></div>
+  </div>
+
+  <script>
+    // JSON que define el menú. Puedes añadir/quitar entradas o cambiar "action".
+    // Si "action.type" === 'link' -> redirige a "action.target"
+    // Si "action.type" === 'alert' -> muestra alert con action.message
+    // Si el objeto tiene "children" -> es un item con submenú
+
+    const menuJson = {
+      "title":"root",
+      "items":[
+        {"id":"play","label":"Jugar","children":[
+          {"id":"new","label":"Nueva Partida","action":{"type":"alert","message":"Empezando nueva partida..."}},
+          {"id":"load","label":"Cargar Partida","action":{"type":"link","target":"/cargar.html"}},
+          {"id":"coop","label":"Multijugador","children":[
+            {"id":"lan","label":"Jugar LAN","action":{"type":"alert","message":"Buscando partida LAN..."}},
+            {"id":"online","label":"Jugar Online","action":{"type":"link","target":"https://example.com/online"}}
+          ]}
+        ]},
+        {"id":"settings","label":"Ajustes","children":[
+          {"id":"audio","label":"Audio","children":[
+            {"id":"vol","label":"Volumen","action":{"type":"alert","message":"Abriendo control de volumen..."}},
+            {"id":"mixer","label":"Mezclador","action":{"type":"alert","message":"Abriendo mezclador..."}}
+          ]},
+          {"id":"video","label":"Gráficos","action":{"type":"link","target":"/grafics.html"}},
+          {"id":"controls","label":"Controles","action":{"type":"alert","message":"Configuración de controles"}}
+        ]},
+        {"id":"extras","label":"Extras","children":[
+          {"id":"credits","label":"Créditos","action":{"type":"alert","message":"Equipo: Studio X"}},
+          {"id":"store","label":"Tienda","action":{"type":"link","target":"https://store.example.com"}}
+        ]},
+        {"id":"exit","label":"Salir","action":{"type":"alert","message":"¿Seguro que quieres salir?"}}
+      ]
+    }
+
+    // Construcción dinámica de paneles desde JSON
+    const panelsRoot = document.getElementById('panels');
+
+    // Mantiene la pila de rutas (panel objects)
+    const panelStack = [];
+
+    function createPanel(node){
+      const panel = document.createElement('div');
+      panel.className = 'panel hidden';
+      panel.dataset.id = node.id || node.title || 'panel-' + Math.random().toString(36).slice(2,8);
+
+      // título arriba
+      const title = document.createElement('div');
+      title.className = 'menu-header';
+      title.textContent = node.label || node.title || 'Menú';
+      panel.appendChild(title);
+
+      const ul = document.createElement('ul');
+      ul.className = 'menu-list';
+
+      const items = node.items || node.children || [];
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'menu-item';
+        li.tabIndex = 0;
+
+        const span = document.createElement('div');
+        span.className = 'label';
+        span.textContent = item.label || 'Sin nombre';
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        meta.innerHTML = item.children ? '▸' : (item.action && item.action.type === 'link' ? '↗' : '●');
+
+        li.appendChild(span);
+        li.appendChild(meta);
+
+        // hover and keyboard
+        li.addEventListener('click', ()=> onItemClick(item));
+        li.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onItemClick(item);} });
+
+        ul.appendChild(li);
+      });
+
+      panel.appendChild(ul);
+
+      // Back button (no aparece en root)
+      const backRow = document.createElement('div');
+      backRow.className = 'back-row';
+
+      const backBtn = document.createElement('button');
+      backBtn.className = 'btn';
+      backBtn.textContent = '← Volver';
+      backBtn.addEventListener('click', ()=> goBack());
+
+      backRow.appendChild(backBtn);
+      panel.appendChild(backRow);
+
+      return panel;
+    }
+
+    // Renders a panel and animates transitions
+    function openPanel(node){
+      const newPanel = createPanel(node);
+      panelsRoot.appendChild(newPanel);
+
+      // set initial state: hidden (opacity 0)
+      requestAnimationFrame(()=>{
+        // current panel (if any) slides left
+        const current = panelsRoot.querySelector('.panel.current');
+        if(current){
+          current.classList.remove('current');
+          current.classList.add('out-left');
+        }
+
+        // reveal new panel exactly where the old was (no slide-in) -> "aparezca de la nada"
+        newPanel.classList.remove('hidden');
+        newPanel.classList.add('current');
+
+        // push on stack
+        panelStack.push({node, el:newPanel});
+      });
+    }
+
+    function goBack(){
+      if(panelStack.length <= 1) return; // si estamos en root no hacemos nada
+
+      // animación: el panel actual desaparece poco a poco (fade) y se elimina
+      const current = panelStack.pop();
+      current.el.classList.add('fade-away');
+
+      // el anterior vuelve desde la izquierda (tenía sido desplazado out-left)
+      const prev = panelStack[panelStack.length-1];
+      if(prev){
+        prev.el.classList.remove('out-left','hidden');
+        // fuerza reflow para que la transición ocurra
+        void prev.el.offsetWidth;
+        prev.el.classList.add('current');
+      }
+
+      // eliminar componente después de la animación
+      setTimeout(()=>{
+        current.el.remove();
+      }, 400);
+    }
+
+    function onItemClick(item){
+      if(item.children){
+        openPanel({title:item.label, items:item.children, id:item.id});
+        return;
+      }
+      if(item.action){
+        if(item.action.type === 'link' && item.action.target){
+          // redirigir
+          window.location.href = item.action.target;
+          return;
+        }
+        if(item.action.type === 'alert'){
+          alert(item.action.message || 'Acción');
+          return;
+        }
+      }
+      // si no hay acción ni children -> default
+      alert('No hay acción configurada para: '+(item.label||item.id||'item'));
+    }
+
+    // Inicializar root
+    openPanel({title: 'Menú principal', items: menuJson.items, id: 'root'});
+
+    // UTIL: permite actualizar el menuJson en runtime (ejemplo)
+    window.updateMenuJson = function(newJson){
+      // limpiamos panels
+      panelsRoot.innerHTML = '';
+      panelStack.length = 0;
+      // abrimos nuevo root
+      openPanel({title: 'Menú principal', items: newJson.items, id: 'root'});
+    }
+
+    // Exponer menuJson para que el desarrollador lo modifique desde consola
+    window.menuJson = menuJson;
+  </script>
+</body>
+</html>
