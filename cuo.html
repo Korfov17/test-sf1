@@ -3,259 +3,227 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Tonterías con toggle (solo HTML/CSS)</title>
+<title>Modo oscuro y menú con blur (solo CSS)</title>
 
 <style>
-  /* ---------------------------
-     Variables base (tema claro por defecto)
-     --------------------------- */
-  :root {
-    --bg: #f6f7fb;
-    --card: #ffffff;
-    --text: #111827;
-    --muted: #6b7280;
-    --accent: #2563eb;
-    --shadow: 0 8px 24px rgba(16,24,40,0.06);
-    --glass: rgba(255,255,255,0.6);
-  }
+/* -------------------------------------------------------
+   VARIABLES BASE - TEMA CLARO (por defecto)
+------------------------------------------------------- */
+:root {
+  --bg: #f3f4f6;
+  --text: #111827;
+  --card: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --shadow: 0 6px 24px rgba(0,0,0,0.1);
+}
 
-  /* Cuando el toggler está checked, se redefinen variables
-     usando el selector de hermano general. El checkbox está antes
-     del .app, por eso funciona: #theme-toggle:checked ~ .app { ... } */
-  #theme-toggle:checked ~ .app {
-    --bg: #0b1220;
-    --card: #0f1724;
-    --text: #e6eef8;
-    --muted: #9aa6bd;
-    --accent: #60a5fa;
-    --shadow: 0 8px 30px rgba(2,6,23,0.6);
-    --glass: rgba(255,255,255,0.03);
-  }
+/* -------------------------------------------------------
+   TEMA OSCURO (se activa cuando #dark-toggle está checked)
+------------------------------------------------------- */
+#dark-toggle:checked ~ .app {
+  --bg: #0b1220;
+  --text: #e5e7eb;
+  --card: #161d2f;
+  --muted: #9ca3af;
+  --accent: #60a5fa;
+  --shadow: 0 6px 24px rgba(0,0,0,0.6);
+}
 
-  /* Reset + tipografía */
-  * { box-sizing: border-box; }
-  html,body { height: 100%; margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: var(--bg); color: var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-  a { color: inherit; text-decoration: none; }
+/* -------------------------------------------------------
+   ESTILOS GENERALES
+------------------------------------------------------- */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+a { color: inherit; text-decoration: none; }
 
-  /* App container */
-  .app {
-    min-height: 100vh;
-    padding: 3.5rem 1.25rem;
-    display: grid;
-    place-items: center;
-    gap: 1.25rem;
-  }
+.app {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  position: relative;
+}
 
-  /* Layout de la caja central */
-  .stage {
-    width: min(1100px, 96%);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-    align-items: start;
-  }
+/* Contenido principal */
+.main {
+  display: grid;
+  gap: 1.5rem;
+  text-align: center;
+}
 
-  /* Tarjetas */
-  .card {
-    background: linear-gradient(180deg, var(--card), color-mix(in srgb, var(--card) 90%, var(--glass)));
-    box-shadow: var(--shadow);
-    border-radius: 14px;
-    padding: 1.25rem;
-    border: 1px solid color-mix(in srgb, var(--text) 5%, transparent);
-    transition: transform .28s ease, box-shadow .28s ease, background .28s ease;
-  }
+/* Tarjetas simples */
+.card {
+  background: var(--card);
+  box-shadow: var(--shadow);
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
-  .card h3 { margin: 0 0 .5rem 0; font-size: 1.05rem; }
-  .card p { margin: 0; color: var(--muted); line-height: 1.45; }
+.card h2 {
+  margin: 0 0 .5rem 0;
+}
 
-  /* Tontería 1: Emoji rebotando */
-  .bouncy {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding: 1.25rem;
-    gap: .75rem;
-    flex-direction: column;
-  }
+/* -------------------------------------------------------
+   BOTONES FLOTANTES
+------------------------------------------------------- */
+.toggle-btn, .menu-btn {
+  position: fixed;
+  top: 1rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0,0,0,0.05);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  z-index: 1000;
+}
 
-  .bubble {
-    width: 96px;
-    height: 96px;
-    border-radius: 999px;
-    display: grid;
-    place-items: center;
-    font-size: 2.5rem;
-    background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, var(--card)), color-mix(in srgb, var(--accent) 8%, var(--glass)));
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-    animation: bounce 2.1s infinite cubic-bezier(.33,.86,.45,1);
-    transform-origin: center;
-  }
+.toggle-btn:hover, .menu-btn:hover {
+  transform: scale(1.05);
+}
 
-  @keyframes bounce {
-    0%   { transform: translateY(0) scale(1); }
-    20%  { transform: translateY(-22px) scale(1.05); }
-    50%  { transform: translateY(0)  scale(.98); }
-    70%  { transform: translateY(-10px) scale(1.02); }
-    100% { transform: translateY(0) scale(1); }
-  }
+/* Botón tema */
+.toggle-btn { right: 1rem; }
 
-  .bouncy .line { width: 100%; height: 8px; background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 40%, transparent), transparent); border-radius: 999px; opacity: .18; transform-origin: left; animation: shimmer 2.6s infinite; }
-  @keyframes shimmer { 0%{ transform: scaleX(.2); } 50%{ transform: scaleX(.98);} 100%{ transform: scaleX(.2);} }
+/* Botón menú */
+.menu-btn { right: 4.5rem; }
 
-  /* Tontería 2: Tarjeta rotante en hover (solo CSS) */
-  .rotator {
-    perspective: 900px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding: 1.25rem;
-  }
+/* Iconos */
+.toggle-btn::before {
+  content: "🌗";
+  font-size: 1.3rem;
+}
+.menu-btn::before {
+  content: "☰";
+  font-size: 1.4rem;
+}
 
-  .flip {
-    width: 100%;
-    max-width: 320px;
-    height: 200px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform .8s cubic-bezier(.2,.9,.25,1);
-    border-radius: 12px;
-  }
+/* -------------------------------------------------------
+   MENÚ FLOTANTE CON BLUR
+------------------------------------------------------- */
+#menu-toggle { position: absolute; left: -9999px; }
 
-  /* Hover / focus rotate */
-  .flip:hover, .flip:focus-within { transform: rotateY(12deg) rotateX(-6deg) translateY(-6px); box-shadow: 0 22px 40px rgba(2,6,23,0.45); }
+/* Fondo borroso */
+#menu-toggle:checked ~ .app .overlay {
+  opacity: 1;
+  pointer-events: all;
+  backdrop-filter: blur(8px);
+}
 
-  .front, .back {
-    position: absolute;
-    inset: 0;
-    border-radius:inherit;
-    backface-visibility: hidden;
-    display: grid;
-    place-items: center;
-    padding: 1rem;
-  }
+/* Overlay base */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  display: grid;
+  place-items: center;
+  z-index: 500;
+}
 
-  .front {
-    background: linear-gradient(180deg, color-mix(in srgb, var(--card) 98%, var(--glass)), var(--card));
-    border: 1px solid color-mix(in srgb, var(--text) 5%, transparent);
-  }
+/* Caja del menú */
+.menu-box {
+  background: var(--card);
+  color: var(--text);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  min-width: 280px;
+  text-align: center;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
 
-  .back {
-    transform: rotateY(180deg);
-    background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 14%, var(--card)), color-mix(in srgb, var(--card) 92%, var(--glass)));
-    color: var(--text);
-    font-weight: 600;
-    gap: 0.5rem;
-  }
+#menu-toggle:checked ~ .app .menu-box {
+  transform: scale(1);
+}
 
-  /* Toggle: hidden checkbox + label visible como icono */
-  #theme-toggle { position: absolute; left: -9999px; } /* off-screen but present for accessibility */
+/* Botón cerrar */
+.close-btn {
+  margin-top: 1rem;
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+}
 
-  .toggle-label {
-    position: fixed;
-    top: 18px;
-    right: 18px;
-    width: 52px;
-    height: 52px;
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    background: linear-gradient(180deg, color-mix(in srgb, var(--card) 85%, var(--glass)), var(--card));
-    box-shadow: var(--shadow);
-    border: 1px solid color-mix(in srgb, var(--text) 4%, transparent);
-    cursor: pointer;
-    z-index: 9999;
-    transition: transform .16s ease, background .2s ease, box-shadow .2s ease;
-  }
+/* Enlaces falsos */
+.menu-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+.menu-box li {
+  padding: 0.5rem 0;
+  color: var(--muted);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.menu-box li:last-child { border: none; }
 
-  .toggle-label:active { transform: scale(.98); }
-  .toggle-label svg { width: 26px; height: 26px; display:block; transition: transform .28s ease; }
+/* Checkbox ocultos */
+#dark-toggle { position: absolute; left: -9999px; }
 
-  /* When checked, rotate the icon slightly to indicate change */
-  #theme-toggle:checked ~ .app .toggle-label svg { transform: rotate(180deg); filter: drop-shadow(0 6px 24px rgba(0,0,0,0.12)); }
-
-  /* small footer / credits */
-  .meta { width: 100%; text-align:center; margin-top: .75rem; color: var(--muted); font-size: .9rem; }
-
-  /* Responsiveness */
-  @media (max-width: 800px) {
-    .stage { grid-template-columns: 1fr; }
-    .toggle-label { top: 12px; right: 12px; width:48px; height:48px; }
-  }
 </style>
 </head>
 <body>
-  <!-- Checkbox hack: input antes de .app -->
-  <input type="checkbox" id="theme-toggle" aria-label="Alternar tema claro/oscuro" />
 
-  <div class="app" role="application" aria-live="polite">
+<!-- Checkbox para modo oscuro -->
+<input type="checkbox" id="dark-toggle">
 
-    <!-- Toggle label: es el icono visible y está fijo -->
-    <label class="toggle-label" for="theme-toggle" title="Alternar tema (claro / oscuro)">
-      <!-- SVG combinado: sol + luna, cambia visualmente por rotación y contraste -->
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <defs>
-          <mask id="moonMask">
-            <rect width="24" height="24" fill="white"></rect>
-            <circle cx="16" cy="8" r="6" fill="black"></circle>
-          </mask>
-        </defs>
-        <!-- Sol (círculo) -->
-        <circle cx="12" cy="12" r="4.2" fill="currentColor" style="mix-blend-mode:screen"></circle>
-        <!-- Rayos -->
-        <g stroke="currentColor" stroke-width="1.2" stroke-linecap="round" style="opacity:.9">
-          <line x1="12" y1="1.8" x2="12" y2="4.6"></line>
-          <line x1="12" y1="19.4" x2="12" y2="22.2"></line>
-          <line x1="1.8" y1="12" x2="4.6" y2="12"></line>
-          <line x1="19.4" y1="12" x2="22.2" y2="12"></line>
-          <line x1="4.2" y1="4.2" x2="6.2" y2="6.2"></line>
-          <line x1="17.8" y1="17.8" x2="19.8" y2="19.8"></line>
-          <line x1="4.2" y1="19.8" x2="6.2" y2="17.8"></line>
-          <line x1="17.8" y1="6.2" x2="19.8" y2="4.2"></line>
-        </g>
+<!-- Checkbox para menú -->
+<input type="checkbox" id="menu-toggle">
 
-        <!-- Luna usando máscara para recortar (se ve al rotar) -->
-        <g mask="url(#moonMask)">
-          <circle cx="18" cy="6" r="5.6" fill="currentColor" style="opacity:.98"></circle>
-        </g>
-      </svg>
-    </label>
+<div class="app">
 
-    <!-- Contenido principal -->
-    <main class="stage" role="main" aria-label="Contenido principal">
+  <!-- BOTONES -->
+  <label for="menu-toggle" class="menu-btn" title="Abrir menú"></label>
+  <label for="dark-toggle" class="toggle-btn" title="Alternar tema"></label>
 
-      <!-- Tarjeta 1: Tontería - Emoji rebotando -->
-      <section class="card bouncy" aria-labelledby="t1title">
-        <h3 id="t1title">Tontería 1 — Emoji rebotón</h3>
-        <div class="bubble" role="img" aria-label="Emoji feliz rebotando">😄</div>
-        <div class="line" aria-hidden="true"></div>
-        <p>Un emoji que nunca para de rebotar. No hace nada útil, pero alegra la vista.</p>
-      </section>
+  <!-- CONTENIDO -->
+  <main class="main">
+    <div class="card">
+      <h2>Bienvenido</h2>
+      <p>Esto es una pequeña demo con modo claro/oscuro y un menú emergente, todo solo con HTML + CSS.</p>
+    </div>
 
-      <!-- Tarjeta 2: Tontería - Flip visual -->
-      <section class="card rotator" aria-labelledby="t2title">
-        <h3 id="t2title">Tontería 2 — Cartulina que gira</h3>
+    <div class="card">
+      <h2>Otra tontería</h2>
+      <p>No hace nada, pero sirve para ver cómo cambia el tema completo.</p>
+    </div>
+  </main>
 
-        <div class="flip" tabindex="0" aria-hidden="false">
-          <div class="front">
-            <div>
-              <strong>Portada</strong>
-              <p style="margin:.35rem 0 0 0; color:var(--muted); font-size:.93rem;">Pasa el cursor o enfoca esta tarjeta para ver el reverso.</p>
-            </div>
-          </div>
-
-          <div class="back">
-            <div>
-              <div style="font-size:1.1rem;">¡Sorpresa!</div>
-              <div style="font-size:.9rem; color:var(--muted); margin-top:.45rem;">Esto es solo una tontería con CSS 3D. No se usa JS.</div>
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-    </main>
-
-    <div class="meta">Diseño: HTML + CSS (sin JavaScript). Icono siempre visible en la esquina superior derecha.</div>
+  <!-- OVERLAY + MENÚ -->
+  <div class="overlay">
+    <div class="menu-box">
+      <h3>Menú principal</h3>
+      <ul>
+        <li>Perfil</li>
+        <li>Ajustes</li>
+        <li>Estadísticas</li>
+        <li>Salir (no funciona)</li>
+      </ul>
+      <label for="menu-toggle" class="close-btn">Cerrar</label>
+    </div>
   </div>
+
+</div>
 </body>
 </html>
