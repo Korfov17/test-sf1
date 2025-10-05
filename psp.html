@@ -25,7 +25,7 @@
         .menu-container {
             width: 100%;
             max-width: 500px;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5));
+            background-color: rgba(0, 0, 0, 0.6);
             border-radius: 8px;
             padding: 25px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
@@ -38,7 +38,6 @@
             font-weight: bold;
             color: #ffcc00;
             text-align: center;
-            text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
         }
         
         .setting-group {
@@ -54,37 +53,26 @@
         
         .dropdown {
             width: 100%;
-            padding: 10px 12px;
-            background: linear-gradient(to bottom, rgba(60, 60, 60, 0.9), rgba(40, 40, 40, 0.9));
-            border: 1px solid rgba(100, 100, 100, 0.8);
+            padding: 8px 12px;
+            background-color: rgba(40, 40, 40, 0.9);
+            border: 1px solid rgba(80, 80, 80, 0.8);
             border-radius: 4px;
             color: #e0e0e0;
             font-size: 16px;
             margin-bottom: 15px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
             cursor: pointer;
         }
         
         .dropdown:hover {
-            background: linear-gradient(to bottom, rgba(70, 70, 70, 0.9), rgba(50, 50, 50, 0.9));
-        }
-        
-        .dropdown:focus {
-            outline: none;
-            border-color: rgba(150, 150, 150, 0.8);
-        }
-        
-        .dropdown option {
-            background-color: #2a2a2a;
-            color: #e0e0e0;
+            background-color: rgba(50, 50, 50, 0.9);
         }
         
         .button {
             display: block;
             width: 100%;
-            padding: 10px 12px;
-            background: linear-gradient(to bottom, rgba(60, 60, 60, 0.9), rgba(40, 40, 40, 0.9));
-            border: 1px solid rgba(100, 100, 100, 0.8);
+            padding: 8px 12px;
+            background-color: rgba(40, 40, 40, 0.9);
+            border: 1px solid rgba(80, 80, 80, 0.8);
             border-radius: 4px;
             color: #e0e0e0;
             font-size: 16px;
@@ -92,17 +80,10 @@
             cursor: pointer;
             transition: all 0.2s;
             margin-bottom: 15px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
         }
         
         .button:hover {
-            background: linear-gradient(to bottom, rgba(70, 70, 70, 0.9), rgba(50, 50, 50, 0.9));
-            border-color: rgba(120, 120, 120, 0.8);
-        }
-        
-        .button:active {
-            background: linear-gradient(to bottom, rgba(50, 50, 50, 0.9), rgba(30, 30, 30, 0.9));
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.7);
+            background-color: rgba(50, 50, 50, 0.9);
         }
         
         .fps-display {
@@ -110,24 +91,37 @@
             font-size: 20px;
             margin-top: 20px;
             color: #ffcc00;
-            text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
             font-weight: bold;
         }
         
         hr {
             border: none;
             height: 1px;
-            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background-color: rgba(255, 255, 255, 0.2);
             margin: 20px 0;
         }
         
         .star {
             color: #ffcc00;
-            text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
         }
         
         .setting-item {
             margin-bottom: 15px;
+        }
+        
+        .dropdown-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .dropdown-arrow {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ffcc00;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -139,9 +133,12 @@
             <h2 class="setting-label">Preajustes visuales</h2>
             <div class="setting-item">
                 <span class="setting-label"><span class="star">★</span> Preajuste</span>
-                <select class="dropdown">
-                    <option>Preset Mod Custom</option>
-                </select>
+                <div class="dropdown-container">
+                    <select class="dropdown">
+                        <option>Preset Mod Custom</option>
+                    </select>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
             </div>
         </div>
         
