@@ -3,30 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Porazon - Web Oficial</title>
-    
-    <link rel="stylesheet" href="css/style.css">
+    <title>Fiesta Estelar - Celebración Especial</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" href="assets/favicon/favicon.ico" type="image/x-icon">
-
-    <!-- Meta descripción clásica -->
-    <meta name="description" content="Evento de cumpleaños dedicado para un amigo.">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="Porazon - Web Oficial">
-    <meta property="og:description" content="Evento para otras cosas, esto es una pruena.">
-    <meta property="og:image" content="https://opengraph.b-cdn.net/production/images/890c3b0e-09df-4fc9-a1ee-e1a5460e144e.png?token=G8unpQtIljNdnGY9BDCNqhO6ICx-yB6sKOOQMBGxA8Y&height=512&width=512&expires=33297063973">
-    <meta property="og:url" content="https://porazon.vercel.app">
-    <meta property="og:site_name" content="Porazon">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⭐</text></svg>" type="image/svg+xml">
+    
+    <!-- Metadatos OG actualizados -->
+    <meta name="description" content="Una celebración inolvidable bajo las estrellas con amigos especiales.">
+    <meta property="og:title" content="Fiesta Estelar - Celebración Especial">
+    <meta property="og:description" content="Una celebración inolvidable bajo las estrellas con amigos especiales.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80">
+    <meta property="og:url" content="https://fiesta-estelar.vercel.app">
+    <meta property="og:site_name" content="Fiesta Estelar">
     <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fiesta Estelar - Celebración Especial">
+    <meta name="twitter:description" content="Una celebración inolvidable bajo las estrellas con amigos especiales.">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80">
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Porazon - Web Oficial">
-    <meta name="twitter:description" content="Evento de cumpleaños dedfkfkf.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+        
+        .date-location {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .info-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .info-card i {
+            margin-right: 10px;
+            color: #fdbb2d;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card h2 {
+            margin-bottom: 15px;
+            color: #fdbb2d;
+            border-bottom: 2px solid #fdbb2d;
+            padding-bottom: 10px;
+        }
+        
+        .card ul {
+            list-style-type: none;
+        }
+        
+        .card li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .card li:before {
+            content: "★";
+            position: absolute;
+            left: 0;
+            color: #fdbb2d;
+        }
+        
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .rsvp {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin-bottom: 40px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #fdbb2d;
+            color: #1a2a6c;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #ffcc44;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .social-links a {
+            color: #fdbb2d;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+        
+        .social-links a:hover {
+            transform: translateY(-5px);
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .image-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .date-location {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .image-gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Conte
+    <div class="container">
+        <header>
+            <h1>Fiesta Estelar</h1>
+            <p class="subtitle">Una celebración inolvidable bajo las estrellas</p>
+            <div class="date-location">
+                <div class="info-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>15 de Diciembre, 2023</span>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Jardines Celestiales</span>
+                </div>
+            </div>
+        </header>
+        
+        <section class="content">
+            <div class="card">
+                <h2>Sobre el Evento</h2>
+                <p>Únete a nosotros para una noche mágica llena de sorpresas, música, deliciosa comida y la compañía de amigos especiales. Hemos preparado actividades únicas para crear recuerdos que durarán toda la vida.</p>
+                <p>El dress code es elegante-cósmico: atrévete a brillar con nosotros bajo las estrellas.</p>
+            </div>
+            
+            <div class="card">
+                <h2>Actividades Destacadas</h2>
+                <ul>
+                    <li>Cóctel de bienvenida con bebidas temáticas</li>
+                    <li>DJ en vivo con música para todos los gustos</li>
+                    <li>Fotografía profesional con fondo estelar</li>
+                    <li>Barra de comida internacional</li>
+                    <li>Sorpresa especial de medianoche</li>
+                    <li>Sesión de observación astronómica</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="image-gallery">
+            <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80')"></div>
+            <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1530103862676-de8c9debad1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80')"></div>
+            <div class="gallery-item" style="background-image: url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80')"></div>
+        </section>
+        
+        <section class="rsvp">
+            <h2>Confirma tu Asistencia</h2>
+            <p>Por favor, confirma tu asistencia antes del 10 de Diciembre para que podamos preparar todo para tu comodidad.</p>
+            <a href="#rsvp-form" class="btn">Confirmar Asistencia</a>
+        </section>
+        
+        <footer>
+            <p>¿Tienes preguntas? Contáctanos:</p>
+            <p>info@fiestaestelar.com | +34 123 456 789</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <p style="margin-top: 20px;">&copy; 2023 Fiesta Estelar. Todos los derechos reservados.</p>
+        </footer>
+    </div>
 </body>
 </html>
