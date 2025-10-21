@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú de Información con Logos de Imagen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .info-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            overflow: hidden;
+        }
+        
+        .info-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.3s;
+        }
+        
+        .info-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .logo {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+        
+        .info-text {
+            flex: 1;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .info-extra {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 480px) {
+            .info-header {
+                font-size: 1.3rem;
+                padding: 15px;
+            }
+            
+            .info-item {
+                padding: 12px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="info-container">
+        <div class="info-header">Información</div>
+        <ul class="info-list">
+            <li class="info-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="Icono información" class="logo">
+                <div class="info-text">
+                    <div class="info-title">Prueba</div>
+                    <div class="info-extra">Información adicional sobre la prueba</div>
+                </div>
+            </li>
+            <li class="info-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/1828/1828843.png" alt="Icono configuración" class="logo">
+                <div class="info-text">
+                    <div class="info-title">Prueba</div>
+                    <div class="info-extra">Detalles importantes para el usuario</div>
+                </div>
+            </li>
+            <li class="info-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="Icono seguridad" class="logo">
+                <div class="info-text">
+                    <div class="info-title">Prueba</div>
+                    <div class="info-extra">Más información relevante aquí</div>
+                </div>
+            </li>
+            <li class="info-item">
+                <img src="https://cdn-icons-png.flaticon.com/512/929/929417.png" alt="Icono contacto" class="logo">
+                <div class="info-text">
+                    <div class="info-title">Prueba</div>
+                    <div class="info-extra">Información extra de ejemplo</div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
