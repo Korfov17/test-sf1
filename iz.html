@@ -19,32 +19,42 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         
         .glass-container {
             width: 90%;
             max-width: 600px;
-            padding: 40px;
+            padding: 40px 30px;
             background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             text-align: center;
         }
         
         .title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            padding: 10px;
-            border: 2px solid black;
-            border-radius: 10px;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 25px;
             background: linear-gradient(to bottom, #ff8c00, #ff4500);
-            color: white;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
             position: relative;
-            overflow: hidden;
+            display: inline-block;
+            padding: 5px 0;
+            text-shadow: 
+                2px 0 0 #000, 
+                -2px 0 0 #000, 
+                0 2px 0 #000, 
+                0 -2px 0 #000, 
+                1px 1px 0 #000, 
+                -1px -1px 0 #000, 
+                1px -1px 0 #000, 
+                -1px 1px 0 #000;
         }
         
         .title::before {
@@ -57,10 +67,10 @@
             background: linear-gradient(
                 90deg,
                 transparent,
-                rgba(255, 255, 255, 0.6),
+                rgba(255, 255, 255, 0.8),
                 transparent
             );
-            animation: shine 1s infinite;
+            animation: shine 1.5s infinite;
         }
         
         @keyframes shine {
@@ -73,16 +83,23 @@
         }
         
         .description {
-            color: black;
+            color: #333;
             font-size: 1.2rem;
             line-height: 1.6;
+            text-align: justify;
+            padding: 0 10px;
+        }
+        
+        .highlight {
+            font-weight: 600;
+            color: #ff6600;
         }
     </style>
 </head>
 <body>
     <div class="glass-container">
         <h1 class="title">Título Principal</h1>
-        <p class="description">Este es un ejemplo de cuadro con efecto "liquid glass" similar al que utiliza iPhone, con un título que tiene borde negro, degradado naranja y un resplandor que se mueve de izquierda a derecha cada segundo.</p>
+        <p class="description">Este es un ejemplo de cuadro con efecto <span class="highlight">"liquid glass"</span> similar al que utiliza iPhone. El título tiene borde negro, degradado naranja y un resplandor que se mueve de izquierda a derecha cada segundo. La descripción es texto negro normal para una mejor legibilidad.</p>
     </div>
 </body>
 </html>
