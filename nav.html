@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barra de Navegación Animada</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            padding: 20px;
+        }
+
+        .nav-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button {
+            position: relative;
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            margin: 0 5px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 40px;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+            z-index: -1;
+        }
+
+        .nav-button:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-button i {
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button span {
+            position: absolute;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-button:hover span {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .nav-button:hover i {
+            transform: translateX(10px);
+        }
+
+        .slider {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: calc(100% - 20px);
+            width: 90px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 0;
+        }
+
+        /* Posiciones del slider para cada botón */
+        #home:checked ~ .slider {
+            left: 10px;
+            width: 90px;
+        }
+
+        #about:checked ~ .slider {
+            left: 105px;
+            width: 100px;
+        }
+
+        #services:checked ~ .slider {
+            left: 210px;
+            width: 120px;
+        }
+
+        #portfolio:checked ~ .slider {
+            left: 335px;
+            width: 120px;
+        }
+
+        #contact:checked ~ .slider {
+            left: 460px;
+            width: 110px;
+        }
+
+        /* Ocultar los inputs radio */
+        input[type="radio"] {
+            display: none;
+        }
+
+        /* Efecto activo para el botón seleccionado */
+        input[type="radio"]:checked + label {
+            color: #6e8efb;
+        }
+
+        input[type="radio"]:checked + label i {
+            transform: scale(1.2);
+        }
+
+        .title {
+            position: absolute;
+            top: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            width: 100%;
+            font-size: 14px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <h1 class="title">Barra de Navegación Animada</h1>
+    
+    <div class="nav-container">
+        <input type="radio" name="nav" id="home" checked>
+        <label for="home" class="nav-button">
+            <i class="fas fa-home"></i>
+            <span>Inicio</span>
+        </label>
+        
+        <input type="radio" name="nav" id="about">
+        <label for="about" class="nav-button">
+            <i class="fas fa-user"></i>
+            <span>Sobre Mí</span>
+        </label>
+        
+        <input type="radio" name="nav" id="services">
+        <label for="services" class="nav-button">
+            <i class="fas fa-cog"></i>
+            <span>Servicios</span>
+        </label>
+        
+        <input type="radio" name="nav" id="portfolio">
+        <label for="portfolio" class="nav-button">
+            <i class="fas fa-briefcase"></i>
+            <span>Portafolio</span>
+        </label>
+        
+        <input type="radio" name="nav" id="contact">
+        <label for="contact" class="nav-button">
+            <i class="fas fa-envelope"></i>
+            <span>Contacto</span>
+        </label>
+        
+        <div class="slider"></div>
+    </div>
+    
+    <p class="instructions">Pasa el cursor sobre los botones para ver el texto y haz clic para activar la animación</p>
+
+    <script>
+        // Agregar interactividad para mejorar la experiencia
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remover la clase activa de todos los botones
+                document.querySelectorAll('.nav-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                // Agregar la clase activa al botón clickeado
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
